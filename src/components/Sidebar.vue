@@ -21,12 +21,12 @@ export default {
   width: 200px;
   position: fixed;
   position: fixed;
-  background-color: whitesmoke;
+  background-color:whitesmoke;
 }
 
 #sidebar a{
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  color: black;
+  color: #2c3e50;
   font-size: 20px;
   padding: 10px 30px;
   text-decoration: none;

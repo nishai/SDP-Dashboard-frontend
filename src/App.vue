@@ -1,20 +1,25 @@
 <template>
   <div id="app">
     <Sidebar/>
-    <div id="stuff">
-      <h1>"Blank Site"</h1>
-      <h2>by Team Potato🥔</h2>
+    <Dashboard/>
+    <div id = "footer" class="footer">
+        <p>Done by Team Potato🥔</p>
     </div>
+    <Chart/>
   </div>
 </template>
 
 <script>
 import Sidebar from './components/Sidebar'
+import Dashboard from './components/Dashboard'
+import Chart from './components/Chart'
 
 export default {
   name: 'App',
   components: {
-    Sidebar
+    Sidebar, 
+    Dashboard,
+    Chart,
   }
 }
 </script>
@@ -24,12 +29,13 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 
-#stuff {
-  text-align :center;
-  margin-left: 200px;
+#footer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  padding-right: 10px;
+  font-size: 15px;
 }
 </style>
