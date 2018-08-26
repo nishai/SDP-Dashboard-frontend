@@ -1,0 +1,17 @@
+
+# this file is important for building the docker image,
+# preventing all files from being copies into it,
+# except the ones defined below.
+
+# Ignore:
+**/*
+
+# Keep: npm
+!./package.json
+!./package-lock.json
+!./src/**/*
+!./public/**/*
+# Keep: webpack
+!./babel.config.js
+!./build/**/*
+!./config/**/*
