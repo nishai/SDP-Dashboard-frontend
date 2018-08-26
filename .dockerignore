@@ -7,11 +7,10 @@
 **/*
 
 # Keep: npm
+!./babel.config.js
 !./package.json
 !./package-lock.json
 !./src/**/*
 !./public/**/*
-# Keep: webpack
-!./babel.config.js
-!./build/**/*
-!./config/**/*
+!./tests/**/*
+!./vue.config.js

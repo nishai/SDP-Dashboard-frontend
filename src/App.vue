@@ -10,18 +10,18 @@
 </template>
 
 <script>
-import Sidebar from './components/Sidebar'
-import Dashboard from './components/Dashboard'
-import Chart from './components/Chart'
+import Sidebar from './components/Sidebar';
+import Dashboard from './components/Dashboard';
+import Chart from './components/Chart';
 
 export default {
   name: 'App',
   components: {
-    Sidebar, 
+    Sidebar,
     Dashboard,
     Chart,
-  }
-}
+  },
+};
 </script>
 
 <style>
