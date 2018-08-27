@@ -37,7 +37,7 @@ init: package.json package-lock.json
 	@make section tag="Installing dependencies"
 	npm install
 
-dev: init
+dev:
 	@make section tag="Local - Serving Dev"
 	npm run dev
 

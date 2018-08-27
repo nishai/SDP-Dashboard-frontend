@@ -11,7 +11,7 @@ export default {
   name: 'Chart',
   mounted() {
     const ctx = 'chart';
-    const myChart = new Chart(ctx, {
+    const chart = new Chart(ctx, {
       type: 'doughnut',
       data: {
         title: 'Race',
