@@ -1,15 +1,32 @@
 <template>
     <div id="sidebar" class="sidenav">
-      <a href="#">Template 1</a>
-      <a href="#">Template 2</a>
-      <a href="#">Template 3</a>
-      <a href="#">Template 4</a>
+      <div id=sidebar_heading> Navigate </div>
+      <div id="sidebar_links" v-for="item in links" :key="item.path">
+        <router-link :to="item.path"> {{ item.name }} </router-link>
+      </div>
     </div>
 </template>
 
 <script>
 export default {
   name: 'Sidebar',
+  data() {
+    return { links: [
+        {
+          name: "Home",
+          path: "/"
+        },
+        {
+          name: "Reports",
+          path: "/reports"
+        },
+        {
+          name: "Dashboard",
+          path: "/dashboard"
+        },
+      ],
+    };
+  },
 };
 </script>
 
@@ -19,18 +36,27 @@ export default {
   left: 0;
   height: 100%;
   width: 200px;
+
   position: fixed;
   position: fixed;
-  background-color:whitesmoke;
+  background-color:#edf0f4;
+
+  color: #2c3e50;
+  font-size: 20px;
+  display: block;
 }
 
 #sidebar a{
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   color: #2c3e50;
   font-size: 20px;
-  padding: 10px 30px;
+  padding: 5px 40px;
   text-decoration: none;
   display: block;
+}
+
+#sidebar_heading {
+  font-weight: bold;
+  padding: 15px 20px;
 }
 
 </style>

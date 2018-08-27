@@ -1,41 +1,68 @@
 <template>
   <div id="app">
     <Sidebar/>
-    <Dashboard/>
-    <div id = "footer" class="footer">
-        <p>Done by Team Potato🥔</p>
+    <div id="app-content">
+      <router-view id="app-view"></router-view>
+      <div id="footer" class="footer">
+          <p>By Team Potato 🥔</p>
+      </div>
     </div>
-    <Chart/>
   </div>
 </template>
 
 <script>
-import Sidebar from './components/Sidebar';
-import Dashboard from './components/Dashboard';
-import Chart from './components/Chart';
+import Sidebar from './components/Sidebar.vue';
 
 export default {
   name: 'App',
   components: {
     Sidebar,
-    Dashboard,
-    Chart,
   },
 };
 </script>
 
 <style>
+
+html,body {
+  height:100%;
+  width: 100%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  /* border: 1px solid black; */
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  width: 100%;
+  height: 100%;
 }
 
 #footer {
-  position: fixed;
   right: 0;
-  bottom: 0;
-  padding-right: 10px;
+  padding: 10px;  /* padding is added on to width */
+  width: calc(100% - 20px); /* make sure to keep up to date with sidebar */
+  margin-left: 0px; /* make sure to keep up to date with sidebar */
+
+  color: #2c3e50;
+  text-align: right;
+  background: #f4f6fb;
   font-size: 15px;
+  height: 30px;
 }
+
+#app-content {
+    margin-left: 200px;
+    width: calc(100% - 200px);
+    height: 100%;
+}
+
+#app-view {
+    min-height: calc(100% - 30px - 2*10px);
+}
+
 </style>

@@ -40,9 +40,14 @@ export default {
 </script>
 
 <style>
-#chart_div {
-    margin-left: 200px;
-    padding: 20px;
-    width: 1000px;
-}
+/* #chart_div { */
+    /* margin-left: 200px;
+    width: calc(100% - 200px);
+    height: 100%;
+    border: 1px solid black; */
+/* } */
+/* #chart { */
+    /* width: 400px; */
+    /* border: 1px solid red; */
+/* } */
 </style>
