@@ -16,6 +16,9 @@ export default {
     Heading,
     Chart,
   },
+  data() {
+    color: "#536c85"
+  }
 };
 </script>
 
