@@ -1,0 +1,46 @@
+
+# To make use of caching make sure to add the changes from:
+# /Dockerfile to ./Dockerfile.serve
+
+# ============= #
+# node          #
+# ============= #
+
+FROM node:alpine
+
+# same as bash's cd
+WORKDIR /app
+
+# dependencies files
+COPY package.json package-lock.json ./
+# install dependencies
+RUN npm install
+
+# documentation only
+EXPOSE 8080
+# binary with args to run
+ENTRYPOINT ["npm", "run"]
+# aditional default arguments to entrypoint
+CMD ["dev"]
+
+# Make sure to add exceptions for files that can be copied in .dockerignore
+COPY . .
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# additions - Above should be the same as the standard ./Dockerfile   #
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+
+RUN npm run build
+
+# ============= #
+# apache/httpd  #
+# ============= #
+
+FROM httpd:alpine
+
+# documentation only
+EXPOSE 80
+
+# copy public web files to container
+COPY --from=0 /app/dist/ /usr/local/apache2/htdocs/
+# COPY ./httpd.conf /usr/local/apache2/conf/httpd.conf
