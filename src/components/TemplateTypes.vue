@@ -1,6 +1,6 @@
 <template>
   <div id="type">
-    <img :src="url" alt="chart" width="256">
+    <img :src="url" alt="chart" width="256" height="256">
     <p id="content"> {{ text }} </p>
   </div>
 </template>

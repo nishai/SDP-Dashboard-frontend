@@ -1,9 +1,15 @@
 <template>
   <div id="templates">
     <Heading heading_text="Template Charts"></Heading>
-    <TemplateTypes text="this one" v-bind:url="url1"></TemplateTypes>
-    <TemplateTypes text="this one also" v-bind:url="url2"></TemplateTypes>
-    <p id="content"> test </p>
+
+    <div class="grid-container">
+      <div class="grid-item">
+        <TemplateTypes text="this one" v-bind:url="url1"></TemplateTypes>
+      </div>
+      <div class="grid-item">
+        <TemplateTypes text="this one also" v-bind:url="url2"></TemplateTypes>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -32,5 +38,15 @@ export default {
 #content {
   padding: 25px;
   color: #536c85;
+}
+.grid-container {
+  display: inline-grid;
+  grid-template-columns: auto auto auto;
+  padding: 10px;
+}
+.grid-item {
+  padding: 20px;
+  font-size: 20px;
+  text-align: center;
 }
 </style>
