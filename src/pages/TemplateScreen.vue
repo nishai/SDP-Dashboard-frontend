@@ -1,16 +1,59 @@
 <template>
   <div id="templates">
     <Heading heading_text="Template Charts"></Heading>
+
     <div id="subheading">
       Demographics
     </div>
-
     <div class="grid-container">
       <div class="grid-item">
-        <TemplateTypes click="one" text="Race" v-bind:url="url2"></TemplateTypes>
+        <TemplateTypes click="one" text="Race" v-bind:url="doughnut"></TemplateTypes>
       </div>
       <div class="grid-item">
-        <TemplateTypes click="two" text="Gender" v-bind:url="url2"></TemplateTypes>
+        <TemplateTypes click="two" text="Gender" v-bind:url="pie1"></TemplateTypes>
+      </div>
+      <div class="grid-item">
+        <TemplateTypes click="two" text="Nationality" v-bind:url="pie2"></TemplateTypes>
+      </div>
+      <div class="grid-item">
+        <TemplateTypes click="two" text="Home Language" v-bind:url="pie3"></TemplateTypes>
+      </div>
+      <div class="grid-item">
+        <TemplateTypes click="two" text="Demographics vs Marks" v-bind:url="line2"></TemplateTypes>
+      </div>
+    </div>
+
+    <div id="subheading">
+      Marks
+    </div>
+    <div class="grid-container">
+      <div class="grid-item">
+        <TemplateTypes click="one" text="Pass rates by year" v-bind:url="bar1"></TemplateTypes>
+      </div>
+      <div class="grid-item">
+        <TemplateTypes click="two"
+        text="Pass rates by faculty/course" v-bind:url="bar3"></TemplateTypes>
+      </div>
+      <div class="grid-item">
+        <TemplateTypes click="two" text="Bell curve" v-bind:url="bellcurve"></TemplateTypes>
+      </div>
+      <div class="grid-item">
+        <TemplateTypes click="two"
+        text="Progress outcome by faculty/course" v-bind:url="bar2"></TemplateTypes>
+      </div>
+    </div>
+
+    <div id="subheading">
+      Class sizes
+    </div>
+    <div class="grid-container">
+      <div class="grid-item">
+        <TemplateTypes click="one"
+        text="Class size vs pass rate" v-bind:url="line2"></TemplateTypes>
+      </div>
+      <div class="grid-item">
+        <TemplateTypes click="two"
+        text="Average class size by faculty/course" v-bind:url="bar1"></TemplateTypes>
       </div>
     </div>
 
@@ -30,8 +73,16 @@ export default {
   },
   data() {
     return {
-      url1: require('../images/bar.png'),
-      url2: require('../images/pie.png'),
+      bar1: require('../images/bar1.png'),
+      bar2: require('../images/bar2.png'),
+      bar3: require('../images/bar3.png'),
+      pie1: require('../images/pie1.png'),
+      pie2: require('../images/pie2.png'),
+      pie3: require('../images/pie3.png'),
+      line1: require('../images/line1.png'),
+      line2: require('../images/line2.png'),
+      bellcurve: require('../images/bell-curve.png'),
+      doughnut: require('../images/doughnut.png'),
     };
   },
 };
@@ -44,13 +95,13 @@ export default {
   color: #536c85;
 }
 #subheading {
-  padding: 35px;
+  padding-left: 35px;
   color: #536c85;
   font-size: 25px;
 }
 .grid-container {
   display: inline-grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: 180px 180px 180px 180px 180px ;
   padding: 10px;
 }
 .grid-item {
