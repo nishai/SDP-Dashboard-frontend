@@ -2,6 +2,10 @@
   <div id="templates">
     <Heading heading_text="Template Charts"></Heading>
 
+    <div id="check">
+      <input type="checkbox" value="always_show" checked> Always show this page on login<br>
+    </div>
+
     <div id="subheading">
       Demographics
     </div>
@@ -99,9 +103,14 @@ export default {
   color: #536c85;
   font-size: 25px;
 }
+#check {
+  top: 10px;
+  right: 10px;
+  position: absolute;
+}
 .grid-container {
   display: inline-grid;
-  grid-template-columns: 180px 180px 180px 180px 180px ;
+  grid-template-columns: 200px 200px 200px 200px 200px ;
   padding: 10px;
 }
 .grid-item {
