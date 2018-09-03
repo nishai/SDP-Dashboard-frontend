@@ -4,12 +4,13 @@
 
     <div class="grid-container">
       <div class="grid-item">
-        <TemplateTypes text="this one" v-bind:url="url1"></TemplateTypes>
+        <TemplateTypes click="one" text="Pass rates by year" v-bind:url="url1"></TemplateTypes>
       </div>
       <div class="grid-item">
-        <TemplateTypes text="this one also" v-bind:url="url2"></TemplateTypes>
+        <TemplateTypes click="two" text="Race" v-bind:url="url2"></TemplateTypes>
       </div>
     </div>
+
   </div>
 </template>
 

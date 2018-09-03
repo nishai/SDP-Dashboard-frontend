@@ -1,15 +1,17 @@
 <template>
-  <div id="type">
+  <router-link :to="'/dashboard'">
+  <div id="type" >
     <img :src="url" alt="chart" width="256" height="256">
     <p id="content"> {{ text }} </p>
   </div>
+  </router-link>
 </template>
 
 <script>
 
 export default {
   name: 'TemplateTypes',
-  props: ['url', 'text'],
+  props: ['url', 'text', 'click'],
 };
 </script>
 
