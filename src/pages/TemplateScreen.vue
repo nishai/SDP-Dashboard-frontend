@@ -11,19 +11,19 @@
     </div>
     <div class="grid-container">
       <div class="grid-item">
-        <TemplateTypes click="one" text="Race" v-bind:url="doughnut"></TemplateTypes>
+        <TemplateTypes text="Race" v-bind:url="doughnut"></TemplateTypes>
       </div>
       <div class="grid-item">
-        <TemplateTypes click="two" text="Gender" v-bind:url="pie1"></TemplateTypes>
+        <TemplateTypes text="Gender" v-bind:url="pie1"></TemplateTypes>
       </div>
       <div class="grid-item">
-        <TemplateTypes click="two" text="Nationality" v-bind:url="pie2"></TemplateTypes>
+        <TemplateTypes text="Nationality" v-bind:url="pie2"></TemplateTypes>
       </div>
       <div class="grid-item">
-        <TemplateTypes click="two" text="Home Language" v-bind:url="pie3"></TemplateTypes>
+        <TemplateTypes text="Home Language" v-bind:url="pie3"></TemplateTypes>
       </div>
       <div class="grid-item">
-        <TemplateTypes click="two" text="Demographics vs Marks" v-bind:url="line2"></TemplateTypes>
+        <TemplateTypes text="Demographics vs Marks" v-bind:url="line2"></TemplateTypes>
       </div>
     </div>
 
@@ -32,17 +32,17 @@
     </div>
     <div class="grid-container">
       <div class="grid-item">
-        <TemplateTypes click="one" text="Pass rates by year" v-bind:url="bar1"></TemplateTypes>
+        <TemplateTypes text="Pass rates by year" v-bind:url="bar1"></TemplateTypes>
       </div>
       <div class="grid-item">
-        <TemplateTypes click="two"
+        <TemplateTypes
         text="Pass rates by faculty/course" v-bind:url="bar3"></TemplateTypes>
       </div>
       <div class="grid-item">
-        <TemplateTypes click="two" text="Bell curve" v-bind:url="bellcurve"></TemplateTypes>
+        <TemplateTypes text="Bell curve" v-bind:url="bellcurve"></TemplateTypes>
       </div>
       <div class="grid-item">
-        <TemplateTypes click="two"
+        <TemplateTypes
         text="Progress outcome by faculty/course" v-bind:url="bar2"></TemplateTypes>
       </div>
     </div>
@@ -52,7 +52,7 @@
     </div>
     <div class="grid-container">
       <div class="grid-item">
-        <TemplateTypes click="one"
+        <TemplateTypes
         text="Class size vs pass rate" v-bind:url="line2"></TemplateTypes>
       </div>
       <div class="grid-item">
@@ -107,6 +107,8 @@ export default {
   top: 10px;
   right: 10px;
   position: absolute;
+  color: #2c3e50;
+  font-size: 16px;
 }
 .grid-container {
   display: inline-grid;
@@ -117,5 +119,12 @@ export default {
   padding: 20px;
   font-size: 20px;
   text-align: center;
+}
+.grid-item:hover {
+  height: 150px;
+  width: 150px;
+  border-radius: 0px;
+  background: #ffffff;
+  box-shadow: 0 0 10px #5f6b7a;
 }
 </style>
