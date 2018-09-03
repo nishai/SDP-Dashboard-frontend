@@ -1,7 +1,7 @@
 <template>
   <router-link :to="'/dashboard'">
   <div id="type" >
-    <img :src="url" alt="chart" width="256" height="256">
+    <img :src="url" alt="chart" width="200" >
     <p id="content"> {{ text }} </p>
   </div>
   </router-link>

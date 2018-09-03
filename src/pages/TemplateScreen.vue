@@ -1,13 +1,16 @@
 <template>
   <div id="templates">
     <Heading heading_text="Template Charts"></Heading>
+    <div id="subheading">
+      Demographics
+    </div>
 
     <div class="grid-container">
       <div class="grid-item">
-        <TemplateTypes click="one" text="Pass rates by year" v-bind:url="url1"></TemplateTypes>
+        <TemplateTypes click="one" text="Race" v-bind:url="url2"></TemplateTypes>
       </div>
       <div class="grid-item">
-        <TemplateTypes click="two" text="Race" v-bind:url="url2"></TemplateTypes>
+        <TemplateTypes click="two" text="Gender" v-bind:url="url2"></TemplateTypes>
       </div>
     </div>
 
@@ -28,7 +31,7 @@ export default {
   data() {
     return {
       url1: require('../images/bar.png'),
-      url2: require('../images/pie.jpg'),
+      url2: require('../images/pie.png'),
     };
   },
 };
@@ -39,6 +42,11 @@ export default {
 #content {
   padding: 25px;
   color: #536c85;
+}
+#subheading {
+  padding: 35px;
+  color: #536c85;
+  font-size: 25px;
 }
 .grid-container {
   display: inline-grid;
