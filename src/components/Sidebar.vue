@@ -11,18 +11,23 @@
 export default {
   name: 'Sidebar',
   data() {
-    return { links: [
+    return {
+      links: [
         {
-          name: "Home",
-          path: "/"
+          name: 'Home',
+          path: '/',
         },
         {
-          name: "Reports",
-          path: "/reports"
+          name: 'Reports',
+          path: '/reports',
         },
         {
-          name: "Dashboard",
-          path: "/dashboard"
+          name: 'Dashboard',
+          path: '/dashboard',
+        },
+        {
+          name: 'Templates',
+          path: '/templatescreen',
         },
       ],
     };

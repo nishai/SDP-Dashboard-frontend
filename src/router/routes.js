@@ -1,6 +1,7 @@
 import Dashboard from '../pages/Dashboard.vue';
 import Reports from '../pages/Reports.vue';
 import Home from '../pages/Home.vue';
+import TemplateScreen from '../pages/TemplateScreen.vue';
 
 /* Define the routes */
 
@@ -19,6 +20,11 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
+  },
+  {
+    path: '/templatescreen',
+    name: 'Template Screen',
+    component: TemplateScreen,
   },
   {
     path: '*',
