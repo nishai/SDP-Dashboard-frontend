@@ -3,7 +3,7 @@
     <Heading heading_text="Example Dashboard"></Heading>
     <p id="content"> This is just an example page </p>
     <Chart></Chart>
-    <Button id="super" @click="superimpose">Superimpose</Button>
+    <Button id="super" @click="superimpose()">Superimpose</Button>
   </div>
 </template>
 
@@ -18,8 +18,8 @@ export default {
     Chart,
   },
   methods: {
-    superimpose(event) {
-      const new_dataset = {
+    superimpose() {
+      const newDataset = {
         data: [55, 8, 12, 18, 7],
         backgroundColor: [
           'rgba(255,99,132,1)',
@@ -31,7 +31,7 @@ export default {
         borderWidth: 2,
       };
 
-      Chart.data().chart_data.data.datasets.push(new_dataset);
+      Chart.data().chart_data.data.datasets.push(newDataset);
       console.log(Chart.data().chart_data.data.datasets);
       document.getElementById('super').disabled = true;
     },

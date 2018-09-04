@@ -39,8 +39,8 @@ export default {
     };
   },
   mounted() {
-    const ctx = 'chart';
-    const chart = new Chart(ctx, this.chart_data);
+    this.ctx = 'chart';
+    this.chart = new Chart(this.ctx, this.chart_data);
   },
 };
 </script>
