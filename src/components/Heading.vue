@@ -8,7 +8,7 @@
 export default {
   name: 'Heading',
   props: {
-    heading_text: String
+    heading_text: String,
   },
 };
 </script>
