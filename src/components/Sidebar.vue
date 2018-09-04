@@ -63,5 +63,9 @@ export default {
   font-weight: bold;
   padding: 15px 20px;
 }
+#sidebar_links:hover {
+  font-weight: bold;
+  box-shadow: 0 0 5px #000000;
+}
 
 </style>

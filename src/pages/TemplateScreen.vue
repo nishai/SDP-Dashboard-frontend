@@ -14,10 +14,10 @@
         <TemplateTypes text="Race" v-bind:url="doughnut"></TemplateTypes>
       </div>
       <div class="grid-item">
-        <TemplateTypes text="Gender" v-bind:url="pie1"></TemplateTypes>
+        <TemplateTypes text="Gender" v-bind:url="pie2"></TemplateTypes>
       </div>
       <div class="grid-item">
-        <TemplateTypes text="Nationality" v-bind:url="pie2"></TemplateTypes>
+        <TemplateTypes text="Nationality" v-bind:url="pie1"></TemplateTypes>
       </div>
       <div class="grid-item">
         <TemplateTypes text="Home Language" v-bind:url="pie3"></TemplateTypes>
@@ -53,7 +53,7 @@
     <div class="grid-container">
       <div class="grid-item">
         <TemplateTypes
-        text="Class size vs pass rate" v-bind:url="line2"></TemplateTypes>
+        text="Class size vs pass rate" v-bind:url="line1"></TemplateTypes>
       </div>
       <div class="grid-item">
         <TemplateTypes click="two"
@@ -123,7 +123,6 @@ export default {
 .grid-item:hover {
   height: 150px;
   width: 150px;
-  border-radius: 0px;
   background: #ffffff;
   box-shadow: 0 0 10px #5f6b7a;
 }
