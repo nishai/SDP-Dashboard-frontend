@@ -2,7 +2,14 @@
   <div id="dashboard">
     <Heading heading_text="Example Dashboard"></Heading>
     <p id="content"> This is just an example page </p>
-    <Chart></Chart>
+    <Chart type="doughnut"></Chart>
+    <Chart type="line"></Chart>
+    <Chart type="bar"></Chart>
+    <Chart type="pie"></Chart>
+    <Chart type="radar"></Chart>
+    <Chart type="polar"></Chart>
+    <Chart type="bubble"></Chart>
+    <Chart type="scatter"></Chart>
   </div>
 </template>
 

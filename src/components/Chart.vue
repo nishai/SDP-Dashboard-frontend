@@ -1,17 +1,39 @@
 <template>
   <div class="small">
-    <doughnut-chart :chart-data="datacollection"></doughnut-chart>
+    <doughnut-chart v-if="type === 'doughnut'" :chart-data="datacollection"></doughnut-chart>
+    <line-chart v-else-if="type === 'line'" :chart-data="datacollection"></line-chart>
+    <bar-chart v-else-if="type === 'bar'" :chart-data="datacollection"></bar-chart>
+    <pie-chart v-else-if="type === 'pie'" :chart-data="datacollection"></pie-chart>
+    <radar-chart v-else-if="type === 'radar'" :chart-data="datacollection"></radar-chart>
+    <polar-chart v-else-if="type === 'polar'" :chart-data="datacollection"></polar-chart>
+    <bubble-chart v-else-if="type === 'bubble'" :chart-data="datacollection"></bubble-chart>
+    <scatter-chart v-else-if="type === 'scatter'" :chart-data="datacollection"></scatter-chart>
     <button @click="addData()">Superimpose</button>
   </div>
 </template>
 
 <script>
 import DoughnutChart from './DoughnutChart';
+import LineChart from './LineChart';
+import BarChart from './BarChart';
+import PieChart from './PieChart';
+import RadarChart from './RadarChart';
+import PolarChart from './PolarChart';
+import BubbleChart from './BubbleChart';
+import ScatterChart from './ScatterChart';
 
 export default {
   components: {
     DoughnutChart,
+    LineChart,
+    BarChart,
+    PieChart,
+    RadarChart,
+    PolarChart,
+    BubbleChart,
+    ScatterChart,
   },
+  props: ['type'],
   data() {
     return {
       datacollection: null,
