@@ -8,7 +8,7 @@
     this.$route.query.templateType.includes('line') ||
     this.$route.query.templateType.includes('bell')" type="line"></Chart>
     <Chart v-if="this.$route.query.templateType === '' ||
-    this.$route.query.templateType.includes('bar')" type="bar"></Chart>
+    this.$route.query.templateType.includes('data')" type="bar"></Chart>
     <Chart v-if="this.$route.query.templateType === '' ||
     this.$route.query.templateType.includes('pie')" type="pie"></Chart>
     <Chart v-if="this.$route.query.templateType === '' ||
