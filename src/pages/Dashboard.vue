@@ -3,7 +3,6 @@
     <Heading heading_text="Example Dashboard"></Heading>
     <p id="content"> This is just an example page </p>
     <Chart></Chart>
-    <Button id="super" @click="superimpose()">Superimpose</Button>
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
   <div class="small">
     <doughnut-chart :chart-data="datacollection"></doughnut-chart>
-    <button @click="addData()">Randomize</button>
+    <button @click="addData()">Superimpose</button>
   </div>
 </template>
 
