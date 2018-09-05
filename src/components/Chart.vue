@@ -62,7 +62,6 @@ export default {
         datasets: this.datacollection.datasets.concat(newData),
         options: this.datacollection.options,
       };
-      console.log(this.datacollection.datasets);
     },
   },
 };
@@ -74,4 +73,3 @@ export default {
     margin:  150px auto;
   }
 </style>
-
