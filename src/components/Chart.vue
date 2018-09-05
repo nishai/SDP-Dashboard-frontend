@@ -1,3 +1,4 @@
+/* eslint-disable */
 <template>
   <div class="small">
     <doughnut-chart v-if="type === 'doughnut'" :chart-data="datacollection"></doughnut-chart>

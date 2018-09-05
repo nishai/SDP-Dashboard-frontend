@@ -15,7 +15,7 @@ export default {
       links: [
         {
           name: 'Home',
-          path: '/',
+          path: '/home',
         },
         {
           name: 'Reports',
@@ -24,6 +24,10 @@ export default {
         {
           name: 'Dashboard',
           path: '/dashboard',
+        },
+        {
+          name: 'Templates',
+          path: '/',
         },
       ],
     };
@@ -58,6 +62,9 @@ export default {
 #sidebar_heading {
   font-weight: bold;
   padding: 15px 20px;
+}
+#sidebar_links:hover {
+  font-weight: bold;
 }
 
 </style>
