@@ -7,7 +7,7 @@
     </div>
 
     <div id="subheading">
-      Demographics
+      <h3>Demographics</h3>
     </div>
     <div class="grid-container">
       <div class="grid-item">
@@ -28,7 +28,7 @@
     </div>
 
     <div id="subheading">
-      Marks
+      <h3>Marks</h3>
     </div>
     <div class="grid-container">
       <div class="grid-item">
@@ -48,7 +48,7 @@
     </div>
 
     <div id="subheading">
-      Class sizes
+      <h3>Class sizes</h3>
     </div>
     <div class="grid-container">
       <div class="grid-item">
@@ -101,7 +101,7 @@ export default {
 #subheading {
   padding-left: 35px;
   color: #536c85;
-  font-size: 25px;
+  /* font-size: 25px; */
 }
 #check {
   top: 10px;
@@ -113,7 +113,7 @@ export default {
 .grid-container {
   display: inline-grid;
   grid-template-columns: 150px 150px 150px 150px 150px ;
-  padding: 10px;
+  padding-left: 30px;
 }
 .grid-item {
   padding: 10px;
