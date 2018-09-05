@@ -8,8 +8,8 @@ import TemplateScreen from '../pages/TemplateScreen.vue';
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    name: 'Template Screen',
+    component: TemplateScreen,
   },
   {
     path: '/reports',
@@ -22,9 +22,9 @@ const routes = [
     component: Dashboard,
   },
   {
-    path: '/templatescreen',
-    name: 'Template Screen',
-    component: TemplateScreen,
+    path: '/home',
+    name: 'Home',
+    component: Home,
   },
   {
     path: '*',

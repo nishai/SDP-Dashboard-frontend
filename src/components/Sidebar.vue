@@ -15,7 +15,7 @@ export default {
       links: [
         {
           name: 'Home',
-          path: '/',
+          path: '/home',
         },
         {
           name: 'Reports',
@@ -27,7 +27,7 @@ export default {
         },
         {
           name: 'Templates',
-          path: '/templatescreen',
+          path: '/',
         },
       ],
     };
@@ -65,7 +65,6 @@ export default {
 }
 #sidebar_links:hover {
   font-weight: bold;
-  box-shadow: 0 0 5px #000000;
 }
 
 </style>

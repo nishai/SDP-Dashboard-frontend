@@ -77,16 +77,16 @@ export default {
   },
   data() {
     return {
-      bar1: require('../images/bar1.png'),
-      bar2: require('../images/bar2.png'),
-      bar3: require('../images/bar3.png'),
-      pie1: require('../images/pie1.png'),
-      pie2: require('../images/pie2.png'),
-      pie3: require('../images/pie3.png'),
-      line1: require('../images/line1.png'),
-      line2: require('../images/line2.png'),
-      bellcurve: require('../images/bell-curve.png'),
-      doughnut: require('../images/doughnut.png'),
+      bar1: require('../assets/bar1.png'),
+      bar2: require('../assets/bar2.png'),
+      bar3: require('../assets/bar3.png'),
+      pie1: require('../assets/pie1.png'),
+      pie2: require('../assets/pie2.png'),
+      pie3: require('../assets/pie3.png'),
+      line1: require('../assets/line1.png'),
+      line2: require('../assets/line2.png'),
+      bellcurve: require('../assets/bell-curve.png'),
+      doughnut: require('../assets/doughnut.png'),
     };
   },
 };
@@ -112,18 +112,18 @@ export default {
 }
 .grid-container {
   display: inline-grid;
-  grid-template-columns: 200px 200px 200px 200px 200px ;
+  grid-template-columns: 150px 150px 150px 150px 150px ;
   padding: 10px;
 }
 .grid-item {
-  padding: 20px;
+  padding: 10px;
   font-size: 20px;
   text-align: center;
 }
 .grid-item:hover {
-  height: 150px;
-  width: 150px;
-  background: #ffffff;
-  box-shadow: 0 0 10px #5f6b7a;
+  height: 120px;
+  width: 120px;
+  background: whitesmoke;
+  border-radius: 5px;
 }
 </style>
