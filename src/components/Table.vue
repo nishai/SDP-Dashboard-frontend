@@ -22,22 +22,22 @@ export default {
     return {
       rows: [
         {
-          id: 1, StudentNo: '0021D31BE03E4AB097DCF9C0C89B13BA', School: 'Forte Secondary School', AverageMark: '60.75',
+          id: 1, studentNo: '0021D31BE03E4AB097DCF9C0C89B13BA', school: 'Forte Secondary School', averageMark: '60.75',
         },
         {
-          id: 2, StudentNo: '002420AA1391E39E6D8FE424D96BCB51', School: 'Mcauley House School', AverageMark: '72.33',
+          id: 2, studentNo: '002420AA1391E39E6D8FE424D96BCB51', school: 'Mcauley House School', averageMark: '72.33',
         },
         {
-          id: 3, StudentNo: '0033DA3F89CE5F5306C06E04A808E9C3', School: 'Khumbula Secondary School', AverageMark: '39.3',
+          id: 3, studentNo: '0033DA3F89CE5F5306C06E04A808E9C3', school: 'Khumbula Secondary School', averageMark: '39.3',
         },
         {
-          id: 4, StudentNo: '004D87C05B047CBA6C54582FAAB34ED3', School: 'Altmont Technical High School', AverageMark: '53.25',
+          id: 4, studentNo: '004D87C05B047CBA6C54582FAAB34ED3', school: 'Altmont Technical High School', averageMark: '53.25',
         },
         {
-          id: 5, StudentNo: '004F3079DFD6018586D2D2BC04713484', School: 'Mbilwi Snr Sec School', AverageMark: '65',
+          id: 5, studentNo: '004F3079DFD6018586D2D2BC04713484', school: 'Mbilwi Snr Sec School', averageMark: '65',
         },
         {
-          id: 6, StudentNo: '0087A333DD09D21A1492FFBD6F6D1ED2', School: 'Boksburg High School', AverageMark: '47.5',
+          id: 6, studentNo: '0087A333DD09D21A1492FFBD6F6D1ED2', school: 'Boksburg High School', averageMark: '47.5',
         },
       ],
     };
@@ -55,12 +55,13 @@ export default {
 </script>
 
 <style scoped>
-  table {
+  #table {
     font-family: 'Open Sans', sans-serif;
     width: 750px;
     border-collapse: collapse;
     border: 3px solid #44475C;
-    margin: 10px 10px 0 10px;
+    margin-left:auto;
+    margin-right:auto;
   }
 
   table th {
