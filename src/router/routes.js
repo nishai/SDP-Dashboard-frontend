@@ -1,14 +1,15 @@
 import Dashboard from '../pages/Dashboard.vue';
 import Reports from '../pages/Reports.vue';
 import Home from '../pages/Home.vue';
+import TemplateScreen from '../pages/TemplateScreen.vue';
 
 /* Define the routes */
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    name: 'Template Screen',
+    component: TemplateScreen,
   },
   {
     path: '/reports',
@@ -19,6 +20,11 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
+  },
+  {
+    path: '/home',
+    name: 'Home',
+    component: Home,
   },
   {
     path: '*',

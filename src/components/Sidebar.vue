@@ -11,18 +11,23 @@
 export default {
   name: 'Sidebar',
   data() {
-    return { links: [
+    return {
+      links: [
         {
-          name: "Home",
-          path: "/"
+          name: 'Home',
+          path: '/home',
         },
         {
-          name: "Reports",
-          path: "/reports"
+          name: 'Reports',
+          path: '/reports',
         },
         {
-          name: "Dashboard",
-          path: "/dashboard"
+          name: 'Dashboard',
+          path: '/dashboard',
+        },
+        {
+          name: 'Templates',
+          path: '/',
         },
       ],
     };
@@ -57,6 +62,9 @@ export default {
 #sidebar_heading {
   font-weight: bold;
   padding: 15px 20px;
+}
+#sidebar_links:hover {
+  font-weight: bold;
 }
 
 </style>

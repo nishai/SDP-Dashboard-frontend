@@ -5,6 +5,7 @@
       <router-view id="app-view"></router-view>
       <div id="footer" class="footer">
           <p>By Team Potato 🥔</p>
+          <a href="https://www.flaticon.com/packs/charts-diagrams">Chart icons designed by Freepik from Flaticon</a>
       </div>
     </div>
   </div>
