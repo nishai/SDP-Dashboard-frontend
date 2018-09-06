@@ -13,11 +13,11 @@ WORKDIR /app
 
 # dependencies files
 COPY package.json package-lock.json ./
-# install dependencies
-RUN npm install
+# behind a proxy pip only requires (lowercase): http_proxy & https_proxy
+# set this with $ docker build --build-arg http_proxy="..." --build-arg https_proxy="..." ...
+RUN apk add --update make && \
+    npm install
 
-# documentation only
-EXPOSE 8080
 # binary with args to run
 ENTRYPOINT ["npm", "run"]
 # aditional default arguments to entrypoint
@@ -25,3 +25,4 @@ CMD ["dev"]
 
 # Make sure to add exceptions for files that can be copied in .dockerignore
 COPY . .
+

@@ -1,0 +1,108 @@
+.DEFAULT_GOAL := help
+# force rebuilds
+.PHONY: help dist fresh stop Dockerfile
+
+
+# =========================================================================	#
+# HELP                                                                      #
+# =========================================================================	#
+
+help:
+	@echo
+	@echo "This file (Makefile.docker) has all the same targets as (Makefile)."
+	@echo "    - The reason for this is that the default (Makefile) is copied"
+	@echo "      into a docker container supporting make and run there,"
+	@echo "      with this makefile forwarding along the calls"
+	@echo
+	@make help
+	@echo
+	@echo " Usage:"
+	@echo "       make -f Makefile.docker"
+	@echo
+	@echo "    [Makefile.docker]:"
+	@echo
+	@echo "    rm                 Delete the docker volumes for persistent data"
+	@echo "    Dockerfile         Build the Dockerfile from the local repo's current state"
+
+# =========================================================================	#
+# DOCKER                                                                    #
+# =========================================================================	#
+
+# the difference between '=' and ':='
+#     - ':=' is only evaluated once when it is defined
+#     - ' =' acts like a function and is evaluated whenever it is USED
+
+NAME_PREFIX      = $(if $(name),$(name),frontend)
+
+IMAGE_NAME       = $(NAME_PREFIX)-image
+CONTAINER_NAME   = $(NAME_PREFIX)-container
+
+DEV_PORT        := $(shell make echo-dev-port)
+PROD_PORT       := $(shell make echo-prod-port)
+
+# =========================================================================	#
+# [Makefile] Specific Targets                                               #
+# =========================================================================	#
+
+# targets from [Makefile]
+# *NB* KEEP THESE VARIABLES UPDATED!
+TARGETS         := serve
+
+# The following targets run in sequence to form a single target due to the *DOUBLE COLONS*
+# *DOUBLE COLONS* let you have multple targets with the same name.
+
+# set the variables for the target
+
+RUN_FLAGS       := # nothing
+
+serve      :: name = frontend-httpd
+serve      :: dockerfile_name = Dockerfile.serve
+
+serve      :: RUN_FLAGS += -p $(PROD_PORT):80
+$(TARGETS) :: RUN_FLAGS += -t $(shell [ -t 0 ] && echo "-i") # terminal flags, -t for color, and -i is only added if its an interactive terminal
+
+# Run the sequence of commands for the target
+# Append commands with || true
+
+$(TARGETS) :: Dockerfile fresh
+	@make section tag="Run - $@"
+	docker run --name $(CONTAINER_NAME) $(RUN_FLAGS) $(run_args) $(IMAGE_NAME) $@ $(make_args) || true
+$(TARGETS) :: stop
+
+# =========================================================================	#
+# [Makefile.Docker] Specific Targets                                        #
+# =========================================================================	#
+
+# Target needs to be run twice above.
+# If the same name is specified twice, only the first instance is run.
+fresh stop:
+	@make section tag="Stopping & Removing Container"
+	docker container stop $(CONTAINER_NAME) || true
+	docker container rm $(CONTAINER_NAME) || true
+
+rm: fresh
+	@make section tag="Removing Default Volumes"
+	@docker volume rm $(VOLUME_DATA) || true
+	@docker volume rm $(VOLUME_LOGS) || true
+
+# ========================================================================= #
+# DOCKERFILE                                                                #
+# ========================================================================= #
+
+FORCE:
+	@# this target is used to trick a wildcard target into acting like .PHONY
+
+Dockerfile: FORCE
+ifneq ($(and $(http_proxy),$(https_proxy)),) # this means: ifdef http_proxy && ifdef https_proxy
+	@make section tag="Building $@ $(if $(no_cache),--no-cache,)" details="http_proxy & https_proxy are both set"
+	@docker build \
+		--build-arg http_proxy='$(http_proxy)' \
+		--build-arg https_proxy='$(https_proxy)' \
+		$(if $(no_cache),--no-cache,) \
+		-t $(IMAGE_NAME) -f $(if $(dockerfile_name),$(dockerfile_name),$@) ./
+else
+	@make section tag="Building $@ $(if $(no_cache),--no-cache,)" details="If behind a proxy, set both (lowercase) http_proxy & https_proxy"
+	@docker build \
+		$(if $(no_cache),--no-cache,) \
+		-t $(IMAGE_NAME) -f $(if $(dockerfile_name),$(dockerfile_name),$@) ./
+endif
