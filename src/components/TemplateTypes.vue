@@ -1,5 +1,5 @@
 <template>
-  <router-link id="link" :to="'/dashboard'">
+    <router-link id="link" :to="{name: 'Dashboard', query: {templateType: url}}">
   <div id="type" >
     <img :src="url" alt="chart" width="120" >
     <p id="content"> {{ text }} </p>
