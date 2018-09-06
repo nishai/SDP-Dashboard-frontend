@@ -2,12 +2,12 @@
   <table id="table">
     <thead>
     <tr>
-      <th v-for="col in columns" :key="col">{{col}}</th>
+      <th v-for="col in columns" :key="col.id">{{col}}</th>
     </tr>
     </thead>
     <tbody>
-    <tr v-for="row in rows" :key="row">
-      <td v-for="col in columns" :key="col">{{row[col]}}</td>
+    <tr v-for="row in rows" :key="row.id">
+      <td v-for="col in columns" :key="col.id">{{row[col]}}</td>
     </tr>
     </tbody>
   </table>
