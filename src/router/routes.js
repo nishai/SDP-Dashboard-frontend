@@ -8,7 +8,7 @@ import TemplateScreen from '../pages/TemplateScreen.vue';
 const routes = [
   {
     path: '/',
-    name: 'Template Screen',
+    name: 'Templates',
     component: TemplateScreen,
   },
   {

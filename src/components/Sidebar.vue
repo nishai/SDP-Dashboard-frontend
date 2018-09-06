@@ -2,7 +2,7 @@
     <div id="sidebar" class="sidenav">
       <div id=sidebar_heading> Navigate </div>
       <div id="sidebar_links" v-for="item in links" :key="item.path">
-        <router-link :to="item.path"> {{ item.name }} </router-link>
+          <router-link :to="{name: item.name, query: item.query}"> {{ item.name }} </router-link>
       </div>
     </div>
 </template>
@@ -24,6 +24,7 @@ export default {
         {
           name: 'Dashboard',
           path: '/dashboard',
+          query: { templateType: '' },
         },
         {
           name: 'Templates',
