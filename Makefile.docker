@@ -66,7 +66,7 @@ $(TARGETS) :: RUN_FLAGS += -t $(shell [ -t 0 ] && echo "-i") # terminal flags, -
 
 $(TARGETS) :: Dockerfile fresh
 	@make section tag="Run - $@"
-	docker run --name $(CONTAINER_NAME) $(RUN_FLAGS) $(run_args) $(IMAGE_NAME) $@ $(make_args) || true
+	docker run --name $(CONTAINER_NAME) $(RUN_FLAGS) $(run_args) $(IMAGE_NAME) $(image_args) || true
 $(TARGETS) :: stop
 
 # =========================================================================	#
