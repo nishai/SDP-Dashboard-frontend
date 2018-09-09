@@ -19,7 +19,7 @@ RUN apk add --update make && \
     npm install
 
 # binary with args to run
-ENTRYPOINT ["npm", "run"]
+ENTRYPOINT ["make"]
 # aditional default arguments to entrypoint
 CMD ["dev"]
 

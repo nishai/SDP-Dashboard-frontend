@@ -19,7 +19,7 @@ RUN apk add --update make && \
     npm install
 
 # binary with args to run
-ENTRYPOINT ["npm", "run"]
+ENTRYPOINT ["make"]
 # aditional default arguments to entrypoint
 CMD ["dev"]
 
@@ -30,7 +30,7 @@ COPY . .
 # additions - Above should be the same as the standard ./Dockerfile   #
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
-RUN npm run build
+RUN make dist
 
 # ============= #
 # apache/httpd  #

@@ -37,6 +37,8 @@ NAME_PREFIX      = $(if $(name),$(name),frontend)
 IMAGE_NAME       = $(NAME_PREFIX)-image
 CONTAINER_NAME   = $(NAME_PREFIX)-container
 
+VOLUME_NPM_CACHE = frontend-volume-cache
+
 DEV_PORT        := $(shell make echo-dev-port)
 PROD_PORT       := $(shell make echo-prod-port)
 
@@ -46,7 +48,10 @@ PROD_PORT       := $(shell make echo-prod-port)
 
 # targets from [Makefile]
 # *NB* KEEP THESE VARIABLES UPDATED!
-TARGETS         := serve
+TARGETS_DEV     := init dev dist test
+TARGETS_CLEAN   := clean
+TARGETS_PROD    := serve
+TARGETS         := $(TARGETS_DEV) $(TARGETS_PROD) $(TARGETS_CLEAN)
 
 # The following targets run in sequence to form a single target due to the *DOUBLE COLONS*
 # *DOUBLE COLONS* let you have multple targets with the same name.
@@ -55,18 +60,25 @@ TARGETS         := serve
 
 RUN_FLAGS       := # nothing
 
+test       :: name = frontend-tests
 serve      :: name = frontend-httpd
 serve      :: dockerfile_name = Dockerfile.serve
 
 serve      :: RUN_FLAGS += -p $(PROD_PORT):80
+dev        :: RUN_FLAGS += -p $(DEV_PORT):$(DEV_PORT)
+$(TARGETS) :: RUN_FLAGS += --volume "$(VOLUME_NPM_CACHE):/app/node_modules"
 $(TARGETS) :: RUN_FLAGS += -t $(shell [ -t 0 ] && echo "-i") # terminal flags, -t for color, and -i is only added if its an interactive terminal
 
 # Run the sequence of commands for the target
 # Append commands with || true
 
+test       :: rm
 $(TARGETS) :: Dockerfile fresh
 	@make section tag="Run - $@"
-	docker run --name $(CONTAINER_NAME) $(RUN_FLAGS) $(run_args) $(IMAGE_NAME) $(image_args) || true
+	docker run --name $(CONTAINER_NAME) $(RUN_FLAGS) $(run_args) $(IMAGE_NAME) $(if $(findstring serve,$@),,$@) $(image_args) || true
+dist       ::
+	@make section tag="Copy ./dist"
+	docker cp "$(CONTAINER_NAME):/app/dist" "$(shell pwd)/" || true
 $(TARGETS) :: stop
 
 # =========================================================================	#
@@ -81,9 +93,11 @@ fresh stop:
 	docker container rm $(CONTAINER_NAME) || true
 
 rm: fresh
-	@make section tag="Removing Default Volumes"
-	@docker volume rm $(VOLUME_DATA) || true
-	@docker volume rm $(VOLUME_LOGS) || true
+	@make section tag="Removing Default Volumes" details="NO DEFAULT VOLUMES EXIST"
+
+rm-cache: fresh
+	@make section tag="Removing Cache Volumes"
+	@docker volume rm $(VOLUME_NPM_CACHE) || true
 
 # ========================================================================= #
 # DOCKERFILE                                                                #

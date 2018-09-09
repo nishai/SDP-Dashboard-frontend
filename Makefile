@@ -48,28 +48,36 @@ echo-dev-port:
 echo-prod-port:
 	@echo $(PROD_PORT)
 
-# =========================================================================	#
-# LOCAL                                                                     #
-# =========================================================================	#
-
-DIST_DIR = ./dist
+DIST_DIR := ./dist
+ENV_DEV  := PORT=$(DEV_PORT) HOST=0.0.0.0
+ENV_PROD := # n/a
 
 init: package.json package-lock.json
-	@make section tag="Installing dependencies"
-	npm install
+	@make section tag="Installing Dependencies"
+	$(ENV_DEV) npm install
 
 dev:
-	@make section tag="Local - Serving Dev"
-	npm run dev 0.0.0.0:$(DEV_PORT)
+	@make section tag="Serving Dev"
+	$(ENV_DEV) npm run dev
 
-build: init
-	@make section tag="Local - Building Optimised"
-	npm run build
+test: clean
+	@mkdir -p coverage
+	@make section tag="Run Unit Tests" details="NOT IMPLEMENTED"
+	@make section tag="Code Covergage" details="NOT IMPLEMENTED"
 
-serve: build
-	@make section tag="Local - Serving Optimised"
-	python3 -m http.server $(PROD_PORT) --directory $(DIST_DIR)
+dist: clean
+	@make section tag="Building Optimised"
+	$(ENV_DEV) npm run build
+
+serve: dist
+	@make section tag="Serving Optimised"
+	$(ENV_PROD) python3 -m http.server $(PROD_PORT) --directory $(DIST_DIR)
+
+# =========================================================================	#
+# CLEAN                                                                     #
+# =========================================================================	#
 
 clean:
 	@make section tag="Cleaning"
 	rm -rf ./dist
+
