@@ -71,8 +71,8 @@ dist: clean
 
 serve: dist
 	@make section tag="Serving Optimised"
-	$(ENV_PROD) python3 -m http.server $(PROD_PORT) --directory $(DIST_DIR)
-
+	@# --directory is only added in python 3.7
+	cd $(DIST_DIR) && $(ENV_PROD) python2 -m SimpleHTTPServer $(PROD_PORT)
 # =========================================================================	#
 # CLEAN                                                                     #
 # =========================================================================	#
