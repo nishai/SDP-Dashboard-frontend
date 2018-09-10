@@ -18,7 +18,6 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
-    "@types/axios": "^0.14.0",
     "@types/chart.js": "^2.7.31",
     "@vue/cli-plugin-babel": "^3.0.1",
     "@vue/cli-plugin-eslint": "^3.0.1",
