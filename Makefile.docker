@@ -2,7 +2,6 @@
 # force rebuilds
 .PHONY: help dist fresh stop Dockerfile
 
-
 # =========================================================================	#
 # HELP                                                                      #
 # =========================================================================	#
@@ -37,8 +36,6 @@ NAME_PREFIX      = $(if $(name),$(name),frontend)
 IMAGE_NAME       = $(NAME_PREFIX)-image
 CONTAINER_NAME   = $(NAME_PREFIX)-container
 
-VOLUME_NPM_CACHE = frontend-volume-cache
-
 DEV_PORT        := $(shell make echo-dev-port)
 PROD_PORT       := $(shell make echo-prod-port)
 
@@ -66,7 +63,6 @@ serve      :: dockerfile_name = Dockerfile.serve
 
 serve      :: RUN_FLAGS += -p $(PROD_PORT):80
 dev        :: RUN_FLAGS += -p $(DEV_PORT):$(DEV_PORT)
-$(TARGETS) :: RUN_FLAGS += --volume "$(VOLUME_NPM_CACHE):/app/node_modules"
 $(TARGETS) :: RUN_FLAGS += -t $(shell [ -t 0 ] && echo "-i") # terminal flags, -t for color, and -i is only added if its an interactive terminal
 
 # Run the sequence of commands for the target
@@ -95,10 +91,6 @@ fresh stop:
 rm: fresh
 	@make section tag="Removing Default Volumes" details="NO DEFAULT VOLUMES EXIST"
 
-rm-cache: fresh
-	@make section tag="Removing Cache Volumes"
-	@docker volume rm $(VOLUME_NPM_CACHE) || true
-
 # ========================================================================= #
 # DOCKERFILE                                                                #
 # ========================================================================= #
@@ -106,17 +98,21 @@ rm-cache: fresh
 FORCE:
 	@# this target is used to trick a wildcard target into acting like .PHONY
 
+
 Dockerfile: FORCE
 ifneq ($(and $(http_proxy),$(https_proxy)),) # this means: ifdef http_proxy && ifdef https_proxy
 	@make section tag="Building $@ $(if $(no_cache),--no-cache,)" details="http_proxy & https_proxy are both set"
-	@docker build \
-		--build-arg http_proxy='$(http_proxy)' \
-		--build-arg https_proxy='$(https_proxy)' \
-		$(if $(no_cache),--no-cache,) \
+	docker build \
+		--build-arg http_proxy_encoded='$(http_proxy)' \
+		--build-arg https_proxy_encoded='$(https_proxy)' \
+		--build-arg http_proxy='$(shell python2 -c "import urllib; print urllib.unquote_plus('$(http_proxy)')")' \
+		--build-arg https_proxy='$(shell python2 -c "import urllib; print urllib.unquote_plus('$(https_proxy)')")' \
+		$(if $(build_args),$(build_args),) $(if $(no_cache),--no-cache,) \
 		-t $(IMAGE_NAME) -f $(if $(dockerfile_name),$(dockerfile_name),$@) ./
 else
 	@make section tag="Building $@ $(if $(no_cache),--no-cache,)" details="If behind a proxy, set both (lowercase) http_proxy & https_proxy"
-	@docker build \
-		$(if $(no_cache),--no-cache,) \
+	docker build \
+		$(if $(build_args),$(build_args),) $(if $(no_cache),--no-cache,) \
 		-t $(IMAGE_NAME) -f $(if $(dockerfile_name),$(dockerfile_name),$@) ./
 endif
+

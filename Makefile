@@ -54,11 +54,11 @@ ENV_PROD := # n/a
 
 init: package.json package-lock.json
 	@make section tag="Installing Dependencies"
-	$(ENV_DEV) npm install
+	$(ENV_DEV) yarn install
 
 dev:
 	@make section tag="Serving Dev"
-	$(ENV_DEV) npm run dev
+	$(ENV_DEV) yarn run dev
 
 test: clean
 	@mkdir -p coverage
@@ -67,7 +67,7 @@ test: clean
 
 dist: clean
 	@make section tag="Building Optimised"
-	$(ENV_DEV) npm run build
+	$(ENV_DEV) yarn run build
 
 serve: dist
 	@make section tag="Serving Optimised"
