@@ -77,16 +77,16 @@ export default {
   },
   data() {
     return {
-      bar1: require('../assets/bar1.png'),
-      bar2: require('../assets/bar2.png'),
-      bar3: require('../assets/bar3.png'),
-      pie1: require('../assets/pie1.png'),
-      pie2: require('../assets/pie2.png'),
-      pie3: require('../assets/pie3.png'),
-      line1: require('../assets/line1.png'),
-      line2: require('../assets/line2.png'),
-      bellcurve: require('../assets/bell-curve.png'),
-      doughnut: require('../assets/doughnut.png'),
+      bar1: require('../assets/images/charts/bar1.png'),
+      bar2: require('../assets/images/charts/bar2.png'),
+      bar3: require('../assets/images/charts/bar3.png'),
+      pie1: require('../assets/images/charts/pie1.png'),
+      pie2: require('../assets/images/charts/pie2.png'),
+      pie3: require('../assets/images/charts/pie3.png'),
+      line1: require('../assets/images/charts/line1.png'),
+      line2: require('../assets/images/charts/line2.png'),
+      bellcurve: require('../assets/images/charts/bell-curve.png'),
+      doughnut: require('../assets/images/charts/doughnut.png'),
     };
   },
 };
