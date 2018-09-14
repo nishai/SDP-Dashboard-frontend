@@ -10,7 +10,7 @@
 <script>
 import axios from 'axios';
 import Heading from '../components/Heading.vue';
-import Chart from '../components/Chart.vue';
+import Chart from '../components/chart/Chart.vue';
 
 export default {
   name: 'Reports',

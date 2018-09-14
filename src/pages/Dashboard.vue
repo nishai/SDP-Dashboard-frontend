@@ -28,8 +28,8 @@
 
 <script>
 import Heading from '../components/Heading.vue';
-import Chart from '../components/Chart.vue';
-import Table from '../components/Table.vue';
+import Chart from '../components/chart/Chart.vue';
+import Table from '../components/chart/Table.vue';
 import List from '../components/List.vue';
 
 export default {

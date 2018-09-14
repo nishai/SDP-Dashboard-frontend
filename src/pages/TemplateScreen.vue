@@ -6,7 +6,7 @@
       <input type="checkbox" value="always_show" checked> Always show this page on login<br>
     </div>
 
-    <div id="subheading">
+    <div class="subheading">
       <h3>Demographics</h3>
     </div>
     <div class="grid-container">
@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <div id="subheading">
+    <div class="subheading">
       <h3>Marks</h3>
     </div>
     <div class="grid-container">
@@ -47,7 +47,7 @@
       </div>
     </div>
 
-    <div id="subheading">
+    <div class="subheading">
       <h3>Class sizes</h3>
     </div>
     <div class="grid-container">
@@ -98,7 +98,8 @@ export default {
   padding: 25px;
   color: #536c85;
 }
-#subheading {
+
+.subheading {
   padding-left: 35px;
   color: #536c85;
   /* font-size: 25px; */
