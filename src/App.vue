@@ -4,8 +4,8 @@
     <div id="app-content">
       <router-view id="app-view"></router-view>
       <div id="footer" class="footer">
-          <p>By Team Potato 🥔</p>
-          <a href="https://www.flaticon.com/packs/charts-diagrams">Chart icons designed by Freepik from Flaticon</a>
+        Dashboard by Team Potato 🥔 <br>
+        Chart Icons by <a href="https://www.flaticon.com/packs/charts-diagrams">Freepik</a> 📊
       </div>
     </div>
   </div>
@@ -23,16 +23,12 @@ export default {
 </script>
 
 <style>
-
+/* make sure the app takes up the entire window */
+/* for example if this was not here, the footer */
+/* could not be placed at the bottom of the screen */
 html,body {
   height:100%;
   width: 100%;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  /* border: 1px solid black; */
 }
 
 #app {
@@ -45,25 +41,24 @@ html,body {
 
 #footer {
   right: 0;
-  padding: 10px;  /* padding is added on to width */
-  width: calc(100% - 20px); /* make sure to keep up to date with sidebar */
-  margin-left: 0px; /* make sure to keep up to date with sidebar */
+  padding: 10px;    /* padding is added on to width */
+  width: 100%;      /* padding is included in this */
+  margin-left: 0;
 
   color: #2c3e50;
   text-align: right;
   background: #f4f6fb;
   font-size: 15px;
-  height: 30px;
+  height: 65px;    /* padding is included in this */
 }
 
 #app-content {
-    margin-left: 200px;
-    width: calc(100% - 200px);
-    height: 100%;
+  margin-left: 200px;         /* make sure to keep up to date with sidebar */
+  width: calc(100% - 200px);  /* make sure to keep up to date with sidebar */
+  height: 100%;
 }
 
 #app-view {
-    min-height: calc(100% - 30px - 2*10px);
+  min-height: calc(100% - 65px - 16px); /* why tf is there also the -16px */
 }
-
 </style>

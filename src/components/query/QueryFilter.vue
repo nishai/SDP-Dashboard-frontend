@@ -1,3 +1,13 @@
+<!--
+This component is intended to be used to construct a partial backend query in a similar form to:
+  {
+    "exclude": true
+    "field": "encrypted_student_no",
+    "operator": "startswith",
+    "value": "02925A2B8FC1F2FC7132D155EBB4FFB7",
+  }
+-->
+
 <template>
   <div id="queryFilter">
     <!-- input group, looks all joined together -->
@@ -53,7 +63,7 @@ export default {
     },
   },
   data: () => ({
-    // avail options
+    // field examples
     // todo, get from backend
     fields: [
       'encrypted_student_no',
@@ -62,6 +72,8 @@ export default {
       'age',
       'gender',
     ],
+    // operator examples
+    // todo, get from backend
     operators: [
       'gte',
       'gt',

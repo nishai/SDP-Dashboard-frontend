@@ -30,7 +30,7 @@
 import Heading from '../components/Heading.vue';
 import Chart from '../components/charts/Chart.vue';
 import Table from '../components/charts/Table.vue';
-import List from '../components/List.vue';
+import List from '../components/charts/List.vue';
 
 export default {
   name: 'Dashboard',
