@@ -15,20 +15,24 @@ export default {
       links: [
         {
           name: 'Home',
-          path: '/home',
+          path: '/',
         },
         {
-          name: 'Queries',
-          path: '/queries',
-        },
-        {
-          name: 'Dashboard',
-          path: '/dashboard',
+          name: 'Chart Examples',
+          path: '/examples',
           query: { templateType: '' },
         },
         {
-          name: 'Templates',
-          path: '/',
+          name: 'Chart Templates',
+          path: '/templates',
+        },
+        {
+          name: 'Queries',
+          path: '/query',
+        },
+        {
+          name: 'Report',
+          path: '/report',
         },
       ],
     };

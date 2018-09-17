@@ -11,19 +11,19 @@
     </div>
     <div class="grid-container">
       <div class="grid-item">
-        <TemplateTypes text="Race" v-bind:url="doughnut"></TemplateTypes>
+        <ChartExampleLink text="Race" v-bind:url="doughnut"></ChartExampleLink>
       </div>
       <div class="grid-item">
-        <TemplateTypes text="Gender" v-bind:url="pie2"></TemplateTypes>
+        <ChartExampleLink text="Gender" v-bind:url="pie2"></ChartExampleLink>
       </div>
       <div class="grid-item">
-        <TemplateTypes text="Nationality" v-bind:url="pie1"></TemplateTypes>
+        <ChartExampleLink text="Nationality" v-bind:url="pie1"></ChartExampleLink>
       </div>
       <div class="grid-item">
-        <TemplateTypes text="Home Language" v-bind:url="pie3"></TemplateTypes>
+        <ChartExampleLink text="Home Language" v-bind:url="pie3"></ChartExampleLink>
       </div>
       <div class="grid-item">
-        <TemplateTypes text="Demographics vs Marks" v-bind:url="line2"></TemplateTypes>
+        <ChartExampleLink text="Demographics vs Marks" v-bind:url="line2"></ChartExampleLink>
       </div>
     </div>
 
@@ -32,18 +32,18 @@
     </div>
     <div class="grid-container">
       <div class="grid-item">
-        <TemplateTypes text="Pass rates by year" v-bind:url="bar1"></TemplateTypes>
+        <ChartExampleLink text="Pass rates by year" v-bind:url="bar1"></ChartExampleLink>
       </div>
       <div class="grid-item">
-        <TemplateTypes
-        text="Pass rates by faculty/course" v-bind:url="bar3"></TemplateTypes>
+        <ChartExampleLink
+        text="Pass rates by faculty/course" v-bind:url="bar3"></ChartExampleLink>
       </div>
       <div class="grid-item">
-        <TemplateTypes text="Bell curve" v-bind:url="bellcurve"></TemplateTypes>
+        <ChartExampleLink text="Bell curve" v-bind:url="bellcurve"></ChartExampleLink>
       </div>
       <div class="grid-item">
-        <TemplateTypes
-        text="Progress outcome by faculty/course" v-bind:url="bar2"></TemplateTypes>
+        <ChartExampleLink
+        text="Progress outcome by faculty/course" v-bind:url="bar2"></ChartExampleLink>
       </div>
     </div>
 
@@ -52,12 +52,12 @@
     </div>
     <div class="grid-container">
       <div class="grid-item">
-        <TemplateTypes
-        text="Class size vs pass rate" v-bind:url="line1"></TemplateTypes>
+        <ChartExampleLink
+        text="Class size vs pass rate" v-bind:url="line1"></ChartExampleLink>
       </div>
       <div class="grid-item">
-        <TemplateTypes click="two"
-        text="Average class size by faculty/course" v-bind:url="bar1"></TemplateTypes>
+        <ChartExampleLink click="two"
+        text="Average class size by faculty/course" v-bind:url="bar1"></ChartExampleLink>
       </div>
     </div>
 
@@ -67,13 +67,13 @@
 <script>
 /* eslint-disable global-require */
 import Heading from '../components/Heading.vue';
-import TemplateTypes from '../components/TemplateTypes.vue';
+import ChartExampleLink from '../components/ChartExampleLink.vue';
 
 export default {
-  name: 'TemplateScreen',
+  name: 'ChartTemplates',
   components: {
     Heading,
-    TemplateTypes,
+    ChartExampleLink,
   },
   data() {
     return {

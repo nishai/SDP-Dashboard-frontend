@@ -33,7 +33,7 @@ import Table from '../components/charts/Table.vue';
 import List from '../components/charts/List.vue';
 
 export default {
-  name: 'Dashboard',
+  name: 'ChartExamples',
   data() {
     return {
       add_table: false,

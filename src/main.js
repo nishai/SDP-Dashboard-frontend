@@ -2,22 +2,13 @@ import BootstrapVue from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import Vue from 'vue';
-import VueRouter from 'vue-router';
-import Vuex from 'vuex';
 import App from './App.vue';
-import routes from './routes';
+import router from './router';
+import store from './store';
 
-/* add plugins to Vue */
+/* add miscellaneous plugins to Vue */
 
-Vue.use(VueRouter);
-Vue.use(Vuex);
 Vue.use(BootstrapVue);
-
-/* Initialise router */
-
-const router = new VueRouter({
-  routes,
-});
 
 /* Initialise Vue */
 
@@ -27,6 +18,7 @@ const app = new Vue({
   components: { App },
   template: '<App/>',
   router,
+  store,
 });
 
 /* Inject App Into Page */
