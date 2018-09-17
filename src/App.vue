@@ -1,64 +1,142 @@
 <template>
-  <div id="app">
+  <div class="app">
     <Sidebar/>
-    <div id="app-content">
-      <router-view id="app-view"></router-view>
-      <div id="footer" class="footer">
-        Dashboard by Team Potato 🥔 <br>
-        Chart Icons by <a href="https://www.flaticon.com/packs/charts-diagrams">Freepik</a> 📊
-      </div>
+    <Optsbar/>
+    <div class="viewport">
+      <router-view class="content">
+        This will be replaced
+      </router-view>
+      <Footer/>
     </div>
   </div>
 </template>
 
+<!-- SCRIPT -->
+
 <script>
-import Sidebar from './components/Sidebar.vue';
+import Sidebar from './components/sidebar/Sidebar.vue';
+import Optsbar from './components/sidebar/Optsbar.vue';
+import Footer from './components/Footer.vue';
 
 export default {
-  name: 'App',
+  name: 'app',
   components: {
     Sidebar,
+    Optsbar,
+    Footer,
   },
 };
 </script>
 
+<!-- STYLE -->
+
 <style>
-/* make sure the app takes up the entire window */
-/* for example if this was not here, the footer */
-/* could not be placed at the bottom of the screen */
-html,body {
-  height:100%;
+
+/* ========================================================================== */
+/* Fix Defaults - https://gist.github.com/robinrendle/1d20c566c5e5fbd67f25    */
+/* ========================================================================== */
+
+/*
+ * Include padding and border in element's total width and height
+ */
+*, *:before, *:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing:border-box;
+  box-sizing: border-box;
+}
+
+/*
+ * make sure the app takes up the entire window
+ * for example if this was not here, the footer
+ * could not be placed at the bottom of the screen
+ */
+html, body {
+  height: 100%;
   width: 100%;
 }
 
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+/*
+ * Fix font rendering defaults
+ */
+html, button {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-size: 100%;
+}
+
+/* ========================================================================== */
+/* Vars                                                                       */
+/* ========================================================================== */
+
+/*
+ * Global CSS variables. Usage eg:
+ *   color: var(--text-color);
+ */
+:root{
+  --text-color: #606e78;
+  --link-color: #486078;
+  --heading-color: #17324d;
+
+  --bg-color: #ffffff;
+  --bg-color-sidebar: #f5f6fa;
+  --bg-color-footer: #edeff2;
+
+  --optsbar-width: 300px;
+  --sidebar-width: 200px;
+  --footer-height: 65px;
+  --font-size: 14px;
+  --font-size-sidebar: 18px;
+
+  --border-color: #eaeaea;
+  --border-color-sidebar: #eaeaea;
+  --border-color-footer: #eaeaea;
+  --border-color-optsbar: #eaeaea;
+}
+
+/* ========================================================================== */
+/* Global Style                                                               */
+/* ========================================================================== */
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+a:hover {
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* ========================================================================== */
+/* Local Style                                                                */
+/* ========================================================================== */
+
+.app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   width: 100%;
   height: 100%;
 }
 
-#footer {
-  right: 0;
-  padding: 10px;    /* padding is added on to width */
-  width: 100%;      /* padding is included in this */
-  margin-left: 0;
-
-  color: #2c3e50;
-  text-align: right;
-  background: #f4f6fb;
-  font-size: 15px;
-  height: 65px;    /* padding is included in this */
-}
-
-#app-content {
-  margin-left: 200px;         /* make sure to keep up to date with sidebar */
-  width: calc(100% - 200px);  /* make sure to keep up to date with sidebar */
+.viewport {
+  margin-left: var(--sidebar-width);
+  width: calc(100% - var(--sidebar-width));
   height: 100%;
 }
 
-#app-view {
-  min-height: calc(100% - 65px - 16px); /* why tf is there also the -16px */
+.content {
+  min-height: calc(100% - var(--footer-height));
+  padding: 25px;
 }
+
 </style>
+

@@ -1,7 +1,6 @@
 <template>
   <div id="dashboard">
     <Heading heading_text="Example Dashboard"></Heading>
-    <p id="content"> This is just an example page </p>
     <Chart v-if="this.$route.query.templateType === '' ||
     this.$route.query.templateType.includes('doughnut')" type="doughnut"></Chart>
     <Chart v-if="this.$route.query.templateType === '' ||
@@ -50,8 +49,4 @@ export default {
 </script>
 
 <style>
-  #content {
-    padding: 25px;
-    color: #536c85;
-  }
 </style>

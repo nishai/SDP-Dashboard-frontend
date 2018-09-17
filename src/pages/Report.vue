@@ -1,7 +1,10 @@
 <template>
 <div>
+  <h1>
+    Report: {{ $route.params.id }}
+  </h1>
   <p>
-    TODO
+    Placeholder
   </p>
 </div>
 </template>

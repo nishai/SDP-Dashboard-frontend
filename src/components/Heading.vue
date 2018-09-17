@@ -1,5 +1,5 @@
 <template>
-    <div id="heading">
+    <div class="heading">
       <h1>{{ heading_text }}</h1>
     </div>
 </template>
@@ -14,9 +14,8 @@ export default {
 </script>
 
 <style>
-#heading {
-  padding: 25px;
-  color: #2c3e50;
+.heading {
+  color: var(--heading-color);
 }
 </style>
 

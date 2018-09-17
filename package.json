@@ -45,13 +45,10 @@
       "@vue/airbnb"
     ],
     "rules": {
-      "max-len": [
-        "warn",
-        {
-          "ignoreComments": true,
-          "code": 120
-        }
-      ]
+      "max-len": ["warn", {"ignoreComments": true, "code": 120}],
+      "no-param-reassign": ["error", { "props": false }],
+      "arrow-parens": ["error", "always"],
+      "no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": true }]
     },
     "parserOptions": {
       "parser": "babel-eslint"

@@ -94,16 +94,12 @@ export default {
 </script>
 
 <style>
-#content {
-  padding: 25px;
-  color: #536c85;
-}
-
 .subheading {
   padding-left: 35px;
   color: #536c85;
   /* font-size: 25px; */
 }
+
 #check {
   top: 10px;
   right: 10px;
@@ -111,20 +107,20 @@ export default {
   color: #2c3e50;
   font-size: 16px;
 }
+
 .grid-container {
-  display: inline-grid;
   grid-template-columns: 150px 150px 150px 150px 150px ;
   padding-left: 30px;
+  /* alignment */
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
+
 .grid-item {
   padding: 10px;
   font-size: 20px;
   text-align: center;
-}
-.grid-item:hover {
-  height: 120px;
-  width: 120px;
-  background: whitesmoke;
-  border-radius: 5px;
 }
 </style>

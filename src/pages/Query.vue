@@ -1,10 +1,10 @@
 <template>
   <div id="query">
     <Heading heading_text="API Request Example"></Heading>
-    <p class="content"> This is just an example page </p>
-    <p class="content" v-bind:style="style"> {{ info }} </p>
+    <p> This is just an example page </p>
+    <p v-bind:style="style"> {{ info }} </p>
     <Heading heading_text="Query Components"></Heading>
-    <p class="content">
+    <p>
       <template v-for="child in children">
         <component :is="child" :key="child.name"></component>
       </template>
@@ -51,8 +51,4 @@ export default {
 
 
 <style>
-.content {
-  padding: 25px;
-  color: #536c85;
-}
 </style>
