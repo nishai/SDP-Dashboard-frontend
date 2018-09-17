@@ -18,8 +18,8 @@ export default {
           path: '/home',
         },
         {
-          name: 'Reports',
-          path: '/reports',
+          name: 'Queries',
+          path: '/queries',
         },
         {
           name: 'Dashboard',

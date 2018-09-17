@@ -14,7 +14,6 @@ export default {
 </script>
 
 <style>
-
 #heading {
   padding: 25px;
   color: #2c3e50;

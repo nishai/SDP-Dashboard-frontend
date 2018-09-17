@@ -1,7 +1,7 @@
-import Dashboard from '../pages/Dashboard.vue';
-import Reports from '../pages/Reports.vue';
-import Home from '../pages/Home.vue';
-import TemplateScreen from '../pages/TemplateScreen.vue';
+import Dashboard from './pages/Dashboard.vue';
+import Queries from './pages/Query.vue';
+import Home from './pages/Home.vue';
+import TemplateScreen from './pages/TemplateScreen.vue';
 
 /* Define the routes */
 
@@ -12,9 +12,9 @@ const routes = [
     component: TemplateScreen,
   },
   {
-    path: '/reports',
-    name: 'Reports',
-    component: Reports,
+    path: '/queries',
+    name: 'Queries',
+    component: Queries,
   },
   {
     path: '/dashboard',
