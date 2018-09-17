@@ -14,17 +14,13 @@ export default {
     return {
       links: [
         {
-          name: 'Home',
-          path: '/',
+          name: 'Chart Templates',
+          path: '/templates',
         },
         {
           name: 'Chart Examples',
           path: '/examples',
           query: { templateType: '' },
-        },
-        {
-          name: 'Chart Templates',
-          path: '/templates',
         },
         {
           name: 'Queries',

@@ -4,7 +4,6 @@ import ChartExamples from './pages/ChartExamples.vue';
 import ChartTemplates from './pages/ChartTemplates.vue';
 import Query from './pages/Query.vue';
 import Report from './pages/Report.vue';
-import Home from './pages/Home.vue';
 
 /* Add VueRouter Plugin to Vue */
 
@@ -16,17 +15,17 @@ const routes = [
   {
     name: 'Home',
     path: '/',
-    component: Home,
-  },
-  {
-    name: 'Chart Examples',
-    path: '/examples',
-    component: ChartExamples,
+    redirect: '/templates',
   },
   {
     name: 'Chart Templates',
     path: '/templates',
     component: ChartTemplates,
+  },
+  {
+    name: 'Chart Examples',
+    path: '/examples',
+    component: ChartExamples,
   },
   {
     name: 'Queries',
