@@ -44,34 +44,45 @@ const testReportAQuery = {
   },
 };
 
-const testReportA = {
-  name: 'Test Report',
-  desc: 'Comparing the marks of students in the science faculty',
-  charts: [
-    {
-      name: 'Test Bar Graph',
-      type: 'bar',
-      query: testReportAQuery,
-    },
-  ],
-};
-
-const testReportB = {
-  name: 'Test Report',
-  charts: [
-    {
-      name: 'Test Pie Chart',
-      type: 'pie',
-      query: testReportAQuery,
-    },
-  ],
-};
-
 function uuidv4() {
   /* https://stackoverflow.com/questions/105034 */
   /* eslint-disable space-infix-ops, no-bitwise, no-mixed-operators, max-len */
   return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, (c) => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16));
 }
+
+
+const testReportA = {
+  name: 'Test Report',
+  desc: 'Comparing the marks of students in the science faculty',
+  charts: {
+    [uuidv4()]: {
+      name: 'Test Bar Graph',
+      type: 'bar',
+      query: testReportAQuery,
+    },
+  },
+};
+
+const testReportB = {
+  name: 'Test Report',
+  charts: {
+    [uuidv4()]: {
+      name: 'Test Pie Chart',
+      type: 'pie',
+      query: testReportAQuery,
+    },
+    [uuidv4()]: {
+      name: 'Test Pie Chart 1',
+      type: 'pie',
+      query: testReportAQuery,
+    },
+    [uuidv4()]: {
+      name: 'Test Pie Chart 2',
+      type: 'pie',
+      query: testReportAQuery,
+    },
+  },
+};
 
 /* ========================================================================== */
 /* STATE                                                                      */
@@ -79,8 +90,8 @@ function uuidv4() {
 
 const stateData = {
   reports: {
-    [uuidv4()]: testReportA,
-    [uuidv4()]: testReportB,
+    '1d090475-3c50-4075-bcf2-1b7f23a2a5cd': testReportA,
+    '1d2d04f5-7c50-74b5-acf2-9b7f33a2adcd': testReportB,
   },
 };
 
@@ -107,6 +118,15 @@ const mutations = {
     };
     Vue.set(state.reports, uuid, report);
   },
+  [mutators.CREATE_REPORT_CHART](state, reportId) {
+    const uuid = uuidv4();
+    const chart = {
+      name: uuid,
+      type: 'pie',
+      query: {},
+    };
+    Vue.set(state.reports[reportId].charts, uuid, chart);
+  },
 };
 
 /* ========================================================================== */
@@ -116,6 +136,9 @@ const mutations = {
 const actions = {
   createReport({ commit, state }) {
     commit(mutators.CREATE_REPORT);
+  },
+  createReportChart({ commit, state }, { reportId }) {
+    commit(mutators.CREATE_REPORT_CHART, reportId);
   },
 };
 

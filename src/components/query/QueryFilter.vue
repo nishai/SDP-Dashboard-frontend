@@ -14,7 +14,7 @@ This component is intended to be used to construct a partial backend query in a 
     <b-input-group size="sm">
       <!-- exclude -->
       <b-input-group-prepend>
-        <b-btn :variant="data.exclude ? 'outline-warning' : 'outline-success'" @click="data.exclude=!data.exclude">
+        <b-btn :variant="data.exclude ? 'outline-warning' : 'outline-primary'" @click="data.exclude=!data.exclude">
           {{ data.exclude ? 'exclude' : 'include' }}
         </b-btn>
       </b-input-group-prepend>

@@ -15,8 +15,8 @@
 
 <script>
 import axios from 'axios';
-import Heading from '../components/Heading.vue';
-import Chart from '../components/charts/Chart.vue';
+import Heading from '../components/misc/Heading.vue';
+import Chart from '../components/charts/chartjs/Chart.vue';
 import QueryFilter from '../components/query/QueryFilter.vue';
 
 export default {
