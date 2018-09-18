@@ -22,77 +22,62 @@ help:
 	@echo "  dockerfile.serve   dockerise the optimised project"
 	@echo "  docker-serve       dockerised version of serve"
 
-label = Frontend
+# =========================================================================	#
+# PRINT                                                                     #
+# =========================================================================	#
+
+label           := Frontend
+docker          := $(shell [ -f /.dockerenv ] && echo 1)
+location        := $(if $(docker),\033[94mDocker\033[0m,\033[92mLocal\033[0m)
 
 section:
-	@printf "\n[\e[94m\e[1m$(label)\e[0m]: \e[93m\e[1m$(tag)\e[0m\n"
+	@printf "\n[\033[91m\033[1m$(label): $(location)\033[0m]: \033[93m\033[1m$(tag)\033[0m\n"
+ifdef details
+	@printf	"\033[90m$(details)\033[0m\n\n"
+endif
 
 # =========================================================================	#
 # LOCAL                                                                     #
 # =========================================================================	#
 
-DIST_DIR = ./dist
+DEV_PORT        := 3080
+PROD_PORT       := 4080
+
+echo-dev-port:
+	@echo $(DEV_PORT)
+echo-prod-port:
+	@echo $(PROD_PORT)
+
+DIST_DIR := ./dist
+ENV_DEV  := PORT=$(DEV_PORT) HOST=0.0.0.0
+ENV_PROD := # n/a
 
 init: package.json package-lock.json
-	@make section tag="Installing dependencies"
-	npm install
+	@make section tag="Installing Dependencies"
+	$(ENV_DEV) yarn install
 
 dev:
-	@make section tag="Local - Serving Dev"
-	npm run dev
+	@make section tag="Serving Dev"
+	$(ENV_DEV) yarn run dev
 
-build: init
-	@make section tag="Local - Building Optimised"
-	npm run build
+test: clean
+	@mkdir -p coverage
+	@make section tag="Run Unit Tests" details="NOT IMPLEMENTED"
+	@make section tag="Code Covergage" details="NOT IMPLEMENTED"
 
-serve: build
-	@make section tag="Local - Serving Optimised"
-	python3 -m http.server 8080 --directory $(DIST_DIR)
+dist: clean
+	@make section tag="Building Optimised"
+	$(ENV_DEV) yarn run build
+
+serve: dist
+	@make section tag="Serving Optimised"
+	@# --directory is only added in python 3.7
+	cd $(DIST_DIR) && $(ENV_PROD) python2 -m SimpleHTTPServer $(PROD_PORT)
+# =========================================================================	#
+# CLEAN                                                                     #
+# =========================================================================	#
 
 clean:
 	@make section tag="Cleaning"
 	rm -rf ./dist
-
-# =========================================================================	#
-# DOCKER - Local Modifictions & Live Updates                                #
-# =========================================================================	#
-
-IMAGE_NAME       = frontend-image
-
-CNTNR_NAME       = frontend-container
-
-VBIND_SRC        = -v "$(shell pwd)/src:/app/src"
-VBIND_PUBLIC     = -v "$(shell pwd)/public:/app/public"
-
-RUN_FLAGS        = --rm --name "$(CNTNR_NAME)"
-
-dockerfile:
-	@make section tag="Local - Building Dockerfile"
-	docker build -t "$(IMAGE_NAME)" ./
-
-docker-dev: dockerfile
-	@make section tag="Docker - Serving (Dev Mode)"
-	docker run $(RUN_FLAGS) -p 8080:8080 $(VBIND_SRC) $(VBIND_PUBLIC) $(IMAGE_NAME) dev
-
-docker-build: dockerfile
-	@make section tag="Docker - Building Optimised"
-	docker run $(RUN_FLAGS) $(IMAGE_NAME) build
-
-# =========================================================================	#
-# DOCKER - Serve Production                                                 #
-# =========================================================================	#
-
-IMAGE_NAME_HTTPD = frontend-image-httpd
-
-CNTNR_NAME_HTTPD = frontend-container-httpd
-
-RUN_FLAGS_HTTPD  = --rm --name "$(CNTNR_NAME_HTTPD)"
-
-dockerfile.serve:
-	@make section tag="Local - Building Dockerfile.serve"
-	docker build -t "$(IMAGE_NAME_HTTPD)" -f "Dockerfile.serve" ./
-
-docker-serve: dockerfile.serve
-	@make section tag="Docker - Serving Optimised"
-	docker run $(RUN_FLAGS_HTTPD) -p 8080:80 $(IMAGE_NAME_HTTPD)
 
