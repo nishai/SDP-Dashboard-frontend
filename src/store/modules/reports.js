@@ -114,7 +114,7 @@ const mutations = {
     const report = {
       name: uuid,
       desc: 'This report has not yet been customised',
-      charts: [],
+      charts: {},
     };
     Vue.set(state.reports, uuid, report);
   },
