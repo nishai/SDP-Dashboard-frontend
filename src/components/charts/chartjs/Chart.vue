@@ -1,6 +1,6 @@
 /* eslint-disable */
 <template>
-  <div class="small">
+  <div>
     <doughnut-chart v-if="type === 'doughnut'" :chart-data="datacollection"></doughnut-chart>
     <line-chart v-else-if="type === 'line'" :chart-data="datacollection"></line-chart>
     <bar-chart v-else-if="type === 'bar'" :chart-data="datacollection"></bar-chart>
@@ -91,8 +91,4 @@ export default {
 </script>
 
 <style>
-  .small {
-    max-width: 600px;
-    margin:  150px auto;
-  }
 </style>
