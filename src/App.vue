@@ -117,6 +117,24 @@ a:hover {
   text-decoration: none;
 }
 
+.stroke-primary { stroke: var(--primary); }
+.stroke-secondary { stroke: var(--secondary); }
+.stroke-success { stroke: var(--success); }
+.stroke-danger { stroke: var(--danger); }
+.stroke-warning { stroke: var(--warning); }
+.stroke-info { stroke: var(--info); }
+.stroke-dark { stroke: var(--dark); }
+.stroke-muted { stroke: var(--gray); }
+
+.hover-stroke-primary:hover { stroke: var(--primary); }
+.hover-stroke-secondary:hover { stroke: var(--secondary); }
+.hover-stroke-success:hover { stroke: var(--success); }
+.hover-stroke-danger:hover { stroke: var(--danger); }
+.hover-stroke-warning:hover { stroke: var(--warning); }
+.hover-stroke-info:hover { stroke: var(--info); }
+.hover-stroke-dark:hover { stroke: var(--dark); }
+.hover-stroke-muted:hover { stroke: var(--gray); }
+
 /* ========================================================================== */
 /* Local Style                                                                */
 /* ========================================================================== */

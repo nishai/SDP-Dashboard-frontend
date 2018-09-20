@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div class="sidebar">
+    <div class="sidebar border rounded-top">
       <div class="sidebar_nav">
         <div class="sidebar_nav_heading"> Navigate </div>
         <div v-for="item in links" :key="item.path" class="sidebar_nav_group">
@@ -34,10 +34,7 @@ export default {
   width: calc(var(--sidebar-width) - 15px);
   height: 100vh;
   /* border */
-  border-width: 1px 1px 0 1px;
   border-color: var(--border-color-sidebar);
-  border-style: solid;
-  border-radius: 10px 10px 0 0;
 }
 
 .sidebar_nav {
