@@ -78,11 +78,13 @@ export default {
           'rgba(75, 192, 192, 1)',
           'rgba(153, 102, 255, 1)',
         ],
+        type: 'line',
+        fill: false,
       }];
       this.datacollection = {
         title: this.datacollection.title,
         labels: this.datacollection.labels,
-        datasets: this.datacollection.datasets.concat(newData),
+        datasets: newData.concat(this.datacollection.datasets),
         options: this.datacollection.options,
       };
     },
