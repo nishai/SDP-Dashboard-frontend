@@ -46,8 +46,11 @@ const mutations = {
 
 const actions = {
   toggleOptsbar({ commit, state }, { component }) {
+    console.log('TOGGLING');
     commit(mutators.TOGGLE_OPTSBAR);
     commit(mutators.SET_OPTSBAR_COMPONENT, component);
+    console.log(state.optsbarOpen);
+    console.log(state.optsbarComponent);
   },
 };
 

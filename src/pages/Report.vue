@@ -3,8 +3,8 @@
     <Heading :heading_text="report.name"></Heading>
     <h3> {{ report.desc }} </h3>
     <div class="d-flex flex-wrap justify-content-start">
-      <ReportChart style="width: 300px;" class="m-2" v-for="(chart, id) in report.charts" :key="id" :id="id" :chart="chart"></ReportChart>
-      <div style="width: 300px;" class="d-flex justify-content-center">
+      <ReportChart style="width: 400px;" class="m-2" v-for="(chart, id) in report.charts" :key="id" :chartId="id" :chart="chart"></ReportChart>
+      <div style="width: 400px;" class="d-flex justify-content-center">
         <b-button class="my-4 mx-2" style="height: 48px;" variant="outline-success" size="lg" @click="create"> New Chart </b-button>
       </div>
     </div>

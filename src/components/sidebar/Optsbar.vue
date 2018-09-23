@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div id="optsbar" v-if="open" :class="$style.optsbar">
+    <div class="optsbar" v-if="open" :class="$style.optsbar">
       <component :is="component"/>
     </div>
   </transition>
@@ -28,7 +28,7 @@ export default {
   width: 200px;
   height: 100vh;
   max-width: 90vw;
-  background-color: var(--accent-color);
+  background-color: var(--border-color-optsbar);
   padding: 1rem;
 }
 </style>
