@@ -11,9 +11,12 @@
   </div>
 </template>
 
+<script src="vue-grid-layout.umd.min.js"></script>
+
 <script>
 import Heading from '../components/misc/Heading.vue';
 import ReportChart from '../components/reports/ReportChart.vue';
+import VueGridLayout from 'vue-grid-layout';
 
 export default {
   name: 'Report',
