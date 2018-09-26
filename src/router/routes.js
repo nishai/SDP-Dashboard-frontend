@@ -3,6 +3,7 @@ import ChartTemplates from '../pages/ChartTemplates.vue';
 import Query from '../pages/Query.vue';
 import Reports from '../pages/Reports.vue';
 import Report from '../pages/Report.vue';
+import GridExample from '../pages/GridExample.vue';
 
 /* Define the routes */
 
@@ -33,6 +34,12 @@ export const navRoutes = [
     name: 'Reports',
     path: '/reports',
     component: Reports,
+  },
+  {
+    name: 'GridExample',
+    path: '/grid',
+    component: GridExample,
+    query: { templateType: '' },
   },
 ];
 
