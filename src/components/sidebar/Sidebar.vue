@@ -12,6 +12,8 @@
   </transition>
 </template>
 
+<!-- SCRIPT -->
+
 <script>
 import { navRoutes } from '../../router/routes';
 
@@ -22,6 +24,8 @@ export default {
   }),
 };
 </script>
+
+<!-- STYLE -->
 
 <style>
 .sidebar {

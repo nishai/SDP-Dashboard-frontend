@@ -1,0 +1,51 @@
+
+/* This file is imported globally in "main.js" or "App.vue" */
+
+/* ========================================================================== */
+/* Vars                                                                       */
+/* ========================================================================== */
+
+/*
+ * Global CSS variables. Usage eg:
+ *   color: var(--text-color);
+ */
+:root{
+  --text-color: #606e78;
+  --link-color: #486078;
+  --heading-color: #17324d;
+
+  --bg-color: #ffffff;
+  --bg-color-sidebar: #f5f6fa;
+  --bg-color-footer: #edeff2;
+
+  --optsbar-width: 300px;
+  --sidebar-width: 200px;
+  --footer-height: 65px;
+  --font-size: 14px;
+  --font-size-sidebar: 18px;
+
+  --border-color: #eaeaea;
+  --border-color-sidebar: #eaeaea;
+  --border-color-footer: #eaeaea;
+  --border-color-optsbar: #eaeaea;
+}
+
+/* ========================================================================== */
+/* Global Style                                                               */
+/* ========================================================================== */
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+a:hover {
+  font-weight: bold;
+  text-decoration: none;
+}
