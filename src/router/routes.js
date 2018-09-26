@@ -39,7 +39,6 @@ export const navRoutes = [
     name: 'GridExample',
     path: '/grid',
     component: GridExample,
-    query: { templateType: '' },
   },
 ];
 

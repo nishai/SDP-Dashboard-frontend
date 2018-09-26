@@ -19,10 +19,10 @@
 <script>
 import Vue from 'vue';
 
-import { bottom, compact, getLayoutItem, moveElement, validateLayout } from '../helpers/utils';
+import { bottom, compact, getLayoutItem, moveElement, validateLayout } from '/helpers/utils';
 // var eventBus = require('./eventBus');
 import GridItem from './GridItem.vue';
-import { addWindowEventListener, removeWindowEventListener } from '../helpers/DOM';
+import { addWindowEventListener, removeWindowEventListener } from '/helpers/DOM';
 
 const elementResizeDetectorMaker = require('element-resize-detector');
 
