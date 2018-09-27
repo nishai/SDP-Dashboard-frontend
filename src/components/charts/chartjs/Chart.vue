@@ -9,7 +9,7 @@
     <polar-chart v-else-if="type === 'polar'" :chart-data="datacollection"></polar-chart>
     <bubble-chart v-else-if="type === 'bubble'" :chart-data="datacollection"></bubble-chart>
     <scatter-chart v-else-if="type === 'scatter'" :chart-data="datacollection"></scatter-chart>
-    <button @click="addData()">Superimpose</button>
+    <button @click="addData()">Compare</button>
   </div>
 </template>
 
