@@ -14,6 +14,9 @@ export default {
       this.$refs.popupRef.show();
     },
   },
+  mounted() {
+    this.$refs.popupRef.show();
+  },
 };
 </script>
 

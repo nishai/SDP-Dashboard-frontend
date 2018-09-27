@@ -20,9 +20,6 @@ export default {
   components: {
     Modal,
   },
-  created() {
-    Modal.openPopup();
-  },
 };
 </script>
 
