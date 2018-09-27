@@ -1,36 +1,59 @@
-import Dashboard from '../pages/Dashboard.vue';
-import Reports from '../pages/Reports.vue';
-import Home from '../pages/Home.vue';
-import TemplateScreen from '../pages/TemplateScreen.vue';
+import ChartExamples from '../pages/ChartExamples.vue';
+import ChartTemplates from '../pages/ChartTemplates.vue';
+import Query from '../pages/Query.vue';
+import Reports from '../pages/ReportList.vue';
+import Report from '../pages/Report.vue';
 
 /* Define the routes */
 
-const routes = [
+export const navRoutes = [
   {
+    name: 'Home',
     path: '/',
-    name: 'Templates',
-    component: TemplateScreen,
+    redirect: '/templates',
   },
   {
-    path: '/reports',
+    name: 'Chart Templates',
+    path: '/templates',
+    component: ChartTemplates,
+  },
+  {
+    name: 'Chart Examples',
+    path: '/examples',
+    component: ChartExamples,
+    /* not part of route definitions, used by navbar */
+    query: { templateType: '' },
+  },
+  {
+    name: 'Queries',
+    path: '/query',
+    component: Query,
+  },
+  {
     name: 'Reports',
+    path: '/reports',
     component: Reports,
   },
+];
+
+export const hiddenRoutes = [
   {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: Dashboard,
+    name: 'Report',
+    path: '/reports/:id',
+    component: Report,
   },
   {
-    path: '/home',
-    name: 'Home',
-    component: Home,
+    name: 'Reports 404',
+    path: '/reports/*',
+    redirect: '/reports',
   },
   {
-    path: '*',
     name: '404',
+    path: '*',
     redirect: '/',
   },
 ];
 
-export default routes;
+/* export the routes */
+
+export default navRoutes.concat(hiddenRoutes);

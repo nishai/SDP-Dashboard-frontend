@@ -2,12 +2,17 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import routes from './routes';
 
-/* Register the router */
+
+/* Add VueRouter Plugin to Vue */
 
 Vue.use(VueRouter);
 
-/* Initialise the router */
+/* Initialise VueRouter */
 
-export default new VueRouter({
+const router = new VueRouter({
   routes,
 });
+
+/* Export VueRouter instance */
+
+export default router;
