@@ -1,6 +1,7 @@
 <template>
   <div class="chart_link_bounds">
-    <Modal></Modal>
+    <Modal ref="templatePopup"></Modal>
+    <button @click="openPopup">Options</button>
     <!-- <router-link class="chart_link" :to="{path: '/examples', query: {templateType: url}}">
       <img :src="url" alt="chart" width="120" >
       <div class="chart_link_text"> {{ text }} </div>
@@ -19,6 +20,11 @@ export default {
   ],
   components: {
     Modal,
+  },
+  methods: {
+    openPopup() {
+      this.$refs.templatePopup.open();
+    },
   },
 };
 </script>

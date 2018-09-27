@@ -10,12 +10,9 @@
 export default {
   name: 'Modal',
   methods: {
-    openPopup() {
+    open() {
       this.$refs.popupRef.show();
     },
-  },
-  mounted() {
-    this.$refs.popupRef.show();
   },
 };
 </script>
