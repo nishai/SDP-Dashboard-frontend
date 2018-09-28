@@ -1,7 +1,7 @@
 test:
   script:
     - make clean
-    - make -f Makefile.docker rm rm-cache test
+    - make -f Makefile.docker rm test
 
 after_script:
   - bash <(curl -s https://codecov.io/bash) -t 4499a9f8-4407-4095-91de-a58fc631d8ae
