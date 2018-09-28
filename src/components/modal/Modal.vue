@@ -1,10 +1,10 @@
 <template>
     <div>
-    <b-modal ref="popupRef" id="popup" title="Chart Options">
-        <p class="my-4">Choose your options fam!😳</p>
-    </b-modal>
-    <!-- <router-link class="chart_link" :to="{path: '/examples', query: {templateType: url}}">
-    </router-link> -->
+    <router-link :to="{path: '/examples', query: {templateType: url}}">
+      <b-modal ref="popupRef" id="popup" title="Chart Options">
+          <p class="my-4">Choose your options fam!😳</p>
+      </b-modal>
+    </router-link>
     </div>
 </template>
 
@@ -16,6 +16,9 @@ export default {
       this.$refs.popupRef.show();
     },
   },
+  props: [
+    'url',
+  ],
 };
 </script>
 
