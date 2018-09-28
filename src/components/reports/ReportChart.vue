@@ -9,11 +9,11 @@
     <b-card no-body>
       <!-- Heading -->
       <div slot="header" class="d-flex justify-content-between">
-        <h4 class="mb-1"> {{ chart.name }} </h4>
+        <b-form-input class="hidden-input" v-model="chart.name" type="text" placeholder="Click To Edit"></b-form-input>
         <small class="d-flex justify-content-between">
-          <b-btn size="sm" class="m-1" variant="outline-primary" @click="openPopup">Edit</b-btn>
+          <b-btn size="sm" class="m-1" variant="outline-primary" @click="toggleEditor">Edit</b-btn>
           <!--<b-btn size="sm" variant="outline-primary" @click="toggleEditor">Opts</b-btn>-->
-          <b-btn size="sm" class="m-1" variant="outline-danger" @click="deletePrompt">Delete</b-btn>
+          <b-btn size="sm" class="m-1" variant="outline-danger" @click="deleteChart">Delete</b-btn>
           <!--<b-btn v-b-modal.modal1>Launch demo modal</b-btn>-->
           <!--<FeatherIcon name="trash" class="mr-2" @click="openPopup"></FeatherIcon>-->
           <!--<FeatherIcon name="edit-2" @click="openPopup"></FeatherIcon>-->
@@ -87,10 +87,16 @@ export default {
       this.$store.dispatch('toggleOptsbar', { component: this.optsbarComponent });
     },
     /* Handle click */
-    deletePrompt() {
-      console.log('B');
-      this.$refs.myModalRef.show();
-      // this.$store.dispatch('toggleOptsbar', { component: this.optsbarComponent });
+    // deletePrompt() {
+    //   console.log('B');
+    //   this.$refs.myModalRef.show();
+    //   this.$store.dispatch('toggleOptsbar', { component: this.optsbarComponent });
+    // },
+    deleteChart() {
+      console.log('DELETING');
+      console.log(this.key);
+      console.log(this.$vnode.key);
+      this.$store.dispatch('deleteReportChart', { reportId: this.reportId, chartId: this.$vnode.key });
     },
   },
 };

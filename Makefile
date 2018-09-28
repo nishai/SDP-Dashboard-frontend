@@ -64,6 +64,7 @@ test: clean
 	@mkdir -p coverage
 	@make section tag="Run Unit Tests" details="NOT IMPLEMENTED"
 	@make section tag="Code Covergage" details="NOT IMPLEMENTED"
+	yarn test -- --coverage
 
 dist: clean
 	@make section tag="Building Optimised"
@@ -80,4 +81,3 @@ serve: dist
 clean:
 	@make section tag="Cleaning"
 	rm -rf ./dist
-

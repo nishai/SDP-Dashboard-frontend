@@ -1,7 +1,7 @@
 import ChartExamples from '../pages/ChartExamples.vue';
 import ChartTemplates from '../pages/ChartTemplates.vue';
 import Query from '../pages/Query.vue';
-import Reports from '../pages/Reports.vue';
+import Reports from '../pages/ReportList.vue';
 import Report from '../pages/Report.vue';
 
 /* Define the routes */
