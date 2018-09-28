@@ -1,13 +1,16 @@
 <template>
   <div class="chart_link_bounds">
-    <router-link class="chart_link" :to="{path: '/examples', query: {templateType: url}}">
+    <Modal ref="templatePopup"></Modal>
+    <button @click="openPopup">Options</button>
+    <!-- <router-link class="chart_link" :to="{path: '/examples', query: {templateType: url}}">
       <img :src="url" alt="chart" width="120" >
       <div class="chart_link_text"> {{ text }} </div>
-    </router-link>
+    </router-link> -->
   </div>
 </template>
 
 <script>
+import Modal from '../modal/Modal.vue';
 
 export default {
   name: 'ChartExampleLink',
@@ -15,6 +18,14 @@ export default {
     'url',
     'text',
   ],
+  components: {
+    Modal,
+  },
+  methods: {
+    openPopup() {
+      this.$refs.templatePopup.open();
+    },
+  },
 };
 </script>
 
