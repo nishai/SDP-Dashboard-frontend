@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     openPopup() {
-      this.$refs.templatePopup.open();
+      this.$refs.templatePopup.showModal();
     },
   },
 };
