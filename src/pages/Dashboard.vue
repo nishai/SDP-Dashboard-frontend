@@ -4,6 +4,7 @@
     <div class="d-flex flex-wrap justify-content-between">
       <div class="d-flex flex-wrap justify-content-start">
         <!-- <DashboardChart style="width: 400px;" class="m-2" v-for="(chart, id) in dashboard.charts" :key="id" :chartId="id" :chart="chart"></DashboardChart> -->
+        <DashboardChart style="width: 400px;" class="m-2" v-for="(dashboardChart, id) in dashboardCharts" v-bind:key="id"  ></DashboardChart>
         <div style="width: 400px;" class="d-flex justify-content-center">
           <b-button class="my-4 mx-2" style="height: 48px;" variant="outline-success" size="lg" @click="create"> New Chart </b-button>
         </div>
@@ -42,17 +43,22 @@ export default {
     List,
     DashboardChart,
   },
+  // computed: {
+  //   dashID() {
+  //     return this.$route.params.id;
+  //   },
+  //   dashboard() {
+  //     return this.$store.state.dashboard.dashboards[this.dashID];
+  //   },
+  // },
   computed: {
-    dashID() {
-      return this.$route.params.id;
-    },
-    dashboard() {
-      return this.$store.state.dashboard.dashboards[this.dashID];
+    dashboardCharts() {
+      return this.$store.state.dashboardCharts.dashboardCharts;
     },
   },
   methods: {
     create() {
-      this.$store.dispatch('createDashboardChart', { dashID: this.dashID });
+      this.$store.dispatch('createDashboardChart');
     },
   },
 };

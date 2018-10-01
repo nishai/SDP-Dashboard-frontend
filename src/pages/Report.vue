@@ -31,6 +31,7 @@ export default {
   },
   methods: {
     create() {
+      console.log(this.$route.params.id);
       this.$store.dispatch('createReportChart', { reportId: this.reportId });
     },
   },
