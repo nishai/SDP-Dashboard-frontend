@@ -1,6 +1,6 @@
 <template>
     <div>
-    <router-link :to="{path: '/examples', query: {templateType: url}}">
+    <router-link :to="{path: '/dashboard', query: {templateType: url}}">
       <b-modal ref="popupRef" id="popup" title="Chart Options">
           <p class="my-4">Choose your options fam!😳</p>
       </b-modal>
@@ -24,4 +24,3 @@ export default {
 
 <style>
 </style>
-

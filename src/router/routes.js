@@ -3,18 +3,20 @@ import ChartTemplates from '../pages/ChartTemplates.vue';
 import Query from '../pages/Query.vue';
 import Reports from '../pages/ReportList.vue';
 import Report from '../pages/Report.vue';
+import Dashboard from '../pages/Dashboard.vue';
 
 /* Define the routes */
 
 export const navRoutes = [
   {
     name: 'Home',
-    path: '/',
-    redirect: '/templates',
+    path: '/dashboard',
+    component: Dashboard,
+    query: { templateType: '' },
   },
   {
     name: 'Chart Templates',
-    path: '/templates',
+    path: '/',
     component: ChartTemplates,
   },
   {
