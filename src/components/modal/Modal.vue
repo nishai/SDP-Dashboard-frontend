@@ -1,23 +1,119 @@
 <template>
     <div>
 
-      <b-modal ref="popupRef" id="popup" title="Chart Options">
-          <p class="my-4">Choose your options fam!😳</p>
-
-          <div slot="modal-footer" class="w-100">
-            <b-btn variant="secondary" @click="hideModal">Close</b-btn>
-
-            <router-link :to="{path: '/examples', query: {templateType: url}}">
-              <b-btn variant="primary">Filter</b-btn>
-            </router-link>
-          </div>
+      <!-- https://bootstrap-vue.js.org/docs/components/modal/ -->
+      <b-modal ref="popupRef" id="popup" title="Chart Options" hide-footer>
+        <div v-if="text === 'Race'">
+          <FilterForm
+            v-bind:url="url"
+            v-bind:fyear="true"
+            v-bind:fcourse="true"
+            v-bind:ffaculty="true"
+            v-bind:fschool="true">
+          </FilterForm>
+        </div>
+        <div v-if="text === 'Gender'">
+          <FilterForm
+            v-bind:url="url"
+            v-bind:fyear="true"
+            v-bind:fcourse="true"
+            v-bind:ffaculty="true"
+            v-bind:fschool="true">
+          </FilterForm>
+        </div>
+        <div v-if="text === 'Nationality'">
+          <FilterForm
+            v-bind:url="url"
+            v-bind:fyear="true"
+            v-bind:fcourse="true"
+            v-bind:ffaculty="true"
+            v-bind:fschool="true">
+          </FilterForm>
+        </div>
+        <div v-if="text === 'Home Language'">
+          <FilterForm
+            v-bind:url="url"
+            v-bind:fyear="true"
+            v-bind:fcourse="true"
+            v-bind:ffaculty="true"
+            v-bind:fschool="true">
+          </FilterForm>
+        </div>
+        <div v-if="text === 'Demographics vs Marks'">
+          <FilterForm
+            v-bind:url="url"
+            v-bind:fyear="true"
+            v-bind:fcourse="true"
+            v-bind:ffaculty="true"
+            v-bind:fschool="true">
+          </FilterForm>
+        </div>
+        <div v-if="text === 'Pass rates by year'">
+          <FilterForm
+            v-bind:url="url"
+            v-bind:fyear="true"
+            v-bind:fcourse="true"
+            v-bind:ffaculty="true"
+            v-bind:fschool="true">
+          </FilterForm>
+        </div>
+        <div v-if="text === 'Pass rates by faculty/course'">
+          <FilterForm
+            v-bind:url="url"
+            v-bind:fyear="true"
+            v-bind:fcourse="true"
+            v-bind:ffaculty="true"
+            v-bind:fschool="true">
+          </FilterForm>
+        </div>
+        <div v-if="text === 'Bell curve'">
+          <FilterForm
+            v-bind:url="url"
+            v-bind:fyear="true"
+            v-bind:fcourse="true"
+            v-bind:ffaculty="true"
+            v-bind:fschool="true">
+          </FilterForm>
+        </div>
+        <div v-if="text === 'Progress outcome by faculty/course'">
+          <FilterForm
+            v-bind:url="url"
+            v-bind:fyear="true"
+            v-bind:fcourse="true"
+            v-bind:ffaculty="true"
+            v-bind:fschool="true">
+          </FilterForm>
+        </div>
+        <div v-if="text === 'Class size vs pass rate'">
+          <FilterForm
+            v-bind:url="url"
+            v-bind:fyear="true"
+            v-bind:fcourse="true"
+            v-bind:ffaculty="true"
+            v-bind:fschool="true">
+          </FilterForm>
+        </div>
+        <div v-if="text === 'Average class size by faculty/course'">
+          <FilterForm
+            v-bind:url="url"
+            v-bind:fyear="true"
+            v-bind:fcourse="true"
+            v-bind:ffaculty="true"
+            v-bind:fschool="true">
+          </FilterForm>
+        </div>
       </b-modal>
     </div>
 </template>
 
 <script>
+import FilterForm from './FilterForm.vue';
+
 export default {
   name: 'Modal',
+  components: {
+    FilterForm,
+  },
   methods: {
     showModal() {
       this.$refs.popupRef.show();
@@ -28,6 +124,7 @@ export default {
   },
   props: [
     'url',
+    'text',
   ],
 };
 </script>
