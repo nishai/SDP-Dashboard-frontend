@@ -2,14 +2,16 @@
     <div>
 
       <!-- https://bootstrap-vue.js.org/docs/components/modal/ -->
-      <b-modal ref="popupRef" id="popup" title="Chart Options" hide-footer>
+      <b-modal ref="popupRef" id="popup" title="Chart Options" size="lg" hide-footer>
+        <b-container fluid>
         <div v-if="text === 'Race'">
           <FilterForm
             v-bind:url="url"
             v-bind:fyear="true"
             v-bind:fcourse="true"
             v-bind:ffaculty="true"
-            v-bind:fschool="true">
+            v-bind:fschool="true"
+            v-bind:numForms="1">
           </FilterForm>
         </div>
         <div v-if="text === 'Gender'">
@@ -18,7 +20,8 @@
             v-bind:fyear="true"
             v-bind:fcourse="true"
             v-bind:ffaculty="true"
-            v-bind:fschool="true">
+            v-bind:fschool="true"
+            v-bind:numForms="1">
           </FilterForm>
         </div>
         <div v-if="text === 'Nationality'">
@@ -27,7 +30,8 @@
             v-bind:fyear="true"
             v-bind:fcourse="true"
             v-bind:ffaculty="true"
-            v-bind:fschool="true">
+            v-bind:fschool="true"
+            v-bind:numForms="1">
           </FilterForm>
         </div>
         <div v-if="text === 'Home Language'">
@@ -36,7 +40,8 @@
             v-bind:fyear="true"
             v-bind:fcourse="true"
             v-bind:ffaculty="true"
-            v-bind:fschool="true">
+            v-bind:fschool="true"
+            v-bind:numForms="1">
           </FilterForm>
         </div>
         <div v-if="text === 'Demographics vs Marks'">
@@ -45,7 +50,9 @@
             v-bind:fyear="true"
             v-bind:fcourse="true"
             v-bind:ffaculty="true"
-            v-bind:fschool="true">
+            v-bind:fschool="true"
+            v-bind:ftype="true"
+            v-bind:numForms="2">
           </FilterForm>
         </div>
         <div v-if="text === 'Pass rates by year'">
@@ -54,7 +61,8 @@
             v-bind:fyear="true"
             v-bind:fcourse="true"
             v-bind:ffaculty="true"
-            v-bind:fschool="true">
+            v-bind:fschool="true"
+            v-bind:numForms="1">
           </FilterForm>
         </div>
         <div v-if="text === 'Pass rates by faculty/course'">
@@ -63,7 +71,8 @@
             v-bind:fyear="true"
             v-bind:fcourse="true"
             v-bind:ffaculty="true"
-            v-bind:fschool="true">
+            v-bind:fschool="true"
+            v-bind:numForms="1">
           </FilterForm>
         </div>
         <div v-if="text === 'Bell curve'">
@@ -72,7 +81,8 @@
             v-bind:fyear="true"
             v-bind:fcourse="true"
             v-bind:ffaculty="true"
-            v-bind:fschool="true">
+            v-bind:fschool="true"
+            v-bind:numForms="1">
           </FilterForm>
         </div>
         <div v-if="text === 'Progress outcome by faculty/course'">
@@ -81,7 +91,8 @@
             v-bind:fyear="true"
             v-bind:fcourse="true"
             v-bind:ffaculty="true"
-            v-bind:fschool="true">
+            v-bind:fschool="true"
+            v-bind:numForms="1">
           </FilterForm>
         </div>
         <div v-if="text === 'Class size vs pass rate'">
@@ -90,7 +101,8 @@
             v-bind:fyear="true"
             v-bind:fcourse="true"
             v-bind:ffaculty="true"
-            v-bind:fschool="true">
+            v-bind:fschool="true"
+            v-bind:numForms="2">
           </FilterForm>
         </div>
         <div v-if="text === 'Average class size by faculty/course'">
@@ -99,9 +111,11 @@
             v-bind:fyear="true"
             v-bind:fcourse="true"
             v-bind:ffaculty="true"
-            v-bind:fschool="true">
+            v-bind:fschool="true"
+            v-bind:numForms="1">
           </FilterForm>
         </div>
+      </b-container>
       </b-modal>
     </div>
 </template>

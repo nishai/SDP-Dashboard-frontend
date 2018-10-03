@@ -1,24 +1,34 @@
 <template>
   <!--https://bootstrap-vue.js.org/docs/components/form/-->
   <b-form @submit="onSubmit" @reset="onClose" v-if="show">
-    <b-form-group v-if="fyear === true" id="raceYearGroup" label="Year:" label-for="raceYear" horizontal>
-      <b-form-select id="raceYear" :options="years" required v-model="form.year">
+    <b-row>
+    <b-col v-for="i in numForms" :key="i">
+    <b-form-group v-if="ftype === true" id="typeGroup" label="Chart Type:" label-for="Type" horizontal>
+        <b-form-select id="Type" :options="types" required v-model="form.type[i-1]">
       </b-form-select>
     </b-form-group>
-    <b-form-group v-if="fcourse === true" id="raceCourseGroup" label="Course:" label-for="raceCourse" horizontal>
-      <b-form-select id="raceCourse" :options="courses" required v-model="form.course">
+    <b-form-group v-if="fyear === true" id="YearGroup" label="Year:" label-for="Year" horizontal>
+      <b-form-select id="Year" :options="years" required v-model="form.year[i-1]">
       </b-form-select>
     </b-form-group>
-    <b-form-group v-if="ffaculty === true" id="raceFacultyGroup" label="Faculty:" label-for="raceFaculty" horizontal>
-      <b-form-select id="raceFaculty" :options="faculties" required v-model="form.faculty">
+    <b-form-group v-if="fcourse === true" id="CourseGroup" label="Course:" label-for="Course" horizontal>
+      <b-form-select id="Course" :options="courses" required v-model="form.course[i-1]">
       </b-form-select>
     </b-form-group>
-    <b-form-group v-if="fschool === true" id="raceSchoolGroup" label="School:" label-for="raceSchool" horizontal>
-      <b-form-select id="raceSchool" :options="schools" required v-model="form.school">
+    <b-form-group v-if="ffaculty === true" id="FacultyGroup" label="Faculty:" label-for="Faculty" horizontal>
+      <b-form-select id="Faculty" :options="faculties" required v-model="form.faculty[i-1]">
       </b-form-select>
     </b-form-group>
+    <b-form-group v-if="fschool === true" id="SchoolGroup" label="School:" label-for="School" horizontal>
+      <b-form-select id="School" :options="schools" required v-model="form.school[i-1]">
+      </b-form-select>
+    </b-form-group>
+    </b-col>
+    </b-row>
+    <b-row>
     <b-button type="submit" variant="primary">Filter</b-button>
     <b-button type="reset" variant="secondary">Close</b-button>
+    </b-row>
   </b-form>
 </template>
 
@@ -29,11 +39,16 @@ export default {
   data() {
     return {
       form: {
-        year: null,
-        course: null,
-        faculty: null,
-        school: null,
+        type: [null, null],
+        year: [null, null],
+        course: [null, null],
+        faculty: [null, null],
+        school: [null, null],
       },
+      types: [
+        { text: 'Select One', value: null },
+        'bar', 'line',
+      ],
       years: [
         { text: 'Select One', value: null },
         '2013', '2014', '2015', '2016', '2017',
@@ -67,6 +82,8 @@ export default {
     'fcourse',
     'ffaculty',
     'fschool',
+    'ftype',
+    'numForms',
   ],
 };
 </script>
