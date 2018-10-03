@@ -102,7 +102,7 @@ export default {
     const keys = Object.keys(this.form);
     for (let i = 0; i < keys.length; i += 1) {
       for (let j = 0; j < this.$props.numForms; j += 1) {
-        this.form.keys[i].push(null);
+        this.form[keys[i]].push(null);
       }
     }
   },
