@@ -31,13 +31,12 @@
 
 <script>
 import Chart from '../charts/chartjs/Chart.vue';
-// import ReportChartEdit from '../reports/ReportChartEdit.vue';
 import FeatherIcon from '../misc/FeatherIcon.vue';
 
 export default {
   name: 'DashboardChart',
   props: {
-    chartId: {
+    dashboardChartId: {
       type: String,
     },
     chart: {
@@ -53,24 +52,7 @@ export default {
     optsbarComponentPrivate: null,
     showPopup: false,
   }),
-  // created() {
-  //   this.optsbarComponentPrivate = new ReportChartEdit({
-  //     propsData: {
-  //       reportId: this.reportId,
-  //       chartId: this.chartId,
-  //     },
-  //   });
-  // },
   computed: {
-    // dashID() {
-    //   return this.$route.params.id;
-    // },
-    // dashboard() {
-    //   return this.$store.state.dashboards.dashboard[this.dashID];
-    // },
-    dashboardChartId() {
-      return this.key;
-    },
     dashboardChart() {
       return this.$store.state.dashboardCharts.dashboardCharts[this.dashboardChartId];
     },
@@ -103,7 +85,7 @@ export default {
       console.log('DELETING');
       console.log(this.key);
       console.log(this.$vnode.key);
-      this.$store.dispatch('deleteDashboardChart', { dashboardChartId: this.$vnode.key });
+      this.$store.dispatch('deleteDashboardChart', { dashboardChartId: this.dashboardChartId });
     },
   },
 };

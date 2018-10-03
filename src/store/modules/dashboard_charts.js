@@ -82,15 +82,6 @@ const getters = {
 /* ========================================================================== */
 
 const mutations = {
-  // [mutators.CREATE_DASHBOARD](state) {
-  //   const uuid = uuidv4();
-  //   const dashboard = {
-  //     name: uuid,
-  //     desc: 'This dashboard has not yet been customised',
-  //     charts: {},
-  //   };
-  //   Vue.set(state.dashboards, uuid, dashboard);
-  // },
   [mutators.CREATE_DASHBOARD_CHART](state) {
     const uuid = uuidv4();
     const dashboardChart = {
@@ -101,9 +92,6 @@ const mutations = {
     Vue.set(state.dashboardCharts, uuid, dashboardChart);
   },
   [mutators.DELETE_DASHBOARD_CHART](state, { dashboardChartId }) {
-    // if (!(dashID in state.dashboard)) {
-    //   throw new Error(`Dashboard ID not found: "${dashID}"`);
-    // }
     if (!(dashboardChartId in state.dashboardCharts[dashboardChartId])) {
       throw new Error(`Chart ID not found: "${dashboardChartId}"`);
     }
@@ -116,9 +104,6 @@ const mutations = {
 /* ========================================================================== */
 
 const actions = {
-  // createDashboard({ commit, state }) {
-  //   commit(mutators.CREATE_DASHBOARD);
-  // },
   createDashboardChart({ commit, state }) {
     commit(mutators.CREATE_DASHBOARD_CHART);
   },
