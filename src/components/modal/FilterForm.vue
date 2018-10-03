@@ -11,23 +11,25 @@
           <b-form-select id="Year" :options="years" required v-model="form.year[i-1]">
           </b-form-select>
         </b-form-group>
-        <b-form-group v-if="fcourse === true" id="CourseGroup" label="Course:" label-for="Course" horizontal>
-          <b-form-select id="Course" :options="courses" required v-model="form.course[i-1]">
+        <b-form-group v-if="ffaculty === true" id="FacultyGroup" label="Faculty:" label-for="Faculty" description="You can choose multiple faculties using Ctrl key" horizontal>
+          <b-form-select multiple id="Faculty" :options="faculties" required v-model="form.faculty[i-1]">
           </b-form-select>
         </b-form-group>
-        <b-form-group v-if="ffaculty === true" id="FacultyGroup" label="Faculty:" label-for="Faculty" horizontal>
-          <b-form-select id="Faculty" :options="faculties" required v-model="form.faculty[i-1]">
+        <b-form-group v-if="fschool === true && form.faculty[i-1] !== null" id="SchoolGroup" label="School:" label-for="School" description="You can choose multiple schools using Ctrl key" horizontal>
+          <b-form-select multiple id="School" :options="schools" required v-model="form.school[i-1]">
           </b-form-select>
         </b-form-group>
-        <b-form-group v-if="fschool === true" id="SchoolGroup" label="School:" label-for="School" horizontal>
-          <b-form-select id="School" :options="schools" required v-model="form.school[i-1]">
+        <b-form-group v-if="fcourse === true && form.school[i-1] !== null" id="CourseGroup" label="Course:" label-for="Course" description="You can choose multiple courses using Ctrl key" horizontal>
+          <b-form-select multiple id="Course" :options="courses" required v-model="form.course[i-1]">
           </b-form-select>
         </b-form-group>
       </b-col>
     </b-row>
-    <b-row>
-      <b-button type="submit" variant="primary">Filter</b-button>
-      <b-button type="reset" variant="secondary">Close</b-button>
+    <b-row class="text-center">
+      <b-col>
+        <b-button type="submit" variant="primary">Filter</b-button>
+        <b-button type="reset" variant="secondary">Close</b-button>
+      </b-col>
     </b-row>
   </b-form>
 </template>
@@ -54,15 +56,15 @@ export default {
         '2013', '2014', '2015', '2016', '2017',
       ],
       courses: [
-        { text: 'Select One', value: null },
+      //  { text: 'Select One', value: null },
         'All', 'Course1', 'Course2', 'Course3', 'Course4',
       ],
       faculties: [
-        { text: 'Select One', value: null },
+      //  { text: 'Select One', value: null },
         'All', 'Science', 'Arts',
       ],
       schools: [
-        { text: 'Select One', value: null },
+      //  { text: 'Select One', value: null },
         'All', 'CSAM', 'Physics', 'Chemistry',
       ],
       show: true,
