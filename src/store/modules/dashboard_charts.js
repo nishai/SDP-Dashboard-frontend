@@ -92,10 +92,10 @@ const mutations = {
     Vue.set(state.dashboardCharts, uuid, dashboardChart);
   },
   [mutators.DELETE_DASHBOARD_CHART](state, { dashboardChartId }) {
-    if (!(dashboardChartId in state.dashboardCharts[dashboardChartId])) {
+    if (!(dashboardChartId in state.dashboardCharts)) {
       throw new Error(`Chart ID not found: "${dashboardChartId}"`);
     }
-    Vue.delete(state.dashboardCharts[dashboardChartId]);
+    Vue.delete(state.dashboardCharts, dashboardChartId);
   },
 };
 

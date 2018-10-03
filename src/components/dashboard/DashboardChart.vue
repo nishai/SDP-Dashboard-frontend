@@ -47,7 +47,6 @@ export default {
     Chart,
     FeatherIcon,
   },
-  // props: ['key'],
   data: () => ({
     optsbarComponentPrivate: null,
     showPopup: false,
@@ -75,21 +74,29 @@ export default {
       console.log('A');
       this.$store.dispatch('toggleOptsbar', { component: this.optsbarComponent });
     },
-    /* Handle click */
-    // deletePrompt() {
-    //   console.log('B');
-    //   this.$refs.myModalRef.show();
-    //   this.$store.dispatch('toggleOptsbar', { component: this.optsbarComponent });
-    // },
     deleteChart() {
       console.log('DELETING');
       console.log(this.key);
       console.log(this.$vnode.key);
-      this.$store.dispatch('deleteDashboardChart', { dashboardChartId: this.dashboardChartId });
+      this.$store.dispatch('deleteDashboardChart', { dashboardChartId: this.$vnode.key });
     },
   },
 };
 </script>
 
 <style>
+
+.card:hover {
+  background-color: whitesmoke;
+}
+
+.card:hover button {
+  opacity: 1;
+}
+
+.card button {
+  opacity: 0;
+  background-color: whitesmoke;
+}
+
 </style>
