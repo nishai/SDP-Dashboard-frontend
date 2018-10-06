@@ -5,7 +5,9 @@
       <div class="d-flex flex-wrap justify-content-start">
         <DashboardChart style="width: 400px;" class="m-2" v-for="(chart, id) in dashboardCharts" v-bind:key="id" v-bind:dashboardChartId="id" v-bind:chart="chart"  ></DashboardChart>
         <div style="width: 400px;" class="d-flex justify-content-center">
-          <b-button class="my-4 mx-2" style="height: 48px;" variant="outline-success" size="lg" @click="create"> New Chart </b-button>
+          <!-- <router-link :to="{path: '/'}"> -->
+            <b-button class="my-4 mx-2" style="height: 48px;" variant="outline-success" size="lg" @click="create"> New Chart </b-button>
+          <!-- </router-link> -->
         </div>
       </div>
       <div>
@@ -50,6 +52,8 @@ export default {
   methods: {
     create() {
       this.$store.dispatch('createDashboardChart');
+      // router.push({ path: 'register', query: { plan: 'private' }});
+      this.$router.push({path: '/'});
     },
   },
 };
