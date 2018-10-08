@@ -9,7 +9,7 @@
             :is-mirrored="false"
             :vertical-compact="true"
             :margin="[10, 10]"
-            :use-css-transforms="false"
+            :use-css-transforms="true"
     >
 
         <grid-item v-for="(item, id) in layout"
@@ -45,7 +45,7 @@ var testLayout = [
 
     // var GridLayout = VueGridLayout.GridLayout;
     // var GridItem = VueGridLayout.GridItem;
-
+// NBNBNB: ADD layout=getresources in html to get all the charts dynamically (like in bugcity example)
 export default {
   name: 'GridExample',
   data: function () { return { layout: testLayout } },
