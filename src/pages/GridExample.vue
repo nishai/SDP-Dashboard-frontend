@@ -3,13 +3,13 @@
       <grid-layout
             :layout="layout"
             :col-num="12"
-            :row-height="30"
+            :row-height="12"
             :is-draggable="true"
             :is-resizable="true"
             :is-mirrored="false"
             :vertical-compact="true"
             :margin="[10, 10]"
-            :use-css-transforms="true"
+            :use-css-transforms="false"
     >
 
         <grid-item v-for="(item, id) in layout"
@@ -19,7 +19,7 @@
                    :w="item.w"
                    :h="item.h"
                    :i="item.i">
-            {{item.i="fucklit"}}
+            {{item.i + "fucklit"}}
         </grid-item>
     </grid-layout>
   </div>
