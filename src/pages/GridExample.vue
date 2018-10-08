@@ -31,7 +31,9 @@
 
 // import GridItem from '../components/grid/GridItem.vue';
 // import GridLayout from '../components/grid/GridLayout.vue';
-import VueGridLayout from 'vue-grid-layout';
+// import VueGridLayout from 'vue-grid-layout';
+import { GridLayout } from 'vue-grid-layout';
+import { GridItem } from 'vue-grid-layout';
 
 var testLayout = [
         {"x":0,"y":0,"w":2,"h":2,"i":"0"},
@@ -61,9 +63,7 @@ var testLayout = [
 
 export default {
   name: 'GridExample',
-  data: {
-    layout: testLayout,
-  },
+  data: function () { return { layout: testLayout } },
   components: {
   },
 };

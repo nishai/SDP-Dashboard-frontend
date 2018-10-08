@@ -5,6 +5,8 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import VueGridLayout from 'vue-grid-layout';
+
 
 /* add miscellaneous plugins to Vue */
 
