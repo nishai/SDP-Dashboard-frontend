@@ -1,3 +1,7 @@
+/*
+ * The javascript entry point for the application
+ */
+
 import BootstrapVue from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
@@ -6,6 +10,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import VueGridLayout from 'vue-grid-layout';
+
 
 
 /* add miscellaneous plugins to Vue */

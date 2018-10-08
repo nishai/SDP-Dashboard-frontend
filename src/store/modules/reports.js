@@ -118,7 +118,7 @@ const mutations = {
     };
     Vue.set(state.reports, uuid, report);
   },
-  [mutators.CREATE_REPORT_CHART](state, reportId) {
+  [mutators.CREATE_REPORT_CHART](state, { reportId }) {
     const uuid = uuidv4();
     const chart = {
       name: uuid,
@@ -126,6 +126,15 @@ const mutations = {
       query: {},
     };
     Vue.set(state.reports[reportId].charts, uuid, chart);
+  },
+  [mutators.DELETE_REPORT_CHART](state, { reportId, chartId }) {
+    if (!(reportId in state.reports)) {
+      throw new Error(`Report ID not found: "${reportId}"`);
+    }
+    if (!(chartId in state.reports[reportId].charts)) {
+      throw new Error(`Chart ID not found: "${chartId}" under Report ID: "${reportId}"`);
+    }
+    Vue.delete(state.reports[reportId].charts, chartId);
   },
 };
 
@@ -138,7 +147,10 @@ const actions = {
     commit(mutators.CREATE_REPORT);
   },
   createReportChart({ commit, state }, { reportId }) {
-    commit(mutators.CREATE_REPORT_CHART, reportId);
+    commit(mutators.CREATE_REPORT_CHART, { reportId });
+  },
+  deleteReportChart({ commit, state }, { reportId, chartId }) {
+    commit(mutators.DELETE_REPORT_CHART, { reportId, chartId });
   },
 };
 

@@ -25,16 +25,17 @@ export default {
     ReportChart,
   },
   computed: {
-    report_id() {
+    reportId() {
       return this.$route.params.id;
     },
     report() {
-      return this.$store.state.reports.reports[this.report_id];
+      return this.$store.state.reports.reports[this.reportId];
     },
   },
   methods: {
     create() {
-      this.$store.dispatch('createReportChart', { reportId: this.report_id });
+      console.log(this.$route.params.id);
+      this.$store.dispatch('createReportChart', { reportId: this.reportId });
     },
   },
 };
