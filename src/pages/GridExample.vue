@@ -4,8 +4,8 @@
 
       <grid-layout
             :layout="layout"
-            :col-num="12"
-            :row-height="12"
+            :col-num="10"
+            :row-height="10"
             :is-draggable="true"
             :is-resizable="true"
             :is-mirrored="false"
@@ -20,13 +20,17 @@
                    :y="item.y"
                    :w="item.w"
                    :h="item.h"
+                   :max-w="7"
+                   :max-h="40"
+                   :min-w="1"
+                   :min-h="10"
                    :i="item.i">
                     <!-- {{item.i}} -->
  
 
   <div class="dashboardChart">
 
-        <DashboardChart style="width: 100%;height: 100%;min-height:200px;min-width: 200px;position:relative;" class="m-2" v-for="(chart, id) in dashboardCharts" v-bind:key="id" v-bind:dashboardChartId="id" v-bind:chart="chart"  ></DashboardChart>
+        <DashboardChart style="width: 100%;position:relative;" class="m-2" v-for="(chart, id) in dashboardCharts" v-bind:key="id" v-bind:dashboardChartId="id" v-bind:chart="chart"  ></DashboardChart>
   </div>
 
 
@@ -49,7 +53,8 @@ import { GridItem } from 'vue-grid-layout';
 
 
 var testLayout = [
-        {"x":0,"y":0,"w":5,"h":27,"i":"0"},
+        {"x":0,"y":0,"w":3.5,"h":27,"i":"0"},
+        
     ];
 
 
