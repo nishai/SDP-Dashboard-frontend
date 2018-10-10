@@ -20,7 +20,7 @@
       <Chart class="example_chart_size" v-if="this.$route.query.templateType === '' ||
       this.$route.query.templateType.includes('scatter')" type="scatter"></Chart>
       <div>
-        <Button id="tableButton" v-on:click="add_table = true">Add Table</Button>
+        <Button id="tableButton" v-if="!isHidden" v-on:click="isHidden = true; add_table = true">Add Table</Button>
         <Table v-if="add_table"></Table>
       </div>
     </div>
@@ -37,6 +37,7 @@ export default {
   data() {
     return {
       add_table: false,
+      isHidden: false,
     };
   },
   components: {
