@@ -9,7 +9,7 @@
     <polar-chart v-else-if="type === 'polar'" :chart-data="datacollection"></polar-chart>
     <bubble-chart v-else-if="type === 'bubble'" :chart-data="datacollection"></bubble-chart>
     <scatter-chart v-else-if="type === 'scatter'" :chart-data="datacollection"></scatter-chart>
-    <button @click="addData()">Compare</button>
+    <!-- <button @click="addData()">Compare</button> -->
   </div>
 </template>
 
@@ -68,24 +68,24 @@ export default {
     startData(newData) {
       this.datacollection = newData;
     },
-    addData() {
-      const newData = [{
-        data: [55, 8, 12, 18, 7],
-        backgroundColor: [
-          'rgba(255,99,132,1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-        ],
-      }];
-      this.datacollection = {
-        title: this.datacollection.title,
-        labels: this.datacollection.labels,
-        datasets: this.datacollection.datasets.concat(newData),
-        options: this.datacollection.options,
-      };
-    },
+    // addData() {
+    //   const newData = [{
+    //     data: [55, 8, 12, 18, 7],
+    //     backgroundColor: [
+    //       'rgba(255,99,132,1)',
+    //       'rgba(54, 162, 235, 1)',
+    //       'rgba(255, 206, 86, 1)',
+    //       'rgba(75, 192, 192, 1)',
+    //       'rgba(153, 102, 255, 1)',
+    //     ],
+    //   }];
+    //   this.datacollection = {
+    //     title: this.datacollection.title,
+    //     labels: this.datacollection.labels,
+    //     datasets: this.datacollection.datasets.concat(newData),
+    //     options: this.datacollection.options,
+    //   };
+    // },
   },
 };
 </script>

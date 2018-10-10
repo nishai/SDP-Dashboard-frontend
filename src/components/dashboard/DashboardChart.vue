@@ -11,9 +11,10 @@
       <div slot="header" class="d-flex justify-content-between">
         <b-form-input class="hidden-input" v-model="dashboardChart.name" type="text" placeholder="Click To Edit"></b-form-input>
         <small class="d-flex justify-content-between">
-          <b-btn size="sm" class="m-1" variant="outline-primary" @click="toggleEditor">Edit</b-btn>
+          <!-- <b-btn size="sm" class="m-1" variant="outline-primary" @click="toggleEditor">Edit</b-btn> -->
           <!--<b-btn size="sm" variant="outline-primary" @click="toggleEditor">Opts</b-btn>-->
-          <b-btn size="sm" class="m-1" variant="outline-danger" @click="deleteChart">Delete</b-btn>
+          <!-- <b-btn size="sm" class="m-1" variant="outline-danger" @click="deleteChart">Delete</b-btn> -->
+          <!-- <b-btn size="sm" class="m-1" variant="outline-secondary" @click="addData()">Compare</b-btn> -->
           <!--<b-btn v-b-modal.modal1>Launch demo modal</b-btn>-->
           <!--<FeatherIcon name="trash" class="mr-2" @click="openPopup"></FeatherIcon>-->
           <!--<FeatherIcon name="edit-2" @click="openPopup"></FeatherIcon>-->
@@ -24,7 +25,12 @@
         <Chart :type="dashboardChart.type"></Chart>
       </b-card-body>
       <!-- Info -->
-      <b-card-footer> {{ details }} </b-card-footer>
+      <b-card-footer>
+        <b-btn size="sm" class="m-1" variant="outline-primary" @click="toggleEditor">Edit</b-btn>
+        <b-btn size="sm" class="m-1" variant="outline-secondary" @click="addData()">Compare</b-btn>
+        <b-btn size="sm" class="m-1" variant="outline-danger" @click="deleteChart">Delete</b-btn>
+        <!-- {{ details }} -->
+       </b-card-footer>
     </b-card>
   </div>
 </template>
@@ -50,6 +56,21 @@ export default {
   data: () => ({
     optsbarComponentPrivate: null,
     showPopup: false,
+    // datacollection : {
+    //   title: this.$vnode.datacollection.title,
+    //   labels: this.$vnode.datacollection.labels,
+    //   datasets: this.$vnode.datacollection.datasets.concat(
+    //     data: [55, 8, 12, 18, 7],
+    //     backgroundColor: [
+    //       'rgba(255,99,132,1)',
+    //       'rgba(54, 162, 235, 1)',
+    //       'rgba(255, 206, 86, 1)',
+    //       'rgba(75, 192, 192, 1)',
+    //       'rgba(153, 102, 255, 1)',
+    //     ],
+    //   ),
+    //   options: this.$vnode.datacollection.options,
+    // };
   }),
   computed: {
     dashboardChart() {
@@ -80,6 +101,24 @@ export default {
       console.log(this.$vnode.key);
       this.$store.dispatch('deleteDashboardChart', { dashboardChartId: this.$vnode.key });
     },
+    // addData() {
+    //   const newData = [{
+    //     data: [55, 8, 12, 18, 7],
+    //     backgroundColor: [
+    //       'rgba(255,99,132,1)',
+    //       'rgba(54, 162, 235, 1)',
+    //       'rgba(255, 206, 86, 1)',
+    //       'rgba(75, 192, 192, 1)',
+    //       'rgba(153, 102, 255, 1)',
+    //     ],
+    //   }];
+    //   this.$vnode.datacollection = {
+    //     title: this.$vnode.datacollection.title,
+    //     labels: this.$vnode.datacollection.labels,
+    //     datasets: this.$vnode.datacollection.datasets.concat(newData),
+    //     options: this.$vnode.datacollection.options,
+    //   };
+    // },
   },
 };
 </script>
