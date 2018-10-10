@@ -2,7 +2,6 @@
   <div id="Table">
     <b-form-select v-model="selected" :options="fields" class="mb-3" />
     <Button id="Add" v-on:click="add(selected)">Add</Button>
-    <div>Selected: <strong>{{ selected }}</strong></div>
     <b-table id="table" striped hover :items="rows" :fields="displayedFields"></b-table>
   </div>
 </template>
@@ -15,10 +14,6 @@ export default {
     return {
       selected: null,
       fields: [
-        {
-          value: 'id',
-          text: 'id',
-        },
         {
           value: 'studentNo',
           text: 'Student Number',
@@ -34,14 +29,9 @@ export default {
       ],
       displayedFields: [
         {
-          key: 'studentNo',
+          key: 'id',
           sortable: true,
         },
-        {
-          key: 'averageMark',
-          sortable: true,
-        },
-
       ],
       rows: [
         {
@@ -80,6 +70,11 @@ export default {
   methods: {
     add(item) {
       this.displayedFields.push({ key: item, sortable: true });
+      for (let i = this.fields.length - 1; i >= 0; i -= 1) {
+        if (this.fields[i].value === item) {
+          this.fields.splice(i, 1);
+        }
+      }
     },
   },
 };
