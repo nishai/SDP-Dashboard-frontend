@@ -52,8 +52,7 @@ export default {
   methods: {
     create() {
       this.$store.dispatch('createDashboardChart');
-      // router.push({ path: 'register', query: { plan: 'private' }});
-      this.$router.push({path: '/'});
+      this.$router.push({ path: '/' });
     },
   },
 };

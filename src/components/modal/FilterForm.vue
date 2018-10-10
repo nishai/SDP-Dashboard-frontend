@@ -108,7 +108,7 @@ export default {
   },
   methods: {
     onSubmit(evt) {
-      this.$router.push({ path: '/examples', query: { templateType: this.url } });
+      this.$router.push({ path: '/dashboard', query: { templateType: this.url } });
     },
     onClose(evt) {
       this.$parent.$parent.hideModal();
@@ -128,4 +128,3 @@ export default {
 
 <style>
 </style>
-
