@@ -2,6 +2,7 @@
   <div >
     <Heading :heading_text="report.name"></Heading>
     <h3> {{ report.desc }} </h3>
+    <b-button class="btn btn-info">Print report</b-button>
     <div class="d-flex flex-wrap justify-content-start">
       <ReportChart style="width: 400px;" class="m-2" v-for="(chart, id) in report.charts" :key="id" :chartId="id" :chart="chart"></ReportChart>
       <div style="width: 400px;" class="d-flex justify-content-center">
