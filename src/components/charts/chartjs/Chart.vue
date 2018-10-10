@@ -38,6 +38,7 @@ export default {
   data() {
     return {
       datacollection: null,
+      maintainAspectRatio: false,
     };
   },
   mounted() {

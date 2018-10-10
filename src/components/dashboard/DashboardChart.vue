@@ -41,6 +41,8 @@ export default {
     },
     chart: {
       type: Object,
+      maintainAspectRatio: false,
+      responsive: true,
     },
   },
   components: {
@@ -50,6 +52,9 @@ export default {
   data: () => ({
     optsbarComponentPrivate: null,
     showPopup: false,
+    maintainAspectRatio: false,
+    responsive: true,
+
   }),
   computed: {
     dashboardChart() {
