@@ -134,9 +134,92 @@ export default {
 
   // https://stackoverflow.com/questions/52724773/javascript-get-data-from-promise-axios
   methods: {
+    // Translate graph description text to model collumn names
+    textToName(name) {
+      switch (name) {
+        case 'Race':
+          return 'Race';
+        case 'Gender':
+          return 'Gender';
+        case 'Nationality':
+          return 'nationality_short_name';
+        case 'Home Language':
+          return 'home_language_description';
+        default:
+          return null;
+      }
+    },
 
     // analyse data and make chart when submitting form
     onSubmit(evt) {
+      const name = this.textToName(this.$props.text);
+      let nameList;
+      axios.post(
+        'http://dashboard-dev.ms.wits.ac.za:4000/course_stats/query',
+        {
+          chain: [
+            {
+              group: {
+                by: [
+                  name,
+                ],
+              },
+            },
+          ],
+        },
+      )
+        .then((response) => response.data)
+        .then((data) => {
+          nameList = Object.values(data.results);
+        });
+
+      for (let i = 0; i < this.$props.numForms; i += 1) {
+        axios.post(
+          'http://dashboard-dev.ms.wits.ac.za:4000/course_stats/query',
+          {
+            chain: [
+              {
+                filter: [
+                  {
+                    field: 'calendar_instance_year',
+                    operator: 'exact',
+                    value: this.form.year[i],
+                  },
+                  {
+                    field: 'faculty',
+                    operator: 'exact',
+                    value: this.form.faculty[i],
+                  },
+                  {
+                    field: 'school',
+                    operator: 'exact',
+                    value: this.form.school[i],
+                  },
+                  {
+                    field: 'course_code',
+                    operator: 'exact',
+                    value: this.form.course[i],
+                  },
+                ],
+                group: {
+                  by: [
+                    name,
+                  ],
+                  yield: [
+                    name: "count",
+                    via: "count",
+                    from: nameList,
+                  ],
+                },
+              },
+            ],
+          },
+        )
+          .then((response) => response.data)
+          .then((data) => {
+            this.years = Object.values(data.results);
+          });
+      }
       this.$router.push({ path: '/examples', query: { templateType: this.url } });
     },
     // close popup when pressing popup button
@@ -268,7 +351,8 @@ export default {
     },
   },
   props: [
-    'url', // contains the type of graph to be used
+    'url', // contains the type of graph to be used (pie, bar. etc)
+    'text', // contains the type of graph to be used (race, bell curve, etc)
     'fyear', // boolean for whether form has year field
     'ffaculty', // boolean for whether form has faculty field
     'fschool', // boolean for whether form has school field

@@ -7,6 +7,7 @@
           <div v-if="text === 'Race'">
             <FilterForm
               v-bind:url="url"
+              v-bind:text="text"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -17,6 +18,7 @@
           <div v-if="text === 'Gender'">
             <FilterForm
               v-bind:url="url"
+              v-bind:text="text"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -27,6 +29,7 @@
           <div v-if="text === 'Nationality'">
             <FilterForm
               v-bind:url="url"
+              v-bind:text="text"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -37,6 +40,7 @@
           <div v-if="text === 'Home Language'">
             <FilterForm
               v-bind:url="url"
+              v-bind:text="text"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -47,6 +51,7 @@
           <div v-if="text === 'Demographics vs Marks'">
             <FilterForm
               v-bind:url="url"
+              v-bind:text="text"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -58,6 +63,7 @@
           <div v-if="text === 'Pass rates by year'">
             <FilterForm
               v-bind:url="url"
+              v-bind:text="text"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -68,6 +74,7 @@
           <div v-if="text === 'Pass rates by faculty/course'">
             <FilterForm
               v-bind:url="url"
+              v-bind:text="text"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -78,6 +85,7 @@
           <div v-if="text === 'Bell curve'">
             <FilterForm
               v-bind:url="url"
+              v-bind:text="text"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -88,6 +96,7 @@
           <div v-if="text === 'Progress outcome by faculty/course'">
             <FilterForm
               v-bind:url="url"
+              v-bind:text="text"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -98,6 +107,7 @@
           <div v-if="text === 'Class size vs pass rate'">
             <FilterForm
               v-bind:url="url"
+              v-bind:text="text"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -108,6 +118,7 @@
           <div v-if="text === 'Average class size by faculty/course'">
             <FilterForm
               v-bind:url="url"
+              v-bind:text="text"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
