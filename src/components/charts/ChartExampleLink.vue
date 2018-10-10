@@ -1,6 +1,6 @@
 <template>
   <div class="chart_link_bounds">
-    <Modal ref="templatePopup" v-bind:url="url"></Modal>
+    <Modal ref="templatePopup" v-bind:url="url" v-bind:text="text"></Modal>
 
     <div class="chart_link">
       <img :src="url" alt="chart" width="120" @click="openPopup" >
@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     openPopup() {
-      this.$refs.templatePopup.open();
+      this.$refs.templatePopup.showModal();
     },
   },
 };
