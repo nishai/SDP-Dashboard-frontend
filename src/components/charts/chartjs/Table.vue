@@ -1,5 +1,10 @@
 <template>
-    <b-table id="table" striped hover :items="rows" :fields="fields"></b-table>
+  <div id="Table">
+    <b-form-select v-model="selected" :options="fields" class="mb-3" />
+    <Button id="Add" v-on:click="add(selected)">Add</Button>
+    <div>Selected: <strong>{{ selected }}</strong></div>
+    <b-table id="table" striped hover :items="rows" :fields="displayedFields"></b-table>
+  </div>
 </template>
 
 <script>
@@ -8,23 +13,35 @@ export default {
   name: 'Table',
   data() {
     return {
+      selected: null,
       fields: [
         {
-          key: 'id',
-          sortable: true,
+          value: 'id',
+          text: 'id',
         },
+        {
+          value: 'studentNo',
+          text: 'Student Number',
+        },
+        {
+          value: 'school',
+          text: 'School',
+        },
+        {
+          value: 'averageMark',
+          text: 'Average Mark',
+        },
+      ],
+      displayedFields: [
         {
           key: 'studentNo',
-          sortable: true,
-        },
-        {
-          key: 'school',
           sortable: true,
         },
         {
           key: 'averageMark',
           sortable: true,
         },
+
       ],
       rows: [
         {
@@ -59,6 +76,11 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    add(item) {
+      this.displayedFields.push({ key: item, sortable: true });
+    },
   },
 };
 </script>
