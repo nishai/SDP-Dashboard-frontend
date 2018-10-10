@@ -1,5 +1,7 @@
 <template>
-  <div class="Grid">
+
+<div class="Grid">
+
       <grid-layout
             :layout="layout"
             :col-num="12"
@@ -19,21 +21,49 @@
                    :w="item.w"
                    :h="item.h"
                    :i="item.i">
-            {{item.i + "fucklit"}}
-        </grid-item>
-    </grid-layout>
+                    {{item.i}}
+ 
+
+  <div class="dashboardChart">
+    <div class="d-flex flex-wrap justify-content-between">
+      <div class="d-flex flex-wrap justify-content-start">
+        <DashboardChart style="width: 400px;" class="m-2" v-for="(chart, id) in dashboardCharts" v-bind:key="id" v-bind:dashboardChartId="id" v-bind:chart="chart"  ></DashboardChart>
+        <div style="width: 400px;" class="d-flex justify-content-center">
+          <!-- <router-link :to="{path: '/'}"> -->
+          <!--   <b-button class="my-4 mx-2" style="height: 48px;" variant="outline-success" size="lg" @click="create"> New Chart </b-button> -->
+          <!-- </router-link> -->
+        </div>
+      </div>
+      <div>
+      <!-- <b-button class="my-4 mx-2" style="height: 48px;" variant="outline-success" size="lg" v-on:click="add_table = true"> New Table </b-button>
+        <Table v-if="add_table"></Table> -->
+      </div>
+      <div>
+      <!-- <b-button class="my-4 mx-2" style="height: 48px;" variant="outline-success" size="lg" @click="add_list = true"> New List </b-button>
+        <List v-if="add_list"></List> -->
+      </div>
+    </div>
   </div>
+
+
+
+
+       </grid-item>
+    </grid-layout>
+  
+</div>
+
 </template>
 
-<!-- <script src="../components/grid/vue-grid-layout.umd.min.js"></script> -->
 <script>
-/* eslint-disable */
-
-// import GridItem from '../components/grid/GridItem.vue';
-// import GridLayout from '../components/grid/GridLayout.vue';
-// import VueGridLayout from 'vue-grid-layout';
+import Heading from '../components/misc/Heading.vue';
+import Chart from '../components/charts/chartjs/Chart.vue';
+import Table from '../components/charts/chartjs/Table.vue';
+import List from '../components/charts/chartjs/List.vue';
+import DashboardChart from '../components/dashboard/DashboardChart.vue';
 import { GridLayout } from 'vue-grid-layout';
 import { GridItem } from 'vue-grid-layout';
+
 
 var testLayout = [
         {"x":0,"y":0,"w":2,"h":5,"i":"0"},
@@ -43,13 +73,37 @@ var testLayout = [
         {"x":8,"y":0,"w":2,"h":5,"i":"4"}
     ];
 
-    // var GridLayout = VueGridLayout.GridLayout;
-    // var GridItem = VueGridLayout.GridItem;
-// NBNBNB: ADD layout=getresources in html to get all the charts dynamically (like in bugcity example)
+
+
 export default {
-  name: 'GridExample',
-  data: function () { return { layout: testLayout } },
+  name: 'Dashboard',
+  data() {
+    return { 
+      layout: testLayout,
+      add_table: false,
+      add_list: false,
+    };
+  },
   components: {
+    Heading,
+    Chart,
+    Table,
+    List,
+    DashboardChart,
+    GridLayout,
+    GridItem,
+  },
+  computed: {
+    dashboardCharts() {
+      return this.$store.state.dashboardCharts.dashboardCharts;
+    },
+  },
+  methods: {
+    create() {
+      this.$store.dispatch('createDashboardChart');
+      // router.push({ path: 'register', query: { plan: 'private' }});
+      this.$router.push({path: '/'});
+    },
   },
 };
 </script>
@@ -57,3 +111,7 @@ export default {
 <style>
 
 </style>
+
+
+
+
