@@ -226,55 +226,56 @@ export default {
           });
       }
     },
-  },
 
-  /**
-   * analyse data and make chart when submitting form
-   */
-  onSubmit(event) {
-    const name = apiQuery.nameToColumn[this.$props.text];
-    const finalData = [];
-    let counter = 0;
-    for (let i = 0; i < this.$props.numForms; i += 1) {
-      apiQuery.getCourseStats(
-        name,
-        this.form.year[i],
-        this.form.faculty[i],
-        this.form.school[i],
-        this.form.course[i],
-      )
-        .then((response) => response.data)
-        .then((data) => {
-          const keys = Object.keys(data.results[0]);
-          const titles = [];
-          const values = [];
-          for (let j = 0; j < data.results.length; j += 1) {
-            titles.push(data.results[j][keys[0]]);
-            values.push(data.results[j][keys[1]]);
-          }
-          return [titles, values];
-        })
-        /* eslint-disable no-loop-func */
-        .then((data) => {
-          finalData.push(data);
-          counter += 1;
-          if (counter === this.$props.numForms) {
-            console.log('URL:', this.url, 'DATA:', finalData);
-            this.$router.push({
-              path: '/examples',
-              query: { templateType: this.url, data: finalData },
-            });
-          }
-        });
-    }
-  },
+    /**
+     * analyse data and make chart when submitting form
+     */
+    onSubmit(event) {
+      const name = apiQuery.nameToColumn[this.$props.text];
+      const finalData = [];
+      let counter = 0;
+      for (let i = 0; i < this.$props.numForms; i += 1) {
+        apiQuery.getCourseStats(
+          name,
+          this.form.year[i],
+          this.form.faculty[i],
+          this.form.school[i],
+          this.form.course[i],
+        )
+          .then((response) => response.data)
+          .then((data) => {
+            console.log('RESPONSE: ', data);
+            const keys = Object.keys(data.results[0]);
+            const titles = [];
+            const values = [];
+            for (let j = 0; j < data.results.length; j += 1) {
+              titles.push(data.results[j][keys[0]]);
+              values.push(data.results[j][keys[1]]);
+            }
+            return [titles, values];
+          })
+          /* eslint-disable no-loop-func */
+          .then((data) => {
+            finalData.push(data);
+            counter += 1;
+            if (counter === this.$props.numForms) {
+              console.log('URL:', this.url, 'DATA:', finalData);
+              this.$router.push({
+                path: '/examples',
+                query: { templateType: this.url, data: finalData },
+              });
+            }
+          });
+      }
+    },
 
-  /**
-   * close popup when pressing popup button
-   */
-  onClose(event) {
-    this.$parent.$parent.hideModal();
-  },
+    /**
+     * close popup when pressing popup button
+     */
+    onClose(event) {
+      this.$parent.$parent.hideModal();
+    },
+  }, /* >>> END METHODS <<< */
 };
 </script>
 
