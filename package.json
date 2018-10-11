@@ -73,6 +73,10 @@
           "args": "none",
           "ignoreRestSiblings": true
         }
+      ],
+      "quote-props": [
+        "warn",
+        "consistent"
       ]
     },
     "parserOptions": {
