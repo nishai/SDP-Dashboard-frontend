@@ -135,7 +135,7 @@
 import FilterForm from './FilterForm.vue';
 
 export default {
-  name: 'Modal',
+  name: 'FilterFormModal',
   components: {
     FilterForm,
   },

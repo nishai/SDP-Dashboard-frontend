@@ -254,10 +254,12 @@ export default {
           }
           return [titles, values];
         })
+        /* eslint-disable no-loop-func */
         .then((data) => {
           finalData.push(data);
           counter += 1;
           if (counter === this.$props.numForms) {
+            console.log('URL:', this.url, 'DATA:', finalData);
             this.$router.push({
               path: '/examples',
               query: { templateType: this.url, data: finalData },
