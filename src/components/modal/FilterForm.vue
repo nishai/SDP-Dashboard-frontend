@@ -138,9 +138,9 @@ export default {
     textToName(name) {
       switch (name) {
         case 'Race':
-          return 'Race';
+          return 'race_description';
         case 'Gender':
-          return 'Gender';
+          return 'gender';
         case 'Nationality':
           return 'nationality_short_name';
         case 'Home Language':
@@ -153,26 +153,8 @@ export default {
     // analyse data and make chart when submitting form
     onSubmit(evt) {
       const name = this.textToName(this.$props.text);
-      let nameList;
-      axios.post(
-        'http://dashboard-dev.ms.wits.ac.za:4000/course_stats/query',
-        {
-          chain: [
-            {
-              group: {
-                by: [
-                  name,
-                ],
-              },
-            },
-          ],
-        },
-      )
-        .then((response) => response.data)
-        .then((data) => {
-          nameList = Object.values(data.results);
-        });
-
+      const finalData = [];
+      let counter = 0;
       for (let i = 0; i < this.$props.numForms; i += 1) {
         axios.post(
           'http://dashboard-dev.ms.wits.ac.za:4000/course_stats/query',
@@ -206,9 +188,11 @@ export default {
                     name,
                   ],
                   yield: [
-                    name: "count",
-                    via: "count",
-                    from: nameList,
+                    {
+                      name: 'count',
+                      via: 'count',
+                      from: name,
+                    },
                   ],
                 },
               },
@@ -217,10 +201,23 @@ export default {
         )
           .then((response) => response.data)
           .then((data) => {
-            this.years = Object.values(data.results);
+            const keys = Object.keys(data.results[0]);
+            const titles = [];
+            const values = [];
+            for (let j = 0; j < data.results.length; j += 1) {
+              titles.push(data.results[j][keys[0]]);
+              values.push(data.results[j][keys[1]]);
+            }
+            return [titles, values];
+          })
+          .then((data) => {
+            finalData.push(data);
+            counter += 1;
+            if (counter === this.$props.numForms) {
+              this.$router.push({ path: '/examples', query: { templateType: this.url, data: finalData } });
+            }
           });
       }
-      this.$router.push({ path: '/examples', query: { templateType: this.url } });
     },
     // close popup when pressing popup button
     onClose(evt) {
