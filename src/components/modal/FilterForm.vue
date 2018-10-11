@@ -4,6 +4,7 @@
     <b-row>
       <!-- create numForms amount of copies of the form side by side-->
       <b-col v-for="i in numForms" :key="i">
+        <!-- CHART TYPE -->
         <b-form-group
           v-if="ftype === true"
           id="typeGroup"
@@ -17,6 +18,7 @@
             v-model="form.type[i-1]">
           </b-form-select>
         </b-form-group>
+        <!-- YEARS -->
         <b-form-group
           v-if="fyear === true"
           id="YearGroup"
@@ -31,6 +33,7 @@
               v-model="form.year[i-1]">
           </b-form-select>
         </b-form-group>
+        <!-- FACULTIES -->
         <b-form-group
           v-if="ffaculty === true"
           id="FacultyGroup"
@@ -47,6 +50,7 @@
             @input="loadSchools(i-1)">
           </b-form-select>
         </b-form-group>
+        <!-- SCHOOLS -->
         <b-form-group
           v-if="fschool === true && form.faculty[i-1][0] != null"
           id="SchoolGroup"
@@ -63,6 +67,7 @@
             @input="loadCourses(i-1)">
           </b-form-select>
         </b-form-group>
+        <!-- COURSES -->
         <b-form-group
           v-if="fcourse === true && form.school[i-1][0] != null"
           id="CourseGroup"
@@ -78,6 +83,7 @@
             v-model="form.course[i-1]">
           </b-form-select>
         </b-form-group>
+
       </b-col>
     </b-row>
     <b-row class="text-center">
@@ -90,7 +96,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import apiQuery from '../../api/api_query';
 
 export default {
   name: 'FilterForm',
@@ -134,70 +140,18 @@ export default {
 
   // https://stackoverflow.com/questions/52724773/javascript-get-data-from-promise-axios
   methods: {
-    // Translate graph description text to model collumn names
-    textToName(name) {
-      switch (name) {
-        case 'Race':
-          return 'race_description';
-        case 'Gender':
-          return 'gender';
-        case 'Nationality':
-          return 'nationality_short_name';
-        case 'Home Language':
-          return 'home_language_description';
-        default:
-          return null;
-      }
-    },
-
     // analyse data and make chart when submitting form
     onSubmit(evt) {
-      const name = this.textToName(this.$props.text);
+      const name = apiQuery.nameToColumn[this.$props.text];
       const finalData = [];
       let counter = 0;
       for (let i = 0; i < this.$props.numForms; i += 1) {
-        axios.post(
-          `http://${process.env.VUE_APP_API}/course_stats/query`,
-          {
-            chain: [
-              {
-                filter: [
-                  {
-                    field: 'calendar_instance_year',
-                    operator: 'exact',
-                    value: this.form.year[i],
-                  },
-                  {
-                    field: 'faculty',
-                    operator: 'exact',
-                    value: this.form.faculty[i],
-                  },
-                  {
-                    field: 'school',
-                    operator: 'exact',
-                    value: this.form.school[i],
-                  },
-                  {
-                    field: 'course_code',
-                    operator: 'exact',
-                    value: this.form.course[i],
-                  },
-                ],
-                group: {
-                  by: [
-                    name,
-                  ],
-                  yield: [
-                    {
-                      name: 'count',
-                      via: 'count',
-                      from: name,
-                    },
-                  ],
-                },
-              },
-            ],
-          },
+        apiQuery.getCourseStats(
+          name,
+          this.form.year[i],
+          this.form.faculty[i],
+          this.form.school[i],
+          this.form.course[i],
         )
           .then((response) => response.data)
           .then((data) => {
@@ -214,7 +168,10 @@ export default {
             finalData.push(data);
             counter += 1;
             if (counter === this.$props.numForms) {
-              this.$router.push({ path: '/examples', query: { templateType: this.url, data: finalData } });
+              this.$router.push({
+                path: '/examples',
+                query: { templateType: this.url, data: finalData },
+              });
             }
           });
       }
@@ -226,20 +183,7 @@ export default {
 
     // loads available years from the database into this.years
     loadYears() {
-      axios.post(
-        `http://${process.env.VUE_APP_API}/course_stats/query`,
-        {
-          chain: [
-            {
-              group: {
-                by: [
-                  'calendar_instance_year',
-                ],
-              },
-            },
-          ],
-        },
-      )
+      apiQuery.getYears()
         .then((response) => response.data)
         .then((data) => {
           this.years = Object.values(data.results);
@@ -248,20 +192,7 @@ export default {
 
     // loads available faculties from the database into this.faculties
     loadFaculties() {
-      axios.post(
-        `http://${process.env.VUE_APP_API}/school_info/query`,
-        {
-          chain: [
-            {
-              group: {
-                by: [
-                  'faculty',
-                ],
-              },
-            },
-          ],
-        },
-      )
+      apiQuery.getFaculties()
         .then((response) => response.data)
         .then((data) => {
           this.faculties = Object.values(data.results);
@@ -272,27 +203,7 @@ export default {
     loadSchools(index) {
       // gets called when form.faculty changes, so it gets called unnecessarily with created()
       if (this.form.faculty[index].length !== 0) {
-        axios.post(
-          `http://${process.env.VUE_APP_API}/school_info/query`,
-          {
-            chain: [
-              {
-                filter: [
-                  {
-                    field: 'faculty',
-                    operator: 'exact',
-                    value: this.form.faculty[index],
-                  },
-                ],
-                group: {
-                  by: [
-                    'school',
-                  ],
-                },
-              },
-            ],
-          },
-        )
+        apiQuery.getFacultySchools(this.form.faculty[index])
           .then((response) => response.data)
           .then((data) => {
             this.schools[index] = Object.values(data.results);
@@ -304,27 +215,7 @@ export default {
     // filters courses in database that are in this.schools and puts it in this.courses
     loadCourses(index) {
       if (this.form.school[index].length !== 0) {
-        axios.post(
-          `http://${process.env.VUE_APP_API}/course_info/query`,
-          {
-            chain: [
-              {
-                filter: [
-                  {
-                    field: 'school',
-                    operator: 'exact',
-                    value: this.form.school[index],
-                  },
-                ],
-                group: {
-                  by: [
-                    'course_name',
-                  ],
-                },
-              },
-            ],
-          },
-        )
+        apiQuery.getSchoolsCourses(this.form.school[index])
           .then((response) => response.data)
           .then((data) => {
             this.courses[index] = Object.values(data.results);

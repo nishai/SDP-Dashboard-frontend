@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import Modal from '../modal/Modal.vue';
+import Modal from '../modal/FilterFormModal.vue';
 
 export default {
   name: 'ChartExampleLink',
