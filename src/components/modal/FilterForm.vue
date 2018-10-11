@@ -100,6 +100,18 @@ import apiQuery from '../../api/api_query';
 
 export default {
   name: 'FilterForm',
+
+  props: [
+    'url', // contains the type of graph to be used (pie, bar. etc)
+    'text', // contains the type of graph to be used (race, bell curve, etc)
+    'fyear', // boolean for whether form has year field
+    'ffaculty', // boolean for whether form has faculty field
+    'fschool', // boolean for whether form has school field
+    'fcourse', // boolean for whether form has course field
+    'ftype', // boolean for whether form has type field
+    'numForms', // int for amount of side by side copies of the form for superimposing graphs
+  ],
+
   data: () => ({
     form: {
       type: [],
@@ -118,6 +130,10 @@ export default {
     courses: [],
     show: true,
   }),
+
+  /**
+   * This is run when the component is first created to initialise it.
+   */
   created() {
     // initialize data.form to have the correct amount of v-models
     const formKeys = Object.keys(this.form);
@@ -138,92 +154,9 @@ export default {
     this.loadFaculties();
   },
 
-  // https://stackoverflow.com/questions/52724773/javascript-get-data-from-promise-axios
-  methods: {
-    // analyse data and make chart when submitting form
-    onSubmit(evt) {
-      const name = apiQuery.nameToColumn[this.$props.text];
-      const finalData = [];
-      let counter = 0;
-      for (let i = 0; i < this.$props.numForms; i += 1) {
-        apiQuery.getCourseStats(
-          name,
-          this.form.year[i],
-          this.form.faculty[i],
-          this.form.school[i],
-          this.form.course[i],
-        )
-          .then((response) => response.data)
-          .then((data) => {
-            const keys = Object.keys(data.results[0]);
-            const titles = [];
-            const values = [];
-            for (let j = 0; j < data.results.length; j += 1) {
-              titles.push(data.results[j][keys[0]]);
-              values.push(data.results[j][keys[1]]);
-            }
-            return [titles, values];
-          })
-          .then((data) => {
-            finalData.push(data);
-            counter += 1;
-            if (counter === this.$props.numForms) {
-              this.$router.push({
-                path: '/examples',
-                query: { templateType: this.url, data: finalData },
-              });
-            }
-          });
-      }
-    },
-    // close popup when pressing popup button
-    onClose(evt) {
-      this.$parent.$parent.hideModal();
-    },
-
-    // loads available years from the database into this.years
-    loadYears() {
-      apiQuery.getYears()
-        .then((response) => response.data)
-        .then((data) => {
-          this.years = Object.values(data.results);
-        });
-    },
-
-    // loads available faculties from the database into this.faculties
-    loadFaculties() {
-      apiQuery.getFaculties()
-        .then((response) => response.data)
-        .then((data) => {
-          this.faculties = Object.values(data.results);
-        });
-    },
-
-    // filters schools in database that are in this.faculty and puts it in this.schools
-    loadSchools(index) {
-      // gets called when form.faculty changes, so it gets called unnecessarily with created()
-      if (this.form.faculty[index].length !== 0) {
-        apiQuery.getFacultySchools(this.form.faculty[index])
-          .then((response) => response.data)
-          .then((data) => {
-            this.schools[index] = Object.values(data.results);
-            this.$forceUpdate();
-          });
-      }
-    },
-
-    // filters courses in database that are in this.schools and puts it in this.courses
-    loadCourses(index) {
-      if (this.form.school[index].length !== 0) {
-        apiQuery.getSchoolsCourses(this.form.school[index])
-          .then((response) => response.data)
-          .then((data) => {
-            this.courses[index] = Object.values(data.results);
-            this.$forceUpdate();
-          });
-      }
-    },
-  },
+  /**
+   * Updated whenever their dependencies are changed.
+   */
   computed: {
     derivedYears() {
       return this.years ? this.years : ['loading data from database...'];
@@ -238,16 +171,108 @@ export default {
       return this.courses ? this.courses : ['loading data from database...'];
     },
   },
-  props: [
-    'url', // contains the type of graph to be used (pie, bar. etc)
-    'text', // contains the type of graph to be used (race, bell curve, etc)
-    'fyear', // boolean for whether form has year field
-    'ffaculty', // boolean for whether form has faculty field
-    'fschool', // boolean for whether form has school field
-    'fcourse', // boolean for whether form has course field
-    'ftype', // boolean for whether form has type field
-    'numForms', // int for amount of side by side copies of the form for superimposing graphs
-  ],
+
+  // https://stackoverflow.com/questions/52724773/javascript-get-data-from-promise-axios
+  methods: {
+    /**
+     * loads available years from the database into this.years
+     */
+    loadYears() {
+      apiQuery.getYears()
+        .then((response) => response.data)
+        .then((data) => {
+          this.years = Object.values(data.results);
+        });
+    },
+
+    /**
+     * loads available faculties from the database into this.faculties
+     */
+    loadFaculties() {
+      apiQuery.getFaculties()
+        .then((response) => response.data)
+        .then((data) => {
+          this.faculties = Object.values(data.results);
+        });
+    },
+
+    /**
+     * filters schools in database that are in this.faculty and puts it in this.schools
+     * @param index
+     */
+    loadSchools(index) {
+      // gets called when form.faculty changes, so it gets called unnecessarily with created()
+      if (this.form.faculty[index].length !== 0) {
+        apiQuery.getFacultySchools(this.form.faculty[index])
+          .then((response) => response.data)
+          .then((data) => {
+            this.schools[index] = Object.values(data.results);
+            this.$forceUpdate();
+          });
+      }
+    },
+
+    /**
+     * filters courses in database that are in this.schools and puts it in this.courses
+     * @param index
+     */
+    loadCourses(index) {
+      if (this.form.school[index].length !== 0) {
+        apiQuery.getSchoolsCourses(this.form.school[index])
+          .then((response) => response.data)
+          .then((data) => {
+            this.courses[index] = Object.values(data.results);
+            this.$forceUpdate();
+          });
+      }
+    },
+  },
+
+  /**
+   * analyse data and make chart when submitting form
+   */
+  onSubmit(event) {
+    const name = apiQuery.nameToColumn[this.$props.text];
+    const finalData = [];
+    let counter = 0;
+    for (let i = 0; i < this.$props.numForms; i += 1) {
+      apiQuery.getCourseStats(
+        name,
+        this.form.year[i],
+        this.form.faculty[i],
+        this.form.school[i],
+        this.form.course[i],
+      )
+        .then((response) => response.data)
+        .then((data) => {
+          const keys = Object.keys(data.results[0]);
+          const titles = [];
+          const values = [];
+          for (let j = 0; j < data.results.length; j += 1) {
+            titles.push(data.results[j][keys[0]]);
+            values.push(data.results[j][keys[1]]);
+          }
+          return [titles, values];
+        })
+        .then((data) => {
+          finalData.push(data);
+          counter += 1;
+          if (counter === this.$props.numForms) {
+            this.$router.push({
+              path: '/examples',
+              query: { templateType: this.url, data: finalData },
+            });
+          }
+        });
+    }
+  },
+
+  /**
+   * close popup when pressing popup button
+   */
+  onClose(event) {
+    this.$parent.$parent.hideModal();
+  },
 };
 </script>
 
