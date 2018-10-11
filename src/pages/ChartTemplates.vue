@@ -2,7 +2,7 @@
   <div id="templates">
     <Heading heading_text="Template Charts"></Heading>
 
-    <div id="check">
+    <div id="check" class="d-none">
       <input type="checkbox" value="always_show" checked> Always show this page on login<br>
     </div>
 
