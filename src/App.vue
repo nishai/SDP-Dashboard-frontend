@@ -29,6 +29,7 @@ import Footer from './components/Footer.vue';
 import './assets/css/defaults.css';
 import './assets/css/bootstrapExtensions.css';
 import './assets/css/dashboard.css';
+import './assets/css/wits.css';
 
 export default {
   name: 'app',
