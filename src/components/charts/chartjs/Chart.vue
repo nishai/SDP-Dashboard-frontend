@@ -34,35 +34,61 @@ export default {
     BubbleChart,
     ScatterChart,
   },
-  props: ['type'],
+  props: [
+    'type',
+    'chartData',
+  ],
   data() {
     return {
       datacollection: null,
     };
   },
   mounted() {
-    const newData = {
+    console.log("yyyyyyyyyyyyyyyyyyyyyyyyy ")
+    console.log(this.$props.chartData)
+    let newData = {
       title: 'Race',
       labels: ['Black', 'White', 'Indian', 'Coloured', 'Other'],
       datasets: [{
-        data: [60, 13, 12, 10, 5],
+        data: [],
         backgroundColor: [
-          'rgba(255,99,132,1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
+//          'rgba(255,99,132,1)',
+//          'rgba(54, 162, 235, 1)',
+//          'rgba(255, 206, 86, 1)',
+//          'rgba(75, 192, 192, 1)',
+//          'rgba(153, 102, 255, 1)',
         ],
         borderWidth: 2,
       }],
       options: {
         title: {
           display: true,
-          text: 'Course Demographics: Race',
+          text: this.$props.type,
         },
       },
     };
-    this.startData(newData);
+    for (let i = 0; i < this.$props.chartData.length; i += 1) {
+      let bgColor = [];
+      for (let j = 0; j < this.$props.chartData.length; j += 1) {
+        bgColor.push(
+          'rgba(' +
+          (Math.floor(Math.random() * 256)) +
+          ',' +
+          (Math.floor(Math.random() * 256)) +
+          ',' +
+          (Math.floor(Math.random() * 256)) +
+          ',' +
+          1 +
+          ')',
+        );
+      }
+      newData.datasets.concat([{
+        data: this.$props.chartData[i],
+        backgroundColor: bgColor,
+      }]);
+    }
+    this.datacollection = newData;
+    // this.startData(newData);
   },
   methods: {
     startData(newData) {

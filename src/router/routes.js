@@ -22,7 +22,10 @@ export const navRoutes = [
     path: '/examples',
     component: ChartExamples,
     /* not part of route definitions, used by navbar */
-    query: { templateType: '' },
+    query: {
+      templateType: '',
+      data: '',
+    },
   },
   {
     name: 'Queries',
