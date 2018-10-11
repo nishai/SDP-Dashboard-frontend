@@ -157,7 +157,7 @@ export default {
       let counter = 0;
       for (let i = 0; i < this.$props.numForms; i += 1) {
         axios.post(
-          'http://dashboard-dev.ms.wits.ac.za:4000/course_stats/query',
+          `http://${process.env.VUE_APP_API}/course_stats/query`,
           {
             chain: [
               {
@@ -227,7 +227,7 @@ export default {
     // loads available years from the database into this.years
     loadYears() {
       axios.post(
-        'http://dashboard-dev.ms.wits.ac.za:4000/course_stats/query',
+        `http://${process.env.VUE_APP_API}/course_stats/query`,
         {
           chain: [
             {
@@ -249,7 +249,7 @@ export default {
     // loads available faculties from the database into this.faculties
     loadFaculties() {
       axios.post(
-        'http://dashboard-dev.ms.wits.ac.za:4000/school_info/query',
+        `http://${process.env.VUE_APP_API}/school_info/query`,
         {
           chain: [
             {
@@ -273,7 +273,7 @@ export default {
       // gets called when form.faculty changes, so it gets called unnecessarily with created()
       if (this.form.faculty[index].length !== 0) {
         axios.post(
-          'http://dashboard-dev.ms.wits.ac.za:4000/school_info/query',
+          `http://${process.env.VUE_APP_API}/school_info/query`,
           {
             chain: [
               {
@@ -305,7 +305,7 @@ export default {
     loadCourses(index) {
       if (this.form.school[index].length !== 0) {
         axios.post(
-          'http://dashboard-dev.ms.wits.ac.za:4000/course_info/query',
+          `http://${process.env.VUE_APP_API}/course_info/query`,
           {
             chain: [
               {
