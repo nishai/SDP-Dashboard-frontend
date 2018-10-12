@@ -17,6 +17,8 @@
     "crypto-browserify": "^3.11.0",
     "crypto-js": "^3.1.9-1",
     "feather-icons": "^4.7.3",
+    "html2canvas": "^1.0.0-alpha.12",
+    "jspdf": "^1.4.1",
     "vue": "^2.5.17",
     "vue-chartjs": "^3.4.0",
     "vue-router": "^3.0.1",
