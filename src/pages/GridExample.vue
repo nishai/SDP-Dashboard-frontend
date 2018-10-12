@@ -54,6 +54,7 @@ import { GridItem } from 'vue-grid-layout';
 
 var testLayout = [
         {"x":0,"y":0,"w":3.5,"h":27,"i":"0"},
+        {"x":0,"y":0,"w":3.5,"h":27,"i":"1"},
         
     ];
 
