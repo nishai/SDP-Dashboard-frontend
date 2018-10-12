@@ -8,6 +8,25 @@ const requester = axios.create({
 });
 
 
+function getLoginToken(username, password) {
+  return requester.post(
+    'auth/token/obtain',
+    {
+      username,
+      password,
+    },
+  );
+}
+
+function refreshToken(token) {
+  return requester.post(
+    'auth/token/refresh',
+    {
+      token,
+    },
+  );
+}
+
 function getYears() {
   return requester.post(
     'course_stats/query',
@@ -150,5 +169,7 @@ export default {
   getFaculties,
   getFacultySchools,
   getSchoolsCourses,
+  getLoginToken,
+  refreshToken,
   nameToColumn,
 };

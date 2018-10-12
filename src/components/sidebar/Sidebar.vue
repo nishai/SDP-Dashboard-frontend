@@ -2,9 +2,9 @@
   <transition name="fade">
     <div class="sidebar border-right">
       <div class="sidebar_nav d-flex flex-column">
-        <div class="sidebar_nav_group sidebar_nav_heading">
-          <img class="img-fluid" src="img/logo/wits-logo-white.png"/>
-        </div>
+        <!--<div class="sidebar_nav_group sidebar_nav_heading">-->
+          <!--<img class="img-fluid" src="img/logo/wits-logo-white.png"/>-->
+        <!--</div>-->
         <div  class="sidebar_nav_group d-flex flex-column" v-for="item in links" :key="item.path">
           <router-link class="sidebar_nav_link" :to="{name: item.name, query: item.query}" > {{ item.name }} </router-link>
         </div>
@@ -30,9 +30,6 @@ export default {
 
 <style>
 .sidebar {
-  position: fixed;
-  left: 0;
-  top: 0;
   margin: 0;
   width: calc(var(--sidebar-width));
   height: 100vh;
