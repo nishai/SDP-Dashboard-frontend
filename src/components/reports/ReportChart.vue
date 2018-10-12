@@ -68,7 +68,7 @@ export default {
       return this.$store.state.reports.reports[this.reportId];
     },
     details() {
-      return 'TODO: detials';
+      return 'TODO: details';
     },
     isEditorOpen() {
       return this.$store.state.ui.optsbarOpen

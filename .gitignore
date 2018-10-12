@@ -30,3 +30,6 @@ yarn-error.log*
 .coverage
 coverage.sh
 coverage/**
+
+#backups
+*.bak
