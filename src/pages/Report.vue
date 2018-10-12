@@ -12,14 +12,11 @@
   </div>
 </template>
 
-<script src="vue-grid-layout.umd.min.js"></script>
-
 <script>
 import Heading from '../components/misc/Heading.vue';
 import ReportChart from '../components/reports/ReportChart.vue';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import VueGridLayout from 'vue-grid-layout';
 
 export default {
   name: 'Report',
@@ -37,7 +34,6 @@ export default {
   },
   methods: {
     create() {
-      console.log(this.$route.params.id);
       this.$store.dispatch('createReportChart', { reportId: this.reportId });
     },
     doPDF() {
