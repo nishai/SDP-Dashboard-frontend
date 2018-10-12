@@ -106,7 +106,7 @@ export default {
           datasets: [
             {
               label: this.groupBy,
-              backgroundColor: palette('cb-Blues', labels.length).map((color) => `#${color}`), // http://google.github.io/palette.js/
+              backgroundColor: palette('mpn65', labels.length).map((color) => `#${color}`), // http://google.github.io/palette.js/
               data,
             },
           ],
