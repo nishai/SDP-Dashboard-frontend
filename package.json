@@ -21,6 +21,8 @@
     "jspdf": "^1.4.1",
     "vue": "^2.5.17",
     "vue-chartjs": "^3.4.0",
+    "vue-grid-layout": "^2.2.0",
+    "vue-responsive-grid-layout": "^1.0.22",
     "vue-router": "^3.0.1",
     "vuedraggable": "^2.16.0",
     "vuex": "^3.0.1"
