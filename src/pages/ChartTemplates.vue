@@ -1,8 +1,14 @@
 <template>
+  <!-- TODO: POPULATE BASED OFF DATA RATHER THAN HARD-CODED -->
+  <!-- TODO: POPULATE BASED OFF DATA RATHER THAN HARD-CODED -->
+  <!-- TODO: POPULATE BASED OFF DATA RATHER THAN HARD-CODED -->
+  <!-- TODO: POPULATE BASED OFF DATA RATHER THAN HARD-CODED -->
+  <!-- TODO: POPULATE BASED OFF DATA RATHER THAN HARD-CODED -->
+  <!-- TODO: POPULATE BASED OFF DATA RATHER THAN HARD-CODED -->
   <div id="templates">
     <Heading heading_text="Template Charts"></Heading>
 
-    <div id="check">
+    <div id="check" class="d-none">
       <input type="checkbox" value="always_show" checked> Always show this page on login<br>
     </div>
 
@@ -11,19 +17,39 @@
     </div>
     <div class="grid-container">
       <div class="grid-item">
-        <ChartExampleLink text="Race" v-bind:url="doughnut"></ChartExampleLink>
+        <ChartExampleLink
+          desc="Race"
+          chartType="pie"
+          :src="doughnut"
+        />
       </div>
       <div class="grid-item">
-        <ChartExampleLink text="Gender" v-bind:url="pie2"></ChartExampleLink>
+        <ChartExampleLink
+          desc="Gender"
+          chartType="pie"
+          :src="pie2"
+        />
       </div>
       <div class="grid-item">
-        <ChartExampleLink text="Nationality" v-bind:url="pie1"></ChartExampleLink>
+        <ChartExampleLink
+          desc="Nationality"
+          chartType="pie"
+          :src="pie1"
+        />
       </div>
       <div class="grid-item">
-        <ChartExampleLink text="Home Language" v-bind:url="pie3"></ChartExampleLink>
+        <ChartExampleLink
+          desc="Home Language"
+          chartType="pie"
+          :src="pie3"
+        />
       </div>
       <div class="grid-item">
-        <ChartExampleLink text="Demographics vs Marks" v-bind:url="line2"></ChartExampleLink>
+        <ChartExampleLink
+          desc="Demographics vs Marks"
+          chartType="bar"
+          :src="line2"
+        />
       </div>
     </div>
 
@@ -32,18 +58,32 @@
     </div>
     <div class="grid-container">
       <div class="grid-item">
-        <ChartExampleLink text="Pass rates by year" v-bind:url="bar1"></ChartExampleLink>
+        <ChartExampleLink
+          desc="Pass rates by year"
+          chartType="bar"
+          :src="bar1"
+        />
       </div>
       <div class="grid-item">
         <ChartExampleLink
-        text="Pass rates by faculty/course" v-bind:url="bar3"></ChartExampleLink>
-      </div>
-      <div class="grid-item">
-        <ChartExampleLink text="Bell curve" v-bind:url="bellcurve"></ChartExampleLink>
+          desc="Pass rates by faculty/course"
+          chartType="bar"
+          :src="bar3"
+        />
       </div>
       <div class="grid-item">
         <ChartExampleLink
-        text="Progress outcome by faculty/course" v-bind:url="bar2"></ChartExampleLink>
+          desc="Bell curve"
+          chartType="line"
+          :src="bellcurve"
+        />
+      </div>
+      <div class="grid-item">
+        <ChartExampleLink
+          desc="Progress outcome by faculty/course"
+          chartType="bar"
+          :src="bar2"
+        />
       </div>
     </div>
 
@@ -53,11 +93,18 @@
     <div class="grid-container">
       <div class="grid-item">
         <ChartExampleLink
-        text="Class size vs pass rate" v-bind:url="line1"></ChartExampleLink>
+          desc="Class size vs pass rate"
+          chartType="line"
+          :src="line1"
+        />
       </div>
       <div class="grid-item">
-        <ChartExampleLink click="two"
-        text="Average class size by faculty/course" v-bind:url="bar1"></ChartExampleLink>
+        <ChartExampleLink
+          click="two"
+          desc="Average class size by faculty/course"
+          chartType="bar"
+          :src="bar1"
+        />
       </div>
     </div>
 

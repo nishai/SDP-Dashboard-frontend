@@ -1,11 +1,12 @@
 <template>
   <transition name="fade">
-    <div class="sidebar border rounded-top">
-      <div class="sidebar_nav">
-        <div class="sidebar_nav_heading"> Navigate </div>
-        <div v-for="item in links" :key="item.path" class="sidebar_nav_group">
-          <b-link :to="{name: item.name, query: item.query}" class="sidebar_nav_link"> {{ item.name }} </b-link>
-          <hr class="sidebar_divider"/>
+    <div class="sidebar border-right">
+      <div class="sidebar_nav d-flex flex-column">
+        <div class="sidebar_nav_group sidebar_nav_heading">
+          <img class="img-fluid" src="img/logo/wits-logo-white.png"/>
+        </div>
+        <div  class="sidebar_nav_group d-flex flex-column" v-for="item in links" :key="item.path">
+          <router-link class="sidebar_nav_link" :to="{name: item.name, query: item.query}" > {{ item.name }} </router-link>
         </div>
       </div>
     </div>
@@ -29,48 +30,56 @@ export default {
 
 <style>
 .sidebar {
-  /* position */
   position: fixed;
   left: 0;
   top: 0;
-  /* size */
-  margin: 15px 0 0 15px;
-  width: calc(var(--sidebar-width) - 15px);
+  margin: 0;
+  width: calc(var(--sidebar-width));
   height: 100vh;
-  /* border */
-  border-color: var(--border-color-sidebar);
+  background-color: var(--bg-color-sidebar);
+  color: var(--text-color-sidebar);
 }
 
 .sidebar_nav {
   font-size: var(--font-size-sidebar);
-  color: var(--text-color);
-  display: block;
 }
 
 .sidebar_nav_heading {
-  color: var(--heading-color);
+  color: var(--text-color-sidebar-heading);
+  background-color: var(--bg-color-sidebar-light);
   font-weight: bold;
   padding: 15px 20px;
+  text-transform: uppercase;
 }
 
 .sidebar_nav_group {
-  padding: 0px 20px;
+  flex-grow: 1;
 }
 
 .sidebar_nav_link {
-  color: var(--link-color);
+  color: var(--text-color-sidebar);
   font-size: var(--font-size-sidebar);
   text-decoration: none;
+  padding: 10px 20px;
+  flex-grow: 1;
 }
 
 .sidebar_nav_link:hover {
-  color: var(--link-color);
+  color: var(--text-color-sidebar);
+  background-color: var(--bg-color-sidebar-dark);
   font-weight: bold;
   text-decoration: none;
 }
 
-.sidebar_divider {
-  margin: 0 0 16px 0;
-  border-style: dotted;
+/* automatically added by the router to any <router-link> */
+.router-link-active {}
+
+/* automatically added by the router to any <router-link> */
+.router-link-exact-active {
+  color: var(--text-color-sidebar);
+  background-color: var(--bg-color-sidebar-dark);
+  font-weight: bold;
+  text-decoration: none;
 }
+
 </style>

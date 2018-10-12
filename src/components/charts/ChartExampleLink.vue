@@ -1,26 +1,26 @@
 <template>
   <div class="chart_link_bounds">
-    <Modal ref="templatePopup" v-bind:url="url" v-bind:text="text"></Modal>
-
+    <FilterFormModal ref="templatePopup" :chartType="chartType" :groupByDesc="desc"></FilterFormModal>
     <div class="chart_link">
-      <img :src="url" alt="chart" width="120" @click="openPopup" >
-      <div class="chart_link_text"> {{ text }} </div>
+      <img :src="src" alt="chart" width="120" @click="openPopup" >
+      <div class="chart_link_text"> {{ desc }} </div>
     </div>
 
   </div>
 </template>
 
 <script>
-import Modal from '../modal/Modal.vue';
+import FilterFormModal from '../modal/FilterFormModal.vue';
 
 export default {
   name: 'ChartExampleLink',
   props: [
-    'url',
-    'text',
+    'src',
+    'desc',
+    'chartType',
   ],
   components: {
-    Modal,
+    FilterFormModal,
   },
   methods: {
     openPopup() {

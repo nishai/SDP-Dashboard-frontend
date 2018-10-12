@@ -15,8 +15,14 @@
   --heading-color: #17324d;
 
   --bg-color: #ffffff;
-  --bg-color-sidebar: #f5f6fa;
-  --bg-color-footer: #edeff2;
+  --bg-color-dark: #F8FAFC;
+  --bg-color-footer: #F8FAFC;
+
+  --text-color-sidebar-heading: #FFFFFF;
+  --text-color-sidebar: #C5D0DE;
+  --bg-color-sidebar-light: #303944;
+  --bg-color-sidebar: #272E38;
+  --bg-color-sidebar-dark: #222933;
 
   --optsbar-width: 300px;
   --sidebar-width: 200px;
