@@ -65,12 +65,8 @@
         type="scatter">
       </Chart>
       <div>
-        <Button id="tableButton" v-on:click="add_table = true">Add Table</Button>
+        <Button id="tableButton" v-if="!isHidden" v-on:click="isHidden = true; add_table = true">Add Table</Button>
         <Table v-if="add_table"></Table>
-      </div>
-      <div>
-        <Button id="listButton" v-on:click="add_list = true">Add List</Button>
-        <List v-if="add_list"></List>
       </div>
     </div>
   </div>
@@ -80,21 +76,19 @@
 import Heading from '../components/misc/Heading.vue';
 import Chart from '../components/charts/chartjs/Chart.vue';
 import Table from '../components/charts/chartjs/Table.vue';
-import List from '../components/charts/chartjs/List.vue';
 
 export default {
   name: 'ChartExamples',
   data() {
     return {
       add_table: false,
-      add_list: false,
+      isHidden: false,
     };
   },
   components: {
     Heading,
     Chart,
     Table,
-    List,
   },
 };
 </script>
