@@ -1,34 +1,9 @@
 
-import axios from 'axios';
+import { app } from '../main';
 
-
-const requester = axios.create({
-  baseURL: `http://${process.env.VUE_APP_API}/`,
-  timeout: 10000,
-});
-
-
-function getLoginToken(username, password) {
-  return requester.post(
-    'auth/token/obtain',
-    {
-      username,
-      password,
-    },
-  );
-}
-
-function refreshToken(token) {
-  return requester.post(
-    'auth/token/refresh',
-    {
-      token,
-    },
-  );
-}
 
 function getYears() {
-  return requester.post(
+  return app.$store.getters.apiAxios.post(
     'course_stats/query',
     {
       chain: [
@@ -45,7 +20,7 @@ function getYears() {
 }
 
 function getFaculties() {
-  return requester.post(
+  return app.$store.getters.apiAxios.post(
     'school_info/query',
     {
       chain: [
@@ -62,7 +37,7 @@ function getFaculties() {
 }
 
 function getFacultySchools(faculties) {
-  return requester.post(
+  return app.$store.getters.apiAxios.post(
     'school_info/query',
     {
       chain: [
@@ -86,7 +61,7 @@ function getFacultySchools(faculties) {
 }
 
 function getSchoolsCourses(schools) {
-  return requester.post(
+  return app.$store.getters.apiAxios.post(
     'course_info/query',
     {
       chain: [
@@ -110,7 +85,7 @@ function getSchoolsCourses(schools) {
 }
 
 function getCourseStats(groupBy, years, faculties, schools, courses) {
-  return requester.post(
+  return app.$store.getters.apiAxios.post(
     'course_stats/query',
     {
       chain: [
@@ -169,7 +144,7 @@ export default {
   getFaculties,
   getFacultySchools,
   getSchoolsCourses,
-  getLoginToken,
-  refreshToken,
+  // getLoginToken,
+  // refreshToken,
   nameToColumn,
 };

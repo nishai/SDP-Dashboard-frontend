@@ -26,8 +26,6 @@
 import Heading from '../components/misc/Heading.vue';
 import Chart from '../components/charts/chartjs/Chart.vue';
 import Table from '../components/charts/chartjs/Table.vue';
-import List from '../components/charts/chartjs/List.vue';
-import DashboardChart from '../components/dashboard/DashboardChart.vue';
 
 export default {
   name: 'Dashboard',
@@ -41,8 +39,6 @@ export default {
     Heading,
     Chart,
     Table,
-    List,
-    DashboardChart,
   },
   computed: {
     dashboardCharts() {

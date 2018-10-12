@@ -1,6 +1,6 @@
 
 import Vue from 'vue';
-import * as mutators from '../mutations';
+import mutations from '../mutations';
 
 /* ========================================================================== */
 /* EXAMPLE DATA - TODO: REPLACE WITH BACKEND QUERY                            */
@@ -85,82 +85,99 @@ const testReportB = {
 };
 
 /* ========================================================================== */
-/* STATE                                                                      */
-/* ========================================================================== */
-
-const stateData = {
-  reports: {
-    '1d090475-3c50-4075-bcf2-1b7f23a2a5cd': testReportA,
-    '1d2d04f5-7c50-74b5-acf2-9b7f33a2adcd': testReportB,
-  },
-};
-
-/* ========================================================================== */
-/* GETTERS                                                                    */
-/* ========================================================================== */
-
-const getters = {
-  get: (state, id) => state.reports[id],
-  num: (state) => state.reports.length,
-};
-
-/* ========================================================================== */
-/* MUTATORS                                                                   */
-/* ========================================================================== */
-
-const mutations = {
-  [mutators.CREATE_REPORT](state) {
-    const uuid = uuidv4();
-    const report = {
-      name: uuid,
-      desc: 'This report has not yet been customised',
-      charts: {},
-    };
-    Vue.set(state.reports, uuid, report);
-  },
-  [mutators.CREATE_REPORT_CHART](state, { reportId }) {
-    const uuid = uuidv4();
-    const chart = {
-      name: uuid,
-      type: 'pie',
-      query: {},
-    };
-    Vue.set(state.reports[reportId].charts, uuid, chart);
-  },
-  [mutators.DELETE_REPORT_CHART](state, { reportId, chartId }) {
-    if (!(reportId in state.reports)) {
-      throw new Error(`Report ID not found: "${reportId}"`);
-    }
-    if (!(chartId in state.reports[reportId].charts)) {
-      throw new Error(`Chart ID not found: "${chartId}" under Report ID: "${reportId}"`);
-    }
-    Vue.delete(state.reports[reportId].charts, chartId);
-  },
-};
-
-/* ========================================================================== */
-/* ACTIONS                                                                    */
-/* ========================================================================== */
-
-const actions = {
-  createReport({ commit, state }) {
-    commit(mutators.CREATE_REPORT);
-  },
-  createReportChart({ commit, state }, { reportId }) {
-    commit(mutators.CREATE_REPORT_CHART, { reportId });
-  },
-  deleteReportChart({ commit, state }, { reportId, chartId }) {
-    commit(mutators.DELETE_REPORT_CHART, { reportId, chartId });
-  },
-};
-
-/* ========================================================================== */
-/* EXPORT MODULE                                                              */
+/* REPORT MODULE                                                              */
 /* ========================================================================== */
 
 export default {
-  state: stateData,
-  getters,
-  actions,
-  mutations,
+
+  /* ======================================================================== */
+  /* STATE                                                                    */
+  /*  - https://vuex.vuejs.org/guide/state.html                               */
+  /*  - Vuex uses a single state tree - a single object serving as the        */
+  /*    "single source of truth". There should be one store for each app,     */
+  /*    making it straightforward to locate a specific piece of state, and    */
+  /*    allowing us to take snapshots of the current app state for debugging. */
+  /* ======================================================================== */
+
+  state: {
+    reports: {
+      '1d090475-3c50-4075-bcf2-1b7f23a2a5cd': testReportA,
+      '1d2d04f5-7c50-74b5-acf2-9b7f33a2adcd': testReportB,
+    },
+  },
+
+  /* ======================================================================== */
+  /* GETTERS                                                                  */
+  /*  - https://vuex.vuejs.org/guide/getters.html                             */
+  /*  - You can think of getters as computed properties in vue for vuex       */
+  /*    stores. Like computed properties, a getter's result is cached based   */
+  /*    on its dependencies, and will only re-evaluate when some of its       */
+  /*    dependencies have changed.                                            */
+  /* ======================================================================== */
+
+  getters: {
+    get: (state, id) => state.reports[id],
+    num: (state) => state.reports.length,
+  },
+
+  /* ======================================================================== */
+  /* MUTATIONS (function contents must be SYNCHRONOUS)                        */
+  /*  - https://vuex.vuejs.org/guide/mutations.html                           */
+  /*  - Mutations should not care about business logic, but are the only way  */
+  /*    to set or change the state (so there’s no direct changes!).           */
+  /*    Furthermore — they must be synchronous. This solution drives a very   */
+  /*    important functionality: mutations can be logged into devtools.       */
+  /*  - Variable names are due to the commit() function.                      */
+  /* ======================================================================== */
+
+  mutations: {
+    [mutations.CREATE_REPORT](state) {
+      const uuid = uuidv4();
+      const report = {
+        name: uuid,
+        desc: 'This report has not yet been customised',
+        charts: {},
+      };
+      Vue.set(state.reports, uuid, report);
+    },
+    [mutations.CREATE_REPORT_CHART](state, { reportId }) {
+      const uuid = uuidv4();
+      const chart = {
+        name: uuid,
+        type: 'pie',
+        query: {},
+      };
+      Vue.set(state.reports[reportId].charts, uuid, chart);
+    },
+    [mutations.DELETE_REPORT_CHART](state, { reportId, chartId }) {
+      if (!(reportId in state.reports)) {
+        throw new Error(`Report ID not found: "${reportId}"`);
+      }
+      if (!(chartId in state.reports[reportId].charts)) {
+        throw new Error(`Chart ID not found: "${chartId}" under Report ID: "${reportId}"`);
+      }
+      Vue.delete(state.reports[reportId].charts, chartId);
+    },
+  },
+
+  /* ======================================================================== */
+  /* ACTIONS (function contents can be ASYNCHRONOUS)                          */
+  /*  - https://vuex.vuejs.org/guide/actions.html                            */
+  /*  - can dispatch more than 1 mutation at a time, it just implements the   */
+  /*    business logic, it doesn't care about data changing                   */
+  /*    (which is manage by mutations)                                        */
+  /* ======================================================================== */
+
+  actions: {
+    createReport({ commit, state }) {
+      commit(mutations.CREATE_REPORT);
+    },
+    createReportChart({ commit, state }, { reportId }) {
+      commit(mutations.CREATE_REPORT_CHART, { reportId });
+    },
+    deleteReportChart({ commit, state }, { reportId, chartId }) {
+      commit(mutations.DELETE_REPORT_CHART, { reportId, chartId });
+    },
+  },
+
 };

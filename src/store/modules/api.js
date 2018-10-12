@@ -1,12 +1,9 @@
 
-/* ========================================================================== */
-/* STATE                                                                      */
-/* ========================================================================== */
-
+import axios from 'axios';
 import mutations from '../mutations';
 
 /* ========================================================================== */
-/* REPORT MODULE                                                              */
+/* API MODULE                                                                 */
 /* ========================================================================== */
 
 export default {
@@ -21,8 +18,10 @@ export default {
   /* ======================================================================== */
 
   state: {
-    optsbarOpen: false,
-    optsbarComponent: null,
+    /* polling */
+    apiPollInterval: 10000,
+    apiPollEnabled: false,
+    apiConnected: false,
   },
 
   /* ======================================================================== */
@@ -35,8 +34,27 @@ export default {
   /* ======================================================================== */
 
   getters: {
-    optsbarOpen: (state) => state.optsbarOpen,
-    optsbarComponent: (state) => state.optsbarComponent,
+    url(state) {
+      return process.env.VUE_APP_API;
+    },
+    apiAxios(state, getters, rootState) {
+      console.log('RECALCULATING AXIOS');
+      const options = {
+        baseURL: `http://${process.env.VUE_APP_API}/`,
+        timeout: 10000,
+      };
+      if (getters.authorized) {
+        if (typeof rootState.auth.authToken !== 'string') {
+          throw new Error(`Auth token is not valid: ${rootState.auth.authToken}`);
+        }
+        options.headers = {
+          'Authorization': `JWT ${rootState.auth.authToken}`,
+          'Content-Type': 'application/json',
+        };
+      }
+      console.log('RECALCULATED AXIOS', options);
+      return axios.create(options);
+    },
   },
 
   /* ======================================================================== */
@@ -50,11 +68,12 @@ export default {
   /* ======================================================================== */
 
   mutations: {
-    [mutations.TOGGLE_OPTSBAR](state) {
-      state.optsbarOpen = !state.optsbarOpen;
+    /* polling */
+    [mutations.API_POLLING_SET_ENABLED]: (state, enabled) => {
+      state.apiPollEnabled = enabled;
     },
-    [mutations.SET_OPTSBAR_COMPONENT](state, component) {
-      state.optsbarComponent = component;
+    [mutations.API_POLLING_SET_CONNECTED]: (state, connected) => {
+      state.apiConnected = connected;
     },
   },
 
@@ -67,10 +86,33 @@ export default {
   /* ======================================================================== */
 
   actions: {
-    toggleOptsbar({ commit, state }, { component }) {
-      commit(mutations.TOGGLE_OPTSBAR);
-      commit(mutations.SET_OPTSBAR_COMPONENT, component);
+    /* polling */
+    apiConnectionPollingStart({ commit, state, getters }) {
+      function doPoll() {
+        getters.apiAxios.get('api/status')
+          .then((response) => {
+            commit(mutations.API_POLLING_SET_CONNECTED, response.data.status === 'active');
+          }).catch((error) => {
+            commit(mutations.API_POLLING_SET_CONNECTED, false);
+          });
+        if (state.apiPollEnabled) {
+          setTimeout(doPoll, state.apiPollInterval);
+        }
+      }
+      if (!state.apiPollEnabled) {
+        commit(mutations.API_POLLING_SET_ENABLED, true);
+        doPoll();
+      } else {
+        throw new Error(`API connectivity polling is already running every ${state.apiPollInterval}ms!`);
+      }
     },
-  },
+    apiConnectionPollingStop({ commit, state }) {
+      if (state.apiPollEnabled) {
+        commit(mutations.API_POLLING_SET_ENABLED, false);
+      } else {
+        throw new Error('API connectivity polling is already stopped!');
+      }
+    },
+  }, /* >>> END ACTIONS <<< */
 
 };

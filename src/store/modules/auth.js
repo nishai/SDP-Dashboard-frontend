@@ -1,12 +1,11 @@
 
-/* ========================================================================== */
-/* STATE                                                                      */
-/* ========================================================================== */
-
 import mutations from '../mutations';
 
+
+// TODO: Move into class, this is too slow
+
 /* ========================================================================== */
-/* REPORT MODULE                                                              */
+/* AUTH MODULE                                                                */
 /* ========================================================================== */
 
 export default {
@@ -21,8 +20,7 @@ export default {
   /* ======================================================================== */
 
   state: {
-    optsbarOpen: false,
-    optsbarComponent: null,
+    authToken: null,
   },
 
   /* ======================================================================== */
@@ -35,8 +33,16 @@ export default {
   /* ======================================================================== */
 
   getters: {
-    optsbarOpen: (state) => state.optsbarOpen,
-    optsbarComponent: (state) => state.optsbarComponent,
+    authorized: (state) => state.authToken !== null,
+    authTokenData: (state) => {
+      if (state.authToken == null) {
+        return null;
+      }
+      // https://stackoverflow.com/questions/38552003
+      const base64Url = state.authToken.split('.')[1];
+      const base64 = base64Url.replace('-', '+').replace('_', '/');
+      return JSON.parse(window.atob(base64));
+    },
   },
 
   /* ======================================================================== */
@@ -50,11 +56,8 @@ export default {
   /* ======================================================================== */
 
   mutations: {
-    [mutations.TOGGLE_OPTSBAR](state) {
-      state.optsbarOpen = !state.optsbarOpen;
-    },
-    [mutations.SET_OPTSBAR_COMPONENT](state, component) {
-      state.optsbarComponent = component;
+    [mutations.AUTH_SET_JWT_TOKEN]: (state, token) => {
+      state.authToken = token;
     },
   },
 
@@ -67,10 +70,58 @@ export default {
   /* ======================================================================== */
 
   actions: {
-    toggleOptsbar({ commit, state }, { component }) {
-      commit(mutations.TOGGLE_OPTSBAR);
-      commit(mutations.SET_OPTSBAR_COMPONENT, component);
+    /**
+     * Attempt to log in and start a new session with the associated username and password.
+     * TODO: cookies & session events
+     * @param username
+     * @param password
+     */
+    authLogIn({ commit, state, getters }, { username, password }) {
+      if (getters.authorized) {
+        throw new Error('Already logged in!');
+      }
+      getters.apiAxios
+        .post('api/token/obtain', { username, password })
+        .then((response) => {
+          if (typeof response.data.token === 'string') {
+            commit(mutations.AUTH_SET_JWT_TOKEN, response.data.token);
+          } else {
+            throw new Error('Invalid Login!');
+          }
+        })
+        .catch((error) => {
+          commit(mutations.AUTH_SET_JWT_TOKEN, null);
+        });
     },
-  },
+    /**
+     * Log out and end the current session.
+     */
+    authLogOut({ commit, state, getters }) {
+      if (!getters.authorized) {
+        throw new Error('Already logged out!');
+      }
+      commit(mutations.AUTH_SET_JWT_TOKEN, null);
+    },
+    /**
+     * Refresh the current session, by obtaining a new JWT token from the existing one.
+     */
+    authRefresh({ commit, state, getters }) {
+      if (!getters.authorized) {
+        throw new Error('Cannot refresh token if not logged in!');
+      }
+      getters.apiAxios
+        .post('api/token/refresh', { token: state.authToken })
+        .then((response) => {
+          if (typeof response.data.token === 'string') {
+            commit(mutations.AUTH_SET_JWT_TOKEN, response.data.token);
+          } else {
+            throw new Error('Invalid Refresh!');
+          }
+        })
+        .catch((error) => {
+          commit(mutations.AUTH_SET_JWT_TOKEN, null);
+        });
+    },
+  }, /* >>> END ACTIONS <<< */
 
 };

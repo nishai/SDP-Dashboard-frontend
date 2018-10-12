@@ -11,10 +11,12 @@ import router from './router';
 import store from './store';
 
 /* Check Mode */ /* eslint-disable */
-console.log(`NODE_ENV: "${process.env.NODE_ENV}"`);
-console.log(`BASE_URL: "${process.env.BASE_URL}"`);
-console.log(`VUE_APP_URL: "${process.env.VUE_APP_URL}"`);
-console.log(`VUE_APP_API: "${process.env.VUE_APP_API}"`);
+if (process.env.NODE_ENV === 'development') {
+  console.log(`NODE_ENV: "${process.env.NODE_ENV}"`);
+  console.log(`BASE_URL: "${process.env.BASE_URL}"`);
+  console.log(`VUE_APP_URL: "${process.env.VUE_APP_URL}"`);
+  console.log(`VUE_APP_API: "${process.env.VUE_APP_API}"`);
+}
 
 /* add miscellaneous plugins to Vue */
 
@@ -24,7 +26,7 @@ Vue.use(BootstrapVue);
 
 Vue.config.productionTip = false;
 
-const app = new Vue({
+export const app = new Vue({
   components: { App },
   template: '<App/>',
   router,
@@ -34,3 +36,8 @@ const app = new Vue({
 /* Inject App Into Page */
 
 app.$mount('#app');
+
+/* poll for the backend, possibly to display an error message when not connected */
+
+app.$store.dispatch('apiConnectionPollingStart');
+

@@ -4,14 +4,14 @@
       <img class="menubar-img img-fluid" src="img/logo/wits-logo-white.png"/>
     </div>
     <div class="menubar-right p-2 ml-auto">
-      <div v-if="!loggedIn" class="d-flex flex-row">
-        <b-form-input class="mx-2" v-model="username" type="text" size="sm" placeholder="Username"></b-form-input>
-        <b-form-input class="mx-2" v-model="password" type="password" size="sm" placeholder="Password"></b-form-input>
-        <b-button class="mx-2" variant="outline-success" size="sm" @click="logIn"> Log In </b-button>
+      <div v-if="!authorized" class="d-flex flex-row">
+        <b-form-input class="mx-2" v-model="tempUsername" type="text" size="sm" placeholder="Username"></b-form-input>
+        <b-form-input class="mx-2" v-model="tempPassword" type="password" size="sm" placeholder="Password"></b-form-input>
+        <b-button class="mx-2" variant="outline-success" size="sm" @click="authLogIn"> Log In </b-button>
       </div>
-      <div v-if="loggedIn" class="d-flex flex-row">
-        {{ username }}
-        <b-button class="mx-2" variant="outline-danger" size="sm" @click="logOut"> Log Out </b-button>
+      <div v-if="authorized" class="d-flex flex-row">
+        {{ authTokenData.username }}
+        <b-button class="mx-2" variant="outline-danger" size="sm" @click="authLogOut"> Log Out </b-button>
       </div>
     </div>
 
@@ -28,44 +28,32 @@
 </template>
 
 <script>
-import queryApi from '../../api/api_query';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'Menubar',
   data: () => ({
-    username: null,
-    password: null,
-    token: null,
+    tempUsername: null,
+    tempPassword: null,
     failedCountdown: 0,
     dismissSecs: 5,
   }),
   computed: {
-    loggedIn() {
-      return this.token !== null;
-    },
+    ...mapGetters([
+      'authorized',
+      'authTokenData',
+    ]),
   },
   methods: {
-    logIn() {
-      console.log(`logging in as: ${this.username}`);
-      queryApi.getLoginToken(this.username, this.password)
-        .then((request) => {
-          console.log(request.data);
-          if (request.data.token !== null) {
-            this.token = request.data.token;
-            this.password = null;
-          } else {
-            this.showFailedAlert();
-          }
-        })
-        .catch((error) => {
-          console.log('Login Failed');
-          this.showFailedAlert();
-        });
-    },
-    logOut() {
-      this.token = null;
-      this.username = null;
-      this.password = null;
+    ...mapActions([
+      'authLogOut',
+    ]),
+    authLogIn(username, password) {
+      this.$store.dispatch('authLogIn', { username: this.tempUsername, password: this.tempPassword });
+      if (this.$store.authorized) {
+        this.tempUsername = null;
+        this.tempPassword = null;
+      }
     },
     failedCountdownChanged(dismissCountdown) {
       this.failedCountdown = dismissCountdown;
