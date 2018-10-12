@@ -1,6 +1,10 @@
 <template>
     <div>
       <!-- TODO: TURN INTO SINGULAR COMPONENT, WITH PROPS -->
+      <!-- TODO: TURN INTO SINGULAR COMPONENT, WITH PROPS -->
+      <!-- TODO: TURN INTO SINGULAR COMPONENT, WITH PROPS -->
+      <!-- TODO: TURN INTO SINGULAR COMPONENT, WITH PROPS -->
+      <!-- TODO: TURN INTO SINGULAR COMPONENT, WITH PROPS -->
       <!-- https://bootstrap-vue.js.org/docs/components/modal/ -->
       <b-modal ref="popupRef" id="popup" title="Chart Options" size="lg" hide-footer>
         <b-container fluid>

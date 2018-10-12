@@ -1,6 +1,11 @@
 <template>
   <div class="dashboard">
     <Heading heading_text="Example Dashboard"></Heading>
+    <!-- TODO: TURN INTO SINGULAR COMPONENT, WITH PROPS -->
+    <!-- TODO: TURN INTO SINGULAR COMPONENT, WITH PROPS -->
+    <!-- TODO: TURN INTO SINGULAR COMPONENT, WITH PROPS -->
+    <!-- TODO: TURN INTO SINGULAR COMPONENT, WITH PROPS -->
+    <!-- TODO: TURN INTO SINGULAR COMPONENT, WITH PROPS -->
     <div class="d-flex flex-wrap justify-content-between">
       <Chart
         class="example_chart_size"

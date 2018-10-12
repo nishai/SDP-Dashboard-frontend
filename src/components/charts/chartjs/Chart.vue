@@ -1,6 +1,12 @@
 /* eslint-disable */
 <template>
   <div>
+    <!-- TODO: TURN INTO SINGULAR COMPONENT WITH PROPS, DELETE, OR REPLACE WITH SOMETHING SIMILAR TO pages/ChartTemplate -->
+    <!-- TODO: TURN INTO SINGULAR COMPONENT WITH PROPS, DELETE, OR REPLACE WITH SOMETHING SIMILAR TO pages/ChartTemplate -->
+    <!-- TODO: TURN INTO SINGULAR COMPONENT WITH PROPS, DELETE, OR REPLACE WITH SOMETHING SIMILAR TO pages/ChartTemplate -->
+    <!-- TODO: TURN INTO SINGULAR COMPONENT WITH PROPS, DELETE, OR REPLACE WITH SOMETHING SIMILAR TO pages/ChartTemplate -->
+    <!-- TODO: TURN INTO SINGULAR COMPONENT WITH PROPS, DELETE, OR REPLACE WITH SOMETHING SIMILAR TO pages/ChartTemplate -->
+    <!-- TODO: TURN INTO SINGULAR COMPONENT WITH PROPS, DELETE, OR REPLACE WITH SOMETHING SIMILAR TO pages/ChartTemplate -->
     <doughnut-chart v-if="type === 'doughnut'" :chart-data="datacollection"></doughnut-chart>
     <line-chart v-else-if="type === 'line'" :chart-data="datacollection"></line-chart>
     <bar-chart v-else-if="type === 'bar'" :chart-data="datacollection"></bar-chart>
@@ -44,19 +50,19 @@ export default {
     };
   },
   mounted() {
-    console.log("yyyyyyyyyyyyyyyyyyyyyyyyy ")
-    console.log(this.$props.chartData)
-    let newData = {
+    console.log('yyyyyyyyyyyyyyyyyyyyyyyyy ');
+    console.log(this.$props.chartData);
+    const newData = {
       title: 'Race',
       labels: ['Black', 'White', 'Indian', 'Coloured', 'Other'],
       datasets: [{
         data: [],
         backgroundColor: [
-//          'rgba(255,99,132,1)',
-//          'rgba(54, 162, 235, 1)',
-//          'rgba(255, 206, 86, 1)',
-//          'rgba(75, 192, 192, 1)',
-//          'rgba(153, 102, 255, 1)',
+          //          'rgba(255,99,132,1)',
+          //          'rgba(54, 162, 235, 1)',
+          //          'rgba(255, 206, 86, 1)',
+          //          'rgba(75, 192, 192, 1)',
+          //          'rgba(153, 102, 255, 1)',
         ],
         borderWidth: 2,
       }],
@@ -68,19 +74,17 @@ export default {
       },
     };
     for (let i = 0; i < this.$props.chartData.length; i += 1) {
-      let bgColor = [];
+      const bgColor = [];
       for (let j = 0; j < this.$props.chartData.length; j += 1) {
-        bgColor.push(
-          'rgba(' +
-          (Math.floor(Math.random() * 256)) +
-          ',' +
-          (Math.floor(Math.random() * 256)) +
-          ',' +
-          (Math.floor(Math.random() * 256)) +
-          ',' +
-          1 +
-          ')',
-        );
+        bgColor.push(`rgba(${
+          Math.floor(Math.random() * 256)
+        },${
+          Math.floor(Math.random() * 256)
+        },${
+          Math.floor(Math.random() * 256)
+        },${
+          1
+        })`);
       }
       newData.datasets.concat([{
         data: this.$props.chartData[i],
