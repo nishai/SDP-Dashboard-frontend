@@ -46,7 +46,6 @@
 import Heading from '../components/misc/Heading.vue';
 import Chart from '../components/charts/chartjs/Chart.vue';
 import Table from '../components/charts/chartjs/Table.vue';
-import List from '../components/charts/chartjs/List.vue';
 import DashboardChart from '../components/dashboard/DashboardChart.vue';
 import { GridLayout } from 'vue-grid-layout';
 import { GridItem } from 'vue-grid-layout';
@@ -73,7 +72,6 @@ export default {
     Heading,
     Chart,
     Table,
-    List,
     DashboardChart,
     GridLayout,
     GridItem,
