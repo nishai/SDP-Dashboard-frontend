@@ -58,6 +58,7 @@ export default {
   }
 
   .app-menubar {
+    z-index: 999999999;
     position: fixed;
     left: 0;
     top: 0;
@@ -75,7 +76,7 @@ export default {
     margin-top: 80px;
     margin-left: var(--sidebar-width);
     width: calc(100% - var(--sidebar-width));
-    height: calc(100% - 80px);
+    height: 100%;
   }
 
   .app-content {
