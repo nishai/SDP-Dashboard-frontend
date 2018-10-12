@@ -46,7 +46,7 @@ export default {
           var width = doc.internal.pageSize.getWidth(); 
           var height = doc.internal.pageSize.getHeight(); 
           height = ratio * width;
-          doc.addImage(imgData, 'PNG', 0, 0, width-20, height-10);
+          doc.addImage(imgData, 'PNG', 0, 0, width, height, '', 'FAST');
           doc.save('report.pdf');
         });
     },
