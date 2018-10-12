@@ -4,10 +4,10 @@
       <!-- https://bootstrap-vue.js.org/docs/components/modal/ -->
       <b-modal ref="popupRef" id="popup" title="Chart Options" size="lg" hide-footer>
         <b-container fluid>
-          <div v-if="text === 'Race'">
+          <div v-if="groupByDesc === 'Race'">
             <FilterForm
-              v-bind:url="url"
-              v-bind:text="text"
+              v-bind:chartType="chartType"
+              v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -15,10 +15,10 @@
               v-bind:numForms="1">
             </FilterForm>
           </div>
-          <div v-if="text === 'Gender'">
+          <div v-if="groupByDesc === 'Gender'">
             <FilterForm
-              v-bind:url="url"
-              v-bind:text="text"
+              v-bind:chartType="chartType"
+              v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -26,10 +26,10 @@
               v-bind:numForms="1">
             </FilterForm>
           </div>
-          <div v-if="text === 'Nationality'">
+          <div v-if="groupByDesc === 'Nationality'">
             <FilterForm
-              v-bind:url="url"
-              v-bind:text="text"
+              v-bind:chartType="chartType"
+              v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -37,10 +37,10 @@
               v-bind:numForms="1">
             </FilterForm>
           </div>
-          <div v-if="text === 'Home Language'">
+          <div v-if="groupByDesc === 'Home Language'">
             <FilterForm
-              v-bind:url="url"
-              v-bind:text="text"
+              v-bind:chartType="chartType"
+              v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -48,10 +48,10 @@
               v-bind:numForms="1">
             </FilterForm>
           </div>
-          <div v-if="text === 'Demographics vs Marks'">
+          <div v-if="groupByDesc === 'Demographics vs Marks'">
             <FilterForm
-              v-bind:url="url"
-              v-bind:text="text"
+              v-bind:chartType="chartType"
+              v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -60,10 +60,10 @@
               v-bind:numForms="2">
             </FilterForm>
           </div>
-          <div v-if="text === 'Pass rates by year'">
+          <div v-if="groupByDesc === 'Pass rates by year'">
             <FilterForm
-              v-bind:url="url"
-              v-bind:text="text"
+              v-bind:chartType="chartType"
+              v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -71,10 +71,10 @@
               v-bind:numForms="1">
             </FilterForm>
           </div>
-          <div v-if="text === 'Pass rates by faculty/course'">
+          <div v-if="groupByDesc === 'Pass rates by faculty/course'">
             <FilterForm
-              v-bind:url="url"
-              v-bind:text="text"
+              v-bind:chartType="chartType"
+              v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -82,10 +82,10 @@
               v-bind:numForms="1">
             </FilterForm>
           </div>
-          <div v-if="text === 'Bell curve'">
+          <div v-if="groupByDesc === 'Bell curve'">
             <FilterForm
-              v-bind:url="url"
-              v-bind:text="text"
+              v-bind:chartType="chartType"
+              v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -93,10 +93,10 @@
               v-bind:numForms="1">
             </FilterForm>
           </div>
-          <div v-if="text === 'Progress outcome by faculty/course'">
+          <div v-if="groupByDesc === 'Progress outcome by faculty/course'">
             <FilterForm
-              v-bind:url="url"
-              v-bind:text="text"
+              v-bind:chartType="chartType"
+              v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -104,10 +104,10 @@
               v-bind:numForms="1">
             </FilterForm>
           </div>
-          <div v-if="text === 'Class size vs pass rate'">
+          <div v-if="groupByDesc === 'Class size vs pass rate'">
             <FilterForm
-              v-bind:url="url"
-              v-bind:text="text"
+              v-bind:chartType="chartType"
+              v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -115,10 +115,10 @@
               v-bind:numForms="2">
             </FilterForm>
           </div>
-          <div v-if="text === 'Average class size by faculty/course'">
+          <div v-if="groupByDesc === 'Average class size by faculty/course'">
             <FilterForm
-              v-bind:url="url"
-              v-bind:text="text"
+              v-bind:chartType="chartType"
+              v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
@@ -148,8 +148,8 @@ export default {
     },
   },
   props: [
-    'url',
-    'text',
+    'chartType',
+    'groupByDesc',
   ],
 };
 </script>

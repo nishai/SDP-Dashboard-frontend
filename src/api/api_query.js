@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const requester = axios.create({
   baseURL: `http://${process.env.VUE_APP_API}/`,
-  timeout: 5000,
+  timeout: 10000,
 });
 
 
@@ -99,7 +99,7 @@ function getCourseStats(groupBy, years, faculties, schools, courses) {
           filter: [
             {
               field: 'calendar_instance_year',
-              operator: 'exact',
+              operator: 'startswith', // TODO: FIX ON FRONTEND
               value: years,
             },
             {
@@ -135,6 +135,7 @@ function getCourseStats(groupBy, years, faculties, schools, courses) {
     },
   );
 }
+
 
 const nameToColumn = {
   'Race': 'race_description',

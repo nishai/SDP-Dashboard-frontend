@@ -3,7 +3,7 @@
   <b-form @submit="onSubmit" @reset="onClose" v-if="show">
     <b-row>
       <!-- create numForms amount of copies of the form side by side-->
-      <b-col v-for="i in numForms" :key="i">
+      <b-col v-for="i in numForms" :key="groupByDesc + '-' + i">
         <!-- CHART TYPE -->
         <b-form-group
           v-if="ftype === true"
@@ -102,8 +102,8 @@ export default {
   name: 'FilterForm',
 
   props: [
-    'url', // contains the type of graph to be used (pie, bar. etc)
-    'text', // contains the type of graph to be used (race, bell curve, etc)
+    'chartType', // contains the type of graph to be used (pie, bar. etc)
+    'groupByDesc', // contains the type of graph to be used (race, bell curve, etc)
     'fyear', // boolean for whether form has year field
     'ffaculty', // boolean for whether form has faculty field
     'fschool', // boolean for whether form has school field
@@ -231,42 +231,24 @@ export default {
      * analyse data and make chart when submitting form
      */
     onSubmit(event) {
-      const name = apiQuery.nameToColumn[this.$props.text];
-      const finalData = [];
-      let counter = 0;
-      for (let i = 0; i < this.$props.numForms; i += 1) {
-        apiQuery.getCourseStats(
-          name,
-          this.form.year[i],
-          this.form.faculty[i],
-          this.form.school[i],
-          this.form.course[i],
-        )
-          .then((response) => response.data)
-          .then((data) => {
-            console.log('RESPONSE: ', data);
-            const keys = Object.keys(data.results[0]);
-            const titles = [];
-            const values = [];
-            for (let j = 0; j < data.results.length; j += 1) {
-              titles.push(data.results[j][keys[0]]);
-              values.push(data.results[j][keys[1]]);
-            }
-            return [titles, values];
-          })
-          /* eslint-disable no-loop-func */
-          .then((data) => {
-            finalData.push(data);
-            counter += 1;
-            if (counter === this.$props.numForms) {
-              console.log('URL:', this.url, 'DATA:', finalData);
-              this.$router.push({
-                path: '/examples',
-                query: { templateType: this.url, data: finalData },
-              });
-            }
-          });
+      const name = apiQuery.nameToColumn[this.$props.groupByDesc];
+      if (this.form.year.length > 1) {
+        console.log('Only 1 form is supported at the moment, this will be fixed in future');
       }
+
+      // go to url
+      this.$router.push({
+        path: '/templates/chart',
+        query: {
+          chartType: this.chartType,
+          groupBy: name,
+          // TODO: Multiple sub-charts
+          years: this.form.year[0],
+          faculties: this.form.faculty[0],
+          schools: this.form.school[0],
+          courses: this.form.course[0],
+        },
+      });
     },
 
     /**
