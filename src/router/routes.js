@@ -45,11 +45,6 @@ export const navRoutes = [
     path: '/grid',
     component: GridExample,
   },
-   {
-    name: 'GridExample',
-    path: '/grid',
-    component: GridExample,
-  },
 
 ];
 
