@@ -38,6 +38,12 @@ export const navRoutes = [
     name: 'Reports',
     path: '/reports',
     component: Reports,
+
+  },
+  {
+   name: 'GridExample',
+    path: '/grid',
+    component: GridExample,
   },
    {
     name: 'GridExample',
