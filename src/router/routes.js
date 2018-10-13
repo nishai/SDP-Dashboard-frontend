@@ -38,6 +38,12 @@ export const navRoutes = [
     path: '/reports',
     component: Reports,
   },
+   {
+    name: 'GridExample',
+    path: '/grid',
+    component: GridExample,
+  },
+
 ];
 
 export const hiddenRoutes = [
