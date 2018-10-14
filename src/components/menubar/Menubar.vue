@@ -10,7 +10,7 @@
         <b-button class="mx-2" variant="outline-success" size="sm" @click="authLogIn"> Log In </b-button>
       </div>
       <div v-if="authorized" class="d-flex flex-row">
-        {{ authTokenData.username }}
+        {{ username }}
         <b-button class="mx-2" variant="outline-danger" size="sm" @click="authLogOut"> Log Out </b-button>
       </div>
     </div>
@@ -43,6 +43,9 @@ export default {
       'authorized',
       'authTokenData',
     ]),
+    username() {
+      return this.authTokenData ? this.authTokenData.username : null;
+    },
   },
   methods: {
     ...mapActions([

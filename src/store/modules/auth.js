@@ -38,10 +38,13 @@ export default {
       if (state.authToken == null) {
         return null;
       }
-      // https://stackoverflow.com/questions/38552003
-      const base64Url = state.authToken.split('.')[1];
-      const base64 = base64Url.replace('-', '+').replace('_', '/');
-      return JSON.parse(window.atob(base64));
+      try {
+        const base64Url = state.authToken.split('.')[1];
+        const base64 = base64Url.replace('-', '+').replace('_', '/');
+        return JSON.parse(window.atob(base64));
+      } catch (e) {
+        return null;
+      }
     },
   },
 
