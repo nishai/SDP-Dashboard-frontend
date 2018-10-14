@@ -15,17 +15,16 @@
         <Table v-if="add_table"></Table>
       </div>
       <div>
-      <b-button class="my-4 mx-2" style="height: 48px;" variant="outline-success" size="lg" @click="add_list = true"> New List </b-button>
-        <List v-if="add_list"></List>
-      </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
 import Heading from '../components/misc/Heading.vue';
 import Chart from '../components/charts/chartjs/Chart.vue';
 import Table from '../components/charts/chartjs/Table.vue';
+import DashboardChart from '../components/dashboard/DashboardChart.vue';
 
 export default {
   name: 'Dashboard',
@@ -39,6 +38,7 @@ export default {
     Heading,
     Chart,
     Table,
+    DashboardChart,
   },
   computed: {
     dashboardCharts() {

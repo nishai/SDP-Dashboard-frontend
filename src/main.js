@@ -9,6 +9,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import VueGridLayout from 'vue-grid-layout';
 
 /* Check Mode */ /* eslint-disable */
 if (process.env.NODE_ENV === 'development') {

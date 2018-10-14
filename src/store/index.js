@@ -4,6 +4,7 @@ import api from './modules/api';
 import auth from './modules/auth';
 import reports from './modules/reports';
 import ui from './modules/ui';
+import dashboardCharts from './modules/dashboard_charts';
 
 
 /* Add Vuex Plugin to Vue */
@@ -20,6 +21,7 @@ const store = new Vuex.Store({
     auth,
     reports,
     ui,
+    dashboardCharts,
   },
   strict: debug,
 });
