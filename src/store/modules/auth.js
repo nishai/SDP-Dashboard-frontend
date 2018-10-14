@@ -20,7 +20,7 @@ export default {
   /* ======================================================================== */
 
   state: {
-    authToken: null,
+    authToken: localStorage.getItem('authToken'),
   },
 
   /* ======================================================================== */
@@ -58,6 +58,7 @@ export default {
   mutations: {
     [mutations.AUTH_SET_JWT_TOKEN]: (state, token) => {
       state.authToken = token;
+      localStorage.setItem('authToken', token);
     },
   },
 
@@ -81,7 +82,7 @@ export default {
         throw new Error('Already logged in!');
       }
       getters.apiAxios
-        .post('api/token/obtain', { username, password })
+        .post('auth/token/obtain', { username, password })
         .then((response) => {
           if (typeof response.data.token === 'string') {
             commit(mutations.AUTH_SET_JWT_TOKEN, response.data.token);
@@ -110,7 +111,7 @@ export default {
         throw new Error('Cannot refresh token if not logged in!');
       }
       getters.apiAxios
-        .post('api/token/refresh', { token: state.authToken })
+        .post('auth/token/refresh', { token: state.authToken })
         .then((response) => {
           if (typeof response.data.token === 'string') {
             commit(mutations.AUTH_SET_JWT_TOKEN, response.data.token);

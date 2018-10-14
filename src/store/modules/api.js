@@ -51,6 +51,7 @@ export default {
           'Authorization': `JWT ${rootState.auth.authToken}`,
           'Content-Type': 'application/json',
         };
+        console.log('RECALCULATED AXIOS HEADERS', options);
       }
       console.log('RECALCULATED AXIOS', options);
       return axios.create(options);
@@ -89,7 +90,7 @@ export default {
     /* polling */
     apiConnectionPollingStart({ commit, state, getters }) {
       function doPoll() {
-        getters.apiAxios.get('api/status')
+        getters.apiAxios.get('status')
           .then((response) => {
             commit(mutations.API_POLLING_SET_CONNECTED, response.data.status === 'active');
           }).catch((error) => {
