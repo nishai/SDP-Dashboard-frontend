@@ -4,7 +4,8 @@ import ChartTemplate from '../pages/ChartTemplate.vue';
 import Query from '../pages/Query.vue';
 import Reports from '../pages/ReportList.vue';
 import Report from '../pages/Report.vue';
-
+import Dashboard from '../pages/Dashboard.vue';
+import GridExample from '../pages/GridExample.vue';
 /* Define the routes */
 
 export const navRoutes = [
@@ -37,7 +38,14 @@ export const navRoutes = [
     name: 'Reports',
     path: '/reports',
     component: Reports,
+
   },
+  {
+   name: 'GridExample',
+    path: '/grid',
+    component: GridExample,
+  },
+
 ];
 
 export const hiddenRoutes = [
