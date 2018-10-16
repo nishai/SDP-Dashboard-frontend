@@ -1,0 +1,81 @@
+//HTML
+
+<div id="app">
+  
+  <h1>Years- you can select multiple years</h1>
+  <v-select multiple v-model="selected" :options="options1"></v-select>
+</div>
+  
+<div id="app2">
+   <h1>Faculty  - you can select multiple faculties</h1>
+  <v-select multiple v-model="selected" :options="options2"></v-select>
+</div>
+
+<div id="app3">
+   <h1>Schools - you can select CSAM, nothing else matters.</h1>
+  <v-select multiple v-model="selected" :options="options3"></v-select>
+  
+</div>
+
+
+
+// js
+
+Vue.component('v-select', VueSelect.VueSelect)
+Vue.component('v-select2', VueSelect.VueSelect)
+
+new Vue({
+  el: '#app',
+  data: {
+    selected: [],
+    options1: ['2014','2015','2016','2017'],
+    options2: ['Science','Art'],
+    options3: ['CSAM']
+  }
+})
+
+new Vue({
+  el: '#app2',
+  data: {
+    selected: [],
+    options2: ['Science','Art'],
+  }
+})
+
+new Vue({
+  el: '#app3',
+  data: {
+    selected: [],
+    options2: ['CSAM'],
+  }
+})
+
+
+//CSS
+
+body {
+  font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+}
+
+h1 {
+  font-size: 26px;
+  font-weight: 600;
+  color: #2c3e5099;
+  text-rendering: optimizelegibility;
+  -moz-osx-font-smoothing: grayscale;
+  -moz-text-size-adjust: none;
+}
+
+#app {
+  max-width: 30em;
+  margin: 1em auto;
+}
+
+#app2 {
+  max-width: 30em;
+  margin: 1em auto;
+}
+#app3 {
+  max-width: 30em;
+  margin: 1em auto;
+}
