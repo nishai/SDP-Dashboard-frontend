@@ -55,6 +55,9 @@ export default {
     courses() {
       return this.$route.query.courses;
     },
+    duplicate() {
+      return this.$route.query.duplicate;
+    },
   }, /* >>> END COMPUTED <<< */
 
   /**
@@ -77,7 +80,7 @@ export default {
     getData() {
       console.log('LOADING DATA');
       // TODO: Multiple sub-charts
-      apiQuery.getCourseStats(this.groupBy, this.years, this.faculties, this.schools, this.courses)
+      apiQuery.getCourseStats(this.groupBy, this.years, this.faculties, this.schools, this.courses, this.duplicate)
         .then((response) => {
           const { results } = response.data;
           console.log('RESPONSE DATA:', response.data);

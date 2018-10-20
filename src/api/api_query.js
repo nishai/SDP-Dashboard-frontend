@@ -117,7 +117,7 @@ function getSchoolsCourses(schools) {
   );
 }
 
-function getCourseStats(groupBy, years, faculties, schools, courses) {
+function getCourseStats(groupBy, years, faculties, schools, courses, duplicate) {
   return requester.post(
     'course_stats/query',
     {
@@ -157,7 +157,7 @@ function getCourseStats(groupBy, years, faculties, schools, courses) {
               },
             ],
             distinctGrouping: false,
-            removeDuplicateCountings: true,
+            removeDuplicateCountings: (duplicate === 'true'),
           },
         },
       ],

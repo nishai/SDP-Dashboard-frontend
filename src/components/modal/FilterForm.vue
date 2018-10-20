@@ -83,6 +83,15 @@
             v-model="form.course[i-1]">
           </b-form-select>
         </b-form-group>
+        <!-- Duplicate Data Checkbox-->
+        <b-form-checkbox-group
+          checked=true
+          id="DuplicateGroup">
+          <b-form-checkbox
+            v-model="form.duplicate[i-1]">
+            Don't Duplicate data across fields
+          </b-form-checkbox>
+        </b-form-checkbox-group>
 
       </b-col>
     </b-row>
@@ -119,6 +128,7 @@ export default {
       course: [],
       faculty: [],
       school: [],
+      duplicate: [],
     },
     types: [
       { text: 'Select One', value: null },
@@ -139,7 +149,11 @@ export default {
     const formKeys = Object.keys(this.form);
     for (let i = 0; i < formKeys.length; i += 1) {
       for (let j = 0; j < this.$props.numForms; j += 1) {
-        this.form[formKeys[i]].push([null]);
+        if (formKeys[i] === 'duplicate') {
+          this.form[formKeys[i]].push(true);
+        } else {
+          this.form[formKeys[i]].push([null]);
+        }
       }
     }
 
@@ -247,6 +261,7 @@ export default {
           faculties: this.form.faculty[0],
           schools: this.form.school[0],
           courses: this.form.course[0],
+          duplicate: (this.form.duplicate[0] === true),
         },
       });
     },
