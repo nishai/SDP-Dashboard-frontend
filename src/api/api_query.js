@@ -37,6 +37,8 @@ function getYears() {
             by: [
               'calendar_instance_year',
             ],
+            distinctGrouping: true,
+            removeDuplicateCountings: false,
           },
         },
       ],
@@ -54,6 +56,8 @@ function getFaculties() {
             by: [
               'faculty',
             ],
+            distinctGrouping: true,
+            removeDuplicateCountings: false,
           },
         },
       ],
@@ -78,6 +82,8 @@ function getFacultySchools(faculties) {
             by: [
               'school',
             ],
+            distinctGrouping: true,
+            removeDuplicateCountings: false,
           },
         },
       ],
@@ -102,6 +108,8 @@ function getSchoolsCourses(schools) {
             by: [
               'course_name',
             ],
+            distinctGrouping: true,
+            removeDuplicateCountings: false,
           },
         },
       ],
@@ -118,7 +126,7 @@ function getCourseStats(groupBy, years, faculties, schools, courses) {
           filter: [
             {
               field: 'calendar_instance_year',
-              operator: 'startswith', // TODO: FIX ON FRONTEND
+              operator: 'exact', // TODO: FIX ON FRONTEND
               value: years,
             },
             {
@@ -148,13 +156,14 @@ function getCourseStats(groupBy, years, faculties, schools, courses) {
                 from: groupBy,
               },
             ],
+            distinctGrouping: false,
+            removeDuplicateCountings: true,
           },
         },
       ],
     },
   );
 }
-
 
 const nameToColumn = {
   'Race': 'race_description',
