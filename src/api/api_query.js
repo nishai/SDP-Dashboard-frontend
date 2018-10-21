@@ -117,7 +117,12 @@ function getSchoolsCourses(schools) {
   );
 }
 
+function determineYield(groupBy) {
+  return groupBy;
+}
+
 function getCourseStats(groupBy, years, faculties, schools, courses, duplicate) {
+  const yieldBy = determineYield(groupBy);
   return requester.post(
     'course_stats/query',
     {
@@ -153,7 +158,7 @@ function getCourseStats(groupBy, years, faculties, schools, courses, duplicate) 
               {
                 name: 'count',
                 via: 'count',
-                from: groupBy,
+                from: yieldBy,
               },
             ],
             distinctGrouping: false,
@@ -170,6 +175,7 @@ const nameToColumn = {
   'Gender': 'gender',
   'Nationality': 'nationality_short_name',
   'Home Language': 'home_language_description',
+  'Bell curve': 'final_mark',
 };
 
 export default {

@@ -105,6 +105,7 @@ export default {
 
       this.$refs.chart.renderChart(
         {
+          type: this.chartType,
           labels,
           datasets: [
             {
