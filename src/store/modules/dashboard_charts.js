@@ -51,12 +51,12 @@ function uuidv4() {
 }
 
 
-const testDashboardChart = {
-  name: 'Test Bar Graph',
-  type: 'bar',
+// const testDashboardChart = {
+  // name: 'Test Bar Graph',
+  // type: 'bar',
   // query: testDashboardAQuery,
-  query: {},
-};
+  // query: {},
+// };
 
 /* ========================================================================== */
 /* STATE                                                                      */
@@ -64,7 +64,7 @@ const testDashboardChart = {
 
 const stateData = {
   dashboardCharts: {
-    '1d090475-3c50-4075-bcf2-1b7f23a2a7cd': testDashboardChart,
+    // '1d090475-3c50-4075-bcf2-1b7f23a2a7cd': testDashboardChart,
   },
 };
 
@@ -92,18 +92,18 @@ const mutations = {
       schools,
       courses,
       duplicates,
-    },
+    }
   ) {
     const uuid = uuidv4();
     const dashboardChart = {
       name: uuid,
-      chartType,
-      groupBy,
-      years,
-      faculties,
-      schools,
-      courses,
-      duplicates,
+      chartType: chartType,
+      groupBy: groupBy,
+      years: years,
+      faculties: faculties,
+      schools: schools,
+      courses: courses,
+      duplicates: duplicates,
     };
     Vue.set(state.dashboardCharts, uuid, dashboardChart);
   },
@@ -133,7 +133,7 @@ const actions = {
       schools,
       courses,
       duplicates,
-    },
+    }
   ) {
     commit(
       mutators.CREATE_DASHBOARD_CHART,
@@ -145,7 +145,7 @@ const actions = {
         schools,
         courses,
         duplicates,
-      },
+      }
     );
   },
   deleteDashboardChart({ commit, state }, { dashboardChartId }) {

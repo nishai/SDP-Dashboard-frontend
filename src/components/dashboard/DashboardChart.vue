@@ -21,7 +21,7 @@
       </div>
       <!-- Chart -->
       <b-card-body style="padding: 5px;">
-        <ChartTemplate :type="dashboardChart.type"></ChartTemplate>
+        <ChartTemplate :chart="dashboardChart"></ChartTemplate>
       </b-card-body>
       <b-btn @ size="sm" class="m-1" variant="outline-primary" @click="openPopup()">Compare</b-btn>
       <!-- Info -->
@@ -59,7 +59,7 @@ export default {
   }),
   computed: {
     dashboardChart() {
-      return this.$store.state.dashboardCharts.dashboardCharts[this.dashboardChartId];
+      return this.$store.state.dashboardCharts.dashboardCharts[this.$props.dashboardChartId];
     },
     details() {
       return 'TODO: details';
