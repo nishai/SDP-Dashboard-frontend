@@ -3,7 +3,21 @@
 
     <!-- Modal Component -->
     <b-modal ref="myModalRef" id="modal1" title="Bootstrap-Vue">
-      <p class="my-4">Hello from modal!</p>
+      <FilterForm
+        v-bind:chartType="true"
+        v-bind:groupByDesc="dashboardChart.groupBy"
+        v-bind:fyear="true"
+        v-bind:fcourse="true"
+        v-bind:ffaculty="true"
+        v-bind:fschool="true"
+        v-bind:numForms="2"
+        v-bind:selectedChartType="dashboardChart.chartType"
+        v-bind:selectedYear="dashboardChart.years"
+        v-bind:selectedCourse="dashboardChart.courses"
+        v-bind:selectedFaculty="dashboardChart.faculties"
+        v-bind:selectedSchool="dashboardChart.schools"
+        v-bind:selectedDuplicate="dashboardChart.duplicates">
+      </FilterForm>
     </b-modal>
 
     <b-card no-body>
@@ -33,6 +47,7 @@
 <script>
 import Chart from '../charts/chartjs/Chart.vue';
 import FeatherIcon from '../misc/FeatherIcon.vue';
+import FilterForm from '../modal/FilterForm.vue';
 
 export default {
   name: 'DashboardChart',
@@ -49,6 +64,7 @@ export default {
   components: {
     Chart,
     FeatherIcon,
+    FilterForm,
   },
   data: () => ({
     optsbarComponentPrivate: null,
