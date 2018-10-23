@@ -21,7 +21,7 @@
       </div>
       <!-- Chart -->
       <b-card-body style="padding: 5px;">
-        <Chart :type="chart.type"></Chart>
+        <ChartTemplate :type="chart.type"></ChartTemplate>
       </b-card-body>
       <!-- Info -->
       <b-card-footer> {{ details }} </b-card-footer>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import Chart from '../charts/chartjs/Chart.vue';
+import ChartTemplate from '../charts/chartjs/ChartTemplate.vue';
 // import ReportChartEdit from '../reports/ReportChartEdit.vue';
 import FeatherIcon from '../misc/FeatherIcon.vue';
 
@@ -45,7 +45,7 @@ export default {
     },
   },
   components: {
-    Chart,
+    ChartTemplate,
     FeatherIcon,
   },
   data: () => ({

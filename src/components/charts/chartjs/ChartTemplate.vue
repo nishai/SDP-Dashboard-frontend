@@ -11,7 +11,7 @@
 <script>
 import palette from 'google-palette';
 import vueCharts from 'vue-chartjs';
-import apiQuery from '../api/api_query';
+import apiQuery from '../../../api/api_query';
 
 
 const chartTypes = {

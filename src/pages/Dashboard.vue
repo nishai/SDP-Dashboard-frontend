@@ -22,7 +22,7 @@
 
 <script>
 import Heading from '../components/misc/Heading.vue';
-import Chart from '../components/charts/chartjs/Chart.vue';
+import ChartTemplate from '../components/charts/chartjs/ChartTemplate.vue';
 import Table from '../components/charts/chartjs/Table.vue';
 import DashboardChart from '../components/dashboard/DashboardChart.vue';
 
@@ -36,7 +36,7 @@ export default {
   },
   components: {
     Heading,
-    Chart,
+    ChartTemplate,
     Table,
     DashboardChart,
   },
@@ -47,7 +47,16 @@ export default {
   },
   methods: {
     create() {
-      this.$store.dispatch('createDashboardChart');
+      this.$store.dispatch({
+        type: 'createDashboardChart',
+        chartType: this.$route.query.chartType,
+        groupBy: this.$route.query.groupBy,
+        years: this.$route.query.years,
+        faculties: this.$route.query.faculties,
+        schools: this.$route.query.schools,
+        courses: this.$route.query.courses,
+        duplicates: this.$route.query.duplicates,
+      });
       this.$router.push({ path: '/' });
     },
   },

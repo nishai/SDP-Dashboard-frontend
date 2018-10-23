@@ -252,7 +252,7 @@ export default {
 
       // go to url
       this.$router.push({
-        path: '/templates/chart',
+        path: '/dashboard',
         query: {
           chartType: this.chartType,
           groupBy: name,

@@ -42,7 +42,7 @@
 
 <script>
 import Heading from '../components/misc/Heading.vue';
-import Chart from '../components/charts/chartjs/Chart.vue';
+import ChartTemplate from '../components/charts/chartjs/ChartTemplate.vue';
 import Table from '../components/charts/chartjs/Table.vue';
 import DashboardChart from '../components/dashboard/DashboardChart.vue';
 import { GridLayout } from 'vue-grid-layout';
@@ -71,7 +71,7 @@ export default {
   },
   components: {
     Heading,
-    Chart,
+    ChartTemplate,
     Table,
     DashboardChart,
     GridLayout,
@@ -84,7 +84,7 @@ export default {
   },
   methods: {
     create() {
-      this.$store.dispatch('createDashboardChart');
+      this.$store.dispatch('createDashboardChart'); // TODO: Correct this to be the same as in pages/Dashboard.vue
       // router.push({ path: 'register', query: { plan: 'private' }});
       this.$router.push({ path: '/' });
     },

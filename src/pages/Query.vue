@@ -16,14 +16,14 @@
 <script>
 import axios from 'axios';
 import Heading from '../components/misc/Heading.vue';
-import Chart from '../components/charts/chartjs/Chart.vue';
+import ChartTemplate from '../components/charts/chartjs/ChartTemplate.vue';
 import QueryFilter from '../components/query/QueryFilter.vue';
 
 export default {
   name: 'Query',
   components: {
     Heading,
-    Chart,
+    ChartTemplate,
   },
   data() {
     return {

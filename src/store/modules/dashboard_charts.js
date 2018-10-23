@@ -82,12 +82,28 @@ const getters = {
 /* ========================================================================== */
 
 const mutations = {
-  [mutators.CREATE_DASHBOARD_CHART](state) {
+  [mutators.CREATE_DASHBOARD_CHART](
+    state,
+    {
+      chartType,
+      groupBy,
+      years,
+      faculties,
+      schools,
+      courses,
+      duplicates,
+    },
+  ) {
     const uuid = uuidv4();
     const dashboardChart = {
       name: uuid,
-      type: 'pie',
-      query: {},
+      chartType,
+      groupBy,
+      years,
+      faculties,
+      schools,
+      courses,
+      duplicates,
     };
     Vue.set(state.dashboardCharts, uuid, dashboardChart);
   },
@@ -104,8 +120,33 @@ const mutations = {
 /* ========================================================================== */
 
 const actions = {
-  createDashboardChart({ commit, state }) {
-    commit(mutators.CREATE_DASHBOARD_CHART);
+  createDashboardChart(
+    {
+      commit,
+      state,
+    },
+    {
+      chartType,
+      groupBy,
+      years,
+      faculties,
+      schools,
+      courses,
+      duplicates,
+    },
+  ) {
+    commit(
+      mutators.CREATE_DASHBOARD_CHART,
+      {
+        chartType,
+        groupBy,
+        years,
+        faculties,
+        schools,
+        courses,
+        duplicates,
+      },
+    );
   },
   deleteDashboardChart({ commit, state }, { dashboardChartId }) {
     commit(mutators.DELETE_DASHBOARD_CHART, { dashboardChartId });
