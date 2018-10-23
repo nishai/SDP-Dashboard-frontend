@@ -1,5 +1,11 @@
 <template>
-  <component :is="component" ref="chart"></component>
+  <div align="center">
+    <h2> {{ groupBy }} </h2>
+    <h4> {{ faculties }}/{{ schools }} {{ years }} </h4>
+    <h6> {{ courses }} </h6>
+    <h1 v-if="isData === false"> NO DATA FOUND FOR QUERY </h1>
+    <component :is="component" ref="chart"></component>
+  </div>
 </template>
 
 <script>
@@ -23,7 +29,7 @@ const chartTypes = {
 export default {
   name: 'ChartTemplate',
 
-  data: () => ({}),
+  data: () => ({ isData: false }),
 
   /**
    * Common variables
@@ -84,14 +90,17 @@ export default {
         .then((response) => {
           const { results } = response.data;
           console.log('RESPONSE DATA:', response.data);
-          const keys = Object.keys(results[0]);
-          const labels = [];
-          const data = [];
-          for (let j = 0; j < results.length; j += 1) { // TODO: add query parameter to perform this on the backend
-            labels.push(results[j][keys[0]]);
-            data.push(results[j][keys[1]]);
+          if (response.data.results.length !== 0) {
+            const keys = Object.keys(results[0]);
+            const labels = [];
+            const data = [];
+            for (let j = 0; j < results.length; j += 1) { // TODO: add query parameter to perform this on the backend
+              labels.push(results[j][keys[0]]);
+              data.push(results[j][keys[1]]);
+            }
+            this.isData = true;
+            this.renderChart(labels, data);
           }
-          this.renderChart(labels, data);
         });
     },
 
@@ -110,7 +119,7 @@ export default {
           datasets: [
             {
               label: this.groupBy,
-              backgroundColor: palette('mpn65', labels.length).map((color) => `#${color}`), // http://google.github.io/palette.js/
+              backgroundColor: palette('tol-rainbow', labels.length).map((color) => `#${color}`), // http://google.github.io/palette.js/
               data,
             },
           ],
