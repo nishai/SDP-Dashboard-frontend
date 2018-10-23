@@ -72,6 +72,9 @@ test       :: rm
 $(TARGETS) :: Dockerfile fresh
 	@make section tag="Run - $@"
 	docker run --name $(CONTAINER_NAME) $(RUN_FLAGS) $(run_args) $(IMAGE_NAME) $(if $(findstring serve,$@),,$@) $(image_args) || true
+test       ::
+	@make section tag="Copy ./coverage"
+	docker cp "$(CONTAINER_NAME):/app/coverage" "$(shell pwd)/" || true
 dist       ::
 	@make section tag="Copy ./dist"
 	docker cp "$(CONTAINER_NAME):/app/dist" "$(shell pwd)/" || true

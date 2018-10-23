@@ -1,69 +1,86 @@
+<!--
+The entry point for Vue defining the app's base component.
+
+The sidebar, footer, and content are defined here.
+  - The content is defined by an instance of Vue Router,
+    which dynamically changes the content based on the current route.
+-->
+
 <template>
-  <div id="app">
-    <Sidebar/>
-    <div id="app-content">
-      <router-view id="app-view"></router-view>
-      <div id="footer" class="footer">
-          <p>By Team Potato 🥔</p>
-          <a href="https://www.flaticon.com/packs/charts-diagrams">Chart icons designed by Freepik from Flaticon</a>
+  <div class="app expand">
+    <Menubar class="app-menubar"/>
+    <div class="expand">
+      <Sidebar class="app-sidebar"/>
+      <Optsbar/>
+      <div class="app-viewport">
+        <router-view class="app-content">
+          This will be replaced
+        </router-view>
+        <Footer/>
       </div>
     </div>
   </div>
 </template>
 
+<!-- SCRIPT -->
+
 <script>
-import Sidebar from './components/Sidebar.vue';
+import Menubar from './components/menubar/Menubar.vue';
+import Sidebar from './components/sidebar/Sidebar.vue';
+import Optsbar from './components/sidebar/Optsbar.vue';
+import Footer from './components/Footer.vue';
+
+/* Import CSS Globally */
+import './assets/css/defaults.css';
+import './assets/css/bootstrapExtensions.css';
+import './assets/css/dashboard.css';
+import './assets/css/wits.css';
 
 export default {
-  name: 'App',
+  name: 'app',
   components: {
+    Menubar,
     Sidebar,
+    Optsbar,
+    Footer,
   },
 };
 </script>
 
+<!-- STYLE -->
+
 <style>
+  .app {}
 
-html,body {
-  height:100%;
-  width: 100%;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  /* border: 1px solid black; */
-}
-
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  width: 100%;
-  height: 100%;
-}
-
-#footer {
-  right: 0;
-  padding: 10px;  /* padding is added on to width */
-  width: calc(100% - 20px); /* make sure to keep up to date with sidebar */
-  margin-left: 0px; /* make sure to keep up to date with sidebar */
-
-  color: #2c3e50;
-  text-align: right;
-  background: #f4f6fb;
-  font-size: 15px;
-  height: 30px;
-}
-
-#app-content {
-    margin-left: 200px;
-    width: calc(100% - 200px);
+  .expand {
+    width: 100%;
     height: 100%;
-}
+  }
 
-#app-view {
-    min-height: calc(100% - 30px - 2*10px);
-}
+  .app-menubar {
+    z-index: 999999999;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 80px;
+    min-height: 80px;
+  }
 
+  .app-sidebar {
+    position: fixed;
+    left: 0;
+    top: 80px;
+  }
+
+  .app-viewport {
+    margin-top: 80px;
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    height: 100%;
+  }
+
+  .app-content {
+    min-height: calc(100% - var(--footer-height));
+    padding: 25px;
+  }
 </style>

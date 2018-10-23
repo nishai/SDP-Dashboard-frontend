@@ -24,3 +24,12 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+
+# Code Coverage stuff
+.codecov
+.coverage
+coverage.sh
+coverage/**
+
+#backups
+*.bak
