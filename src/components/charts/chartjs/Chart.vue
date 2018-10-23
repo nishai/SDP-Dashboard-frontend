@@ -27,8 +27,8 @@ const chartTypes = {
 };
 
 export default {
-  name: 'ChartTemplate',
-  props: ['chart'],
+  name: 'Chart',
+  props: ['chartData'],
   data: () => ({ isData: false }),
 
   /**
@@ -37,7 +37,7 @@ export default {
   computed: {
     /* chart */
     chartType() {
-      return this.$props.chart.chartType;
+      return this.$props.chartData.chartType;
     },
     component() {
       if (!(this.chartType in chartTypes)) {
@@ -47,22 +47,22 @@ export default {
     },
     /* params */
     groupBy() {
-      return this.$props.chart.groupBy;
+      return this.$props.chartData.groupBy;
     },
     years() {
-      return this.$props.chart.years;
+      return this.$props.chartData.years;
     },
     faculties() {
-      return this.$props.chart.faculties;
+      return this.$props.chartData.faculties;
     },
     schools() {
-      return this.$props.chart.schools;
+      return this.$props.chartData.schools;
     },
     courses() {
-      return this.$props.chart.courses;
+      return this.$props.chartData.courses;
     },
     duplicate() {
-      return this.$props.chart.duplicate;
+      return this.$props.chartData.duplicate;
     },
   }, /* >>> END COMPUTED <<< */
 

@@ -22,7 +22,7 @@
 
 <script>
 import Heading from '../components/misc/Heading.vue';
-import ChartTemplate from '../components/charts/chartjs/ChartTemplate.vue';
+import Chart from '../components/charts/chartjs/Chart.vue';
 import Table from '../components/charts/chartjs/Table.vue';
 import DashboardChart from '../components/dashboard/DashboardChart.vue';
 
@@ -36,7 +36,7 @@ export default {
   },
   components: {
     Heading,
-    ChartTemplate,
+    Chart,
     Table,
     DashboardChart,
   },

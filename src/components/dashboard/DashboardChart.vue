@@ -21,7 +21,7 @@
       </div>
       <!-- Chart -->
       <b-card-body style="padding: 5px;">
-        <ChartTemplate :chart="dashboardChart"></ChartTemplate>
+        <Chart :chartData="dashboardChart"></Chart>
       </b-card-body>
       <b-btn @ size="sm" class="m-1" variant="outline-primary" @click="openPopup()">Compare</b-btn>
       <!-- Info -->
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import ChartTemplate from '../charts/chartjs/ChartTemplate.vue';
+import Chart from '../charts/chartjs/Chart.vue';
 import FeatherIcon from '../misc/FeatherIcon.vue';
 
 export default {
@@ -47,7 +47,7 @@ export default {
     },
   },
   components: {
-    ChartTemplate,
+    Chart,
     FeatherIcon,
   },
   data: () => ({

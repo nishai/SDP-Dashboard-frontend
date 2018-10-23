@@ -7,63 +7,63 @@
     <!-- TODO: TURN INTO SINGULAR COMPONENT, WITH PROPS -->
     <!-- TODO: TURN INTO SINGULAR COMPONENT, WITH PROPS -->
     <div class="d-flex flex-wrap justify-content-between">
-      <ChartTemplate
+      <Chart
         class="example_chart_size"
         v-if="this.$route.query.templateType === '' ||
         this.$route.query.templateType.includes('doughnut')"
         :chartData="this.$route.query.data"
         type="doughnut">
-      </ChartTemplate>
-      <ChartTemplate
+      </Chart>
+      <Chart
         class="example_chart_size"
         v-if="this.$route.query.templateType === '' ||
         this.$route.query.templateType.includes('line') ||
         this.$route.query.templateType.includes('bell')"
         :chartData="this.$route.query.data"
         type="line">
-      </ChartTemplate>
-      <ChartTemplate
+      </Chart>
+      <Chart
         class="example_chart_size"
         v-if="this.$route.query.templateType === '' ||
         this.$route.query.templateType.includes('data')"
         :chartData="this.$route.query.data"
         type="bar">
-      </ChartTemplate>
-      <ChartTemplate
+      </Chart>
+      <Chart
         class="example_chart_size"
         v-if="this.$route.query.templateType === '' ||
         this.$route.query.templateType.includes('pie')"
         :chartData="this.$route.query.data"
         type="pie">
-      </ChartTemplate>
-      <ChartTemplate
+      </Chart>
+      <Chart
         class="example_chart_size"
         v-if="this.$route.query.templateType === '' ||
         this.$route.query.templateType.includes('radar')"
         :chartData="this.$route.query.data"
         type="radar">
-      </ChartTemplate>
-      <ChartTemplate
+      </Chart>
+      <Chart
         class="example_chart_size"
         v-if="this.$route.query.templateType === '' ||
         this.$route.query.templateType.includes('polar')"
         :chartData="this.$route.query.data"
         type="polar">
-      </ChartTemplate>
-      <ChartTemplate
+      </Chart>
+      <Chart
         class="example_chart_size"
         v-if="this.$route.query.templateType === '' ||
         this.$route.query.templateType.includes('bubble')"
         :chartData="this.$route.query.data"
         type="bubble">
-      </ChartTemplate>
-      <ChartTemplate
+      </Chart>
+      <Chart
         class="example_chart_size"
         v-if="this.$route.query.templateType === '' ||
         this.$route.query.templateType.includes('scatter')"
         :chartData="this.$route.query.data"
         type="scatter">
-      </ChartTemplate>
+      </Chart>
       <div>
         <Button id="tableButton" v-if="!isHidden" v-on:click="isHidden = true; add_table = true">Add Table</Button>
         <Table v-if="add_table"></Table>
@@ -74,7 +74,7 @@
 
 <script>
 import Heading from '../components/misc/Heading.vue';
-import ChartTemplate from '../components/charts/chartjs/ChartTemplate.vue';
+import Chart from '../components/charts/chartjs/Chart.vue';
 import Table from '../components/charts/chartjs/Table.vue';
 
 export default {
@@ -87,7 +87,7 @@ export default {
   },
   components: {
     Heading,
-    ChartTemplate,
+    Chart,
     Table,
   },
 };
