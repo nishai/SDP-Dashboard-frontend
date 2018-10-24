@@ -19,7 +19,7 @@
       <div class="grid-item">
         <ChartExampleLink
           desc="Race"
-          chartType="pie"
+          chartType="doughnut"
           :src="doughnut"
         />
       </div>

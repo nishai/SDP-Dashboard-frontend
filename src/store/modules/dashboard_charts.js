@@ -51,12 +51,12 @@ function uuidv4() {
 }
 
 
-const testDashboardChart = {
-  name: 'Test Bar Graph',
-  type: 'bar',
+// const testDashboardChart = {
+  // name: 'Test Bar Graph',
+  // type: 'bar',
   // query: testDashboardAQuery,
-  query: {},
-};
+  // query: {},
+// };
 
 /* ========================================================================== */
 /* STATE                                                                      */
@@ -64,7 +64,7 @@ const testDashboardChart = {
 
 const stateData = {
   dashboardCharts: {
-    '1d090475-3c50-4075-bcf2-1b7f23a2a7cd': testDashboardChart,
+    // '1d090475-3c50-4075-bcf2-1b7f23a2a7cd': testDashboardChart,
   },
 };
 
@@ -82,12 +82,30 @@ const getters = {
 /* ========================================================================== */
 
 const mutations = {
-  [mutators.CREATE_DASHBOARD_CHART](state) {
+  [mutators.CREATE_DASHBOARD_CHART](
+    state,
+    {
+      charts,
+      // chartType,
+      // groupBy,
+      // years,
+      // faculties,
+      // schools,
+      // courses,
+      // duplicate,
+    }
+  ) {
     const uuid = uuidv4();
     const dashboardChart = {
       name: uuid,
-      type: 'pie',
-      query: {},
+      charts: charts,
+      // chartType: chartType,
+      // groupBy: groupBy,
+      // years: years,
+      // faculties: faculties,
+      // schools: schools,
+      // courses: courses,
+      // duplicate: duplicate,
     };
     Vue.set(state.dashboardCharts, uuid, dashboardChart);
   },
@@ -104,8 +122,35 @@ const mutations = {
 /* ========================================================================== */
 
 const actions = {
-  createDashboardChart({ commit, state }) {
-    commit(mutators.CREATE_DASHBOARD_CHART);
+  createDashboardChart(
+    {
+      commit,
+      state,
+    },
+    {
+      charts,
+      //      chartType,
+      // groupBy,
+      // years,
+      // faculties,
+      // schools,
+      // courses,
+      // duplicate,
+    }
+  ) {
+    commit(
+      mutators.CREATE_DASHBOARD_CHART,
+      {
+        charts,
+        // chartType,
+        // groupBy,
+        // years,
+        // faculties,
+        // schools,
+        // courses,
+        // duplicate,
+      }
+    );
   },
   deleteDashboardChart({ commit, state }, { dashboardChartId }) {
     commit(mutators.DELETE_DASHBOARD_CHART, { dashboardChartId });

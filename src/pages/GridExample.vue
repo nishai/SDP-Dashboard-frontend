@@ -84,7 +84,7 @@ export default {
   },
   methods: {
     create() {
-      this.$store.dispatch('createDashboardChart');
+      this.$store.dispatch('createDashboardChart'); // TODO: Correct this to be the same as in pages/Dashboard.vue
       // router.push({ path: 'register', query: { plan: 'private' }});
       this.$router.push({ path: '/' });
     },
