@@ -345,9 +345,15 @@ export default {
         type: 'createDashboardChart',
         charts: chartArr,
       });
-      // go to url
-      this.$parent.$parent.deleteChart();
+
+      // close form
+      try {
+        this.$parent.$parent.deleteChart();
+      } catch(err) {
+        console.log("no delete chart function when calling from template screen");
+      }
       this.$parent.$parent.hideModal();
+      // go to url
       this.$router.push({
         path: '/dashboard',
       });
