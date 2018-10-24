@@ -344,6 +344,13 @@ export default {
       this.$store.dispatch({
         type: 'createDashboardChart',
         charts: chartArr,
+        layout: {
+          x: Object.keys(this.$store.state.dashboardCharts.dashboardCharts).length * 3.6,
+          y: 0,
+          w: 3.5,
+          h: 27,
+          i: Object.keys(this.$store.state.dashboardCharts.dashboardCharts).length + 1
+        },
       });
 
       // close form

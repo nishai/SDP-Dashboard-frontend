@@ -86,6 +86,7 @@ const mutations = {
     state,
     {
       charts,
+      layout,
       // chartType,
       // groupBy,
       // years,
@@ -99,6 +100,7 @@ const mutations = {
     const dashboardChart = {
       name: uuid,
       charts: charts,
+      layout: layout,
       // chartType: chartType,
       // groupBy: groupBy,
       // years: years,
@@ -129,6 +131,7 @@ const actions = {
     },
     {
       charts,
+      layout,
       //      chartType,
       // groupBy,
       // years,
@@ -142,6 +145,7 @@ const actions = {
       mutators.CREATE_DASHBOARD_CHART,
       {
         charts,
+        layout,
         // chartType,
         // groupBy,
         // years,
