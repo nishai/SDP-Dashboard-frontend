@@ -346,6 +346,7 @@ export default {
         charts: chartArr,
       });
       // go to url
+      this.$parent.$parent.hideModal();
       this.$router.push({
         path: '/dashboard',
       });

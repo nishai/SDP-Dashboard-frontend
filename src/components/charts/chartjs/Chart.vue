@@ -105,9 +105,9 @@ export default {
         let datasets = [];
         let labels = [];
         for (let i = 0; i < this.$props.chartData.length; i += 1) {
-            labels = labels.concat(this.chartResultsLabels[i]);
+            labels = [...new Set([...labels, ...this.chartResultsLabels[i]])];
             datasets.push({
-              label: this.chartResultsLabels[i],
+              // label: this.chartResultsLabels[i],
               backgroundColor: palette('tol-rainbow', labels.length).map((color) => `#${color}`), // http://google.github.io/palette.js/
               data: this.chartResultsData[i],
               borderWidth: 2,
