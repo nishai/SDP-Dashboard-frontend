@@ -13,10 +13,8 @@
 </div>
 
 
-
-
 </template> -->
-<!-- 
+<!--
 <script>
  import Multiselect from 'vue-multiselect'
 
@@ -52,8 +50,6 @@ export default {
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style> -->
 
 
-
-
 <!-- <template>
   <div>
     <vue-tags-input
@@ -82,10 +78,8 @@ export default {
          -->
 
 
-
-
-
 <template>
+<div>
   <div>
     <vue-tags-input
       v-model="tag"
@@ -93,17 +87,20 @@ export default {
       :autocomplete-items="filteredItems"
       @tags-changed="newTags => tags = newTags">
     </vue-tags-input>
+  </div>
 
     <div>
+
     <vue-tags-input
-      v-model="tag"
-      :tags="tags"
+      v-model="tag2"
+      :tags="tags2"
       :autocomplete-items="filteredItems2"
-      @tags-changed="newTags => tags = newTags">
+      @tags-changed="newTags => tags2 = newTags">
     </vue-tags-input>
 
 
   </div>
+</div>
 </template>
 
 <script>
@@ -117,6 +114,8 @@ export default {
     return {
       tag: '',
       tags: [],
+      tag2: '',
+      tags2: [],
       autocompleteItems: [{
         text: 'Spain',
       }, {
@@ -130,26 +129,25 @@ export default {
       }],
 
       autocompleteItems2: [{
-        text: 'Spain',
+        text: '1',
       }, {
-        text: 'France',
+        text: '2',
       }, {
-        text: 'USA',
+        text: '3',
       }, {
-        text: 'Germany',
+        text: '4',
       }, {
-        text: 'China',
+        text: '5',
       }],
     };
   },
   computed: {
     filteredItems() {
-      return this.autocompleteItems.filter(i => new RegExp(this.tag, 'i').test(i.text));
+      return this.autocompleteItems.filter((i) => new RegExp(this.tag, 'i').test(i.text));
     },
     filteredItems2() {
-      return this.autocompleteItems2.filter(i => new RegExp(this.tag, 'i').test(i.text));
+      return this.autocompleteItems2.filter((i) => new RegExp(this.tag, 'i').test(i.text));
     },
   },
 };
 </script>
-        
