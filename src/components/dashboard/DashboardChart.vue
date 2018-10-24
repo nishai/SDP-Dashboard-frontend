@@ -2,21 +2,21 @@
   <div>
 
     <!-- Modal Component -->
-    <b-modal ref="myModalRef" id="modal1" title="Compare Options" size="lg" hide-footer>
+    <b-modal ref="compareModal" id="modal1" title="Compare Options" size="lg" hide-footer>
       <FilterForm
         v-bind:chartType="true"
-        v-bind:groupByDesc="dashboardChart.groupBy"
+        v-bind:groupByDesc="dashboardChart.charts[0].groupBy"
         v-bind:fyear="true"
         v-bind:fcourse="true"
         v-bind:ffaculty="true"
         v-bind:fschool="true"
         v-bind:numForms="2"
-        v-bind:selectedChartType="dashboardChart.chartType"
-        v-bind:selectedYear="dashboardChart.years"
-        v-bind:selectedCourse="dashboardChart.courses"
-        v-bind:selectedFaculty="dashboardChart.faculties"
-        v-bind:selectedSchool="dashboardChart.schools"
-        v-bind:selectedDuplicate="dashboardChart.duplicate">
+        v-bind:selectedChartType="dashboardChart.charts[0].chartType"
+        v-bind:selectedYear="dashboardChart.charts[0].years"
+        v-bind:selectedCourse="dashboardChart.charts[0].courses"
+        v-bind:selectedFaculty="dashboardChart.charts[0].faculties"
+        v-bind:selectedSchool="dashboardChart.charts[0].schools"
+        v-bind:selectedDuplicate="dashboardChart.charts[0].duplicate">
       </FilterForm>
     </b-modal>
 
@@ -35,7 +35,7 @@
       </div>
       <!-- Chart -->
       <b-card-body style="padding: 5px;">
-        <Chart :chartData="dashboardChart"></Chart>
+        <Chart :chartData="dashboardChart.charts"></Chart>
       </b-card-body>
       <b-btn @ size="sm" class="m-1" variant="outline-primary" @click="openPopup()">Compare</b-btn>
       <!-- Info -->
@@ -89,7 +89,11 @@ export default {
   methods: {
     openPopup() {
       console.log('Opening Popup');
-      this.$refs.myModalRef.show();
+      this.$refs.compareModal.show();
+    },
+    hideModal() { // needs to have same name as in FilterFormModal
+      console.log('Closing Popup');
+      this.$refs.compareModal.hide();
     },
     /* Handle click */
     toggleEditor() {

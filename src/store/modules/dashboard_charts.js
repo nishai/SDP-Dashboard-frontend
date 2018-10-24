@@ -85,25 +85,27 @@ const mutations = {
   [mutators.CREATE_DASHBOARD_CHART](
     state,
     {
-      chartType,
-      groupBy,
-      years,
-      faculties,
-      schools,
-      courses,
-      duplicate,
+      charts,
+      // chartType,
+      // groupBy,
+      // years,
+      // faculties,
+      // schools,
+      // courses,
+      // duplicate,
     }
   ) {
     const uuid = uuidv4();
     const dashboardChart = {
       name: uuid,
-      chartType: chartType,
-      groupBy: groupBy,
-      years: years,
-      faculties: faculties,
-      schools: schools,
-      courses: courses,
-      duplicate: duplicate,
+      charts: charts,
+      // chartType: chartType,
+      // groupBy: groupBy,
+      // years: years,
+      // faculties: faculties,
+      // schools: schools,
+      // courses: courses,
+      // duplicate: duplicate,
     };
     Vue.set(state.dashboardCharts, uuid, dashboardChart);
   },
@@ -126,25 +128,27 @@ const actions = {
       state,
     },
     {
-      chartType,
-      groupBy,
-      years,
-      faculties,
-      schools,
-      courses,
-      duplicate,
+      charts,
+      //      chartType,
+      // groupBy,
+      // years,
+      // faculties,
+      // schools,
+      // courses,
+      // duplicate,
     }
   ) {
     commit(
       mutators.CREATE_DASHBOARD_CHART,
       {
-        chartType,
-        groupBy,
-        years,
-        faculties,
-        schools,
-        courses,
-        duplicate,
+        charts,
+        // chartType,
+        // groupBy,
+        // years,
+        // faculties,
+        // schools,
+        // courses,
+        // duplicate,
       }
     );
   },

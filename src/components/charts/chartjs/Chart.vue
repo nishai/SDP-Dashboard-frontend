@@ -1,9 +1,8 @@
 <template>
   <div align="center">
-    <h2> {{ groupBy }} </h2>
-    <h4> {{ faculties }}/{{ schools }} {{ years }} </h4>
-    <h6> {{ courses }} </h6>
+    <h6> {{ this.$props.chartData }} </h6>
     <h1 v-if="isData === false"> NO DATA FOUND FOR QUERY </h1>
+    <!--component :is="component" ref="chart"></component-->
     <component :is="component" ref="chart"></component>
   </div>
 </template>
@@ -29,49 +28,32 @@ const chartTypes = {
 export default {
   name: 'Chart',
   props: ['chartData'],
-  data: () => ({ isData: false }),
+  data: () => ({ 
+    isData: false,
+    chartResultsLabels: [],
+    chartResultsData: [],
+  }),
 
-  /**
-   * Common variables
-   */
   computed: {
-    /* chart */
-    chartType() {
-      return this.$props.chartData.chartType;
+    component(){
+      return chartTypes[this.$props.chartData[0].chartType];
     },
-    component() {
-      if (!(this.chartType in chartTypes)) {
-        throw new Error(`Chart type "${this.chartType}" does not exist.`);
-      }
-      return chartTypes[this.chartType];
-    },
-    /* params */
-    groupBy() {
-      return this.$props.chartData.groupBy;
-    },
-    years() {
-      return this.$props.chartData.years;
-    },
-    faculties() {
-      return this.$props.chartData.faculties;
-    },
-    schools() {
-      return this.$props.chartData.schools;
-    },
-    courses() {
-      return this.$props.chartData.courses;
-    },
-    duplicate() {
-      return this.$props.chartData.duplicate;
-    },
-  }, /* >>> END COMPUTED <<< */
-
+  },
   /**
    * run when component is created
    */
   mounted() {
-    console.log('Mounted!', this.groupBy, this.years, this.faculties, this.schools, this.courses, this.duplicate);
-    this.getData();
+    for (let i = 0; i < this.$props.chartData.length; i += 1) {
+      console.log('Mounted!',
+        this.$props.chartData[i].groupBy,
+        this.$props.chartData[i].years,
+        this.$props.chartData[i].faculties,
+        this.$props.chartData[i].schools,
+        this.$props.chartData[i].courses,
+        this.$props.chartData[i].duplicate
+      );
+      this.getData(i);
+    }
     // this.renderChart();
   },
 
@@ -83,11 +65,17 @@ export default {
     /**
      * Query for the data to render based on the current url parameters
      */
-    getData() {
+    getData(index) {
       console.log('LOADING DATA');
       // TODO: Multiple sub-charts
-      apiQuery.getCourseStats(this.groupBy, this.years, this.faculties, this.schools, this.courses, this.duplicate)
-        .then((response) => {
+      apiQuery.getCourseStats(
+        this.$props.chartData[index].groupBy,
+        this.$props.chartData[index].years,
+        this.$props.chartData[index].faculties,
+        this.$props.chartData[index].schools,
+        this.$props.chartData[index].courses,
+        this.$props.chartData[index].duplicate
+        ).then((response) => {
           const { results } = response.data;
           console.log('RESPONSE DATA:', response.data);
           if (response.data.results.length !== 0) {
@@ -99,7 +87,9 @@ export default {
               data.push(results[j][keys[1]]);
             }
             this.isData = true;
-            this.renderChart(labels, data);
+            this.chartResultsLabels.push(labels)
+            this.chartResultsData.push(data);
+            this.renderChart();
           }
         });
     },
@@ -107,28 +97,36 @@ export default {
     /**
      * Render the current loaded data to the chart component
      */
-    renderChart(labels, data) {
-      if (labels.length !== data.length) {
-        throw new Error('Label length not equal to data length');
-      }
-
-      this.$refs.chart.renderChart(
-        {
-          type: this.chartType,
-          labels,
-          datasets: [
-            {
-              label: this.groupBy,
+    renderChart() {
+      if(this.chartResultsData.length === this.chartData.length){
+        /*if (labels.length !== data.length) {
+          throw new Error('Label length not equal to data length');
+        }*/
+        let datasets = [];
+        let labels = [];
+        for (let i = 0; i < this.$props.chartData.length; i += 1) {
+            labels = labels.concat(this.chartResultsLabels[i]);
+            datasets.push({
+              label: this.chartResultsLabels[i],
               backgroundColor: palette('tol-rainbow', labels.length).map((color) => `#${color}`), // http://google.github.io/palette.js/
-              data,
-            },
-          ],
-        },
-        {
-          responsive: true,
-          maintainAspectRatio: false,
-        },
-      );
+              data: this.chartResultsData[i],
+              borderWidth: 2,
+              type: this.$props.chartData[i].chartType,
+              fill: false,
+            });
+        }
+        this.$refs.chart.renderChart(
+          {
+            // type: this.chartType,
+            labels: labels,
+            datasets: datasets,
+          },
+          {
+            responsive: true,
+            maintainAspectRatio: false,
+          },
+        );
+      }
     },
   }, /* >>> END METHODS <<< */
 };
