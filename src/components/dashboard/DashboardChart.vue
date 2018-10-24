@@ -9,7 +9,7 @@
     <b-card no-body>
       <!-- Heading -->
       <div slot="header" class="d-flex justify-content-between">
-        <b-form-input class="hidden-input" v-model="chart.name" type="text" placeholder="Click To Edit"></b-form-input>
+        <b-form-input class="hidden-input" v-model="dashboardChart.name" type="text" placeholder="Click To Edit"></b-form-input>
         <small class="d-flex justify-content-between">
           <b-btn size="sm" class="m-1" variant="outline-primary" @click="toggleEditor">Edit</b-btn>
           <!--<b-btn size="sm" variant="outline-primary" @click="toggleEditor">Opts</b-btn>-->
@@ -21,7 +21,7 @@
       </div>
       <!-- Chart -->
       <b-card-body style="padding: 5px;">
-        <Chart :type="chart.type"></Chart>
+        <Chart :type="dashboardChart.type"></Chart>
       </b-card-body>
       <!-- Info -->
       <b-card-footer> {{ details }} </b-card-footer>
@@ -31,17 +31,18 @@
 
 <script>
 import Chart from '../charts/chartjs/Chart.vue';
-// import ReportChartEdit from '../reports/ReportChartEdit.vue';
 import FeatherIcon from '../misc/FeatherIcon.vue';
 
 export default {
-  name: 'ReportChart',
+  name: 'DashboardChart',
   props: {
-    chartId: {
+    dashboardChartId: {
       type: String,
     },
     chart: {
       type: Object,
+      maintainAspectRatio: false,
+      responsive: true,
     },
   },
   components: {
@@ -51,21 +52,13 @@ export default {
   data: () => ({
     optsbarComponentPrivate: null,
     showPopup: false,
+    maintainAspectRatio: false,
+    responsive: true,
+
   }),
-  // created() {
-  //   this.optsbarComponentPrivate = new ReportChartEdit({
-  //     propsData: {
-  //       reportId: this.reportId,
-  //       chartId: this.chartId,
-  //     },
-  //   });
-  // },
   computed: {
-    reportId() {
-      return this.$route.params.id;
-    },
-    report() {
-      return this.$store.state.reports.reports[this.reportId];
+    dashboardChart() {
+      return this.$store.state.dashboardCharts.dashboardCharts[this.dashboardChartId];
     },
     details() {
       return 'TODO: details';
@@ -86,21 +79,29 @@ export default {
       console.log('A');
       this.$store.dispatch('toggleOptsbar', { component: this.optsbarComponent });
     },
-    /* Handle click */
-    // deletePrompt() {
-    //   console.log('B');
-    //   this.$refs.myModalRef.show();
-    //   this.$store.dispatch('toggleOptsbar', { component: this.optsbarComponent });
-    // },
     deleteChart() {
       console.log('DELETING');
       console.log(this.key);
       console.log(this.$vnode.key);
-      this.$store.dispatch('deleteReportChart', { reportId: this.reportId, chartId: this.$vnode.key });
+      this.$store.dispatch('deleteDashboardChart', { dashboardChartId: this.$vnode.key });
     },
   },
 };
 </script>
 
 <style>
+
+.card:hover {
+  background-color: whitesmoke;
+}
+
+.card:hover button {
+  opacity: 1;
+}
+
+.card button {
+  opacity: 0;
+  background-color: whitesmoke;
+}
+
 </style>
