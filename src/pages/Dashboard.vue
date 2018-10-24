@@ -45,6 +45,8 @@ export default {
       return this.$store.state.dashboardCharts.dashboardCharts;
     },
   },
+
+  /**
   mounted: function () {
     this.$store.dispatch({
       type: 'createDashboardChart',
@@ -56,7 +58,7 @@ export default {
       courses: this.$route.query.courses,
       duplicates: this.$route.query.duplicates,
     });
-  },
+  },*/
   methods:{
     create(){
       this.$router.push({ path: '/' });

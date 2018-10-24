@@ -84,14 +84,14 @@
           </b-form-select>
         </b-form-group>
         <!-- Duplicate Data Checkbox-->
-        <b-form-checkbox-group
+        <b-form-group
           checked=true
           id="DuplicateGroup">
           <b-form-checkbox
             v-model="form.duplicate[i-1]">
             Don't Duplicate data across fields
           </b-form-checkbox>
-        </b-form-checkbox-group>
+        </b-form-group>
 
       </b-col>
     </b-row>
@@ -322,19 +322,21 @@ export default {
         console.log('Only 1 form is supported at the moment, this will be fixed in future');
       }
 
+      // add chart to store
+      // TODO: Multiple sub-charts
+      this.$store.dispatch({
+        type: 'createDashboardChart',
+        chartType: this.chartType,
+        groupBy: name,
+        years: this.form.year[0],
+        faculties: this.form.faculty[0],
+        schools: this.form.school[0],
+        courses: this.form.course[0],
+        duplicate: (this.form.duplicate[0] === true),
+      });
       // go to url
       this.$router.push({
         path: '/dashboard',
-        query: {
-          chartType: this.chartType,
-          groupBy: name,
-          // TODO: Multiple sub-charts
-          years: this.form.year[0],
-          faculties: this.form.faculty[0],
-          schools: this.form.school[0],
-          courses: this.form.course[0],
-          duplicate: (this.form.duplicate[0] === true),
-        },
       });
     },
 

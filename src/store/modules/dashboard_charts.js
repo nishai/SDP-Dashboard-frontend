@@ -91,7 +91,7 @@ const mutations = {
       faculties,
       schools,
       courses,
-      duplicates,
+      duplicate,
     }
   ) {
     const uuid = uuidv4();
@@ -103,7 +103,7 @@ const mutations = {
       faculties: faculties,
       schools: schools,
       courses: courses,
-      duplicates: duplicates,
+      duplicate: duplicate,
     };
     Vue.set(state.dashboardCharts, uuid, dashboardChart);
   },
@@ -132,7 +132,7 @@ const actions = {
       faculties,
       schools,
       courses,
-      duplicates,
+      duplicate,
     }
   ) {
     commit(
@@ -144,7 +144,7 @@ const actions = {
         faculties,
         schools,
         courses,
-        duplicates,
+        duplicate,
       }
     );
   },

@@ -162,7 +162,7 @@ function getCourseStats(groupBy, years, faculties, schools, courses, duplicate) 
               },
             ],
             distinctGrouping: false,
-            removeDuplicateCountings: (duplicate === 'true'),
+            removeDuplicateCountings: duplicate,
           },
         },
       ],

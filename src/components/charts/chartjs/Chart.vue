@@ -70,7 +70,7 @@ export default {
    * run when component is created
    */
   mounted() {
-    console.log('Mounted!', this.groupBy, this.years, this.faculties, this.schools, this.courses);
+    console.log('Mounted!', this.groupBy, this.years, this.faculties, this.schools, this.courses, this.duplicate);
     this.getData();
     // this.renderChart();
   },

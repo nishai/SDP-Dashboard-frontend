@@ -2,7 +2,7 @@
   <div>
 
     <!-- Modal Component -->
-    <b-modal ref="myModalRef" id="modal1" title="Bootstrap-Vue">
+    <b-modal ref="myModalRef" id="modal1" title="Compare Options" size="lg" hide-footer>
       <FilterForm
         v-bind:chartType="true"
         v-bind:groupByDesc="dashboardChart.groupBy"
@@ -16,7 +16,7 @@
         v-bind:selectedCourse="dashboardChart.courses"
         v-bind:selectedFaculty="dashboardChart.faculties"
         v-bind:selectedSchool="dashboardChart.schools"
-        v-bind:selectedDuplicate="dashboardChart.duplicates">
+        v-bind:selectedDuplicate="dashboardChart.duplicate">
       </FilterForm>
     </b-modal>
 
