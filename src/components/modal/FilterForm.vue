@@ -1,5 +1,7 @@
 <template>
   <!--https://bootstrap-vue.js.org/docs/components/form/-->
+
+
   <b-form @submit="onSubmit" @reset="onClose" v-if="show">
     <b-row>
       <!-- create numForms amount of copies of the form side by side-->
@@ -19,6 +21,15 @@
           </b-form-select>
         </b-form-group>
         <!-- YEARS -->
+         <label for="formGroupExampleInput">Example label</label>
+         <div>
+            <vue-tags-input
+              v-model="tag"
+              :tags="tags"
+              :autocomplete-items="filteredItems"
+              @tags-changed="newTags => tags = newTags">
+            </vue-tags-input>
+          </div>
         <b-form-group
           v-if="fyear === true"
           id="YearGroup"
@@ -33,12 +44,7 @@
               v-model="form.year[i-1]">
           </b-form-select>
 
-           <vue-tags-input
-            v-model="tag"
-            :tags="tags"
-            :autocomplete-items="filteredItems"
-            @tags-changed="newTags => tags = newTags">
-          </vue-tags-input>
+
 
         </b-form-group>
         <!-- FACULTIES -->
@@ -101,10 +107,13 @@
       </b-col>
     </b-row>
   </b-form>
+
+
 </template>
 
 <script>
 import apiQuery from '../../api/api_query';
+import VueTagsInput from '@johmun/vue-tags-input';
 
 export default {
   name: 'FilterForm',
@@ -120,6 +129,10 @@ export default {
     'numForms', // int for amount of side by side copies of the form for superimposing graphs
   ],
 
+  components: {
+    VueTagsInput,
+  },
+
   data: () => ({
     form: {
       type: [],
@@ -127,13 +140,14 @@ export default {
       course: [],
       faculty: [],
       school: [],
+
     },
 
-
-      // filter tags
+       // filter tags
       tag: '',
-      tags: [],
-      autocompleteItems: [{
+      tags: [],    
+// 
+     autocompleteItems: [{
           text: 'Spain',
         }, {
           text: 'France',
@@ -144,7 +158,6 @@ export default {
         }, {
           text: 'China',
         }], 
-// 
 
 
     types: [
@@ -204,7 +217,7 @@ export default {
       return this.autocompleteItems.filter((i) => new RegExp(this.tag, 'i').test(i.text));
     },
 
-    
+
   },
 
   // https://stackoverflow.com/questions/52724773/javascript-get-data-from-promise-axios
