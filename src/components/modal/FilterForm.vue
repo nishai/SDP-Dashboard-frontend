@@ -2,6 +2,8 @@
   <!--https://bootstrap-vue.js.org/docs/components/form/-->
 
 
+<!-- http://www.vue-tags-input.com/#/examples/templates -->
+
   <b-form @submit="onSubmit" @reset="onClose" v-if="show">
     <b-row>
       <!-- create numForms amount of copies of the form side by side-->
@@ -69,10 +71,10 @@
 <!-- Filter Tags -->
             <div>
             <vue-tags-input
-              v-model="form.faculty[i-1]"
-              :tags="facultyTags"
+              v-model="tag2"
+              :tags="tags2"
               :autocomplete-items=derivedFaculties
-              @tags-changed="newTags => facultyTags = newTags">
+              @tags-changed="newTags => tags2 = newTags">
             </vue-tags-input>
           </div>
 
@@ -194,7 +196,8 @@ export default {
     },
 
        // filter tags
-      // tag: '',
+      tag: '',
+      tags:[],
       yearTags: [],    
       facultyTags:[],
       schoolTags:[],
@@ -269,6 +272,10 @@ export default {
     filteredItems() {
       return this.autocompleteItems.filter((i) => new RegExp(this.tag, 'i').test(i.text));
     },
+       filteredItems2() {
+      return this.autocompleteItems2.filter((i) => new RegExp(this.tag2, 'i').test(i.text));
+    },
+  
 
 
   },

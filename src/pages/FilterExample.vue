@@ -135,9 +135,9 @@ export default {
       }, {
         text: '3',
       }, {
-        text: '4',
+        text: '54',
       }, {
-        text: '5',
+        text: '5555',
       }],
     };
   },
@@ -146,7 +146,7 @@ export default {
       return this.autocompleteItems.filter((i) => new RegExp(this.tag, 'i').test(i.text));
     },
     filteredItems2() {
-      return this.autocompleteItems.filter((i) => new RegExp(this.tag, 'i').test(i.text));
+      return this.autocompleteItems2.filter((i) => new RegExp(this.tag2, 'i').test(i.text));
     },
   },
 };
