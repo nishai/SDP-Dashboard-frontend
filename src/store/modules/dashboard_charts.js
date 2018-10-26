@@ -101,11 +101,12 @@ const mutations = {
     var dashboardChart = {
       name: uuid,
       charts: charts,
-      x: layout.x,
-      y: layout.y,
-      w: layout.w,
-      h: layout.h,
-      i: layout.i,
+      // x: layout.x,
+      // y: layout.y,
+      // w: layout.w,
+      // h: layout.h,
+      // i: layout.i,
+      layout: layout,
       // chartType: chartType,
       // groupBy: groupBy,
       // years: years,
@@ -128,15 +129,14 @@ const mutations = {
   [mutators.UPDATE_CHART_LAYOUT](state, { newLayout }) {
     for(var chartId in state.dashboardCharts){
       for(let j = 0; j < newLayout.length; j += 1){
-        if(state.dashboardCharts[chartId].i === newLayout[j].i){
-          state.dashboardCharts[chartId].x = newLayout[j].x;
-          state.dashboardCharts[chartId].y = newLayout[j].y;
-          state.dashboardCharts[chartId].w = newLayout[j].w;
-          state.dashboardCharts[chartId].h = newLayout[j].h;
+        if(state.dashboardCharts[chartId].layout.i === newLayout[j].i){
+          state.dashboardCharts[chartId].layout.x = newLayout[j].x;
+          state.dashboardCharts[chartId].layout.y = newLayout[j].y;
+          state.dashboardCharts[chartId].layout.w = newLayout[j].w;
+          state.dashboardCharts[chartId].layout.h = newLayout[j].h;
         }
       }
     }
-    console.log(state.dashboardCharts)
   },
 };
 

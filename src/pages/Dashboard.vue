@@ -21,16 +21,15 @@
               :key="id"
               :class="{ 'editMode' : 'true' }"
               :autoSize="true"
-              :x="chart.x"
-              :y="chart.y"
-              :w="chart.w"
-              :h="chart.h"
+              :x="chart.layout.x"
+              :y="chart.layout.y"
+              :w="chart.layout.w"
+              :h="chart.layout.h"
               :max-w="7"
               :max-h="40"
               :min-w="1"
               :min-h="10"
-              :i="chart.i">
-                {{chart}}
+              :i="chart.layout.i">
                   <DashboardChart
                     style="width: 400px;"
                     class="m-2"
@@ -91,11 +90,11 @@ export default {
       let charts = this.getCharts;
       for(var chartId in charts){
         layouts = layouts.concat({
-          x: charts[chartId].x,
-          y: charts[chartId].y,
-          w: charts[chartId].w,
-          h: charts[chartId].h,
-          i: charts[chartId].i,
+          x: charts[chartId].layout.x,
+          y: charts[chartId].layout.y,
+          w: charts[chartId].layout.w,
+          h: charts[chartId].layout.h,
+          i: charts[chartId].layout.i,
         });
       }
       return layouts;
@@ -120,7 +119,6 @@ export default {
       this.$router.push({ path: '/' });
     },
     layoutUpdatedEvent(newLayout){
-      console.log("Updated layout: ", newLayout)
       this.$store.dispatch('updateChartLayout', {newLayout: newLayout});
     },
   }
