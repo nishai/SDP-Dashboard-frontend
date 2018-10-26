@@ -129,9 +129,18 @@
 
 <script>
 import Chart from 'chart.js';
+import ChartModule from 'chartjs-plugin-labels';
+
+// https://github.com/emn178/chartjs-plugin-labels
+Chart.defaults.global.plugins.labels = {
+  render: 'percentage',
+  fontColor: '#333',
+  precision: 2,
+};
 
 export default {
   name: 'Chart',
+  name: 'ChartModule',
   mounted() {
     const ctx = 'chart';
     const chart = new Chart(ctx, {
@@ -156,53 +165,39 @@ export default {
           display: true,
           text: 'Course Demographics: Race',
         },
-        tooltips: {
-          // try this https://github.com/emn178/chartjs-plugin-labels
-          intersect: false,
-          callbacks: {
-            title: function(tooltipItem, data) {
-              return data['labels'][tooltipItem[0]['index']];
-            },
-            label: function(tooltipItem, data) {
-              var dataset = data['datasets'][0];
-              var percent = Math.round((dataset['data'][tooltipItem['index']] / dataset["_meta"][0]['total']) * 100);
-              return percent + '%';
+        legend: {
+          display: true,
+
+          // generateLabels changes from chart to chart,  check the source,
+          // this one is from the doughnut :
+          // https://github.com/chartjs/Chart.js/blob/master/src/controllers/controller.doughnut.js#L42
+          labels: {
+            generateLabels: function(chart) {
+              var data = chart.data;
+              if (data.labels.length && data.datasets.length) {
+                return data.labels.map(function(label, i) {
+                  var meta = chart.getDatasetMeta(0);
+                  var ds = data.datasets[0];
+                  var arc = meta.data[i];
+                  var custom = arc && arc.custom || {};
+                  var getValueAtIndexOrDefault = Chart.helpers.getValueAtIndexOrDefault;
+                  var arcOpts = chart.options.elements.arc;
+                  var fill = custom.backgroundColor ? custom.backgroundColor : getValueAtIndexOrDefault(ds.backgroundColor, i, arcOpts.backgroundColor);
+                  var stroke = custom.borderColor ? custom.borderColor : getValueAtIndexOrDefault(ds.borderColor, i, arcOpts.borderColor);
+                    return {
+                    // And finally :
+                    text: label + ": " + ds.data[i],
+                    fillStyle: fill,
+                    strokeStyle: stroke,
+                    hidden: isNaN(ds.data[i]) || meta.data[i].hidden,
+                    index: i
+                  };
+                });
+              }
+              return [];
             }
           }
-        },
-        legend: {
-    display: true,
-
-    // generateLabels changes from chart to chart,  check the source,
-    // this one is from the doughut :
-    // https://github.com/chartjs/Chart.js/blob/master/src/controllers/controller.doughnut.js#L42
-    labels: {
-      generateLabels: function(chart) {
-        var data = chart.data;
-        if (data.labels.length && data.datasets.length) {
-          return data.labels.map(function(label, i) {
-            var meta = chart.getDatasetMeta(0);
-            var ds = data.datasets[0];
-            var arc = meta.data[i];
-            var custom = arc && arc.custom || {};
-            var getValueAtIndexOrDefault = Chart.helpers.getValueAtIndexOrDefault;
-            var arcOpts = chart.options.elements.arc;
-            var fill = custom.backgroundColor ? custom.backgroundColor : getValueAtIndexOrDefault(ds.backgroundColor, i, arcOpts.backgroundColor);
-            var stroke = custom.borderColor ? custom.borderColor : getValueAtIndexOrDefault(ds.borderColor, i, arcOpts.borderColor);
-              return {
-              // And finally :
-              text: label + ": " + ds.data[i],
-              fillStyle: fill,
-              strokeStyle: stroke,
-              hidden: isNaN(ds.data[i]) || meta.data[i].hidden,
-              index: i
-            };
-          });
         }
-        return [];
-      }
-    }
-  }
       },
     });
 
