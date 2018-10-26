@@ -23,7 +23,13 @@
     <b-card no-body>
       <!-- Heading -->
       <div slot="header" class="d-flex justify-content-between">
-        <b-form-input class="hidden-input" v-model="dashboardChart.name" type="text" placeholder="Click To Edit"></b-form-input>
+        <b-form-input
+          class="hidden-input"
+          :value="dashboardChart.name"
+          v-on:change="renameChart($event)"
+          type="text"
+          placeholder="Click To Edit">
+      </b-form-input>
         <small class="d-flex justify-content-between">
           <b-btn size="sm" class="m-1" variant="outline-primary" @click="toggleEditor">Edit</b-btn>
           <!--<b-btn size="sm" variant="outline-primary" @click="toggleEditor">Opts</b-btn>-->
@@ -105,6 +111,10 @@ export default {
       console.log(this.key);
       console.log(this.$vnode.key);
       this.$store.dispatch('deleteDashboardChart', { dashboardChartId: this.$vnode.key });
+    },
+    renameChart(e){
+      this.$store.dispatch('renameChart', {name: e, id: this.$vnode.key});
+      this.$vnode.key = e;
     },
   },
 };

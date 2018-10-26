@@ -62,7 +62,7 @@ function uuidv4() {
 /* STATE                                                                      */
 /* ========================================================================== */
 
-const stateData = {
+var stateData = {
   dashboardCharts: {
     // '1d090475-3c50-4075-bcf2-1b7f23a2a7cd': testDashboardChart,
   },
@@ -73,8 +73,9 @@ const stateData = {
 /* ========================================================================== */
 
 const getters = {
-  getChart: (state, id) => state.dashboardCharts[id],
-  numChart: (state) => state.dashboardCharts.length,
+  getChart: (state, id) => { return state.dashboardCharts[id] },
+  numCharts: (state) => { return state.dashboardCharts.length },
+  getCharts: (state) => { return state.dashboardCharts },
 };
 
 /* ========================================================================== */
@@ -97,10 +98,14 @@ const mutations = {
     }
   ) {
     const uuid = uuidv4();
-    const dashboardChart = {
+    var dashboardChart = {
       name: uuid,
       charts: charts,
-      layout: layout,
+      x: layout.x,
+      y: layout.y,
+      w: layout.w,
+      h: layout.h,
+      i: layout.i,
       // chartType: chartType,
       // groupBy: groupBy,
       // years: years,
@@ -116,6 +121,22 @@ const mutations = {
       throw new Error(`Chart ID not found: "${dashboardChartId}"`);
     }
     Vue.delete(state.dashboardCharts, dashboardChartId);
+  },
+  [mutators.RENAME_DASHBOARD_CHART](state, { name, id }) {
+    state.dashboardCharts[id].name = name;
+  },
+  [mutators.UPDATE_CHART_LAYOUT](state, { newLayout }) {
+    for(var chartId in state.dashboardCharts){
+      for(let j = 0; j < newLayout.length; j += 1){
+        if(state.dashboardCharts[chartId].i === newLayout[j].i){
+          state.dashboardCharts[chartId].x = newLayout[j].x;
+          state.dashboardCharts[chartId].y = newLayout[j].y;
+          state.dashboardCharts[chartId].w = newLayout[j].w;
+          state.dashboardCharts[chartId].h = newLayout[j].h;
+        }
+      }
+    }
+    console.log(state.dashboardCharts)
   },
 };
 
@@ -158,6 +179,12 @@ const actions = {
   },
   deleteDashboardChart({ commit, state }, { dashboardChartId }) {
     commit(mutators.DELETE_DASHBOARD_CHART, { dashboardChartId });
+  },
+  renameChart({ commit, state }, { name, id }) {
+    commit(mutators.RENAME_DASHBOARD_CHART, { name, id });
+  },
+  updateChartLayout({ commit, state }, { newLayout }) {
+    commit(mutators.UPDATE_CHART_LAYOUT, { newLayout });
   },
 };
 
