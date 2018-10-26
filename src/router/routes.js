@@ -1,11 +1,11 @@
 import ChartExamples from '../pages/ChartExamples.vue';
-import ChartTemplates from '../pages/ChartTemplates.vue';
-import ChartTemplate from '../pages/ChartTemplate.vue';
 import Query from '../pages/Query.vue';
 import Reports from '../pages/ReportList.vue';
 import Report from '../pages/Report.vue';
 import Dashboard from '../pages/Dashboard.vue';
 import GridExample from '../pages/GridExample.vue';
+import ChartTemplates from '../pages/ChartTemplates.vue';
+
 /* Define the routes */
 
 export const navRoutes = [
@@ -41,19 +41,19 @@ export const navRoutes = [
 
   },
   {
-   name: 'GridExample',
+    name: 'GridExample',
     path: '/grid',
     component: GridExample,
+  },
+  {
+    name: 'Dashboard',
+    path: '/dashboard',
+    component: Dashboard,
   },
 
 ];
 
 export const hiddenRoutes = [
-  {
-    name: 'Chart Template',
-    path: '/templates/chart',
-    component: ChartTemplate,
-  },
   {
     name: 'Report',
     path: '/reports/:id',

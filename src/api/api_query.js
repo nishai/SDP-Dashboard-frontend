@@ -12,6 +12,8 @@ function getYears() {
             by: [
               'calendar_instance_year',
             ],
+            distinctGrouping: true,
+            removeDuplicateCountings: false,
           },
         },
       ],
@@ -29,6 +31,8 @@ function getFaculties() {
             by: [
               'faculty',
             ],
+            distinctGrouping: true,
+            removeDuplicateCountings: false,
           },
         },
       ],
@@ -53,6 +57,8 @@ function getFacultySchools(faculties) {
             by: [
               'school',
             ],
+            distinctGrouping: true,
+            removeDuplicateCountings: false,
           },
         },
       ],
@@ -77,6 +83,8 @@ function getSchoolsCourses(schools) {
             by: [
               'course_name',
             ],
+            distinctGrouping: true,
+            removeDuplicateCountings: false,
           },
         },
       ],
@@ -84,8 +92,13 @@ function getSchoolsCourses(schools) {
   );
 }
 
-function getCourseStats(groupBy, years, faculties, schools, courses) {
-  return app.$store.getters.apiAxios.post(
+function determineYield(groupBy) {
+  return groupBy;
+}
+
+function getCourseStats(groupBy, years, faculties, schools, courses, duplicate) {
+  const yieldBy = determineYield(groupBy);
+  return requester.post(
     'course_stats/query',
     {
       chain: [
@@ -93,7 +106,7 @@ function getCourseStats(groupBy, years, faculties, schools, courses) {
           filter: [
             {
               field: 'calendar_instance_year',
-              operator: 'startswith', // TODO: FIX ON FRONTEND
+              operator: 'exact', // TODO: FIX ON FRONTEND
               value: years,
             },
             {
@@ -120,9 +133,11 @@ function getCourseStats(groupBy, years, faculties, schools, courses) {
               {
                 name: 'count',
                 via: 'count',
-                from: groupBy,
+                from: yieldBy,
               },
             ],
+            distinctGrouping: false,
+            removeDuplicateCountings: duplicate,
           },
         },
       ],
@@ -130,12 +145,12 @@ function getCourseStats(groupBy, years, faculties, schools, courses) {
   );
 }
 
-
 const nameToColumn = {
   'Race': 'race_description',
   'Gender': 'gender',
   'Nationality': 'nationality_short_name',
   'Home Language': 'home_language_description',
+  'Bell curve': 'final_mark',
 };
 
 export default {

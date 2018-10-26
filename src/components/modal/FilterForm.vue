@@ -1,12 +1,12 @@
 <template>
   <!--https://bootstrap-vue.js.org/docs/components/form/-->
-  <b-form @submit="onSubmit" @reset="onClose" v-if="show">
+  <b-form @submit="onSubmit"  v-if="show">
     <b-row>
       <!-- create numForms amount of copies of the form side by side-->
       <b-col v-for="i in numForms" :key="groupByDesc + '-' + i">
         <!-- CHART TYPE -->
         <b-form-group
-          v-if="ftype === true"
+          v-if="chartType === true"
           id="typeGroup"
           label="Chart Type:"
           label-for="Type"
@@ -83,13 +83,22 @@
             v-model="form.course[i-1]">
           </b-form-select>
         </b-form-group>
+        <!-- Duplicate Data Checkbox-->
+        <b-form-group
+          checked=true
+          id="DuplicateGroup">
+          <b-form-checkbox
+            v-model="form.duplicate[i-1]">
+            Don't Duplicate data across fields
+          </b-form-checkbox>
+        </b-form-group>
 
       </b-col>
     </b-row>
     <b-row class="text-center">
       <b-col>
-        <b-button type="submit" variant="primary">Filter</b-button>
-        <b-button type="reset" variant="secondary">Close</b-button>
+        <b-button type="primary">Filter</b-button>
+        <b-button @click="onClose" variant="secondary">Close</b-button>
       </b-col>
     </b-row>
   </b-form>
@@ -110,6 +119,16 @@ export default {
     'fcourse', // boolean for whether form has course field
     'ftype', // boolean for whether form has type field
     'numForms', // int for amount of side by side copies of the form for superimposing graphs
+
+    // preselected values to be hilighted on form start
+    'selectedChartType',
+    'selectedGroupByDesc',
+    'selectedYear',
+    'selectedFaculty',
+    'selectedSchool',
+    'selectedCourse',
+    'selectedType',
+    'selectedDuplicate',
   ],
 
   data: () => ({
@@ -119,10 +138,11 @@ export default {
       course: [],
       faculty: [],
       school: [],
+      duplicate: [],
     },
     types: [
       { text: 'Select One', value: null },
-      'bar', 'line',
+      'bar', 'line', 'pie', 'doughnut', 'radar',
     ],
     years: [],
     faculties: [],
@@ -137,10 +157,76 @@ export default {
   created() {
     // initialize data.form to have the correct amount of v-models
     const formKeys = Object.keys(this.form);
+    let sflag = false;
+    let cflag = false;
+
     for (let i = 0; i < formKeys.length; i += 1) {
       for (let j = 0; j < this.$props.numForms; j += 1) {
-        this.form[formKeys[i]].push([null]);
+        if (formKeys[i] === 'duplicate') {
+          if(j === 0 && this.$props.selectedDuplicate === false){
+            this.form[formKeys[i]].push(false);
+          } else {
+            this.form[formKeys[i]].push(true);
+          }
+        } else {
+          if(j === 0){
+            let selected = [null];
+            switch(formKeys[i]){
+              case 'type':
+                if(this.$props.selectedChartType !== undefined){
+                  selected = this.$props.selectedChartType;
+                } else {
+                  selected = [null];
+                }
+                break;
+              case 'year':
+                if(this.$props.selectedYear !== undefined){
+                  selected = this.$props.selectedYear;
+                } else {
+                  selected = [null];
+                }
+                break;
+              case 'faculty':
+                if(this.$props.selectedFaculty !== undefined){
+                  selected = this.$props.selectedFaculty;
+                } else {
+                  selected = [null];
+                }
+                break;
+              case 'school':
+                if(this.$props.selectedSchool !== undefined){
+                  selected = this.$props.selectedSchool;
+                  sflag = true;
+                } else {
+                  selected = [null];
+                }
+                break;
+              case 'course':
+                if(this.$props.selectedCourse !== undefined){
+                  selected = this.$props.selectedCourse;
+                  cflag = true;
+                } else {
+                  selected = [null];
+                }
+                break;
+              default:
+                selected = [null]
+            }
+            if(typeof selected === "string" && formKeys[i] !== 'type'){
+              selected = [selected];
+            }
+            this.form[formKeys[i]].push(selected);
+          } else {
+            this.form[formKeys[i]].push([null]);
+          }
+        }
       }
+    }
+    if(sflag){
+      this.loadSchools(0);
+    }
+    if(cflag){
+      this.loadCourses(0);
     }
 
     // initialize data arrays to fit the amount of tables being displayed
@@ -231,23 +317,45 @@ export default {
      * analyse data and make chart when submitting form
      */
     onSubmit(event) {
-      const name = apiQuery.nameToColumn[this.$props.groupByDesc];
-      if (this.form.year.length > 1) {
-        console.log('Only 1 form is supported at the moment, this will be fixed in future');
+      let name;
+      if(apiQuery.nameToColumn[this.$props.groupByDesc] !== undefined){
+        name = apiQuery.nameToColumn[this.$props.groupByDesc];
+      } else{
+        name = this.$props.groupByDesc;
       }
+      // if (this.form.year.length > 1) {
+      //   console.log('Only 1 form is supported at the moment, this will be fixed in future');
+      // }
 
+      let chartArr = []
+      for (let i = 0; i < this.$props.numForms; i += 1) {
+        chartArr.push({
+          chartType: this.form.type[i],
+          groupBy: name,
+          years: this.form.year[i],
+          faculties: this.form.faculty[i],
+          schools: this.form.school[i],
+          courses: this.form.course[i],
+          duplicate: (this.form.duplicate[i] === true),
+        })
+      }
+      // add chart to store
+      // TODO: Multiple sub-charts
+      this.$store.dispatch({
+        type: 'createDashboardChart',
+        charts: chartArr,
+      });
+
+      // close form
+      try {
+        this.$parent.$parent.deleteChart();
+      } catch(err) {
+        console.log("no delete chart function when calling from template screen");
+      }
+      this.$parent.$parent.hideModal();
       // go to url
       this.$router.push({
-        path: '/templates/chart',
-        query: {
-          chartType: this.chartType,
-          groupBy: name,
-          // TODO: Multiple sub-charts
-          years: this.form.year[0],
-          faculties: this.form.faculty[0],
-          schools: this.form.school[0],
-          courses: this.form.course[0],
-        },
+        path: '/dashboard',
       });
     },
 

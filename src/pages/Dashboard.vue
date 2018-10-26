@@ -6,7 +6,7 @@
         <DashboardChart style="width: 400px;" class="m-2" v-for="(chart, id) in dashboardCharts" v-bind:key="id" v-bind:dashboardChartId="id" v-bind:chart="chart"  ></DashboardChart>
         <div style="width: 400px;" class="d-flex justify-content-center">
           <!-- <router-link :to="{path: '/'}"> -->
-            <b-button class="my-4 mx-2" style="height: 48px;" variant="outline-success" size="lg" @click="create"> New Chart </b-button>
+          <b-button class="my-4 mx-2" style="height: 48px;" variant="outline-success" size="lg" @click="create"> New Chart </b-button>
           <!-- </router-link> -->
         </div>
       </div>
@@ -45,12 +45,25 @@ export default {
       return this.$store.state.dashboardCharts.dashboardCharts;
     },
   },
-  methods: {
-    create() {
-      this.$store.dispatch('createDashboardChart');
+
+  /**
+  mounted: function () {
+    this.$store.dispatch({
+      type: 'createDashboardChart',
+      chartType: this.$route.query.chartType,
+      groupBy: this.$route.query.groupBy,
+      years: this.$route.query.years,
+      faculties: this.$route.query.faculties,
+      schools: this.$route.query.schools,
+      courses: this.$route.query.courses,
+      duplicates: this.$route.query.duplicates,
+    });
+  },*/
+  methods:{
+    create(){
       this.$router.push({ path: '/' });
-    },
-  },
+    }
+  }
 };
 </script>
 
