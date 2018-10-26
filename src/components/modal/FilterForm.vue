@@ -41,7 +41,7 @@
             <vue-tags-input
               v-model="tag"
               :tags="tags"
-              :autocomplete-items="filteredItems"
+              :autocomplete-items=derivedYears
               @tags-changed="newTags => tags = newTags">
             </vue-tags-input>
           </div>
