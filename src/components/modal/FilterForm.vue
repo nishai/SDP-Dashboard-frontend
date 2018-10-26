@@ -36,15 +36,18 @@
               v-model="form.year[i-1]">
           </b-form-select> -->
 
-
+<!-- Filter Tags -->
             <div>
             <vue-tags-input
-              v-model="tag"
-              :tags="tags"
+              v-model="form.year[i-1]"
+              :tags="yearTags"
               :autocomplete-items=derivedYears
-              @tags-changed="newTags => tags = newTags">
+              @tags-changed="newTags => yearTags = newTags">
             </vue-tags-input>
           </div>
+
+
+
         </b-form-group>
         <!-- FACULTIES -->
         <b-form-group
@@ -54,47 +57,95 @@
           label-for="Faculty"
           description="You can choose multiple faculties using Ctrl or Shift key"
           horizontal>
-          <b-form-select
+ <!--          <b-form-select
             multiple
             id="Faculty"
             :options="derivedFaculties"
             required
             v-model="form.faculty[i-1]"
             @input="loadSchools(i-1)">
-          </b-form-select>
+          </b-form-select> -->
+
+<!-- Filter Tags -->
+            <div>
+            <vue-tags-input
+              v-model="form.faculty[i-1]"
+              :tags="facultyTags"
+              :autocomplete-items=derivedFaculties
+              @tags-changed="newTags => facultyTags = newTags">
+            </vue-tags-input>
+          </div>
+
+
         </b-form-group>
+
+
+
+
+
+
         <!-- SCHOOLS -->
+        <!--           v-if="fschool === true && form.faculty[i-1][0] != null"
+ -->
         <b-form-group
-          v-if="fschool === true && form.faculty[i-1][0] != null"
           id="SchoolGroup"
           label="School:"
           label-for="School"
           description="You can choose multiple schools using Ctrl or Shift key"
           horizontal>
-          <b-form-select
+     <!--      <b-form-select
             multiple
             id="School"
             :options="derivedSchools[i-1]"
             required
             v-model="form.school[i-1]"
             @input="loadCourses(i-1)">
-          </b-form-select>
+          </b-form-select> -->
+
+<!-- Filter Tags -->
+            <div>
+            <vue-tags-input
+              v-model="form.school[i-1]"
+              :tags="schoolTags"
+              :autocomplete-items=derivedSchools
+              @tags-changed="newTags => schoolTags = newTags">
+            </vue-tags-input>
+            </div>
+
+
+
+
+
+
         </b-form-group>
         <!-- COURSES -->
+        <!--         v-if="fcourse === true && form.school[i-1][0] != null" -->
         <b-form-group
-          v-if="fcourse === true && form.school[i-1][0] != null"
+  
           id="CourseGroup"
           label="Course:"
           label-for="Course"
           description="You can choose multiple courses using Ctrl or Shift key"
           horizontal>
-          <b-form-select
+     <!--      <b-form-select
             multiple
             id="Course"
             :options="derivedCourses[i-1]"
             required
             v-model="form.course[i-1]">
-          </b-form-select>
+          </b-form-select> -->
+
+
+<!-- Filter Tags -->
+            <div>
+            <vue-tags-input
+              v-model="form.course[i-1]"
+              :tags="courseTags"
+              :autocomplete-items=derivedCourses
+              @tags-changed="newTags => courseTags = newTags">
+            </vue-tags-input>
+            </div>
+
         </b-form-group>
 
       </b-col>
@@ -143,20 +194,23 @@ export default {
     },
 
        // filter tags
-      tag: '',
-      tags: [],    
+      // tag: '',
+      yearTags: [],    
+      facultyTags:[],
+      schoolTags:[],
+      courseTags:[],
 // 
-     autocompleteItems: [{
-          text: 'Spain',
-        }, {
-          text: 'France',
-        }, {
-          text: 'USA',
-        }, {
-          text: 'Germany',
-        }, {
-          text: 'China',
-        }], 
+     // autocompleteItems: [{
+     //      text: 'Spain',
+     //    }, {
+     //      text: 'France',
+     //    }, {
+     //      text: 'USA',
+     //    }, {
+     //      text: 'Germany',
+     //    }, {
+     //      text: 'China',
+     //    }], 
 
 
     types: [
@@ -249,14 +303,14 @@ export default {
      */
     loadSchools(index) {
       // gets called when form.faculty changes, so it gets called unnecessarily with created()
-      if (this.form.faculty[index].length !== 0) {
+      // if (this.form.faculty[index].length !== 0) {
         apiQuery.getFacultySchools(this.form.faculty[index])
           .then((response) => response.data)
           .then((data) => {
             this.schools[index] = Object.values(data.results);
             this.$forceUpdate();
           });
-      }
+      // }
     },
 
     /**
@@ -264,14 +318,14 @@ export default {
      * @param index
      */
     loadCourses(index) {
-      if (this.form.school[index].length !== 0) {
+      // if (this.form.school[index].length !== 0) {
         apiQuery.getSchoolsCourses(this.form.school[index])
           .then((response) => response.data)
           .then((data) => {
             this.courses[index] = Object.values(data.results);
             this.$forceUpdate();
           });
-      }
+      // }
     },
 
     /**
