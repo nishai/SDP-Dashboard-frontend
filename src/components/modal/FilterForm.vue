@@ -32,6 +32,14 @@
               required
               v-model="form.year[i-1]">
           </b-form-select>
+
+           <vue-tags-input
+            v-model="tag"
+            :tags="tags"
+            :autocomplete-items="filteredItems"
+            @tags-changed="newTags => tags = newTags">
+          </vue-tags-input>
+
         </b-form-group>
         <!-- FACULTIES -->
         <b-form-group
@@ -120,6 +128,25 @@ export default {
       faculty: [],
       school: [],
     },
+
+
+      // filter tags
+      tag: '',
+      tags: [],
+      autocompleteItems: [{
+          text: 'Spain',
+        }, {
+          text: 'France',
+        }, {
+          text: 'USA',
+        }, {
+          text: 'Germany',
+        }, {
+          text: 'China',
+        }], 
+// 
+
+
     types: [
       { text: 'Select One', value: null },
       'bar', 'line',
@@ -170,6 +197,14 @@ export default {
     derivedCourses() {
       return this.courses ? this.courses : ['loading data from database...'];
     },
+
+
+    // filtertags
+    filteredItems() {
+      return this.autocompleteItems.filter((i) => new RegExp(this.tag, 'i').test(i.text));
+    },
+
+    
   },
 
   // https://stackoverflow.com/questions/52724773/javascript-get-data-from-promise-axios
