@@ -44,10 +44,12 @@
               v-model="form.year[i-1]"
               :tags="yearTags"
               :autocomplete-items=derivedYears
-              @tags-changed="newTags => yearTags = newTags">
+              :add-only-from-autocomplete="true"  
+              @tags-changed="update">
+              
             </vue-tags-input>
           </div>
-
+<!-- @tags-changed="newTags => yearTags = newTags"> -->
 
 
         </b-form-group>
