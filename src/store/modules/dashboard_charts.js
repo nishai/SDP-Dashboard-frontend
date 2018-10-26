@@ -50,14 +50,6 @@ function uuidv4() {
   return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, (c) => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16));
 }
 
-
-// const testDashboardChart = {
-  // name: 'Test Bar Graph',
-  // type: 'bar',
-  // query: testDashboardAQuery,
-  // query: {},
-// };
-
 /* ========================================================================== */
 /* STATE                                                                      */
 /* ========================================================================== */
@@ -88,32 +80,13 @@ const mutations = {
     {
       charts,
       layout,
-      // chartType,
-      // groupBy,
-      // years,
-      // faculties,
-      // schools,
-      // courses,
-      // duplicate,
     }
   ) {
     const uuid = uuidv4();
     var dashboardChart = {
       name: uuid,
       charts: charts,
-      // x: layout.x,
-      // y: layout.y,
-      // w: layout.w,
-      // h: layout.h,
-      // i: layout.i,
       layout: layout,
-      // chartType: chartType,
-      // groupBy: groupBy,
-      // years: years,
-      // faculties: faculties,
-      // schools: schools,
-      // courses: courses,
-      // duplicate: duplicate,
     };
     Vue.set(state.dashboardCharts, uuid, dashboardChart);
   },
@@ -153,13 +126,6 @@ const actions = {
     {
       charts,
       layout,
-      //      chartType,
-      // groupBy,
-      // years,
-      // faculties,
-      // schools,
-      // courses,
-      // duplicate,
     }
   ) {
     commit(
@@ -167,13 +133,6 @@ const actions = {
       {
         charts,
         layout,
-        // chartType,
-        // groupBy,
-        // years,
-        // faculties,
-        // schools,
-        // courses,
-        // duplicate,
       }
     );
   },
