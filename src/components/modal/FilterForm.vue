@@ -21,8 +21,23 @@
           </b-form-select>
         </b-form-group>
         <!-- YEARS -->
-         <label for="formGroupExampleInput">Example label</label>
-         <div>
+       
+        <b-form-group
+          v-if="fyear === true"
+          id="YearGroup"
+          label="Year:"
+          label-for="Year"
+          horizontal>
+           <!--  <b-form-select
+              multiple
+              id="Year"
+              :options="derivedYears"
+              required
+              v-model="form.year[i-1]">
+          </b-form-select> -->
+
+
+            <div>
             <vue-tags-input
               v-model="tag"
               :tags="tags"
@@ -30,22 +45,6 @@
               @tags-changed="newTags => tags = newTags">
             </vue-tags-input>
           </div>
-        <b-form-group
-          v-if="fyear === true"
-          id="YearGroup"
-          label="Year:"
-          label-for="Year"
-          horizontal>
-            <b-form-select
-              multiple
-              id="Year"
-              :options="derivedYears"
-              required
-              v-model="form.year[i-1]">
-          </b-form-select>
-
-
-
         </b-form-group>
         <!-- FACULTIES -->
         <b-form-group
