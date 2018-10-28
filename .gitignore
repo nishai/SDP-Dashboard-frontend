@@ -33,3 +33,5 @@ coverage/**
 
 #backups
 *.bak
+
+\.env\.development

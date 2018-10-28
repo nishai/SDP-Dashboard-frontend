@@ -1,8 +1,9 @@
 <template>
   <div class="dashboard">
     <Heading heading_text="Dashboard"></Heading>
+    <b-button class="btn btn-info" @click="doPDF">Save report</b-button>
     <div class="d-flex flex-wrap justify-content-between">
-      <div class="d-flex flex-wrap justify-content-start">
+      <div id="dashDiv" class="d-flex flex-wrap justify-content-start">
         <DashboardChart style="width: 400px;" class="m-2" v-for="(chart, id) in dashboardCharts" v-bind:key="id" v-bind:dashboardChartId="id" v-bind:chart="chart"  ></DashboardChart>
         <div style="width: 400px;" class="d-flex justify-content-center">
           <!-- <router-link :to="{path: '/'}"> -->
@@ -25,6 +26,8 @@ import Heading from '../components/misc/Heading.vue';
 import Chart from '../components/charts/chartjs/Chart.vue';
 import Table from '../components/charts/chartjs/Table.vue';
 import DashboardChart from '../components/dashboard/DashboardChart.vue';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 export default {
   name: 'Dashboard',
@@ -62,7 +65,28 @@ export default {
   methods:{
     create(){
       this.$router.push({ path: '/' });
-    }
+    },
+    doPDF() {
+      // var ratio = this.$refs.reportPage.clientHeight / this.$refs.reportPage.clientWidth;
+      var doc = new jsPDF();
+      // var width = doc.internal.pageSize.getWidth(); 
+      // var height = doc.internal.pageSize.getHeight(); 
+      // height = ratio * width;
+
+      var currentComponents = document.getElementById('dashDiv').children;
+      var numCharts = currentComponents.length;
+
+      for (var i=0; i < numCharts-1; i++){
+        console.log(currentComponents[i]);
+        // html2canvas(chart)
+        // .then(canvas => {  
+        //   var imgData = canvas.toDataURL('image/png');              
+        //   doc.addImage(imgData, 'PNG', 0, 0, 0, 0, '', 'FAST');
+        // });
+      }
+
+      // doc.save('report.pdf');
+    },
   }
 };
 </script>
