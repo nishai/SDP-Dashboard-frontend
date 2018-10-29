@@ -75,18 +75,25 @@ export default {
 
       var currentComponents = document.getElementById('dashDiv').children;
       var numCharts = currentComponents.length - 1;  //ignores New Chart button
+      var num_done = 0;
 
       for (var i=0; i < numCharts; i++){
-        console.log(currentComponents[i]);
-        html2canvas(currentComponents[i], {allowTaint: true})
-        .then(canvas => {  
-          var imgData = canvas.toDataURL('image/png');              
-          doc.addImage(imgData, 'PNG', 20, 20 + (100*i), 100, 100, '', 'FAST');
-        });
-      }
+        let currdiv = currentComponents[i];
+        console.log(currdiv);
+        html2canvas(currdiv, {allowTaint: true})
+          .then(canvas => {  
+            var imgData = canvas.toDataURL('image/png');   
+            
+            var ratio = currdiv.clientHeight / currdiv.clientWidth;
+            var width = 85;
+            var height = ratio * width;
+      
+            doc.addImage(imgData, 'PNG', 0, 0, 50, 100, '', 'FAST');
+            num_done++;
 
-      // doc.save('report.pdf');
-      doc.output('dataurlnewwindow');
+            if (num_done == numCharts)  {doc.output('dataurlnewwindow');};
+          });
+      }
     },
   }
 };
