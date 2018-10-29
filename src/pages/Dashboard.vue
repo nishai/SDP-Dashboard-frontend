@@ -3,7 +3,7 @@
     <Heading heading_text="Dashboard"></Heading>
     <b-button class="btn btn-info" @click="doPDF">Save report</b-button>
     <div class="d-flex flex-wrap justify-content-between">
-      <div id="dashDiv" class="d-flex flex-wrap justify-content-start">
+      <div id="dashDiv" ref="dashdiv" class="d-flex flex-wrap justify-content-start">
         <DashboardChart style="width: 400px;" class="m-2" v-for="(chart, id) in dashboardCharts" v-bind:key="id" v-bind:dashboardChartId="id" v-bind:chart="chart"  ></DashboardChart>
         <div style="width: 400px;" class="d-flex justify-content-center">
           <!-- <router-link :to="{path: '/'}"> -->
@@ -74,18 +74,19 @@ export default {
       // height = ratio * width;
 
       var currentComponents = document.getElementById('dashDiv').children;
-      var numCharts = currentComponents.length;
+      var numCharts = currentComponents.length - 1;  //ignores New Chart button
 
-      for (var i=0; i < numCharts-1; i++){
+      for (var i=0; i < numCharts; i++){
         console.log(currentComponents[i]);
-        // html2canvas(chart)
-        // .then(canvas => {  
-        //   var imgData = canvas.toDataURL('image/png');              
-        //   doc.addImage(imgData, 'PNG', 0, 0, 0, 0, '', 'FAST');
-        // });
+        html2canvas(currentComponents[i], {allowTaint: true})
+        .then(canvas => {  
+          var imgData = canvas.toDataURL('image/png');              
+          doc.addImage(imgData, 'PNG', 20, 20 + (100*i), 100, 100, '', 'FAST');
+        });
       }
 
       // doc.save('report.pdf');
+      doc.output('dataurlnewwindow');
     },
   }
 };
