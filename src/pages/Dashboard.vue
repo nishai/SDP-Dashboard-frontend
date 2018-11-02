@@ -80,7 +80,7 @@ export default {
           var width = doc.internal.pageSize.getWidth();
           var height = ratio * width;
           
-          doc.addImage(imgData, 'PNG', 10, 30, width, height, '', 'FAST');
+          doc.addImage(imgData, 'PNG', 10, 30, width, height, '', 'NORMAL');
           doc.output('dataurlnewwindow');
         });
     },
