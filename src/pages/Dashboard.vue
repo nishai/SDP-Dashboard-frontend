@@ -7,7 +7,7 @@
         <DashboardChart style="width: 400px;" class="m-2" v-for="(chart, id) in dashboardCharts" v-bind:key="id" v-bind:dashboardChartId="id" v-bind:chart="chart"  ></DashboardChart>
         <div style="width: 400px;" class="d-flex justify-content-center">
           <!-- <router-link :to="{path: '/'}"> -->
-          <b-button class="my-4 mx-2" style="height: 48px;" variant="outline-success" size="lg" @click="create"> New Chart </b-button>
+          <b-button class="my-4 mx-2" data-html2canvas-ignore="true" style="height: 48px;" variant="outline-success" size="lg" @click="create"> New Chart </b-button>
           <!-- </router-link> -->
         </div>
       </div>
@@ -67,33 +67,22 @@ export default {
       this.$router.push({ path: '/' });
     },
     doPDF() {
-      // var ratio = this.$refs.reportPage.clientHeight / this.$refs.reportPage.clientWidth;
-      var doc = new jsPDF();
-      // var width = doc.internal.pageSize.getWidth(); 
-      // var height = doc.internal.pageSize.getHeight(); 
-      // height = ratio * width;
+      var doc = new jsPDF('p', 'pt', 'a4');
+      doc.text(20, 20, "Report");
 
-      var currentComponents = document.getElementById('dashDiv').children;
-      var numCharts = currentComponents.length - 1;  //ignores New Chart button
-      var num_done = 0;
-
-      for (var i=0; i < numCharts; i++){
-        let currdiv = currentComponents[i];
-        console.log(currdiv);
-        html2canvas(currdiv, {allowTaint: true})
-          .then(canvas => {  
-            var imgData = canvas.toDataURL('image/png');   
-            
-            var ratio = currdiv.clientHeight / currdiv.clientWidth;
-            var width = 85;
-            var height = ratio * width;
-      
-            doc.addImage(imgData, 'PNG', 0, 0, 50, 100, '', 'FAST');
-            num_done++;
-
-            if (num_done == numCharts)  {doc.output('dataurlnewwindow');};
-          });
-      }
+      let currdiv = this.$refs.dashdiv;
+      console.log(currdiv);
+      html2canvas(currdiv, {allowTaint: true})
+        .then(canvas => {  
+          var imgData = canvas.toDataURL('image/png');   
+          
+          var ratio = canvas.height / canvas.width;
+          var width = doc.internal.pageSize.getWidth();
+          var height = ratio * width;
+          
+          doc.addImage(imgData, 'PNG', 10, 30, width, height, '', 'FAST');
+          doc.output('dataurlnewwindow');
+        });
     },
   }
 };
