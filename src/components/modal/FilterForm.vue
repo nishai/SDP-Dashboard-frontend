@@ -106,6 +106,7 @@
 
 <script>
 import apiQuery from '../../api/api_query';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'FilterForm',
@@ -244,6 +245,9 @@ export default {
    * Updated whenever their dependencies are changed.
    */
   computed: {
+    ...mapGetters([
+			'numCharts',
+		]),						
     derivedYears() {
       return this.years ? this.years : ['loading data from database...'];
     },
@@ -345,11 +349,11 @@ export default {
         type: 'createDashboardChart',
         charts: chartArr,
         layout: {
-          x: Object.keys(this.$store.state.dashboardCharts.dashboardCharts).length * 3.6,
+          x: 0,
           y: 0,
-          w: 3.5,
-          h: 27,
-          i: Object.keys(this.$store.state.dashboardCharts.dashboardCharts).length + 1
+          w: 27,
+          h: 1,
+          i: this.numCharts + 1
         },
       });
 

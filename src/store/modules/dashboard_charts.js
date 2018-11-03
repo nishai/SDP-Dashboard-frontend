@@ -65,8 +65,8 @@ var stateData = {
 /* ========================================================================== */
 
 const getters = {
-  getChart: (state, id) => { return state.dashboardCharts[id] },
-  numCharts: (state) => { return state.dashboardCharts.length },
+  getChart: (state) => (id) => { return state.dashboardCharts[id] },
+  numCharts: (state) => { return Object.keys(state.dashboardCharts).length },
   getCharts: (state) => { return state.dashboardCharts },
 };
 
@@ -103,10 +103,25 @@ const mutations = {
     for(var chartId in state.dashboardCharts){
       for(let j = 0; j < newLayout.length; j += 1){
         if(state.dashboardCharts[chartId].layout.i === newLayout[j].i){
-          state.dashboardCharts[chartId].layout.x = newLayout[j].x;
-          state.dashboardCharts[chartId].layout.y = newLayout[j].y;
-          state.dashboardCharts[chartId].layout.w = newLayout[j].w;
-          state.dashboardCharts[chartId].layout.h = newLayout[j].h;
+					if (newLayout[j].x === -1){
+						newLayout[j].x = state.dashboardCharts[chartId].layout.x;
+					}
+					if (newLayout[j].y === -1){
+						newLayout[j].y = state.dashboardCharts[chartId].layout.y;
+					}
+					if (newLayout[j].w === -1){
+						newLayout[j].w = state.dashboardCharts[chartId].layout.w;
+					}
+					if (newLayout[j].h === -1){
+						newLayout[j].h = state.dashboardCharts[chartId].layout.h;
+					}
+          state.dashboardCharts[chartId].layout = {
+						x: newLayout[j].x,
+            y: newLayout[j].y,
+            w: newLayout[j].w,
+            h: newLayout[j].h,
+            i: newLayout[j].i,
+				  }
         }
       }
     }

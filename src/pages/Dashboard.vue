@@ -10,31 +10,30 @@
     </div>
     <grid-layout
       :layout="layouts"
-      :col-num="10"
-      :row-height="150"
+      :col-num="100"
+      :row-height="25"
       :is-draggable="true"
       :is-resizable="true"
       :is-mirrored="false"
-      :vertical-compact="true"
-      :margin="[5, 5]"
-      :use-css-transforms="true"
-      @layout-updated="layoutUpdatedEvent">
+      :margin="[1, 1]"
+      :use-css-transforms="true">
 
       <grid-item
         v-for="(chart,id) in getCharts"
         :key="id"
-        :autoSize="true"
         :x="chart.layout.x"
         :y="chart.layout.y"
         :w="chart.layout.w"
         :h="chart.layout.h"
-        :max-w="7"
-        :max-h="40"
-        :min-w="1"
-        :min-h="10"
+        :max-w="70"
+        :max-h="1"
+        :min-w="10"
+        :min-h="1"
+				@resize="resizeEvent"
+				@move="moveEvent"
         :i="chart.layout.i">
         <DashboardChart
-          style="width: 400px;"
+				  style="width: 100%;position:relative;"
           class="m-2"
           v-bind:key="id"
           v-bind:dashboardChartId="id"
@@ -73,7 +72,6 @@ export default {
   computed: {
     ...mapGetters([
       'getCharts',
-      'numCharts',
     ]),
     layouts() {
       let layouts = [];
@@ -95,9 +93,34 @@ export default {
     create(){
       this.$router.push({ path: '/' });
     },
-    layoutUpdatedEvent(newLayout){
-      this.$store.dispatch('updateChartLayout', {newLayout: newLayout});
-    },
+		resizeEvent(i, newH, newW, newHPx, newWPx){
+			this.$store.dispatch(
+			  'updateChartLayout',
+				{
+				  newLayout: [{
+						x: -1,
+						y: -1,
+						w: newW,
+						h: newH,
+						i: i,
+					}],
+				}
+		  );
+		},
+		moveEvent(i, newX, newY){
+			this.$store.dispatch(
+			  'updateChartLayout',
+				{
+				  newLayout: [{
+						x: newX,
+						y: newY,
+						w: -1,
+						h: -1,
+						i: i,
+					}],
+				}
+		  );
+	  },
   }
 };
 </script>

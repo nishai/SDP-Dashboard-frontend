@@ -22,14 +22,14 @@
 
     <b-card no-body>
       <!-- Heading -->
-      <div slot="header" class="d-flex justify-content-between">
+      <div slot="header" class="m-0">
         <b-form-input
           class="hidden-input"
           :value="dashboardChart.name"
           v-on:change="renameChart($event)"
           type="text"
           placeholder="Click To Edit">
-      </b-form-input>
+        </b-form-input>
         <small class="d-flex justify-content-between">
           <b-btn size="sm" class="m-1" variant="outline-primary" @click="toggleEditor">Edit</b-btn>
           <!--<b-btn size="sm" variant="outline-primary" @click="toggleEditor">Opts</b-btn>-->
@@ -43,7 +43,7 @@
       <b-card-body style="padding: 5px;">
         <Chart :chartData="dashboardChart.charts"></Chart>
       </b-card-body>
-      <b-btn @ size="sm" class="m-1" variant="outline-primary" @click="openPopup()">Compare</b-btn>
+      <b-btn size="sm" class="m-1" variant="outline-primary" @click="openPopup()">Compare</b-btn>
       <!-- Info -->
       <b-card-footer> {{ details }} </b-card-footer>
     </b-card>
@@ -54,6 +54,7 @@
 import Chart from '../charts/chartjs/Chart.vue';
 import FeatherIcon from '../misc/FeatherIcon.vue';
 import FilterForm from '../modal/FilterForm.vue';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'DashboardChart',
@@ -80,8 +81,11 @@ export default {
 
   }),
   computed: {
+    ...mapGetters([
+      'getChart',
+		]),
     dashboardChart() {
-      return this.$store.state.dashboardCharts.dashboardCharts[this.$props.dashboardChartId];
+      return this.getChart(this.$props.dashboardChartId);
     },
     details() {
       return 'TODO: details';
