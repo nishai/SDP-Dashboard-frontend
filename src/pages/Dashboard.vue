@@ -35,6 +35,7 @@
       :is-draggable="true"
       :is-resizable="true"
       :is-mirrored="false"
+			:responsive="true"
       :margin="[1, 1]"
       :use-css-transforms="true">
 
@@ -45,7 +46,7 @@
         :y="chart.layout.y"
         :w="chart.layout.w"
         :h="chart.layout.h"
-        :max-w="70"
+        :max-w="100"
         :max-h="1"
         :min-w="10"
         :min-h="1"

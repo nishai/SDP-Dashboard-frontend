@@ -104,16 +104,49 @@ export default {
         }*/
         let datasets = [];
         let labels = [];
+
+				//https://stackoverflow.com/questions/51560507/javascript-sort-an-array-of-string-numbers
+				const transform = k => {
+			    if (k === 'K') return 0;
+ 		  	  else if (k === 'N') return 13;
+          else return +k;
+        }
+
+
         for (let i = 0; i < this.$props.chartData.length; i += 1) {
-            labels = [...new Set([...labels, ...this.chartResultsLabels[i]])];
-            datasets.push({
-              // label: this.chartResultsLabels[i],
-              backgroundColor: palette('tol-rainbow', labels.length).map((color) => `#${color}`), // http://google.github.io/palette.js/
-              data: this.chartResultsData[i],
-              borderWidth: 2,
-              type: this.$props.chartData[i].chartType,
-              fill: false,
-            });
+					let data = [];
+					if(this.$props.chartData[i].chartType === "line"){
+  					data.push({
+	  					labels: this.chartResultsLabels[i]
+		  			})
+			  		for (var j = 0; j < this.chartResultsData[i].length; j += 1){
+				  		data.push({
+  							x: this.chartResultsLabels[i][j],
+	  						y: this.chartResultsData[i][j],
+		  				})
+			  		}
+					} else {
+						data = this.chartResultsData[i];
+					}
+          labels = [...new Set([...labels, ...this.chartResultsLabels[i]])];
+					labels = labels.sort((a, b) => transform(a) - transform(b));
+	  			let colors;
+					if(this.$props.chartData[i].chartType === "line"){
+						colors = palette(
+							'tol-rainbow',
+							this.$props.chartData.length
+						).map((color) => `#${color}`)[i];
+					} else {
+						colors = palette('tol-rainbow', labels.length).map((color) => `#${color}`);
+					}
+          datasets.push({
+            backgroundColor: colors, // http://google.github.io/palette.js/
+            data: data,
+            borderWidth: 2,
+            type: this.$props.chartData[i].chartType,
+            fill: true,
+		  			label: this.$props.chartData[i].courses,
+          });
         }
         this.$refs.chart.renderChart(
           {
