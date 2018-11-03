@@ -114,12 +114,11 @@
             <vue-tags-input
               v-model="form.school[i-1]"
               :tags="schoolTags"
-              :autocomplete-items=derivedSchools
+              :autocomplete-items="derivedSchools[i-1]"
               :add-only-from-autocomplete="true"    
-              @tags-changed="newTags => schoolTags = newTags">
+              @tags-changed="loadCourses($event, i-1)">
             </vue-tags-input>
             </div>
-
 
 
 
@@ -149,7 +148,7 @@
             <vue-tags-input
               v-model="form.course[i-1]"
               :tags="courseTags"
-              :autocomplete-items=derivedCourses
+              :autocomplete-items="derivedCourses[i-1]"
               @tags-changed="newTags => courseTags = newTags">
             </vue-tags-input>
             </div>
@@ -264,12 +263,16 @@ export default {
       return this.years ? this.years : ['loading data from database...'];
     },
     derivedFaculties() {
+      console.log("FUcking Faculties") 
+      console.log(this.faculties) 
       return this.faculties ? this.faculties : ['loading data from database...'];
     },
     derivedSchools() {
+      console.log(this.schools)
       return this.schools ? this.schools : ['loading data from database...'];
     },
     derivedCourses() {
+      console.log("rrrrrrrrrrrrrrrr FUcking courses") 
       return this.courses ? this.courses : ['loading data from database...'];
     },
 
@@ -314,34 +317,30 @@ export default {
      * filters schools in database that are in this.faculty and puts it in this.schools
      * @param index
      */
-    loadSchools(e,index) {
+    loadSchools(facultyTaglits,index) {
       // gets called when form.faculty changes, so it gets called unnecessarily with created()
-      console.log("aaa")
-      console.log(e[0].text)
-            console.log("rrr")
 
-            console.log(index) 
+      console.log("Tests")
+      console.log(facultyTaglits[0].text)
+      console.log(index) 
 
       if (this.form.faculty[index].length !== 0) {
-        console.log('FUUK')
         console.log(this.form.faculty)
-
+        
         // the query will get schools for the following faculties:
         var faculties =[];
-        for(var f =0;f<e.length;f++){
-          faculties.push(e[f].text);
+        for(var f =0;f<facultyTaglits.length;f++){
+          faculties.push(facultyTaglits[f].text);
         }
         
-        this.form.faculty[index]=faculties;
-        console.log('FUUK WITS')
-        console.log(faculties)
-
-
-        apiQuery.getFacultySchools(this.form.faculty[index])
+        
+        
+        apiQuery.getFacultySchools(faculties)
           .then((response) => response.data)
           .then((data) => {
             this.schools[index] = Object.values(data.results);
             console.log(data.results)
+
             this.$forceUpdate();
           });
       }
@@ -351,12 +350,35 @@ export default {
      * filters courses in database that are in this.schools and puts it in this.courses
      * @param index
      */
-    loadCourses(index) {
+    loadCourses(schoolTaglits,index) {
+      console.log("Courses Tests")
+      console.log(schoolTaglits[0].text)
+      console.log("school list length")
+
+      console.log(this.form.school[index].length)
+      console.log("zzzzzzzzzzzzz")
+
+      console.log(this.form.school)
+
       if (this.form.school[index].length !== 0) {
+            console.log("aaaaaaaaaaaaaaaaaaaa fucking courses")
+
+        // the query will get courses for the following schools:
+        var schoolz =[];
+        for(var f =0;f<schoolTaglits.length;f++){
+          schoolz.push(schoolTaglits[f].text);
+        }
+
+        this.form.school[index]=schoolz;
         apiQuery.getSchoolsCourses(this.form.school[index])
           .then((response) => response.data)
           .then((data) => {
             this.courses[index] = Object.values(data.results);
+            
+            console.log("aaaaaaaaaaaaaaaaaaaa fucking courses")
+
+            console.log(data.results);
+
             this.$forceUpdate();
           });
       }
