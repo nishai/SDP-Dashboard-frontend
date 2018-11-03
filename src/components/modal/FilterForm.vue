@@ -45,12 +45,13 @@
               :tags="yearTags"
               :autocomplete-items=derivedYears
               :add-only-from-autocomplete="true"  
-              @tags-changed="update">
+              @tags-changed="newTags => yearTags = newTags">
               
             </vue-tags-input>
           </div>
 <!-- @tags-changed="newTags => yearTags = newTags"> -->
 
+              <!-- @tags-changed="update"> -->
 
         </b-form-group>
         <!-- FACULTIES -->
@@ -59,7 +60,7 @@
           id="FacultyGroup"
           label="Faculty:"
           label-for="Faculty"
-          description="You can choose multiple faculties using Ctrl or Shift key"
+          description="You can choose multiple faculties"
           horizontal>
  <!--          <b-form-select
             multiple
@@ -76,14 +77,16 @@
               v-model="tag2"
               :tags="tags2"
               :autocomplete-items=derivedFaculties
-              @tags-changed="newTags => tags2 = newTags">
+              @tags-changed="loadSchools($event, i-1)" >
             </vue-tags-input>
-          </div>
+            </div>
 
 
         </b-form-group>
 
+<!-- "newTags => tags2 = newTags"> -->
 
+              <!-- @input="loadSchools(i-1)" -->
 
 
 
@@ -95,7 +98,7 @@
           id="SchoolGroup"
           label="School:"
           label-for="School"
-          description="You can choose multiple schools using Ctrl or Shift key"
+          description="You can choose multiple schools"
           horizontal>
      <!--      <b-form-select
             multiple
@@ -112,6 +115,7 @@
               v-model="form.school[i-1]"
               :tags="schoolTags"
               :autocomplete-items=derivedSchools
+              :add-only-from-autocomplete="true"    
               @tags-changed="newTags => schoolTags = newTags">
             </vue-tags-input>
             </div>
@@ -129,7 +133,7 @@
           id="CourseGroup"
           label="Course:"
           label-for="Course"
-          description="You can choose multiple courses using Ctrl or Shift key"
+          description="You can choose multiple courses"
           horizontal>
      <!--      <b-form-select
             multiple
@@ -310,16 +314,37 @@ export default {
      * filters schools in database that are in this.faculty and puts it in this.schools
      * @param index
      */
-    loadSchools(index) {
+    loadSchools(e,index) {
       // gets called when form.faculty changes, so it gets called unnecessarily with created()
-      // if (this.form.faculty[index].length !== 0) {
+      console.log("aaa")
+      console.log(e[0].text)
+            console.log("rrr")
+
+            console.log(index) 
+
+      if (this.form.faculty[index].length !== 0) {
+        console.log('FUUK')
+        console.log(this.form.faculty)
+
+        // the query will get schools for the following faculties:
+        var faculties =[];
+        for(var f =0;f<e.length;f++){
+          faculties.push(e[f].text);
+        }
+        
+        this.form.faculty[index]=faculties;
+        console.log('FUUK WITS')
+        console.log(faculties)
+
+
         apiQuery.getFacultySchools(this.form.faculty[index])
           .then((response) => response.data)
           .then((data) => {
             this.schools[index] = Object.values(data.results);
+            console.log(data.results)
             this.$forceUpdate();
           });
-      // }
+      }
     },
 
     /**
@@ -327,14 +352,14 @@ export default {
      * @param index
      */
     loadCourses(index) {
-      // if (this.form.school[index].length !== 0) {
+      if (this.form.school[index].length !== 0) {
         apiQuery.getSchoolsCourses(this.form.school[index])
           .then((response) => response.data)
           .then((data) => {
             this.courses[index] = Object.values(data.results);
             this.$forceUpdate();
           });
-      // }
+      }
     },
 
     /**
