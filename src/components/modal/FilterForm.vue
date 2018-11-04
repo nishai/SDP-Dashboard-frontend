@@ -338,7 +338,7 @@ export default {
     loadSchools(facultyTaglits,index) {
       // gets called when form.faculty changes, so it gets called unnecessarily with created()
 
-      console.log("Tests")
+      console.log("mmmmmmmmm Tests")
       console.log(facultyTaglits[0].text)
       console.log(index) 
 
@@ -349,6 +349,7 @@ export default {
         var faculties =[];
         for(var f =0;f<facultyTaglits.length;f++){
           faculties.push(facultyTaglits[f].text);
+          this.facultyTags.push(facultyTaglits[f]);//update the taglist
         }
         
         
@@ -385,6 +386,7 @@ export default {
         var schoolz =[];
         for(var f =0;f<schoolTaglits.length;f++){
           schoolz.push(schoolTaglits[f].text);
+          this.schoolTags.push(schoolTaglits[f]);//update the taglist
         }
 
         this.form.school[index]=schoolz;
@@ -414,7 +416,7 @@ export default {
 
       var array_values = new Array();
 
-      for (var text in yearTags) {
+      for (var text in this.yearTags) {
           array_values.push(yearsTags[key]);
       }
       console.log(array_values)
