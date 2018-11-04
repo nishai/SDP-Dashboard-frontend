@@ -43,7 +43,7 @@
             <vue-tags-input
               v-model="form.year[i-1]"
               :tags="yearTags"
-              :autocomplete-items=filteredItems1
+              :autocomplete-items=derivedYears
               :add-only-from-autocomplete="true"  
               @tags-changed="newTags => yearTags = newTags">
               
@@ -78,14 +78,15 @@
               :tags="facultyTags"
               :autocomplete-items=derivedFaculties
               :add-only-from-autocomplete="true"  
-              @tags-changed="newTags => facultyTags = newTags">
+              @tags-changed="loadSchools($event, i-1)">
             </vue-tags-input>
             </div>
 
 <!-- "loadSchools($event, i-1)" -->
         </b-form-group>
 
-<!-- "newTags => tags2 = newTags"> -->
+<!-- "newTags => facultyTags = newTags" -->
+
 
               <!-- @input="loadSchools(i-1)" -->
 
@@ -258,8 +259,8 @@ export default {
     // Load years and faculties for basic form
     this.loadYears();
     this.loadFaculties();
-    // this.loadSchools();
-    // this.loadCourses();
+    this.loadSchools();
+    this.loadCourses();
   },
 
   /**
@@ -268,7 +269,6 @@ export default {
   computed: {
     derivedYears() {
       return this.years ? this.years : ['loading data from database...'];
-       // return filteredItems1();
     },
     derivedFaculties() {
       console.log("FUcking Faculties") 
@@ -286,9 +286,9 @@ export default {
 
 
     // filtertags
-    filteredItems1() {
-      return this.derivedYears.filter((i) => new RegExp(this.yeartag, 'i').test(i.text));
-    },
+    // filteredItems1() {
+    //   return this.derivedYears.filter((i) => new RegExp(this.yeartag, 'i').test(i.text));
+    // },
     //    filteredItems2() {
     //   return this.autocompleteItems2.filter((i) => new RegExp(this.tag2, 'i').test(i.text));
     // },
@@ -351,16 +351,16 @@ export default {
      * filters schools in database that are in this.faculty and puts it in this.schools
      * @param index
      */
-    loadSchools(newTags,index) {
+    loadSchools(e,index) {
       // gets called when form.faculty changes, so it gets called unnecessarily with created()
 
       console.log("loadSchools Tests")
       console.log("ltest1")
-      console.log(newTags[0].text)
+      console.log(e[0].text)
       console.log("test2")
       console.log(index) 
       console.log("test3")
-      console.log(newTags) 
+      console.log(e) 
 
       if (this.form.faculty[index].length !== 0) {
         console.log("test4")
@@ -368,14 +368,14 @@ export default {
         
         // the query will get schools for the following faculties:
         var faculties =[];
-        for(var f =0;f<newTags.length;f++){
-          faculties.push(newTags[f].text);
+        for(var f =0;f<e.length;f++){
+          faculties.push(e[f].text);
         }
         console.log("test5")
         console.log(faculties)
 
 
-        this.facultyTags=newTags;
+        this.facultyTags=e;
         console.log("test6")
 
         console.log(facultyTags)
@@ -461,7 +461,7 @@ export default {
 // years
       let submitYears=[];
       for (var key in this.yearTags){
-        console.log( key, this.yearTags[key].text ); //Yay it works!!
+        console.log( key, this.yearTags[key].text ) //Yay it works!!
         submitYears.push(this.yearTags[key].text)
         }
       console.log(submitYears)//Yay it works!!
@@ -469,14 +469,17 @@ export default {
 
 // faculties
       let submitFaculties=[];
-      console.log("test 7")
-      console.info(this.facultyTags)
-      for (var i =0;i < this.facultyTags.length;i++){
-        console.log("test8")
+     
+
+
+      for (var key in this.facultyTags){
+        console.log("test7")
         console.log(this.facultyTags ); 
-        // submitFaculties.push(this.facultyTags[i])
+        console.log("test8")
+        console.log( key, this.facultyTags[key].text )
+        submitFaculties.push(this.facultyTags[key].text)
       }
-      // console.log(submitFaculties)
+      console.log(submitFaculties)
       // this.form.faculty[0] = submitFaculties;
 
 
