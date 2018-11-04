@@ -414,12 +414,15 @@ export default {
       console.log(this.schoolTags)
       console.log(this.courseTags)
 
-      var array_values = new Array();
+      var submitYears = new Array();
 
-      for (var text in this.yearTags) {
-          array_values.push(this.yearsTags[text]);
+      for (var key in this.yearTags) {
+        console.log("yearTags[key].text")
+        console.log( key, this.yearTags[key].text ); //Yay it works!!
+        submitYears.push(this.yearTags[key].text)
       }
-      console.log(array_values)
+      console.log("submitYears:")
+      console.log(submitYears)
 
 
       const name = apiQuery.nameToColumn[this.$props.groupByDesc];
