@@ -417,7 +417,7 @@ export default {
       var array_values = new Array();
 
       for (var text in this.yearTags) {
-          array_values.push(yearsTags[key]);
+          array_values.push(this.yearsTags[text]);
       }
       console.log(array_values)
 
