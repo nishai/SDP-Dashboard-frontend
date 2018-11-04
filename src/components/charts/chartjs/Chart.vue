@@ -187,7 +187,8 @@ export default {
 						data = this.chartResultsData[i];
 					}
 	  			let colors;
-					if(this.$props.chartData[i].chartType === "line"){
+					if(this.$props.chartData[i].chartType === "line" ||
+						this.$props.chartData[i].chartType === "bar"){
 						colors = palette(
 							'tol-rainbow',
 							this.$props.chartData.length
