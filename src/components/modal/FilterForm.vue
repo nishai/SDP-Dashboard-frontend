@@ -419,10 +419,25 @@ export default {
       for (var key in this.yearTags) {
         console.log("yearTags[key].text")
         console.log( key, this.yearTags[key].text ); //Yay it works!!
-        submitYears.push(this.yearTags[key].text)
+        submitYears.push(this.yearTags[key].text);
       }
       console.log("submitYears:")
       console.log(submitYears)
+      this.form.year[0]=submitYears
+
+
+      var submitFacs = new Array();
+      for (var key in this.facultyTags) {
+        console.log("facTags[key].text")
+        console.log( key, this.facultyTags[key].text ); //Yay it works!!
+        submitFacs.push(this.facultyTags[key].text);
+      }
+      console.log("submitFacs:")
+      console.log(submitFacs)
+      this.form.faculty[0]=submitFacs;
+
+
+
 
 
       const name = apiQuery.nameToColumn[this.$props.groupByDesc];
