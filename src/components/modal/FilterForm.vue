@@ -436,7 +436,15 @@ export default {
       console.log(submitFacs)
       this.form.faculty[0]=submitFacs;
 
-
+      var submitSchools = new Array();
+      for (var key in this.schoolTags) {
+        console.log("schoolTags[key].text")
+        console.log( key, this.schoolTags[key].text ); //Yay it works!!
+        submitSchools.push(this.schoolTags[key].text);
+      }
+      console.log("submitSchools:")
+      console.log(submitSchools)
+      this.form.school[0]=submitSchools;
 
 
 
