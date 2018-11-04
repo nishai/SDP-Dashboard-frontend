@@ -78,11 +78,11 @@
               :tags="facultyTags"
               :autocomplete-items=derivedFaculties
               :add-only-from-autocomplete="true"  
-              @tags-changed="loadSchools($event, i-1)" >
+              @tags-changed="newTags => facultyTags = newTags">
             </vue-tags-input>
             </div>
 
-
+<!-- "loadSchools($event, i-1)" -->
         </b-form-group>
 
 <!-- "newTags => tags2 = newTags"> -->
@@ -313,7 +313,7 @@ export default {
           console.log("YearQuery Returns:")
           console.log(this.years)
           
-          // convert to dictionary for the
+          // convert to dictionary for the tags
           let list = this.years
           list = list.map(x => {
           return({text: x});
@@ -332,7 +332,19 @@ export default {
         .then((response) => response.data)
         .then((data) => {
           this.faculties = Object.values(data.results);
+
+
+          // convert to dictionary for the tags
+          let list = this.faculties
+          list = list.map(x => {
+          return({text: x});
+          });
+            console.log(list);
+
+   
+
         });
+
     },
 
     /**
