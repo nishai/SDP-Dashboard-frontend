@@ -75,8 +75,9 @@
             <div>
             <vue-tags-input
               v-model="tag2"
-              :tags="tags2"
+              :tags="facultyTags"
               :autocomplete-items=derivedFaculties
+              :add-only-from-autocomplete="true"  
               @tags-changed="loadSchools($event, i-1)" >
             </vue-tags-input>
             </div>
@@ -253,6 +254,8 @@ export default {
     // Load years and faculties for basic form
     this.loadYears();
     this.loadFaculties();
+    // this.loadSchools();
+    // this.loadCourses();
   },
 
   /**
@@ -261,6 +264,7 @@ export default {
   computed: {
     derivedYears() {
       return this.years ? this.years : ['loading data from database...'];
+       
     },
     derivedFaculties() {
       console.log("FUcking Faculties") 
@@ -286,6 +290,9 @@ export default {
     },
   
 
+ // filteredItems3() {
+ //      return this.autocompleteItems3.filter((i) => new RegExp(this.yearTags, 'i').test(i.text));
+ //    },
 
   },
 
@@ -299,7 +306,18 @@ export default {
         .then((response) => response.data)
         .then((data) => {
           this.years = Object.values(data.results);
+          console.log("YearQuery Returns:")
+          console.log(this.years)
+          
+          // convert to dictionary for the
+          let list = this.years
+          list = list.map(x => {
+          return({text: x});
+          });
+            console.log(list);
+
         });
+
     },
 
     /**
@@ -360,7 +378,7 @@ export default {
 
       console.log(this.form.school)
 
-      if (this.form.school[index].length !== 0) {
+      if (this.form.school[index].length == 0) {
             console.log("aaaaaaaaaaaaaaaaaaaa fucking courses")
 
         // the query will get courses for the following schools:
@@ -388,6 +406,20 @@ export default {
      * analyse data and make chart when submitting form
      */
     onSubmit(event) {
+      console.log("ssssssssss SUBMITTED TESTS")
+      console.log(this.yearTags)
+      console.log(this.facultyTags)
+      console.log(this.schoolTags)
+      console.log(this.courseTags)
+
+      var array_values = new Array();
+
+      for (var text in yearTags) {
+          array_values.push(yearsTags[key]);
+      }
+      console.log(array_values)
+
+
       const name = apiQuery.nameToColumn[this.$props.groupByDesc];
       if (this.form.year.length > 1) {
         console.log('Only 1 form is supported at the moment, this will be fixed in future');

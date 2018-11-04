@@ -1,84 +1,5 @@
-<!-- <template> -->
-<!--   <div>
-    <multiselect
-      v-model="selected"
-      :options="options">
-    </multiselect>
-  </div> -->
+<template> 
 
- <!--  <div>
-  <label class="typo__label">Groups</label>
-  <multiselect v-model="Fuckoptions" :options="Fuckoptions" :multiple="true" group-values="libs" group-label="language" :group-select="true" placeholder="Type to search" track-by="name" label="name"><span slot="noResult">Oops! No elements found. Consider changing the search query.</span></multiselect>
-  <pre class="language-json"><code>{{ value }}</code></pre>
-</div>
-
-
-</template> -->
-<!--
-<script>
- import Multiselect from 'vue-multiselect'
-
-export default {
-  components: {
-    Multiselect
-  },
-  data () {
-    return {
-      value: [
-        { name: 'Javascript', code: 'js' }
-      ],
-      Fuckoptions: [
-        { name: 'Vue.js', code: 'vu' },
-        { name: 'Javascript', code: 'js' },
-        { name: 'Open Source', code: 'os' }
-      ],
-    }
-  },
-  methods: {
-    addTag (newTag) {
-      const tag = {
-        name: newTag,
-        code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
-      }
-      this.options.push(tag)
-      this.value.push(tag)
-    }
-  }
-}
-</script>
-
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style> -->
-
-
-<!-- <template>
-  <div>
-    <vue-tags-input
-      v-model="tag"
-      :tags="tags"
-      @tags-changed="newTags => tags = newTags"
-    />
-  </div>
-</template>
-
-<script>
-import VueTagsInput from '@johmun/vue-tags-input';
-
-export default {
-  components: {
-    VueTagsInput,
-  },
-  data() {
-    return {
-      tag: '',
-      tags: [],
-    };
-  },
-};
-</script>
-         -->
-
-
-<template>
 <div>
   <div>
     <vue-tags-input
@@ -100,6 +21,41 @@ export default {
 
 
   </div>
+
+   <vue-tags-input
+      v-model="tag3"
+      :tags="tags3"
+      :autocomplete-items="filteredItems3"
+      :add-only-from-autocomplete="true"    
+      @tags-changed="newTags => tags3 = newTags">
+    </vue-tags-input>
+
+
+  </div>
+
+<!-- axios example -->
+ <!--  <div>
+    <vue-tags-input
+      v-model="tag"
+      :tags="tags"
+      :autocomplete-items="autocompleteItems"
+      :add-only-from-autocomplete="true"
+      @tags-changed="update">
+    </vue-tags-input>
+  </div>
+
+    <div>
+    <vue-tags-input
+      v-model="tag2"
+      :tags="tags2"
+      :autocomplete-items="autocompleteItems"
+      :add-only-from-autocomplete="true"
+      @tags-changed="update">
+    </vue-tags-input>
+  </div> -->
+
+        
+
 </div>
 </template>
 
@@ -116,6 +72,8 @@ export default {
       tags: [],
       tag2: '',
       tags2: [],
+      tag3: '',
+      tags3: [],
       autocompleteItems: [{
         text: 'Spain',
       }, {
@@ -139,7 +97,29 @@ export default {
       }, {
         text: '5555',
       }],
+
+      // autocompleteItems3:['1','2','3','hr','fml']
+      autocompleteItems3: [{
+        text: 'hello',
+      }, {
+        text: "Josh",
+      }, {
+        text: 'sucks',
+      }, {
+        text: '123',
+      }, {
+        text: '1',
+      },{
+        text: '2',
+      },{
+        text: '3',
+      }
+      ],
+
+
     };
+
+
   },
   computed: {
     filteredItems() {
@@ -148,6 +128,64 @@ export default {
     filteredItems2() {
       return this.autocompleteItems2.filter((i) => new RegExp(this.tag2, 'i').test(i.text));
     },
+    filteredItems3() {
+      return this.autocompleteItems3.filter((i) => new RegExp(this.tag3, 'i').test(i.text));
+    },
+  },
+};
+</script>
+
+
+
+
+<!-- axios example -->
+
+<!-- 
+<script>
+import VueTagsInput from '@johmun/vue-tags-input';
+import axios from 'axios';
+
+export default {
+  components: {
+    VueTagsInput,
+  },
+  data() {
+    return {
+      tag: '',
+      tags: [],
+      tag2: '',
+      tags2: [],
+      autocompleteItems: [],
+      autocompleteItems2: [],
+
+      debounce: null,
+    };
+  },
+  methods: {
+    update(newTags) {
+      this.autocompleteItems = [];
+      this.tags = newTags;
+
+      this.autocompleteItems2 = [];
+      this.tags2 = newTags;
+    },
+    initItems() {
+      if (this.tag.length === 0) return;
+      const url = `https://itunes.apple.com/search?term=
+        ${this.tag}&entity=allArtist&attribute=allArtistTerm&limit=6`;
+
+      clearTimeout(this.debounce);
+      this.debounce = setTimeout(() => {
+        axios.get(url).then(response => {
+          this.autocompleteItems = response.data.results.map(a => {
+            return { text: a.artistName };
+          });
+        }).catch(() => console.warn('Oh. Something went wrong'));
+      }, 600);
+    },
+  },
+  watch: {
+    'tag': 'initItems',
   },
 };
 </script>
