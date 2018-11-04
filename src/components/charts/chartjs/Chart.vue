@@ -87,7 +87,10 @@ export default {
 							let sum = 0;
 							let numDatapoints = 0;
 							for (let k = 0; k < results.length; k += 1) { 
-								sum += parseInt(results[k][keys[0]], 10) * parseInt(results[k][keys[1]],10);
+								//sum += parseInt(results[k][keys[0]], 10) * parseInt(results[k][keys[1]],10); // for average mark
+								if (parseInt(results[k][keys[0]], 10) > 50) {
+									sum += parseInt(results[k][keys[1]],10);
+								}
 								numDatapoints += parseInt(results[k][keys[1]], 10)
 							}
 							var avg = sum/numDatapoints;
