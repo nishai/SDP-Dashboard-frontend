@@ -52,7 +52,11 @@ export default {
         this.$props.chartData[i].courses,
         this.$props.chartData[i].duplicate
       );
-      this.getData(i);
+			if(this.$props.chartData[0].chartType === 'bar'){
+				this.getBarData(i);
+			} else {
+	      this.getData(i);
+			}
     }
     // this.renderChart();
   },
@@ -61,6 +65,41 @@ export default {
    * Methods accessible to component
    */
   methods: {
+
+		getBarData(index) {
+			this.chartResultsLabels.push([]);
+			this.chartResultsData.push([]);
+			for(let j = 0; j < this.$props.chartData[index].years.length; j += 1){
+				this.chartResultsLabels[index].push(null);
+				this.chartResultsData[index].push(null);
+				apiQuery.getCourseStats(
+					this.$props.chartData[index].groupBy,
+					this.$props.chartData[index].years[j],
+					this.$props.chartData[index].faculties,
+					this.$props.chartData[index].schools,
+					this.$props.chartData[index].courses,
+					this.$props.chartData[index].duplicate
+					).then((response) => {
+						const { results } = response.data;
+						console.log('RESPONSE DATA:', response.data);
+						if (response.data.results.length !== 0) {
+							const keys = Object.keys(results[0]);
+							let sum = 0;
+							let numDatapoints = 0;
+							for (let k = 0; k < results.length; k += 1) { 
+								sum += parseInt(results[k][keys[0]], 10) * parseInt(results[k][keys[1]],10);
+								numDatapoints += parseInt(results[k][keys[1]], 10)
+							}
+							var avg = sum/numDatapoints;
+
+							this.isData = true;
+							this.chartResultsLabels[index][j] = this.$props.chartData[index].years[j];
+							this.chartResultsData[index][j] = avg;
+            	this.renderChart();
+						}
+					});
+			}
+		},
 
     /**
      * Query for the data to render based on the current url parameters
@@ -98,7 +137,21 @@ export default {
      * Render the current loaded data to the chart component
      */
     renderChart() {
-      if(this.chartResultsData.length === this.chartData.length){
+			let barFlag = true;
+			for (let l = 0; l < this.chartResultsData.length; l += 1) {
+				if (this.chartResultsData[l].length !== this.chartData[l].years.length ||
+					this.chartResultsData[l].includes(null)){
+					barFlag = false;
+				}
+			}
+      if(
+				this.chartResultsData.length === this.chartData.length &&
+				(this.$props.chartData[0].chartType !== 'bar' ||
+				this.$props.chartData[0].chartType === 'bar' && 
+				barFlag)
+			){
+				console.log(this.chartResultsData)
+				console.log(this.chartResultsLabels)
         /*if (labels.length !== data.length) {
           throw new Error('Label length not equal to data length');
         }*/
@@ -114,6 +167,7 @@ export default {
 
 
         for (let i = 0; i < this.$props.chartData.length; i += 1) {
+          labels = [...new Set([...labels, ...this.chartResultsLabels[i]])];
 					let data = [];
 					if(this.$props.chartData[i].chartType === "line"){
   					data.push({
@@ -125,11 +179,10 @@ export default {
 	  						y: this.chartResultsData[i][j],
 		  				})
 			  		}
+						labels = labels.sort((a, b) => transform(a) - transform(b));
 					} else {
 						data = this.chartResultsData[i];
 					}
-          labels = [...new Set([...labels, ...this.chartResultsLabels[i]])];
-					labels = labels.sort((a, b) => transform(a) - transform(b));
 	  			let colors;
 					if(this.$props.chartData[i].chartType === "line"){
 						colors = palette(
@@ -157,6 +210,13 @@ export default {
           {
             responsive: true,
             maintainAspectRatio: false,
+						scales: {
+							yAxes: [{
+								ticks: {
+									beginAtZero: true,
+								}
+							}]
+						}
           },
         );
       }
