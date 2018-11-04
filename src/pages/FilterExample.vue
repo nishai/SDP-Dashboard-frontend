@@ -100,19 +100,19 @@ export default {
 
       // autocompleteItems3:['1','2','3','hr','fml']
       autocompleteItems3: [{
-        text: 'hello',
+        text: '2013',
       }, {
-        text: "Josh",
+        text: "2014",
       }, {
-        text: 'sucks',
+        text: '2015',
       }, {
-        text: '123',
+        text: '2016',
       }, {
-        text: '1',
+        text: '2017',
       },{
-        text: '2',
+        text: '2018',
       },{
-        text: '3',
+        text: '2019',
       }
       ],
 
