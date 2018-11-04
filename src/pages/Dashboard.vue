@@ -21,46 +21,74 @@
     </b-modal>
 
     <Heading heading_text="Dashboard"></Heading>
-    <div>
-       <!-- <router-link :to="{path: '/'}"> -->
-       <b-button class="my-4 mx-2" style="height: 48px;" variant="outline-success" size="lg" @click="create"> New Chart </b-button>
-       <!-- </router-link> -->
-      <b-button class="my-4 mx-2" style="height: 48px;" variant="outline-success" size="lg" v-on:click="add_table = true"> New Table </b-button>
-        <Table v-if="add_table"></Table>
+    <div class="d-flex flex-wrap">
+    	<b-button
+				class="my-4 mx-2"
+				style="height: 48px;"
+				variant="outline-success"
+				size="lg"
+				@click="doPDF">
+					Save report
+			</b-button>
+      <!-- <router-link :to="{path: '/'}"> -->
+      <b-button
+				class="my-4 mx-2"
+				data-html2canvas-ignore="true"
+				style="height: 48px;"
+				variant="outline-success"
+				size="lg"
+				@click="create">
+					 New Chart 
+				</b-button>
+      <!-- </router-link> -->
+      <b-button
+				class="my-4 mx-2"
+				style="height: 48px;"
+				variant="outline-success"
+				size="lg"
+				v-on:click="add_table = true">
+					 New Table
+			</b-button>
     </div>
-    <grid-layout
-      :layout="layouts"
-      :col-num="100"
-      :row-height="25"
-      :is-draggable="true"
-      :is-resizable="true"
-      :is-mirrored="false"
-			:responsive="true"
-      :margin="[1, 1]"
-      :use-css-transforms="true">
+    <div
+			id="dashDiv"
+			ref="dashdiv"
+			style="height: 100%; width: 100%; position:relative;">
+			<grid-layout
+				:layout="layouts"
+				:col-num="100"
+				:row-height="25"
+				:is-draggable="true"
+				:is-resizable="true"
+				:is-mirrored="false"
+				:responsive="true"
+				:margin="[1, 1]"
+				:use-css-transforms="true">
 
-      <grid-item
-        v-for="(chart,id) in getCharts"
-        :key="id"
-        :x="chart.layout.x"
-        :y="chart.layout.y"
-        :w="chart.layout.w"
-        :h="chart.layout.h"
-        :max-w="100"
-        :max-h="1"
-        :min-w="10"
-        :min-h="1"
-				@resize="resizeEvent"
-				@move="moveEvent"
-        :i="chart.layout.i">
-        <DashboardChart
-				  style="width: 100%;position:relative;"
-          class="m-2"
-          v-bind:key="id"
-          v-bind:dashboardChartId="id">
-        </DashboardChart>
-      </grid-item>
-    </grid-layout>
+				<grid-item
+					v-for="(chart,id) in getCharts"
+					:key="id"
+					:x="chart.layout.x"
+					:y="chart.layout.y"
+					:w="chart.layout.w"
+					:h="chart.layout.h"
+					:max-w="100"
+					:max-h="1"
+					:min-w="10"
+					:min-h="1"
+					@resize="resizeEvent"
+					@move="moveEvent"
+					:i="chart.layout.i">
+					<DashboardChart
+						style="width: 100%;position:relative;"
+						class="m-2"
+						v-bind:key="id"
+						v-bind:dashboardChartId="id">
+					</DashboardChart>
+ 		      <Table v-if="add_table"></Table>
+				</grid-item>
+			</grid-layout>
+		</div>
   </div>
 </template>
 
@@ -73,6 +101,8 @@ import FilterForm from '../components/modal/FilterForm.vue';
 import { GridLayout } from 'vue-grid-layout';
 import { GridItem } from 'vue-grid-layout';
 import { mapGetters } from 'vuex';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 export default {
   name: 'Dashboard',
@@ -167,6 +197,24 @@ export default {
 				}
 		  );
 	  },
+    doPDF() {
+      var doc = new jsPDF('p', 'pt', 'a4');
+      doc.text(20, 20, "Report");
+
+      let currdiv = this.$refs.dashdiv;
+      console.log(currdiv);
+      html2canvas(currdiv, {allowTaint: true})
+        .then(canvas => {  
+          var imgData = canvas.toDataURL('image/png');   
+          
+          var ratio = canvas.height / canvas.width;
+          var width = doc.internal.pageSize.getWidth();
+          var height = ratio * width;
+          
+          doc.addImage(imgData, 'PNG', 10, 30, width, height, '', 'NORMAL');
+          doc.output('dataurlnewwindow');
+        });
+    },
   }
 };
 </script>
