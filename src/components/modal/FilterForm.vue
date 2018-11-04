@@ -43,7 +43,7 @@
             <vue-tags-input
               v-model="form.year[i-1]"
               :tags="yearTags"
-              :autocomplete-items=derivedYears
+              :autocomplete-items=filteredItems1
               :add-only-from-autocomplete="true"  
               @tags-changed="newTags => yearTags = newTags">
               
@@ -74,7 +74,7 @@
 <!-- Filter Tags -->
             <div>
             <vue-tags-input
-              v-model="tag2"
+              v-model="form.faculty[i-1]"
               :tags="facultyTags"
               :autocomplete-items=derivedFaculties
               :add-only-from-autocomplete="true"  
@@ -202,7 +202,11 @@ export default {
     },
 
        // filter tags
-      tag: '',
+      yeartag: '',
+      faculytag: '',
+      schooltag: '',
+      coursetag: '',
+
       tags:[],
       yearTags: [],    
       facultyTags:[],
@@ -264,7 +268,7 @@ export default {
   computed: {
     derivedYears() {
       return this.years ? this.years : ['loading data from database...'];
-       
+       // return filteredItems1();
     },
     derivedFaculties() {
       console.log("FUcking Faculties") 
@@ -282,12 +286,12 @@ export default {
 
 
     // filtertags
-    filteredItems() {
-      return this.autocompleteItems.filter((i) => new RegExp(this.tag, 'i').test(i.text));
+    filteredItems1() {
+      return this.derivedYears.filter((i) => new RegExp(this.yeartag, 'i').test(i.text));
     },
-       filteredItems2() {
-      return this.autocompleteItems2.filter((i) => new RegExp(this.tag2, 'i').test(i.text));
-    },
+    //    filteredItems2() {
+    //   return this.autocompleteItems2.filter((i) => new RegExp(this.tag2, 'i').test(i.text));
+    // },
   
 
  // filteredItems3() {
@@ -335,23 +339,35 @@ export default {
      * filters schools in database that are in this.faculty and puts it in this.schools
      * @param index
      */
-    loadSchools(facultyTaglits,index) {
+    loadSchools(newTags,index) {
       // gets called when form.faculty changes, so it gets called unnecessarily with created()
 
-      console.log("Tests")
-      console.log(facultyTaglits[0].text)
+      console.log("loadSchools Tests")
+      console.log("ltest1")
+      console.log(newTags[0].text)
+      console.log("test2")
       console.log(index) 
+      console.log("test3")
+      console.log(newTags) 
 
       if (this.form.faculty[index].length !== 0) {
-        console.log(this.form.faculty)
+        console.log("test4")
+        console.log(this.form.faculty[index].length)
         
         // the query will get schools for the following faculties:
         var faculties =[];
-        for(var f =0;f<facultyTaglits.length;f++){
-          faculties.push(facultyTaglits[f].text);
+        for(var f =0;f<newTags.length;f++){
+          faculties.push(newTags[f].text);
         }
-        
-        
+        console.log("test5")
+        console.log(faculties)
+
+
+        this.facultyTags=newTags;
+        console.log("test6")
+
+        console.log(facultyTags)
+
         
         apiQuery.getFacultySchools(faculties)
           .then((response) => response.data)
@@ -368,9 +384,9 @@ export default {
      * filters courses in database that are in this.schools and puts it in this.courses
      * @param index
      */
-    loadCourses(schoolTaglits,index) {
+    loadCourses(schoolTags,index) {
       console.log("Courses Tests")
-      console.log(schoolTaglits[0].text)
+      console.log(schoolTags[0].text)
       console.log("school list length")
 
       console.log(this.form.school[index].length)
@@ -383,8 +399,8 @@ export default {
 
         // the query will get courses for the following schools:
         var schoolz =[];
-        for(var f =0;f<schoolTaglits.length;f++){
-          schoolz.push(schoolTaglits[f].text);
+        for(var f =0;f<schoolTags.length;f++){
+          schoolz.push(schoolTags[f].text);
         }
 
         this.form.school[index]=schoolz;
@@ -412,12 +428,65 @@ export default {
       console.log(this.schoolTags)
       console.log(this.courseTags)
 
-      var array_values = new Array();
+      console.log("Conversion test")
+//  Convert Nathan to Judaism
 
-      for (var text in yearTags) {
-          array_values.push(yearsTags[key]);
+//                               _.._
+//                              .'    '.
+//                             (____/`\ \
+//                            (  |' ' )  )
+//                            )  _\= _/  (
+//                  __..---.(`_.'  ` \    )
+//                 `;-""-._(_( .      `; (
+//                 /       `-`'--'     ; )
+//                /    /  .    ( .  ,| |(
+// _.-`'---...__,'    /-,..___.-'--'_| |_)
+// '-'``'-.._       ,'  |   / .........'
+//           ``;--"`;   |   `-`
+//              `'..__.'
+
+
+// years
+      let submitYears=[];
+      for (var key in this.yearTags){
+        console.log( key, this.yearTags[key].text ); //Yay it works!!
+        submitYears.push(this.yearTags[key].text)
+        }
+      console.log(submitYears)//Yay it works!!
+      this.form.year[0] = submitYears;
+
+// faculties
+      let submitFaculties=[];
+      console.log("test 7")
+      console.info(this.facultyTags)
+      for (var i =0;i < this.facultyTags.length;i++){
+        console.log("test8")
+        console.log(this.facultyTags ); 
+        // submitFaculties.push(this.facultyTags[i])
       }
-      console.log(array_values)
+      // console.log(submitFaculties)
+      // this.form.faculty[0] = submitFaculties;
+
+
+
+// 
+
+//                               _.._
+//                              .'    '.
+//                             (____/`\ \
+//                            (  |' ' )  )
+//                            )  _\= _/  (
+//                  __..---.(`_.'  ` \    )
+//                 `;-""-._(_( .      `; (
+//                 /       `-`'--'     ; )
+//                /    /  .    ( .  ,| |(
+// _.-`'---...__,'    /-,..___.-'--'_| |_)
+// '-'``'-.._       ,'  |   / .........'
+//           ``;--"`;   |   `-`
+//              `'..__.'
+
+
+
 
 
       const name = apiQuery.nameToColumn[this.$props.groupByDesc];
@@ -431,7 +500,9 @@ export default {
         query: {
           chartType: this.chartType,
           groupBy: name,
-          // TODO: Multiple sub-charts
+          // TODO: 
+          // this.form.year[i]= submitYears.... from Or's new stuff
+          
           years: this.form.year[0],
           faculties: this.form.faculty[0],
           schools: this.form.school[0],
