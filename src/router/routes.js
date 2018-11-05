@@ -6,7 +6,7 @@ import Reports from '../pages/ReportList.vue';
 import Report from '../pages/Report.vue';
 import Dashboard from '../pages/Dashboard.vue';
 import GridExample from '../pages/GridExample.vue';
-import Filters from '../pages/FilterExample.vue';
+// import Filters from '../pages/FilterExample.vue';
 
 /* Define the routes */
 
@@ -47,11 +47,11 @@ export const navRoutes = [
     path: '/grid',
     component: GridExample,
   },
-  {
-   name: 'FilterExample',
-    path: '/filter',
-    component: Filters,
-  },
+  // {
+  //  name: 'FilterExample',
+  //   path: '/filter',
+  //   component: Filters,
+  // },
 
 ];
 
