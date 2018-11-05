@@ -12,14 +12,68 @@
           label="Year:"
           label-for="Year"
           horizontal>
-						<!-- Filter Tags -->
-            <div>
+					<!-- Filter Tags -->
+          <div>
             <vue-tags-input
-              v-model="tagStrs.years[i]"
-              :tags="tagDicts.years[i]"
-              :autocomplete-items="filteredItemsYears(i)"
+              v-model="tagStrs.years[i-1]"
+              :tags="tagDicts.years[i-1]"
+              :autocomplete-items="filteredItemsYears(i-1)"
               :add-only-from-autocomplete="true"  
-              @tags-changed="newTags => tagDicts.years[i] = newTags"> 
+              @tags-changed="newTags => tagDicts.years[0] = newTags"> 
+            </vue-tags-input>
+          </div>
+        </b-form-group>
+				<!-- FACULTY -->
+        <b-form-group
+          v-if="ffaculty === true"
+          id="FacultyGroup"
+          label="Faculty:"
+          label-for="Faculty"
+          horizontal>
+					<!-- Filter Tags -->
+          <div>
+            <vue-tags-input
+              v-model="tagStrs.faculties[i-1]"
+              :tags="tagDicts.faculties[i-1]"
+              :autocomplete-items="filteredItemsFaculties(i-1)"
+              :add-only-from-autocomplete="true"  
+              @tags-changed="newTags => tagDicts.faculties[0] = newTags"> 
+            </vue-tags-input>
+          </div>
+        </b-form-group>
+				<!-- SCHOOL -->
+        <b-form-group
+          v-if="fschool === true"
+          id="SchoolGroup"
+          label="School:"
+          label-for="School"
+          horizontal>
+					<!-- Filter Tags -->
+          <div>
+            <vue-tags-input
+              v-model="tagStrs.schools[i-1]"
+              :tags="tagDicts.schools[i-1]"
+              :autocomplete-items="filteredItemsSchools(i-1)"
+              :add-only-from-autocomplete="true"  
+              @tags-changed="newTags => tagDicts.schools[0] = newTags"> 
+            </vue-tags-input>
+          </div>
+        </b-form-group>
+				<!-- COURSES -->
+        <b-form-group
+          v-if="fcourse === true"
+          id="CourseGroup"
+          label="Course:"
+          label-for="Course"
+          horizontal>
+					<!-- Filter Tags -->
+          <div>
+            <vue-tags-input
+              v-model="tagStrs.courses[i-1]"
+              :tags="tagDicts.courses[i-1]"
+              :autocomplete-items="filteredItemsCourses(i-1)"
+              :add-only-from-autocomplete="true"  
+              @tags-changed="newTags => tagDicts.courses[0] = newTags"> 
             </vue-tags-input>
           </div>
         </b-form-group>
@@ -63,8 +117,10 @@ export default {
 	components: {
     VueTagsInput,
   },
+
   data: () => ({
 		show: false,
+		showCounter: 0,
 		chartTypes: [
 				{ text: 'Select One', value: null },
 				'bar', 'line', 'pie', 'doughnut', 'radar',
@@ -87,16 +143,14 @@ export default {
 			schools: [],
 			courses: [],
 		},
-		duplicate: [],
+		duplicates: [],
 		chosenType: [],
 	}),
 
   /**
    * This is run when the component is first created to initialise it.
    */
-  updated() {
-		this.show = true;
-		console.log("aaaaaaaaaaaaaaaaaa")
+  created() {
 		// initialize data.form to have the correct amount of v-models
     const formKeys = Object.keys(this.tagDicts);
 		if (this.$props.selectedDuplicate === false){
@@ -152,7 +206,7 @@ export default {
             selected = [selected];
           }
 
-					dicts = []
+					let dicts = []
 					for (let k = 0; i < selected.length; k += 1){
 						dicts.push({text: selected[k]});
 					}
@@ -164,21 +218,40 @@ export default {
 				}
 			}
 		}
-		this.loadYears();
-		this.loadFaculties();
-		this.loadSchools();
-		this.loadCoureses();
 	},
   computed: {
     ...mapGetters([
       'numCharts',
     ]),     
 
-    filteredItemsYears(index) {
-      return this.tagAutocompletes.years[index].filter((i) => new RegExp(this.tagStrs.years[index], 'i').test(i.text));
-    },
   },
-	methods(){
+	methods: {
+    filteredItemsYears(index) {
+      return this.tagAutocompletes.years[0].filter((i) => new RegExp(this.tagStrs.years[0], 'i').test(i.text));
+    },
+    filteredItemsFaculties(index) {
+      return this.tagAutocompletes.faculties[0].filter((i) => new RegExp(this.tagStrs.faculties[0], 'i').test(i.text));
+    },
+    filteredItemsSchools(index) {
+      return this.tagAutocompletes.schools[0].filter((i) => new RegExp(this.tagStrs.schools[0], 'i').test(i.text));
+    },
+    filteredItemsCourses(index) {
+      return this.tagAutocompletes.courses[0].filter((i) => new RegExp(this.tagStrs.courses[0], 'i').test(i.text)).slice(0,10);
+    },
+
+		makeShow() {
+			this.showCounter += 1;
+			if (this.showCounter === 4){
+				console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
+				this.show = true;
+			}
+		},
+		loadData(){
+			this.loadYears();
+			this.loadFaculties();
+			this.loadSchools();
+			this.loadCourses();
+		},
 		loadYears() {
       apiQuery.getYears()
         .then((response) => response.data)
@@ -188,7 +261,47 @@ export default {
 					for (let i = 0; i < this.tagAutocompletes.years.length; i += 1){
           	this.tagAutocompletes.years[i] = 
 							Object.values(data.results).map(a => {return { text: a};  });      
-					} 
+					}
+					this.makeShow();
+        });
+    },
+		loadFaculties() {
+      apiQuery.getFaculties()
+        .then((response) => response.data)
+        .then((data) => {
+          // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
+          // can probably clean this up and reduce redundency
+					for (let i = 0; i < this.tagAutocompletes.faculties.length; i += 1){
+          	this.tagAutocompletes.faculties[i] = 
+							Object.values(data.results).map(a => {return { text: a};  });      
+					}
+					this.makeShow();
+        });
+    },
+		loadSchools() {
+      apiQuery.getSchools()
+        .then((response) => response.data)
+        .then((data) => {
+          // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
+          // can probably clean this up and reduce redundency
+					for (let i = 0; i < this.tagAutocompletes.schools.length; i += 1){
+          	this.tagAutocompletes.schools[i] = 
+							Object.values(data.results).map(a => {return { text: a};  });      
+					}
+					this.makeShow();
+        });
+    },
+		loadCourses() {
+      apiQuery.getCourses()
+        .then((response) => response.data)
+        .then((data) => {
+          // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
+          // can probably clean this up and reduce redundency
+					for (let i = 0; i < this.tagAutocompletes.courses.length; i += 1){
+          	this.tagAutocompletes.courses[i] = 
+							Object.values(data.results).map(a => {return { text: a};  });      
+					}
+					this.makeShow();
         });
     },
 		onSubmit(){
@@ -198,3 +311,4 @@ export default {
 };    
 
 
+</script>

@@ -65,6 +65,44 @@ function getFaculties() {
   );
 }
 
+function getSchools() {
+  return requester.post(
+    'school_info/query',
+    {
+      chain: [
+        {
+          group: {
+            by: [
+              'school',
+            ],
+            distinctGrouping: true,
+            removeDuplicateCountings: false,
+          },
+        },
+      ],
+    },
+  );
+}
+
+function getCourses(schools) {
+  return requester.post(
+    'course_info/query',
+    {
+      chain: [
+        {
+          group: {
+            by: [
+              'course_name',
+            ],
+            distinctGrouping: true,
+            removeDuplicateCountings: false,
+          },
+        },
+      ],
+    },
+  );
+}
+
 function getFacultySchools(faculties) {
   return requester.post(
     'school_info/query',
@@ -185,6 +223,8 @@ export default {
   getCourseStats,
   getYears,
   getFaculties,
+	getSchools,
+	getCourses,
   getFacultySchools,
   getSchoolsCourses,
   getLoginToken,
