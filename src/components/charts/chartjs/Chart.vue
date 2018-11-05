@@ -8,10 +8,18 @@
 </template>
 
 <script>
+
 import palette from 'google-palette';
 import vueCharts from 'vue-chartjs';
 import apiQuery from '../../../api/api_query';
+import ChartModule from 'chartjs-plugin-labels';
 
+// https://github.com/emn178/chartjs-plugin-labels
+Chart.defaults.global.plugins.labels = {
+  render: 'percentage',
+  fontColor: '#333',
+  precision: 2,
+};
 
 const chartTypes = {
   'bar': vueCharts.Bar,
@@ -27,6 +35,9 @@ const chartTypes = {
 
 export default {
   name: 'Chart',
+  components: {
+    ChartModule,
+  },
   props: ['chartData'],
   data: () => ({ 
     isData: false,
