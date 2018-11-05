@@ -53,7 +53,7 @@
     <div
 			id="dashDiv"
 			ref="dashdiv"
-			style="height: 100%; width: 100%; position:relative;">
+			style="height: 3500px; width: 100%; position:relative;">
 			<grid-layout
 				:layout="layouts"
 				:col-num="100"
@@ -205,13 +205,13 @@ export default {
       console.log(currdiv);
       html2canvas(currdiv, {allowTaint: true})
         .then(canvas => {  
-          var imgData = canvas.toDataURL('image/png');   
+          var imgData = canvas.toDataURL('image/png', 0.1);   
           
           var ratio = canvas.height / canvas.width;
           var width = doc.internal.pageSize.getWidth();
           var height = ratio * width;
           
-          doc.addImage(imgData, 'PNG', 10, 30, width, height, '', 'NORMAL');
+          doc.addImage(imgData, 'PNG', 10, 30, width, height, '', 'FAST');
           doc.output('dataurlnewwindow');
         });
     },
