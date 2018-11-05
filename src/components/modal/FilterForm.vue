@@ -34,7 +34,7 @@
             <vue-tags-input
               v-model="form.year[i-1]"
               :tags="yearTags"
-              :autocomplete-items="derivedYears"
+              :autocomplete-items="filteredItems1"
               :add-only-from-autocomplete="true"  
               @tags-changed="newTags => yearTags = newTags"> 
             </vue-tags-input>
@@ -51,7 +51,7 @@
 <!-- Filter Tags -->
             <div>
             <vue-tags-input
-              v-model="tag2"
+              v-model="form.faculty[i-1]"
               :tags="facultyTags"
               :autocomplete-items="derivedFaculties"
               :add-only-from-autocomplete="true"  
@@ -215,7 +215,7 @@ export default {
 
     // *** this needs fixing filtertags - Not working currently
     filteredItems1() {
-      return this.derivedYears.filter((i) => new RegExp(this.form.year[i-1], 'i').test(i.text));
+      return this.list.filter((i) => new RegExp(this.form.year[i-1], 'i').test(i.text));
     },
 
   },
