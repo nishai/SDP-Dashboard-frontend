@@ -121,10 +121,10 @@ function determineYield(groupBy) {
   return groupBy;
 }
 
-function getCourseStats(groupBy, years, faculties, schools, courses, duplicate) {
+function getCourseStats(modelName ,groupBy, years, faculties, schools, courses, duplicate) {
   const yieldBy = determineYield(groupBy);
   return requester.post(
-    'course_stats/query',
+    modelName + '/query',
     {
       chain: [
         {
@@ -178,6 +178,7 @@ const nameToColumn = {
   'Bell curve': 'final_mark',
 	'Pass rates by year': 'pass_rates_by_year',
 	'Pass rates by faculty/course': 'pass_rates_by_course',
+	'Progress outcome by faculty/course': 'progress_outcome_by_course',
 };
 
 export default {

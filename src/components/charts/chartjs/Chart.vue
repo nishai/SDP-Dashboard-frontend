@@ -72,9 +72,9 @@ export default {
 				case 'pass_rates_by_year':
 					forLimit = this.$props.chartData[index].years.length;
 				case 'pass_rates_by_course':
+				case 'progress_outcome_by_course':
 					forLimit = this.$props.chartData[index].courses.length;
 			}
-
 			this.chartResultsLabels.push([]);
 			this.chartResultsData.push([]);
 			for(let j = 0; j < forLimit; j += 1){
@@ -85,6 +85,7 @@ export default {
 				switch(this.$props.chartData[index].groupBy){
 					case 'pass_rates_by_year':
 						queryArr = [
+							'course_stats',
 							'final_mark',
 							this.$props.chartData[index].years[j],
 							this.$props.chartData[index].faculties,
@@ -95,6 +96,7 @@ export default {
 						break;
 					case 'pass_rates_by_course':
 						queryArr = [
+							'course_stats',
 							'final_mark',
 							this.$props.chartData[index].years,
 							this.$props.chartData[index].faculties,
@@ -103,7 +105,19 @@ export default {
 							this.$props.chartData[index].duplicate
 						]
 						break;
+					case 'progress_outcome_by_course':
+						queryArr = [
+							'average_year_stats',
+							'progress_outcome_type',
+							this.$props.chartData[index].years,
+							this.$props.chartData[index].faculties,
+							this.$props.chartData[index].schools,
+							this.$props.chartData[index].courses[j],
+							this.$props.chartData[index].duplicate
+						]
+						break;
 				}
+				console.log(queryArr[0], queryArr[1], queryArr[2], queryArr[3], queryArr[4], queryArr[5], queryArr[6])
 				apiQuery.getCourseStats(
 					queryArr[0],
 					queryArr[1],
@@ -111,6 +125,7 @@ export default {
 					queryArr[3],
 					queryArr[4],
 					queryArr[5],
+					queryArr[6],
 					).then((response) => {
 						const { results } = response.data;
 						console.log('RESPONSE DATA:', response.data);
@@ -118,12 +133,23 @@ export default {
 							const keys = Object.keys(results[0]);
 							let sum = 0;
 							let numDatapoints = 0;
+							let labels = [];
+							let data = [];
 							for (let k = 0; k < results.length; k += 1) { 
 								//sum += parseInt(results[k][keys[0]], 10) * parseInt(results[k][keys[1]],10); // for average mark
-								if (parseInt(results[k][keys[0]], 10) > 50) {
-									sum += parseInt(results[k][keys[1]],10);
+								switch(this.$props.chartData[index].groupBy){
+									case 'pass_rates_by_year':
+									case 'pass_rates_by_course':
+										if (parseInt(results[k][keys[0]], 10) > 50) {
+											sum += parseInt(results[k][keys[1]],10);
+										}
+										numDatapoints += parseInt(results[k][keys[1]], 10)
+										break;
+									case 'progress_outcome_by_course':
+										labels.push(results[k][keys[0]]);
+										data.push(results[k][keys[1]]);
+										break;
 								}
-								numDatapoints += parseInt(results[k][keys[1]], 10)
 							}
 							var avg = sum/numDatapoints;
 
@@ -131,12 +157,16 @@ export default {
 							switch(this.$props.chartData[index].groupBy){
 								case 'pass_rates_by_year':
 									this.chartResultsLabels[index][j] = this.$props.chartData[index].years[j];
+									this.chartResultsData[index][j] = avg;
 									break;
 								case 'pass_rates_by_course':
 									this.chartResultsLabels[index][j] = this.$props.chartData[index].courses[j];
+									this.chartResultsData[index][j] = avg;
 									break;
+								case 'progress_outcome_by_course':
+									this.chartResultsLabels[index] = labels;
+									this.chartResultsData[index] = data;
 							}
-							this.chartResultsData[index][j] = avg;
             	this.renderChart();
 						}
 					});
@@ -150,6 +180,7 @@ export default {
       console.log('LOADING DATA');
       // TODO: Multiple sub-charts
       apiQuery.getCourseStats(
+				'course_stats',
         this.$props.chartData[index].groupBy,
         this.$props.chartData[index].years,
         this.$props.chartData[index].faculties,
