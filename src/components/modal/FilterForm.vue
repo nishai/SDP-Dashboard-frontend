@@ -32,11 +32,11 @@
 <!-- Filter Tags -->
             <div>
             <vue-tags-input
-              v-model="form.year[i-1]"
+              v-model="tag"
               :tags="yearTags"
-              :autocomplete-items="filteredItems1"
+              :autocomplete-items="autocompleteItems"
               :add-only-from-autocomplete="true"  
-              @tags-changed="newTags => yearTags = newTags"> 
+              @tags-changed="update"> 
             </vue-tags-input>
           </div>
         </b-form-group>
@@ -140,7 +140,18 @@ export default {
 
     },
 
-       // filter tags - these store the currently selected tags
+      //filter tag 'tag' takes input and passes it to filter  with autocomplete :
+
+      ///////test
+      tag: '',
+      ////////
+
+
+       // filter tags lists - these store the currently selected tags
+
+       /// TEST
+      autocompleteItems: [],
+      /////////////////////////
       yearTags: [],    
       facultyTags:[],
       schoolTags:[],
@@ -199,11 +210,11 @@ export default {
    */
   computed: {
     derivedYears() {
-        let list = this.years
-          list = list.map(x => {
-          return({text: x});
-          });
-            this.years=list; 
+        // let list = this.years
+        //   list = list.map(x => {
+        //   return({text: x});
+        //   });
+        //     this.years=list; 
 
             return this.years ? this.years : ['loading data from database...'];
        
@@ -220,9 +231,11 @@ export default {
 
 
     // *** this needs fixing filtertags - Not working currently
-    filteredItems1() {
-      return this.years.filter((i) => new RegExp(this.form.year[i-1], 'i').test(i.text));
-    },
+    // filteredItems1() {
+    //   console.log("PPPPPPPPPP")
+    //   console.log(this.years)
+    //   return this.years.filter((i) => new RegExp(this.tag, 'i').test(i.text));
+    // },
 
   },
 
@@ -231,11 +244,18 @@ export default {
     /**
      * loads available years from the database into this.years
      */
+    update(newTags) {
+      this.autocompleteItems = [];
+      this.yearTags = newTags;
+    },
+
+
     loadYears() {
       apiQuery.getYears()
         .then((response) => response.data)
         .then((data) => {
-          this.years = Object.values(data.results);          
+          this.autocompleteItems = Object.values(data.results).map(a => {
+            return { text: a};  });       
           // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
           // can probably clean this up and reduce redundency
          
@@ -374,6 +394,11 @@ export default {
       this.$parent.$parent.hideModal();
     },
   }, /* >>> END METHODS <<< */
+  // watch: {
+  //   'tag': 'loadYears',
+  //   'autocompleteItems':'loadYears',
+
+  // },
 };
 </script>
 
