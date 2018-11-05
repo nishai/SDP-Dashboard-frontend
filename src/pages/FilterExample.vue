@@ -33,8 +33,10 @@
 
   </div>
 
+
+
 <!-- axios example -->
- <!--  <div>
+  <!-- <div>
     <vue-tags-input
       v-model="tag"
       :tags="tags"
@@ -42,17 +44,9 @@
       :add-only-from-autocomplete="true"
       @tags-changed="update">
     </vue-tags-input>
-  </div>
-
-    <div>
-    <vue-tags-input
-      v-model="tag2"
-      :tags="tags2"
-      :autocomplete-items="autocompleteItems"
-      :add-only-from-autocomplete="true"
-      @tags-changed="update">
-    </vue-tags-input>
   </div> -->
+
+    
 
         
 
@@ -61,6 +55,7 @@
 
 <script>
 import VueTagsInput from '@johmun/vue-tags-input';
+import apiQuery from '../api/api_query';
 
 export default {
   components: {
@@ -74,6 +69,7 @@ export default {
       tags2: [],
       tag3: '',
       tags3: [],
+      faculties:[],
       autocompleteItems: [{
         text: 'Spain',
       }, {
@@ -99,32 +95,48 @@ export default {
       }],
 
       // autocompleteItems3:['1','2','3','hr','fml']
-      autocompleteItems3: [{
-        text: "2013",
-      }, {
-        text: "2014",
-      }, {
-        text: "2015",
-      }, {
-        text: "2016",
-      }, {
-        text: "2017",
-      },{
-        text: "2018",
-      },{
-        text: "2019",
-      }
-      ],
+      // autocompleteItems3: [{
+      //   text: "2013",
+      // }, {
+      //   text: "2014",
+      // }, {
+      //   text: "2015",
+      // }, {
+      //   text: "2016",
+      // }, {
+      //   text: "2017",
+      // },{
+      //   text: "2018",
+      // },{
+      //   text: "2019",
+      // }
+      // ],
+      autocompleteItems3:[],
 
 
     };
 
 
   },
+
+
+  created() {
+    this.loadFaculties();
+    console.log("loadfacks")
+    console.log(this.faculties)
+
+  },
+
+
   computed: {
     filteredItems() {
+      console.log("fuuuuuuck")
+      console.log(this.autocompleteItems3)
+      console.log(JSON.stringify(this.autocompleteItems3))
       return this.autocompleteItems.filter((i) => new RegExp(this.tag, 'i').test(i.text));
     },
+
+
     filteredItems2() {
       return this.autocompleteItems2.filter((i) => new RegExp(this.tag2, 'i').test(i.text));
     },
@@ -132,6 +144,36 @@ export default {
       return this.autocompleteItems3.filter((i) => new RegExp(this.tag3, 'i').test(i.text));
     },
   },
+
+  methods:{
+     loadFaculties() {
+      console.log("hayyylo")
+      apiQuery.getFaculties()
+        .then((response) => response.data)
+        .then((data) => {
+          this.faculties = Object.values(data.results);
+          this.autocompleteItems3=Object.values(data.results);
+          console.log("iiiiiiiiii")
+          console.log(JSON.stringify(Object.values(data.results)))
+        console.log("jjjjjjjjjjjjjjjjjj")
+        console.log(this.autocompleteItems3)
+
+
+         this.autocompleteItems3 = this.autocompleteItems3.map(a => {
+            return { text: a};  }); 
+
+        });
+                        console.log("ccccccccccc")
+
+                console.log(this.autocompleteItems3)
+
+        
+
+    },
+
+
+  },
+
 };
 </script>
 
@@ -139,11 +181,12 @@ export default {
 
 
 <!-- axios example -->
-
 <!-- 
+
 <script>
 import VueTagsInput from '@johmun/vue-tags-input';
 import axios from 'axios';
+import apiQuery from '../api/api_query';
 
 export default {
   components: {
@@ -153,10 +196,7 @@ export default {
     return {
       tag: '',
       tags: [],
-      tag2: '',
-      tags2: [],
       autocompleteItems: [],
-      autocompleteItems2: [],
 
       debounce: null,
     };
@@ -166,26 +206,47 @@ export default {
       this.autocompleteItems = [];
       this.tags = newTags;
 
-      this.autocompleteItems2 = [];
-      this.tags2 = newTags;
     },
     initItems() {
       if (this.tag.length === 0) return;
-      const url = `https://itunes.apple.com/search?term=
-        ${this.tag}&entity=allArtist&attribute=allArtistTerm&limit=6`;
+      // const url = `https://itunes.apple.com/search?term=
+      //   ${this.tag}&entity=allArtist&attribute=allArtistTerm&limit=6`;
+
+
+//Experiment1
+        // apiQuery.getYears()
+        // .then(response =>{
+        //   this.autocompleteItems = response.data.results.map(a => {
+        //     return { text: a.text };
+        //   });
+        // })
+        //   console.log("uuuuuuuuuuuuuuuuu")
+        //   console.log(this.autocompleteItems)
+
+
+/// Experiment 3
+ apiQuery.getYears()
+        .then((response) => response.data)
+        .then((data) => {
+
+          this.autocompleteItems = Object.values(data.results).map(a => {
+            return { text: a};  });   
+          console.log("kkkkkkk")
+          console.log(this.autocompleteItems)
+        });
 
       clearTimeout(this.debounce);
-      this.debounce = setTimeout(() => {
-        axios.get(url).then(response => {
-          this.autocompleteItems = response.data.results.map(a => {
-            return { text: a.artistName };
-          });
-        }).catch(() => console.warn('Oh. Something went wrong'));
-      }, 600);
+      // this.debounce = setTimeout(() => {
+      //   axios.get(url).then(response => {
+      //     this.autocompleteItems = response.data.results.map(a => {
+      //       return { text: a.artistName };
+      //     });
+      //   }).catch(() => console.warn('Oh. Something went wrong'));
+      // }, 600);
     },
   },
-  watch: {
+  watch:{
     'tag': 'initItems',
   },
 };
-</script>
+</script> -->

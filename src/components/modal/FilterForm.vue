@@ -260,7 +260,8 @@ export default {
           console.log("aaaaaaaaaaaaaaaa")
           console.log(Object.values(data.results).map(a => {
             return { text: a};  })   )
-
+          console.log("bbbbbbbbbbbbb")
+          console.log(this.autocompleteItems)
           // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
           // can probably clean this up and reduce redundency
          
