@@ -45,11 +45,19 @@ export const navRoutes = [
     path: '/grid',
     component: GridExample,
   },
+<<<<<<< HEAD
   {
     name: 'Dashboard',
     path: '/dashboard',
     component: Dashboard,
   },
+=======
+  // {
+  //  name: 'FilterExample',
+  //   path: '/filter',
+  //   component: Filters,
+  // },
+>>>>>>> 7430089ac656fb9384a75ee49d2fd0e4a00b1ca2
 
 ];
 
