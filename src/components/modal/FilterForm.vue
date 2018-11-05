@@ -1,6 +1,6 @@
 <template>
   <!--https://bootstrap-vue.js.org/docs/components/form/-->
-  <b-form @submit="onSubmit">
+  <b-form @submit="onSubmit" v-if="show">
 <!-- http://www.vue-tags-input.com/#/examples/templates -->
     <b-row>
       <!-- create numForms amount of copies of the form side by side-->
@@ -44,23 +44,24 @@ export default {
   },
 
   data: () => ({
+		show = false,
 		chartTypes = [
 				{ text: 'Select One', value: null },
 				'bar', 'line', 'pie', 'doughnut', 'radar',
 		],
-		tagStrs = {
+		tagStrs = {   //arrays of strings
 			years: [],
 			faculties: [],
 			schools: [],
 			courses: [],
 		},
-		tagDicts = {
+		tagDicts = {	// arrays of array of dictionaries
 			years: [],
 			faculties: [],
 			schools: [],
 			courses: [],
 		},
-		tagAutocompletes = {
+		tagAutocompletes = {	//arrays of array of dictionionaries
 			years: [],
 			faculties: [],
 			schools: [],
@@ -73,7 +74,8 @@ export default {
   /**
    * This is run when the component is first created to initialise it.
    */
-  created() {
+  mounted() {
+		show = true;
 		// initialize data.form to have the correct amount of v-models
     const formKeys = Object.keys(this.tagDicts);
 		if (this.$props.selectedDuplicate === false){
@@ -92,10 +94,57 @@ export default {
 				this.tagStrs[formKeys[i]].push('');
 				this.tagAutocompletes[formKeys[i]].push([]);
 				if (j === 0){
-						
+					let selected = [];
+          switch(formKeys[i]){
+						case 'year':
+							if(this.$props.selectedYear !== undefined){
+								selected = this.$props.selectedYear;
+							} else {
+								selected = [];
+							}
+							break;
+						case 'faculty':
+							if(this.$props.selectedFaculty !== undefined){
+								selected = this.$props.selectedFaculty;
+							} else {
+								selected = [];
+							}
+							break;
+						case 'school':
+							if(this.$props.selectedSchool !== undefined){
+								selected = this.$props.selectedSchool;
+							} else {
+								selected = [];
+							}
+							break;
+						case 'course':
+							if(this.$props.selectedCourse !== undefined){
+								selected = this.$props.selectedCourse;
+							} else {
+								selected = [];
+							}
+							break;
+						default:
+							selected = []
+					}
+				  if(typeof selected === "string"){
+            selected = [selected];
+          }
+
+					dicts = []
+					for (let k = 0; i < selected.length; k += 1){
+						dicts.push({text: selected[k]});
+					}
+					this.tagDicts[formKeys[i]].push(dicts)
+
+
 				} else {
 					this.tagDicts[formKeys[i]].push([]);
 				}
 			}
 		}
+		this.loadYears();
+		this.loadFaculties();
+		this.loadSchools();
+		this.loadCoureses();
 	},
