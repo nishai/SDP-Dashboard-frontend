@@ -200,7 +200,7 @@ export default {
 	  },
     doPDF() {
       var doc = new jsPDF('p', 'pt', 'a4');
-      doc.text(20, 40, "Report");
+      doc.text(20, 30, "Report");
 
       let currdiv = this.$refs.dashdiv;
       currdiv = currdiv.children[0].children;
@@ -208,24 +208,31 @@ export default {
       let num_charts = this.$store.getters.numCharts;
       var num_done = 0;
 
+    
+
       for (var i=0; i < num_charts; i++){
-        console.log(currdiv[i].children[0]);
         let currchart = currdiv[i].children[0];
-        var prev_height = 30;
-        // var x = (i % 2 == 0) ? 20 : 350;
+        let imod2 = i%2;
+        let imod4 = i%4;
+        let x = (imod2 == 0) ? 20 : 300;
+        let y = ((imod4 == 0) || (imod4 == 1)) ? 50 : 450;
 
         html2canvas(currchart, {allowTaint: true})
         .then(canvas => {  
           var imgData = canvas.toDataURL('image/png');   
           
-          var ratio = canvas.height / canvas.width;
-          var width = 250;
-          var height = ratio * width;
+          var ratio = canvas.width / canvas.height;
+          var height = 375;
+          var width = ratio * height;
           
-          doc.addImage(imgData, 'PNG', 20, prev_height+25, width, height, '', 'FAST');
-          prev_height += height+25;
+          if ((imod4 == 0) && (num_done >= 4)){
+            doc.addPage();
+            doc.setPage((i/4) + 1);
+          }
+          doc.addImage(imgData, 'PNG', x, y, width, height, '', 'NORMAL');
           // doc.output('dataurlnewwindow');
           num_done++;
+
           if (num_done == num_charts) doc.save('report.pdf');
         });
       }
