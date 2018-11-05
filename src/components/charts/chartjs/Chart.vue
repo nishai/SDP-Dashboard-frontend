@@ -82,9 +82,11 @@ export default {
 			switch(this.$props.chartData[index].groupBy){
 				case 'pass_rates_by_year':
 					forLimit = this.$props.chartData[index].years.length;
+					break;
 				case 'pass_rates_by_course':
 				case 'progress_outcome_by_course':
 					forLimit = this.$props.chartData[index].courses.length;
+					break;
 			}
 			this.chartResultsLabels.push([]);
 			this.chartResultsData.push([]);
@@ -177,6 +179,7 @@ export default {
 								case 'progress_outcome_by_course':
 									this.chartResultsLabels[index] = labels;
 									this.chartResultsData[index] = data;
+									break;
 							}
             	this.renderChart();
 						}
