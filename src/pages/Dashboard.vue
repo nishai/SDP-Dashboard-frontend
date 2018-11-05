@@ -229,7 +229,7 @@ export default {
             doc.addPage();
             doc.setPage((i/4) + 1);
           }
-          doc.addImage(imgData, 'PNG', x, y, width, height, '', 'NORMAL');
+          doc.addImage(imgData, 'PNG', x, y, width, height, '', 'FAST');
           // doc.output('dataurlnewwindow');
           num_done++;
 
