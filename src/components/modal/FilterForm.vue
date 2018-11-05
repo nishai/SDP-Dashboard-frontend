@@ -20,7 +20,7 @@
             <vue-tags-input
               v-model="tagStrs.years[i]"
               :tags="tagDicts.years[i]"
-              :autocomplete-items="tagAutocompletes.years[i]"
+              :autocomplete-items="filteredItemsYears(i)"
               :add-only-from-autocomplete="true"  
               @tags-changed="newTags => tagDicts.years[i] = newTags"> 
             </vue-tags-input>
@@ -175,6 +175,13 @@ export default {
   computed: {
     ...mapGetters([
       'numCharts',
-    ]),           
+    ]),     
+
+    filteredItemsYears(index) {
+      return this.tagAutocompletes.years[index].filter((i) => new RegExp(this.tagStrs.years[index], 'i').test(i.text));
+    },
+
+
+  }      
 
 
