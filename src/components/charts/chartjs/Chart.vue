@@ -1,13 +1,13 @@
 /* eslint-disable */
-<!-- <template>
+<template>
   <div>
-    <TODO: TURN INTO SINGULAR COMPONENT WITH PROPS, DELETE, OR REPLACE WITH SOMETHING SIMILAR TO pages/ChartTemplate -->
     <!-- TODO: TURN INTO SINGULAR COMPONENT WITH PROPS, DELETE, OR REPLACE WITH SOMETHING SIMILAR TO pages/ChartTemplate -->
     <!-- TODO: TURN INTO SINGULAR COMPONENT WITH PROPS, DELETE, OR REPLACE WITH SOMETHING SIMILAR TO pages/ChartTemplate -->
     <!-- TODO: TURN INTO SINGULAR COMPONENT WITH PROPS, DELETE, OR REPLACE WITH SOMETHING SIMILAR TO pages/ChartTemplate -->
     <!-- TODO: TURN INTO SINGULAR COMPONENT WITH PROPS, DELETE, OR REPLACE WITH SOMETHING SIMILAR TO pages/ChartTemplate -->
     <!-- TODO: TURN INTO SINGULAR COMPONENT WITH PROPS, DELETE, OR REPLACE WITH SOMETHING SIMILAR TO pages/ChartTemplate -->
-    <!-- <doughnut-chart v-if="type === 'doughnut'" :chart-data="datacollection"></doughnut-chart>
+    <!-- TODO: TURN INTO SINGULAR COMPONENT WITH PROPS, DELETE, OR REPLACE WITH SOMETHING SIMILAR TO pages/ChartTemplate -->
+    <doughnut-chart v-if="type === 'doughnut'" :chart-data="datacollection"></doughnut-chart>
     <line-chart v-else-if="type === 'line'" :chart-data="datacollection"></line-chart>
     <bar-chart v-else-if="type === 'bar'" :chart-data="datacollection"></bar-chart>
     <pie-chart v-else-if="type === 'pie'" :chart-data="datacollection"></pie-chart>
@@ -17,118 +17,17 @@
     <scatter-chart v-else-if="type === 'scatter'" :chart-data="datacollection"></scatter-chart>
     <button @click="addData()">Compare</button>
   </div>
-</template> --> -->
-
-<script>
-// import DoughnutChart from './DoughnutChart';
-// import LineChart from './LineChart';
-// import BarChart from './BarChart';
-// import PieChart from './PieChart';
-// import RadarChart from './RadarChart';
-// import PolarChart from './PolarChart';
-// import BubbleChart from './BubbleChart';
-// import ScatterChart from './ScatterChart';
-//
-// export default {
-//   components: {
-//     DoughnutChart,
-//     LineChart,
-//     BarChart,
-//     PieChart,
-//     RadarChart,
-//     PolarChart,
-//     BubbleChart,
-//     ScatterChart,
-//   },
-//   props: [
-//     'type',
-//     'chartData',
-//   ],
-//   data() {
-//     return {
-//       datacollection: null,
-//     };
-//   },
-//   mounted() {
-//     console.log('yyyyyyyyyyyyyyyyyyyyyyyyy ');
-//     console.log(this.$props.chartData);
-//     const newData = {
-//       title: 'Race',
-//       labels: ['Black', 'White', 'Indian', 'Coloured', 'Other'],
-//       datasets: [{
-//         data: [],
-//         backgroundColor: [
-//           //          'rgba(255,99,132,1)',
-//           //          'rgba(54, 162, 235, 1)',
-//           //          'rgba(255, 206, 86, 1)',
-//           //          'rgba(75, 192, 192, 1)',
-//           //          'rgba(153, 102, 255, 1)',
-//         ],
-//         borderWidth: 2,
-//       }],
-//       options: {
-//         title: {
-//           display: true,
-//           text: this.$props.type,
-//         },
-//       },
-//     };
-//     for (let i = 0; i < this.$props.chartData.length; i += 1) {
-//       const bgColor = [];
-//       for (let j = 0; j < this.$props.chartData.length; j += 1) {
-//         bgColor.push(`rgba(${
-//           Math.floor(Math.random() * 256)
-//         },${
-//           Math.floor(Math.random() * 256)
-//         },${
-//           Math.floor(Math.random() * 256)
-//         },${
-//           1
-//         })`);
-//       }
-//       newData.datasets.concat([{
-//         data: this.$props.chartData[i],
-//         backgroundColor: bgColor,
-//       }]);
-//     }
-//     this.datacollection = newData;
-//     // this.startData(newData);
-//   },
-//   methods: {
-//     startData(newData) {
-//       this.datacollection = newData;
-//     },
-//     addData() {
-//       const newData = [{
-//         data: [55, 8, 12, 18, 7],
-//         backgroundColor: [
-//           'rgba(255,99,132,1)',
-//           'rgba(54, 162, 235, 1)',
-//           'rgba(255, 206, 86, 1)',
-//           'rgba(75, 192, 192, 1)',
-//           'rgba(153, 102, 255, 1)',
-//         ],
-//       }];
-//       this.datacollection = {
-//         title: this.datacollection.title,
-//         labels: this.datacollection.labels,
-//         datasets: this.datacollection.datasets.concat(newData),
-//         options: this.datacollection.options,
-//       };
-//     },
-//   },
-// };
-// </script>
-
-
-<template>
-    <div id="chart_div">
-        <canvas id="chart"></canvas>
-    </div>
 </template>
 
 <script>
-import Chart from 'chart.js';
+import DoughnutChart from './DoughnutChart';
+import LineChart from './LineChart';
+import BarChart from './BarChart';
+import PieChart from './PieChart';
+import RadarChart from './RadarChart';
+import PolarChart from './PolarChart';
+import BubbleChart from './BubbleChart';
+import ScatterChart from './ScatterChart';
 import ChartModule from 'chartjs-plugin-labels';
 
 // https://github.com/emn178/chartjs-plugin-labels
@@ -139,73 +38,96 @@ Chart.defaults.global.plugins.labels = {
 };
 
 export default {
-  name: 'Chart',
-  name: 'ChartModule',
+  components: {
+    DoughnutChart,
+    LineChart,
+    BarChart,
+    PieChart,
+    RadarChart,
+    PolarChart,
+    BubbleChart,
+    ScatterChart,
+    ChartModule,
+  },
+  props: [
+    'type',
+    'chartData',
+  ],
+  data() {
+    return {
+      datacollection: null,
+    };
+  },
   mounted() {
-    const ctx = 'chart';
-    const chart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        title: 'Race',
-        labels: ['Black', 'White', 'Indian', 'Coloured', 'Other'],
-        datasets: [{
-          data: [70, 13, 12, 10, 5],
-          backgroundColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-          ],
-          borderWidth: 2,
-        }],
-      },
+    console.log('yyyyyyyyyyyyyyyyyyyyyyyyy ');
+    console.log(this.$props.chartData);
+    const newData = {
+      title: 'Race',
+      labels: ['Black', 'White', 'Indian', 'Coloured', 'Other'],
+      datasets: [{
+        data: [],
+        backgroundColor: [
+          //          'rgba(255,99,132,1)',
+          //          'rgba(54, 162, 235, 1)',
+          //          'rgba(255, 206, 86, 1)',
+          //          'rgba(75, 192, 192, 1)',
+          //          'rgba(153, 102, 255, 1)',
+        ],
+        borderWidth: 2,
+      }],
       options: {
         title: {
           display: true,
-          text: 'Course Demographics: Race',
+          text: this.$props.type,
         },
-        legend: {
-          display: true,
-
-          // generateLabels changes from chart to chart,  check the source,
-          // this one is from the doughnut :
-          // https://github.com/chartjs/Chart.js/blob/master/src/controllers/controller.doughnut.js#L42
-          labels: {
-            generateLabels: function(chart) {
-              var data = chart.data;
-              if (data.labels.length && data.datasets.length) {
-                return data.labels.map(function(label, i) {
-                  var meta = chart.getDatasetMeta(0);
-                  var ds = data.datasets[0];
-                  var arc = meta.data[i];
-                  var custom = arc && arc.custom || {};
-                  var getValueAtIndexOrDefault = Chart.helpers.getValueAtIndexOrDefault;
-                  var arcOpts = chart.options.elements.arc;
-                  var fill = custom.backgroundColor ? custom.backgroundColor : getValueAtIndexOrDefault(ds.backgroundColor, i, arcOpts.backgroundColor);
-                  var stroke = custom.borderColor ? custom.borderColor : getValueAtIndexOrDefault(ds.borderColor, i, arcOpts.borderColor);
-                    return {
-                    // And finally :
-                    text: label + ": " + ds.data[i],
-                    fillStyle: fill,
-                    strokeStyle: stroke,
-                    hidden: isNaN(ds.data[i]) || meta.data[i].hidden,
-                    index: i
-                  };
-                });
-              }
-              return [];
-            }
-          }
-        }
       },
-    });
-
-    chart.generateLegend();
+    };
+    for (let i = 0; i < this.$props.chartData.length; i += 1) {
+      const bgColor = [];
+      for (let j = 0; j < this.$props.chartData.length; j += 1) {
+        bgColor.push(`rgba(${
+          Math.floor(Math.random() * 256)
+        },${
+          Math.floor(Math.random() * 256)
+        },${
+          Math.floor(Math.random() * 256)
+        },${
+          1
+        })`);
+      }
+      newData.datasets.concat([{
+        data: this.$props.chartData[i],
+        backgroundColor: bgColor,
+      }]);
+    }
+    this.datacollection = newData;
+    // this.startData(newData);
+  },
+  methods: {
+    startData(newData) {
+      this.datacollection = newData;
+    },
+    addData() {
+      const newData = [{
+        data: [55, 8, 12, 18, 7],
+        backgroundColor: [
+          'rgba(255,99,132,1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+        ],
+      }];
+      this.datacollection = {
+        title: this.datacollection.title,
+        labels: this.datacollection.labels,
+        datasets: this.datacollection.datasets.concat(newData),
+        options: this.datacollection.options,
+      };
+    },
   },
 };
 </script>
-
 
 <style>
 </style>
