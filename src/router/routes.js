@@ -15,14 +15,6 @@ export const navRoutes = [
     redirect: '/templates',
   },
   {
-    name: 'Dashboard',
-    path: '/dash',
-    component: Dashboard,
-    query: {
-      templateType: '',
-    },
-  },
-  {
     name: 'Chart Templates',
     path: '/templates',
     component: ChartTemplates,
