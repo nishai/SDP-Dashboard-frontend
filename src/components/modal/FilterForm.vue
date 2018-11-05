@@ -199,7 +199,13 @@ export default {
    */
   computed: {
     derivedYears() {
-      return this.years ? this.years : ['loading data from database...'];
+        let list = this.years
+          list = list.map(x => {
+          return({text: x});
+          });
+            this.years=list; 
+
+            return this.years ? this.years : ['loading data from database...'];
        
     },
     derivedFaculties() {
@@ -215,7 +221,7 @@ export default {
 
     // *** this needs fixing filtertags - Not working currently
     filteredItems1() {
-      return this.list.filter((i) => new RegExp(this.form.year[i-1], 'i').test(i.text));
+      return this.years.filter((i) => new RegExp(this.form.year[i-1], 'i').test(i.text));
     },
 
   },
@@ -232,11 +238,7 @@ export default {
           this.years = Object.values(data.results);          
           // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
           // can probably clean this up and reduce redundency
-          let list = this.years
-          list = list.map(x => {
-          return({text: x});
-          });
-            this.years=list;
+         
         });
 
     },
@@ -258,14 +260,17 @@ export default {
      */
     loadSchools(facultyTaglits,index) {
       // gets called when form.faculty changes, so it gets called unnecessarily with created()
+      console.log(facultyTaglits)
 
-      if (this.form.faculty[index].length !== 0) {
+      if (facultyTaglits.length !== 0) {
         console.log(this.form.faculty)
-        
+              console.log("Hellllllllllllllllllo")
+
         // the query will get schools for the following faculties:
         var faculties =[];
+        this.facultyTags=[];
         for(var f =0;f<facultyTaglits.length;f++){
-          faculties.push(facultyTaglits[f].text);
+          faculties.push(facultyTaglits[f].text); //for the getFaculties query. shist but yea...
           this.facultyTags.push(facultyTaglits[f]);//update the taglist
         }
          
