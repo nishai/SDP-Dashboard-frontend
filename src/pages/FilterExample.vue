@@ -69,7 +69,6 @@ export default {
       tags2: [],
       tag3: '',
       tags3: [],
-      faculties:[],
       autocompleteItems: [{
         text: 'Spain',
       }, {
@@ -121,18 +120,13 @@ export default {
 
 
   created() {
-    this.loadFaculties();
-    console.log("loadfacks")
-    console.log(this.faculties)
+    this.loadFaculties();//load the data and put it into autocomplete items (faculties)
 
   },
 
 
   computed: {
     filteredItems() {
-      console.log("fuuuuuuck")
-      console.log(this.autocompleteItems3)
-      console.log(JSON.stringify(this.autocompleteItems3))
       return this.autocompleteItems.filter((i) => new RegExp(this.tag, 'i').test(i.text));
     },
 
@@ -151,21 +145,13 @@ export default {
       apiQuery.getFaculties()
         .then((response) => response.data)
         .then((data) => {
-          this.faculties = Object.values(data.results);
-          this.autocompleteItems3=Object.values(data.results);
-          console.log("iiiiiiiiii")
-          console.log(JSON.stringify(Object.values(data.results)))
-        console.log("jjjjjjjjjjjjjjjjjj")
-        console.log(this.autocompleteItems3)
-
-
+          this.autocompleteItems3=Object.values(data.results);//get data from DB
          this.autocompleteItems3 = this.autocompleteItems3.map(a => {
-            return { text: a};  }); 
+            return { text: a};  }); //make data into expected format for autocomplete
 
         });
-                        console.log("ccccccccccc")
-
-                console.log(this.autocompleteItems3)
+        console.log("ccccccccccc")
+        console.log(this.autocompleteItems3)
 
         
 
