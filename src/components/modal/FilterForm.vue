@@ -22,7 +22,7 @@
               :tags="tagDicts.years[i]"
               :autocomplete-items="tagAutocompletes.years[i]"
               :add-only-from-autocomplete="true"  
-              @tags-changed="update"> 
+              @tags-changed="newTags => tagDicts.years[i] = newTags"> 
             </vue-tags-input>
           </div>
         </b-form-group>
@@ -172,3 +172,9 @@ export default {
 		this.loadSchools();
 		this.loadCoureses();
 	},
+  computed: {
+    ...mapGetters([
+      'numCharts',
+    ]),           
+
+
