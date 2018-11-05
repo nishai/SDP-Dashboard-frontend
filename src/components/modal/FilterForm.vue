@@ -227,13 +227,13 @@ export default {
   },
 	methods: {
     filteredItemsYears(index) {
-      return this.tagAutocompletes.years[0].filter((i) => new RegExp(this.tagStrs.years[0], 'i').test(i.text));
+      return this.tagAutocompletes.years[0].filter((i) => new RegExp(this.tagStrs.years[0], 'i').test(i.text)).slice(0,10);
     },
     filteredItemsFaculties(index) {
-      return this.tagAutocompletes.faculties[0].filter((i) => new RegExp(this.tagStrs.faculties[0], 'i').test(i.text));
+      return this.tagAutocompletes.faculties[0].filter((i) => new RegExp(this.tagStrs.faculties[0], 'i').test(i.text)).slice(0,10);
     },
     filteredItemsSchools(index) {
-      return this.tagAutocompletes.schools[0].filter((i) => new RegExp(this.tagStrs.schools[0], 'i').test(i.text));
+      return this.tagAutocompletes.schools[0].filter((i) => new RegExp(this.tagStrs.schools[0], 'i').test(i.text)).slice(0,10);
     },
     filteredItemsCourses(index) {
       return this.tagAutocompletes.courses[0].filter((i) => new RegExp(this.tagStrs.courses[0], 'i').test(i.text)).slice(0,10);
@@ -242,7 +242,7 @@ export default {
 		makeShow() {
 			this.showCounter += 1;
 			if (this.showCounter === 4){
-				console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
+				console.log("Finished loading data for form")
 				this.show = true;
 			}
 		},
@@ -305,7 +305,83 @@ export default {
         });
     },
 		onSubmit(){
-			console.log("ggggggggggggggggggggggggggggggggg")
+			let name;
+      if(apiQuery.nameToColumn[this.$props.groupByDesc] !== undefined){
+        name = apiQuery.nameToColumn[this.$props.groupByDesc];
+      } else{
+        name = this.$props.groupByDesc;
+			}
+
+			// Convert FilterTags into arrays to pass into the query:
+
+			// convert years tags to an array
+      var submitYears = new Array();
+      var submitFaculties = new Array();
+      var submitSchools = new Array();
+      var submitCourses = new Array();
+			for (let i = 0; i < this.$props.numForms; i += 1) {
+				submitYears.push([]);
+				submitFaculties.push([]);
+				submitSchools.push([]);
+				submitCourses.push([]);
+				for (var key in this.tagsDicts.years[i]) {
+					submitYears[i].push(this.tagsDicts.years[i][key].text);
+				}
+				// convert faculty tags to an array
+				for (var key in this.tagsDicts.faculties[i]) {
+					submitFaculties[i].push(this.tagsDicts.faculties[i][key].text);
+				}
+
+				// convert schools tags to an array
+				for (var key in this.tagsDicts.schools[i]) {
+					submitSchools[i].push(this.tagsDicts.schools[i][key].text);
+				}
+
+				// convert courses tags to an array
+				for (var key in this.tagsDicts.courses[i]) {
+					submitCourses[i].push(this.tagsDicts.courses[i][key].text);
+				}
+			}
+			//end conversions
+
+			let chartArr = []
+      for (let i = 0; i < this.$props.numForms; i += 1) {
+        chartArr.push({
+          chartType: this.form.type[i], //*******************
+          groupBy: name,
+          years: submitYears[i],
+          faculties: submitFaculties[i],
+          schools: submitSchools[i],
+          courses: submitCourses[i],
+          duplicate: (this.form.duplicate[i] === true), //***********************
+        })
+			}
+
+			// add chart to store
+      // TODO: Multiple sub-charts
+      this.$store.dispatch({
+        type: 'createDashboardChart',
+        charts: chartArr,
+        layout: {
+          x: 0,
+          y: 0,
+          w: 27,
+          h: 1,
+          i: this.numCharts + 1
+        },
+      });
+
+      // close form
+      try {
+        this.$parent.$parent.deleteChart();
+      } catch(err) {
+        console.log("no delete chart function when calling from template screen");
+      }
+      this.$parent.$parent.hideModal();
+      // go to url
+      this.$router.push({
+        path: '/dashboard',
+      });
 		},
 	},
 };    
