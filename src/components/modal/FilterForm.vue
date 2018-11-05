@@ -254,8 +254,13 @@ export default {
       apiQuery.getYears()
         .then((response) => response.data)
         .then((data) => {
+
           this.autocompleteItems = Object.values(data.results).map(a => {
-            return { text: a};  });       
+            return { text: a};  });   
+          console.log("aaaaaaaaaaaaaaaa")
+          console.log(Object.values(data.results).map(a => {
+            return { text: a};  })   )
+
           // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
           // can probably clean this up and reduce redundency
          
