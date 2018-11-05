@@ -5,17 +5,14 @@
     <b-row>
       <!-- create numForms amount of copies of the form side by side-->
       <b-col v-for="i in numForms" :key="groupByDesc + '-' + i">
-
-
-
-<!-- YEARS -->
+				<!-- YEARS -->
         <b-form-group
           v-if="fyear === true"
           id="YearGroup"
           label="Year:"
           label-for="Year"
           horizontal>
-<!-- Filter Tags -->
+						<!-- Filter Tags -->
             <div>
             <vue-tags-input
               v-model="tagStrs.years[i]"
@@ -42,7 +39,6 @@ import VueTagsInput from '@johmun/vue-tags-input';
 
 export default {
   name: 'FilterForm',
-
   props: [
     'chartType', // contains the type of graph to be used (pie, bar. etc)
     'groupByDesc', // contains the type of graph to be used (race, bell curve, etc)
@@ -68,38 +64,39 @@ export default {
     VueTagsInput,
   },
   data: () => ({
-		show = false,
-		chartTypes = [
+		show: false,
+		chartTypes: [
 				{ text: 'Select One', value: null },
 				'bar', 'line', 'pie', 'doughnut', 'radar',
 		],
-		tagStrs = {   //arrays of strings
+		tagStrs: {   //arrays of strings
 			years: [],
 			faculties: [],
 			schools: [],
 			courses: [],
 		},
-		tagDicts = {	// arrays of array of dictionaries
+		tagDicts: {	// arrays of array of dictionaries
 			years: [],
 			faculties: [],
 			schools: [],
 			courses: [],
 		},
-		tagAutocompletes = {	//arrays of array of dictionionaries
+		tagAutocompletes: {	//arrays of array of dictionionaries
 			years: [],
 			faculties: [],
 			schools: [],
 			courses: [],
 		},
-		duplicate = [],
-		chosenType = [],
+		duplicate: [],
+		chosenType: [],
 	}),
 
   /**
    * This is run when the component is first created to initialise it.
    */
-  mounted() {
-		show = true;
+  updated() {
+		this.show = true;
+		console.log("aaaaaaaaaaaaaaaaaa")
 		// initialize data.form to have the correct amount of v-models
     const formKeys = Object.keys(this.tagDicts);
 		if (this.$props.selectedDuplicate === false){
@@ -180,8 +177,24 @@ export default {
     filteredItemsYears(index) {
       return this.tagAutocompletes.years[index].filter((i) => new RegExp(this.tagStrs.years[index], 'i').test(i.text));
     },
-
-
-  }      
+  },
+	methods(){
+		loadYears() {
+      apiQuery.getYears()
+        .then((response) => response.data)
+        .then((data) => {
+          // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
+          // can probably clean this up and reduce redundency
+					for (let i = 0; i < this.tagAutocompletes.years.length; i += 1){
+          	this.tagAutocompletes.years[i] = 
+							Object.values(data.results).map(a => {return { text: a};  });      
+					} 
+        });
+    },
+		onSubmit(){
+			console.log("ggggggggggggggggggggggggggggggggg")
+		},
+	},
+};    
 
 
