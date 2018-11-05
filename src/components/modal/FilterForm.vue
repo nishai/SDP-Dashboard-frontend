@@ -268,7 +268,7 @@ export default {
 
         // the query will get schools for the following faculties:
         var faculties =[];
-        this.facultyTags=[];
+        this.facultyTags=[];//re-init the selected tags,(user changed mind)
         for(var f =0;f<facultyTaglits.length;f++){
           faculties.push(facultyTaglits[f].text); //for the getFaculties query. shist but yea...
           this.facultyTags.push(facultyTaglits[f]);//update the taglist
@@ -290,16 +290,17 @@ export default {
      */
     loadCourses(schoolTaglits,index) {
 
-      if (this.form.school[index].length == 0) {
+      if (schoolTaglits.length !== 0) {
         // the query will get courses for the following schools:
         var schoolz =[];
+        this.schoolTags=[];//re-init the selected tags, (user changed mind)
         for(var f =0;f<schoolTaglits.length;f++){
           schoolz.push(schoolTaglits[f].text);
           this.schoolTags.push(schoolTaglits[f]);//update the taglist
         }
 
-        this.form.school[index]=schoolz;
-        apiQuery.getSchoolsCourses(this.form.school[index])
+        // this.form.school[index]=schoolz; //caused a bug where text would appear next to tag
+        apiQuery.getSchoolsCourses(schoolz)
           .then((response) => response.data)
           .then((data) => {
             this.courses[index] = Object.values(data.results);
