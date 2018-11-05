@@ -52,8 +52,9 @@
     </div>
     <div
 			id="dashDiv"
-			ref="dashdiv"
-			style="height: 3500px; width: 100%; position:relative;">
+      ref="dashdiv"
+			style="min-height:1000px; position:relative; "
+      >
 			<grid-layout
 				:layout="layouts"
 				:col-num="100"
@@ -199,21 +200,35 @@ export default {
 	  },
     doPDF() {
       var doc = new jsPDF('p', 'pt', 'a4');
-      doc.text(20, 20, "Report");
+      doc.text(20, 40, "Report");
 
       let currdiv = this.$refs.dashdiv;
-      console.log(currdiv);
-      html2canvas(currdiv, {allowTaint: true})
+      currdiv = currdiv.children[0].children;
+
+      let num_charts = this.$store.getters.numCharts;
+      var num_done = 0;
+
+      for (var i=0; i < num_charts; i++){
+        console.log(currdiv[i].children[0]);
+        let currchart = currdiv[i].children[0];
+        var prev_height = 30;
+        // var x = (i % 2 == 0) ? 20 : 350;
+
+        html2canvas(currchart, {allowTaint: true})
         .then(canvas => {  
-          var imgData = canvas.toDataURL('image/png', 0.1);   
+          var imgData = canvas.toDataURL('image/png');   
           
           var ratio = canvas.height / canvas.width;
-          var width = doc.internal.pageSize.getWidth();
+          var width = 250;
           var height = ratio * width;
           
-          doc.addImage(imgData, 'PNG', 10, 30, width, height, '', 'FAST');
-          doc.output('dataurlnewwindow');
+          doc.addImage(imgData, 'PNG', 20, prev_height+25, width, height, '', 'FAST');
+          prev_height += height+25;
+          // doc.output('dataurlnewwindow');
+          num_done++;
+          if (num_done == num_charts) doc.save('report.pdf');
         });
+      }
     },
   }
 };
