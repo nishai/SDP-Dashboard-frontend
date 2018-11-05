@@ -5,6 +5,31 @@
     <b-row>
       <!-- create numForms amount of copies of the form side by side-->
       <b-col v-for="i in numForms" :key="groupByDesc + '-' + i">
+
+
+
+<!-- YEARS -->
+        <b-form-group
+          v-if="fyear === true"
+          id="YearGroup"
+          label="Year:"
+          label-for="Year"
+          horizontal>
+<!-- Filter Tags -->
+            <div>
+            <vue-tags-input
+              v-model="tagStrs.years[i]"
+              :tags="tagDicts.years[i]"
+              :autocomplete-items="tagAutocompletes.years[i]"
+              :add-only-from-autocomplete="true"  
+              @tags-changed="update"> 
+            </vue-tags-input>
+          </div>
+        </b-form-group>
+
+
+
+
 			</b-col>
 		</b-row>
 	</b-form>
@@ -42,19 +67,20 @@ export default {
 	components: {
     VueTagsInput,
   },
-
-  data: () => ({
+ 
+  data: () => ({ 
 		chartTypes = [
 				{ text: 'Select One', value: null },
 				'bar', 'line', 'pie', 'doughnut', 'radar',
 		],
+
 		tagStrs = {
 			years: [],
 			faculties: [],
 			schools: [],
 			courses: [],
 		},
-		tagDicts = {
+		tagDicts = { 
 			years: [],
 			faculties: [],
 			schools: [],
