@@ -66,7 +66,8 @@ export default {
 			schools: [],
 			courses: [],
 		},
-		duplicate: [],
+		duplicate = [],
+		chosenType = [],
 	}),
 
   /**
@@ -76,18 +77,24 @@ export default {
 		// initialize data.form to have the correct amount of v-models
     const formKeys = Object.keys(this.tagDicts);
 		if (this.$props.selectedDuplicate === false){
-			duplicates.push(false);
+			this.duplicates.push(false);
 		} else {
-			duplicates.push(true);
+			this.duplicates.push(true);
 		}
+    if(this.$props.selectedChartType !== undefined){
+	    this.chosenType = this.$props.selectedChartType;
+    } else {
+			this.chosenType = this.$props.chartType
+		}
+
 		for (let i = 0; i < formKeys.length; i += 1) {
       for (let j = 0; j < this.$props.numForms; j += 1) {
-				if (if j === 0){
-					
+				this.tagStrs[formKeys[i]].push('');
+				this.tagAutocompletes[formKeys[i]].push([]);
+				if (j === 0){
+						
 				} else {
-					tagStrs[formKeys[i]].push('');
-					tagDicts[formKeys[i]].push([]);
-					tagAutocompletes[formKeys[i]].push([]);
+					this.tagDicts[formKeys[i]].push([]);
 				}
 			}
 		}
