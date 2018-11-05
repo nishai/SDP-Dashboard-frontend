@@ -176,6 +176,8 @@ const nameToColumn = {
   'Nationality': 'nationality_short_name',
   'Home Language': 'home_language_description',
   'Bell curve': 'final_mark',
+	'Pass rates by year': 'pass_rates_by_year',
+	'Pass rates by faculty/course': 'pass_rates_by_course',
 };
 
 export default {
