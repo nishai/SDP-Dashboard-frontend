@@ -28,6 +28,14 @@ import RadarChart from './RadarChart';
 import PolarChart from './PolarChart';
 import BubbleChart from './BubbleChart';
 import ScatterChart from './ScatterChart';
+import ChartModule from 'chartjs-plugin-labels';
+
+// https://github.com/emn178/chartjs-plugin-labels
+Chart.defaults.global.plugins.labels = {
+  render: 'percentage',
+  fontColor: '#333',
+  precision: 2,
+};
 
 export default {
   components: {
@@ -39,6 +47,7 @@ export default {
     PolarChart,
     BubbleChart,
     ScatterChart,
+    ChartModule,
   },
   props: [
     'type',
