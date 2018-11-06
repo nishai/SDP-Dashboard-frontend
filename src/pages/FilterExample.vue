@@ -100,24 +100,22 @@ export default {
       autocompleteItems3: [{
         text: '2013',
       }, {
-        text: "2014",
+        text: '2014',
       }, {
         text: '2015',
       }, {
         text: '2016',
       }, {
         text: '2017',
-      },{
+      }, {
         text: '2018',
-      },{
+      }, {
         text: '2019',
-      }
+      },
       ],
 
 
     };
-
-
   },
   computed: {
     filteredItems() {
@@ -132,8 +130,6 @@ export default {
   },
 };
 </script>
-
-
 
 
 <!-- axios example -->
