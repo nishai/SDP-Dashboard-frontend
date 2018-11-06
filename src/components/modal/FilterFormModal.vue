@@ -11,7 +11,8 @@
           <div v-if="groupByDesc === 'Race'">
             <FilterForm
 							ref="raceForm"
-              v-bind:chartType="false"
+              v-bind:chartTypeOptions="['doughnut', 'pie']"
+              v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
@@ -24,7 +25,8 @@
           <div v-if="groupByDesc === 'Gender'">
             <FilterForm
 							ref="genderForm"
-              v-bind:chartType="false"
+              v-bind:chartTypeOptions="['doughnut', 'pie']"
+              v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
@@ -37,7 +39,8 @@
           <div v-if="groupByDesc === 'Nationality'">
             <FilterForm
 							ref="nationalityForm"
-              v-bind:chartType="false"
+              v-bind:chartTypeOptions="['doughnut', 'pie']"
+              v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
@@ -50,7 +53,8 @@
           <div v-if="groupByDesc === 'Home Language'">
             <FilterForm
 							ref="languageForm"
-              v-bind:chartType="false"
+              v-bind:chartTypeOptions="['doughnut', 'pie']"
+              v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
@@ -63,20 +67,21 @@
           <div v-if="groupByDesc === 'Demographics vs Marks'">
             <FilterForm
 							ref="demographicsForm"
-              v-bind:chartType="true"
+              v-bind:chartTypeOptions="['line']"
+              v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
               v-bind:fschool="true"
-              v-bind:ftype="true"
               v-bind:numForms="2">
             </FilterForm>
           </div>
           <div v-if="groupByDesc === 'Pass rates by year'">
             <FilterForm
 							ref="passByYearForm"
-              v-bind:chartType="true"
+              v-bind:chartTypeOptions="['bar']"
+              v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
@@ -89,7 +94,8 @@
           <div v-if="groupByDesc === 'Pass rates by faculty/course'">
             <FilterForm
 							ref="passByCourseForm"
-              v-bind:chartType="true"
+              v-bind:chartTypeOptions="['bar']"
+              v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
@@ -102,7 +108,8 @@
           <div v-if="groupByDesc === 'Bell curve'">
             <FilterForm
 							ref="bellForm"
-              v-bind:chartType="true"
+              v-bind:chartTypeOptions="['line']"
+              v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
@@ -115,7 +122,8 @@
           <div v-if="groupByDesc === 'Progress outcome by faculty/course'">
             <FilterForm
 							ref="progressForm"
-              v-bind:chartType="true"
+              v-bind:chartTypeOptions="['bar']"
+              v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
@@ -128,7 +136,8 @@
           <div v-if="groupByDesc === 'Class size vs pass rate'">
             <FilterForm
 							ref="classSizeForm"
-              v-bind:chartType="true"
+              v-bind:chartTypeOptions="['line']"
+              v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
@@ -140,7 +149,8 @@
           <div v-if="groupByDesc === 'Average class size by faculty/course'">
             <FilterForm
 							ref="classSizeByCourseForm"
-              v-bind:chartType="true"
+              v-bind:chartTypeOptions="['bar']"
+              v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
