@@ -33,7 +33,3 @@ coverage/**
 
 #backups
 *.bak
-
-\.env\.development
-
-vue\.config\.js
