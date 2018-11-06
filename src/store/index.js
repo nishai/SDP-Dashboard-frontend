@@ -4,24 +4,17 @@ import reports from './modules/reports';
 import ui from './modules/ui';
 import dashboardCharts from './modules/dashboard_charts';
 
-
-/* Add Vuex Plugin to Vue */
+/* enable plugin, TODO: move to plugin folder */
 
 Vue.use(Vuex);
 
-/* Initialise Vuex */
+/* Export Vuex instance */
 
-const debug = process.env.NODE_ENV !== 'production';
-
-const store = new Vuex.Store({
+export default new Vuex.Store({
   modules: {
     ui,
     reports,
     dashboardCharts,
   },
-  strict: debug,
+  strict: process.env.NODE_ENV !== 'production',
 });
-
-/* Export Vuex instance */
-
-export default store;

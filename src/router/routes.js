@@ -23,12 +23,10 @@ export const navRoutes = [
     name: 'Chart Examples',
     path: '/examples',
     component: ChartExamples,
-    /* not part of route definitions, used by navbar */
     query: {
       templateType: '',
     },
   },
-
   {
     name: 'Queries',
     path: '/query',
@@ -38,7 +36,6 @@ export const navRoutes = [
     name: 'Reports',
     path: '/reports',
     component: Reports,
-
   },
   {
     name: 'GridExample',
@@ -50,13 +47,9 @@ export const navRoutes = [
     path: '/dashboard',
     component: Dashboard,
   },
-  // {
-  //  name: 'FilterExample',
-  //   path: '/filter',
-  //   component: Filters,
-  // },
-
 ];
+
+/* not part of route definitions, used by navbar */
 
 export const hiddenRoutes = [
   {

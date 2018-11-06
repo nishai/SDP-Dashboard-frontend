@@ -39,7 +39,7 @@ export default {
     ChartModule,
   },
   props: ['chartData'],
-  data: () => ({ 
+  data: () => ({
     isData: false,
     chartResultsLabels: [],
     chartResultsData: [],
@@ -98,7 +98,7 @@ export default {
 				switch(this.$props.chartData[index].groupBy){
 					case 'pass_rates_by_year':
 						queryArr = [
-							'course_stats',
+							'course-stats',
 							'final_mark',
 							this.$props.chartData[index].years[j],
 							this.$props.chartData[index].faculties,
@@ -109,7 +109,7 @@ export default {
 						break;
 					case 'pass_rates_by_course':
 						queryArr = [
-							'course_stats',
+							'course-stats',
 							'final_mark',
 							this.$props.chartData[index].years,
 							this.$props.chartData[index].faculties,
@@ -120,7 +120,7 @@ export default {
 						break;
 					case 'progress_outcome_by_course':
 						queryArr = [
-							'average_year_stats',
+							'average-year-stats',
 							'progress_outcome_type',
 							this.$props.chartData[index].years,
 							this.$props.chartData[index].faculties,
@@ -148,7 +148,7 @@ export default {
 							let numDatapoints = 0;
 							let labels = [];
 							let data = [];
-							for (let k = 0; k < results.length; k += 1) { 
+							for (let k = 0; k < results.length; k += 1) {
 								//sum += parseInt(results[k][keys[0]], 10) * parseInt(results[k][keys[1]],10); // for average mark
 								switch(this.$props.chartData[index].groupBy){
 									case 'pass_rates_by_year':
@@ -194,7 +194,7 @@ export default {
       console.log('LOADING DATA');
       // TODO: Multiple sub-charts
       apiQuery.getCourseStats(
-				'course_stats',
+				'course-stats',
         this.$props.chartData[index].groupBy,
         this.$props.chartData[index].years,
         this.$props.chartData[index].faculties,
@@ -243,7 +243,7 @@ export default {
 			}
       if(
 				(this.$props.chartData[0].chartType !== 'bar' ||
-				this.$props.chartData[0].chartType === 'bar' && 
+				this.$props.chartData[0].chartType === 'bar' &&
 				barFlag)
 			){
 				console.log(this.chartResultsData)

@@ -31,9 +31,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import Chart from '../charts/chartjs/Chart.vue';
 import FeatherIcon from '../misc/FeatherIcon.vue';
-import { mapGetters } from 'vuex';
 
 export default {
   name: 'DashboardChart',
@@ -61,7 +61,7 @@ export default {
   computed: {
     ...mapGetters([
       'getChart',
-		]),
+    ]),
     dashboardChart() {
       return this.getChart(this.$props.dashboardChartId);
     },
@@ -75,10 +75,10 @@ export default {
     },
   },
   methods: {
-		openPopup() {
-			console.log("Opening popup in parent");
+    openPopup() {
+      console.log('Opening popup in parent');
       this.$parent.$parent.$parent.openPopup(this.dashboardChartId);
-		},
+    },
     /* Handle click */
     toggleEditor() {
       console.log('A');
@@ -89,8 +89,8 @@ export default {
       console.log(this.$vnode.key);
       this.$store.dispatch('deleteDashboardChart', { dashboardChartId: this.$vnode.key });
     },
-    renameChart(e){
-      this.$store.dispatch('renameChart', {name: e, id: this.$vnode.key});
+    renameChart(e) {
+      this.$store.dispatch('renameChart', { name: e, id: this.$vnode.key });
       this.$vnode.key = e;
     },
   },

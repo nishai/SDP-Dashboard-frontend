@@ -11,7 +11,6 @@ The sidebar, footer, and content are defined here.
     <Menubar class="app-menubar"/>
     <div class="expand">
       <Sidebar class="app-sidebar"/>
-      <Optsbar/>
       <div class="app-viewport">
         <router-view class="app-content">
           This will be replaced
@@ -27,21 +26,13 @@ The sidebar, footer, and content are defined here.
 <script>
 import Menubar from './components/menubar/Menubar.vue';
 import Sidebar from './components/sidebar/Sidebar.vue';
-import Optsbar from './components/sidebar/Optsbar.vue';
 import Footer from './components/Footer.vue';
-
-/* Import CSS Globally */
-import './assets/css/defaults.css';
-import './assets/css/bootstrapExtensions.css';
-import './assets/css/dashboard.css';
-import './assets/css/wits.css';
 
 export default {
   name: 'app',
   components: {
     Menubar,
     Sidebar,
-    Optsbar,
     Footer,
   },
 };
