@@ -14,7 +14,7 @@
           horizontal>
           <b-form-select
             id="Type"
-            :options="chartTypeOptions"
+            :options="chartTypeOptions[i-1]"
             required
             v-model="chosenType[i-1]">
           </b-form-select>
@@ -34,7 +34,7 @@
               :tags="tagDicts.years[i-1]"
               :autocomplete-items="filteredItemsYears(i-1)"
               :add-only-from-autocomplete="true"  
-              @tags-changed="newTags => tagDicts.years[0] = newTags"> 
+              @tags-changed="newTags => tagDicts.years[i-1] = newTags"> 
             </vue-tags-input>
           </div>
         </b-form-group>
@@ -52,7 +52,7 @@
               :tags="tagDicts.faculties[i-1]"
               :autocomplete-items="filteredItemsFaculties(i-1)"
               :add-only-from-autocomplete="true"  
-              @tags-changed="newTags => tagDicts.faculties[0] = newTags"> 
+              @tags-changed="newTags => tagDicts.faculties[i-1] = newTags"> 
             </vue-tags-input>
           </div>
         </b-form-group>
@@ -70,7 +70,7 @@
               :tags="tagDicts.schools[i-1]"
               :autocomplete-items="filteredItemsSchools(i-1)"
               :add-only-from-autocomplete="true"  
-              @tags-changed="newTags => tagDicts.schools[0] = newTags"> 
+              @tags-changed="newTags => tagDicts.schools[i-1] = newTags"> 
             </vue-tags-input>
           </div>
         </b-form-group>
@@ -88,7 +88,7 @@
               :tags="tagDicts.courses[i-1]"
               :autocomplete-items="filteredItemsCourses(i-1)"
               :add-only-from-autocomplete="true"  
-              @tags-changed="newTags => tagDicts.courses[0] = newTags"> 
+              @tags-changed="newTags => tagDicts.courses[i-1] = newTags"> 
             </vue-tags-input>
           </div>
         </b-form-group>
@@ -143,6 +143,8 @@ export default {
     'selectedCourse',
     'selectedType',
     'selectedDuplicate',
+
+		'compare',
   ],
 
 	components: {
@@ -182,6 +184,31 @@ export default {
    * This is run when the component is first created to initialise it.
    */
   created() {
+		if (this.$props.compare === true){
+			this.loadYears();
+			this.loadFaculties();
+			this.loadSchools();
+			this.loadCourses();
+		}
+    for (let i = 0; i < this.$props.numForms; i += 1) {
+			if (i !== 0){
+				this.$props.chartTypeOptions.push([this.$props.selectedChartType]);
+			}
+			switch (this.$props.selectedChartType){
+				case 'pie':
+					this.$props.chartTypeOptions[i].push('doughnut');
+					break;
+				case 'doughnut':
+					this.$props.chartTypeOptions[i].push('pie');
+					break;
+				case 'line':
+					this.$props.chartTypeOptions[i].push('bar');
+					break;
+				case 'bar':
+					this.$props.chartTypeOptions[i].push('line');
+					break;
+			}
+		}
 		// initialize data.form to have the correct amount of v-models
     const formKeys = Object.keys(this.tagDicts);
 		if (this.$props.selectedDuplicate === false){
@@ -203,28 +230,28 @@ export default {
 
 					let selected = [];
           switch(formKeys[i]){
-						case 'year':
+						case 'years':
 							if(this.$props.selectedYear !== undefined){
 								selected = this.$props.selectedYear;
 							} else {
 								selected = [];
 							}
 							break;
-						case 'faculty':
+						case 'faculties':
 							if(this.$props.selectedFaculty !== undefined){
 								selected = this.$props.selectedFaculty;
 							} else {
 								selected = [];
 							}
 							break;
-						case 'school':
+						case 'schools':
 							if(this.$props.selectedSchool !== undefined){
 								selected = this.$props.selectedSchool;
 							} else {
 								selected = [];
 							}
 							break;
-						case 'course':
+						case 'courses':
 							if(this.$props.selectedCourse !== undefined){
 								selected = this.$props.selectedCourse;
 							} else {
@@ -237,9 +264,8 @@ export default {
 				  if(typeof selected === "string"){
             selected = [selected];
           }
-
 					let dicts = []
-					for (let k = 0; i < selected.length; k += 1){
+					for (let k = 0; k < selected.length; k += 1){
 						dicts.push({text: selected[k]});
 					}
 					this.tagDicts[formKeys[i]].push(dicts)
@@ -262,16 +288,16 @@ export default {
   },
 	methods: {
     filteredItemsYears(index) {
-      return this.tagAutocompletes.years[0].filter((i) => new RegExp(this.tagStrs.years[0], 'i').test(i.text)).slice(0,10);
+      return this.tagAutocompletes.years[index].filter((i) => new RegExp(this.tagStrs.years[index], 'i').test(i.text)).slice(0,10);
     },
     filteredItemsFaculties(index) {
-      return this.tagAutocompletes.faculties[0].filter((i) => new RegExp(this.tagStrs.faculties[0], 'i').test(i.text)).slice(0,10);
+      return this.tagAutocompletes.faculties[index].filter((i) => new RegExp(this.tagStrs.faculties[index], 'i').test(i.text)).slice(0,10);
     },
     filteredItemsSchools(index) {
-      return this.tagAutocompletes.schools[0].filter((i) => new RegExp(this.tagStrs.schools[0], 'i').test(i.text)).slice(0,10);
+      return this.tagAutocompletes.schools[index].filter((i) => new RegExp(this.tagStrs.schools[index], 'i').test(i.text)).slice(0,10);
     },
     filteredItemsCourses(index) {
-      return this.tagAutocompletes.courses[0].filter((i) => new RegExp(this.tagStrs.courses[0], 'i').test(i.text)).slice(0,10);
+      return this.tagAutocompletes.courses[index].filter((i) => new RegExp(this.tagStrs.courses[index], 'i').test(i.text)).slice(0,10);
     },
 
 		makeShow() {

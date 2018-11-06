@@ -2,22 +2,29 @@
   <div class="dashboard">
     <!-- Modal Component -->
 	  <b-modal ref="compareModal" id="compareModal" title="Compare Options" size="lg" hide-footer>
-      <FilterForm
-				v-if="showModal"
-        v-bind:chartType="true"
-        v-bind:groupByDesc="popupChart.charts[0].groupBy"
-        v-bind:fyear="true"
-        v-bind:fcourse="true"
-        v-bind:ffaculty="true"
-        v-bind:fschool="true"
-        v-bind:numForms="2"
-        v-bind:selectedChartType="popupChart.charts[0].chartType"
-        v-bind:selectedYear="popupChart.charts[0].years"
-        v-bind:selectedCourse="popupChart.charts[0].courses"
-        v-bind:selectedFaculty="popupChart.charts[0].faculties"
-        v-bind:selectedSchool="popupChart.charts[0].schools"
-        v-bind:selectedDuplicate="popupChart.charts[0].duplicate">
-      </FilterForm>
+			<b-container fluid>
+				<div>
+					<FilterForm
+						v-if="showModal"
+						v-bind:chartTypeOptions="[[popupChart.charts[0].chartType]]"
+						v-bind:chartType="popupChart.charts[0].chartType"
+						v-bind:groupByDesc="popupChart.charts[0].groupBy"
+						v-bind:fyear="true"
+						v-bind:fcourse="true"
+						v-bind:ffaculty="true"
+						v-bind:fschool="true"
+						v-bind:ftype="true"
+						v-bind:numForms="2"
+						v-bind:selectedChartType="popupChart.charts[0].chartType"
+						v-bind:selectedYear="popupChart.charts[0].years"
+						v-bind:selectedCourse="popupChart.charts[0].courses"
+						v-bind:selectedFaculty="popupChart.charts[0].faculties"
+						v-bind:selectedSchool="popupChart.charts[0].schools"
+						v-bind:selectedDuplicate="popupChart.charts[0].duplicate"
+						v-bind:compare="true">
+					</FilterForm>
+				</div>
+			</b-container>
     </b-modal>
 
     <Heading heading_text="Dashboard"></Heading>

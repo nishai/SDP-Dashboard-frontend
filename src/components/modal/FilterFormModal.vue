@@ -11,7 +11,7 @@
           <div v-if="groupByDesc === 'Race'">
             <FilterForm
 							ref="raceForm"
-              v-bind:chartTypeOptions="['doughnut', 'pie']"
+              v-bind:chartTypeOptions="[['doughnut']]"
               v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
@@ -19,13 +19,14 @@
               v-bind:ffaculty="true"
               v-bind:fschool="true"
               v-bind:numForms="1"
-              v-bind:selectedChartType="chartType">
+              v-bind:selectedChartType="chartType"
+							v-bind:compare="false">
             </FilterForm>
           </div>
           <div v-if="groupByDesc === 'Gender'">
             <FilterForm
 							ref="genderForm"
-              v-bind:chartTypeOptions="['doughnut', 'pie']"
+              v-bind:chartTypeOptions="[['pie']]"
               v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
@@ -33,13 +34,14 @@
               v-bind:ffaculty="true"
               v-bind:fschool="true"
               v-bind:numForms="1"
-              v-bind:selectedChartType="chartType">
+              v-bind:selectedChartType="chartType"
+							v-bind:compare="false">
             </FilterForm>
           </div>
           <div v-if="groupByDesc === 'Nationality'">
             <FilterForm
 							ref="nationalityForm"
-              v-bind:chartTypeOptions="['doughnut', 'pie']"
+              v-bind:chartTypeOptions="[['pie']]"
               v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
@@ -47,13 +49,14 @@
               v-bind:ffaculty="true"
               v-bind:fschool="true"
               v-bind:numForms="1"
-              v-bind:selectedChartType="chartType">
+              v-bind:selectedChartType="chartType"
+							v-bind:compare="false">
             </FilterForm>
           </div>
           <div v-if="groupByDesc === 'Home Language'">
             <FilterForm
 							ref="languageForm"
-              v-bind:chartTypeOptions="['doughnut', 'pie']"
+              v-bind:chartTypeOptions="[['pie']]"
               v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
@@ -61,26 +64,28 @@
               v-bind:ffaculty="true"
               v-bind:fschool="true"
               v-bind:numForms="1"
-              v-bind:selectedChartType="chartType">
+              v-bind:selectedChartType="chartType"
+							v-bind:compare="false">
             </FilterForm>
           </div>
           <div v-if="groupByDesc === 'Demographics vs Marks'">
             <FilterForm
 							ref="demographicsForm"
-              v-bind:chartTypeOptions="['line']"
+              v-bind:chartTypeOptions="[['line']]"
               v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
               v-bind:fschool="true"
-              v-bind:numForms="2">
+              v-bind:numForms="2"
+							v-bind:compare="false">
             </FilterForm>
           </div>
           <div v-if="groupByDesc === 'Pass rates by year'">
             <FilterForm
 							ref="passByYearForm"
-              v-bind:chartTypeOptions="['bar']"
+              v-bind:chartTypeOptions="[['bar']]"
               v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
@@ -88,13 +93,14 @@
               v-bind:ffaculty="true"
               v-bind:fschool="true"
               v-bind:numForms="1"
-              v-bind:selectedChartType="chartType">
+              v-bind:selectedChartType="chartType"
+							v-bind:compare="false">
             </FilterForm>
           </div>
           <div v-if="groupByDesc === 'Pass rates by faculty/course'">
             <FilterForm
 							ref="passByCourseForm"
-              v-bind:chartTypeOptions="['bar']"
+              v-bind:chartTypeOptions="[['bar']]"
               v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
@@ -102,13 +108,14 @@
               v-bind:ffaculty="true"
               v-bind:fschool="true"
               v-bind:numForms="1"
-              v-bind:selectedChartType="chartType">
+              v-bind:selectedChartType="chartType"
+							v-bind:compare="false">
             </FilterForm>
           </div>
           <div v-if="groupByDesc === 'Bell curve'">
             <FilterForm
 							ref="bellForm"
-              v-bind:chartTypeOptions="['line']"
+              v-bind:chartTypeOptions="[['line']]"
               v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
@@ -116,13 +123,14 @@
               v-bind:ffaculty="true"
               v-bind:fschool="true"
               v-bind:numForms="1"
-              v-bind:selectedChartType="chartType">
+              v-bind:selectedChartType="chartType"
+							v-bind:compare="false">
             </FilterForm>
           </div>
           <div v-if="groupByDesc === 'Progress outcome by faculty/course'">
             <FilterForm
 							ref="progressForm"
-              v-bind:chartTypeOptions="['bar']"
+              v-bind:chartTypeOptions="[['bar']]"
               v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
@@ -130,26 +138,28 @@
               v-bind:ffaculty="true"
               v-bind:fschool="true"
               v-bind:numForms="1"
-              v-bind:selectedChartType="chartType">
+              v-bind:selectedChartType="chartType"
+							v-bind:compare="false">
             </FilterForm>
           </div>
           <div v-if="groupByDesc === 'Class size vs pass rate'">
             <FilterForm
 							ref="classSizeForm"
-              v-bind:chartTypeOptions="['line']"
+              v-bind:chartTypeOptions="[['line']]"
               v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
               v-bind:fcourse="true"
               v-bind:ffaculty="true"
               v-bind:fschool="true"
-              v-bind:numForms="2">
+              v-bind:numForms="2"
+							v-bind:compare="false">
             </FilterForm>
           </div>
           <div v-if="groupByDesc === 'Average class size by faculty/course'">
             <FilterForm
 							ref="classSizeByCourseForm"
-              v-bind:chartTypeOptions="['bar']"
+              v-bind:chartTypeOptions="[['bar']]"
               v-bind:ftype="true"
               v-bind:groupByDesc="groupByDesc"
               v-bind:fyear="true"
@@ -157,7 +167,8 @@
               v-bind:ffaculty="true"
               v-bind:fschool="true"
               v-bind:numForms="1"
-              v-bind:selectedChartType="chartType">
+              v-bind:selectedChartType="chartType"
+							v-bind:compare="false">
             </FilterForm>
           </div>
         </b-container>
