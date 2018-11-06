@@ -159,10 +159,10 @@ function determineYield(groupBy) {
   return groupBy;
 }
 
-function getCourseStats(modelName ,groupBy, years, faculties, schools, courses, duplicate) {
+function getCourseStats(modelName, groupBy, years, faculties, schools, courses, duplicate) {
   const yieldBy = determineYield(groupBy);
   return requester.post(
-    modelName + '/query',
+    `${modelName}/query`,
     {
       chain: [
         {
@@ -214,17 +214,17 @@ const nameToColumn = {
   'Nationality': 'nationality_short_name',
   'Home Language': 'home_language_description',
   'Bell curve': 'final_mark',
-	'Pass rates by year': 'pass_rates_by_year',
-	'Pass rates by faculty/course': 'pass_rates_by_course',
-	'Progress outcome by faculty/course': 'progress_outcome_by_course',
+  'Pass rates by year': 'pass_rates_by_year',
+  'Pass rates by faculty/course': 'pass_rates_by_course',
+  'Progress outcome by faculty/course': 'progress_outcome_by_course',
 };
 
 export default {
   getCourseStats,
   getYears,
   getFaculties,
-	getSchools,
-	getCourses,
+  getSchools,
+  getCourses,
   getFacultySchools,
   getSchoolsCourses,
   getLoginToken,
