@@ -1,14 +1,11 @@
 <template>
   <!--https://bootstrap-vue.js.org/docs/components/form/-->
-
-
+  <b-form @submit="onSubmit" v-if="show">
 <!-- http://www.vue-tags-input.com/#/examples/templates -->
-
-  <b-form @submit="onSubmit" @reset="onClose" v-if="show">
     <b-row>
       <!-- create numForms amount of copies of the form side by side-->
       <b-col v-for="i in numForms" :key="groupByDesc + '-' + i">
-        <!-- CHART TYPE -->
+				<!-- CHART TYPE -->
         <b-form-group
           v-if="ftype === true"
           id="typeGroup"
@@ -17,106 +14,118 @@
           horizontal>
           <b-form-select
             id="Type"
-            :options="types"
+            :options="chartTypeOptions[i-1]"
             required
-            v-model="form.type[i-1]">
+            v-model="chosenType[i-1]">
           </b-form-select>
         </b-form-group>
-        <!-- YEARS -->
+
+				<!-- YEARS -->
         <b-form-group
           v-if="fyear === true"
           id="YearGroup"
           label="Year:"
           label-for="Year"
           horizontal>
-<!-- Filter Tags -->
-            <div>
+					<!-- Filter Tags -->
+          <div>
             <vue-tags-input
-              v-model="tag"
-              :tags="yearTags"
-              :autocomplete-items="autocompleteItems"
+              v-model="tagStrs.years[i-1]"
+              :tags="tagDicts.years[i-1]"
+              :autocomplete-items="filteredItemsYears(i-1)"
               :add-only-from-autocomplete="true"  
-              @tags-changed="update"> 
+              @tags-changed="newTags => tagDicts.years[i-1] = newTags"> 
             </vue-tags-input>
           </div>
         </b-form-group>
-        <!-- FACULTIES -->
+				<!-- FACULTY -->
         <b-form-group
           v-if="ffaculty === true"
           id="FacultyGroup"
           label="Faculty:"
           label-for="Faculty"
-          description="You can choose multiple faculties"
           horizontal>
-<!-- Filter Tags -->
-            <div>
+					<!-- Filter Tags -->
+          <div>
             <vue-tags-input
-              v-model="form.faculty[i-1]"
-              :tags="facultyTags"
-              :autocomplete-items="derivedFaculties"
+              v-model="tagStrs.faculties[i-1]"
+              :tags="tagDicts.faculties[i-1]"
+              :autocomplete-items="filteredItemsFaculties(i-1)"
               :add-only-from-autocomplete="true"  
-              @tags-changed="loadSchools($event, i-1)" >
+              @tags-changed="newTags => tagDicts.faculties[i-1] = newTags"> 
             </vue-tags-input>
-            </div>
+          </div>
         </b-form-group>
-
-        <!-- SCHOOLS -->
+				<!-- SCHOOL -->
         <b-form-group
+          v-if="fschool === true"
           id="SchoolGroup"
           label="School:"
           label-for="School"
-          description="You can choose multiple schools"
           horizontal>
-<!-- Filter Tags -->
-            <div>
+					<!-- Filter Tags -->
+          <div>
             <vue-tags-input
-              v-model="form.school[i-1]"
-              :tags="schoolTags"
-              :autocomplete-items="derivedSchools[i-1]"
-              :add-only-from-autocomplete="true"    
-              @tags-changed="loadCourses($event, i-1)">
+              v-model="tagStrs.schools[i-1]"
+              :tags="tagDicts.schools[i-1]"
+              :autocomplete-items="filteredItemsSchools(i-1)"
+              :add-only-from-autocomplete="true"  
+              @tags-changed="newTags => tagDicts.schools[i-1] = newTags"> 
             </vue-tags-input>
-            </div>
+          </div>
         </b-form-group>
-        <!-- COURSES -->
+				<!-- COURSES -->
         <b-form-group
+          v-if="fcourse === true"
           id="CourseGroup"
           label="Course:"
           label-for="Course"
-          description="You can choose multiple courses"
           horizontal>
-<!-- Filter Tags -->
-            <div>
+					<!-- Filter Tags -->
+          <div>
             <vue-tags-input
-              v-model="form.course[i-1]"
-              :tags="courseTags"
-              :autocomplete-items="derivedCourses[i-1]"
-              @tags-changed="newTags => courseTags = newTags">
+              v-model="tagStrs.courses[i-1]"
+              :tags="tagDicts.courses[i-1]"
+              :autocomplete-items="filteredItemsCourses(i-1)"
+              :add-only-from-autocomplete="true"  
+              @tags-changed="newTags => tagDicts.courses[i-1] = newTags"> 
             </vue-tags-input>
-            </div>
+          </div>
         </b-form-group>
 
-      </b-col>
-    </b-row>
-    <b-row class="text-center">
-      <b-col>
-        <b-button type="submit" variant="primary">Filter</b-button>
-        <b-button type="reset" variant="secondary">Close</b-button>
-      </b-col>
-    </b-row>
-  </b-form>
+				<!-- Duplicate Data Checkbox-->
+        <b-form-group
+          checked=true
+          id="DuplicateGroup">
+          <b-form-checkbox
+            v-model="duplicates[i-1]">
+            Don't Duplicate data across fields
+          </b-form-checkbox>
+        </b-form-group>
 
+			</b-col>
+		</b-row>
+		<b-row>
+      <b-col>
+        <b-button variant="primary" type="primary">Filter</b-button>
+			</b-col>
+			<b-col>
+        <b-button @click="onClose" variant="secondary">Close</b-button>
+      </b-col>
+    </b-row>
+	</b-form>
+	<h1 v-else> Loading Data For Form, Please Wait... {{loadedPercent}}% Loaded</h1>
 </template>
 
 <script>
 import apiQuery from '../../api/api_query';
+import { mapGetters } from 'vuex';
 import VueTagsInput from '@johmun/vue-tags-input';
 
 export default {
   name: 'FilterForm',
-
   props: [
-    'chartType', // contains the type of graph to be used (pie, bar. etc)
+    'chartTypeOptions', // contains the options for chart types available (pie, bar. etc)
     'groupByDesc', // contains the type of graph to be used (race, bell curve, etc)
     'fyear', // boolean for whether form has year field
     'ffaculty', // boolean for whether form has faculty field
@@ -124,283 +133,321 @@ export default {
     'fcourse', // boolean for whether form has course field
     'ftype', // boolean for whether form has type field
     'numForms', // int for amount of side by side copies of the form for superimposing graphs
+
+    // preselected values to be hilighted on form start
+    'selectedChartType',
+    'selectedGroupByDesc',
+    'selectedYear',
+    'selectedFaculty',
+    'selectedSchool',
+    'selectedCourse',
+    'selectedType',
+    'selectedDuplicate',
+
+		'compare',
   ],
 
-  components: {
+	components: {
     VueTagsInput,
   },
 
   data: () => ({
-    form: {
-      type: [],
-      year: [],
-      course: [],
-      faculty: [],
-      school: [],
-
-    },
-
-      //filter tag 'tag' takes input and passes it to filter  with autocomplete :
-
-      ///////test
-      tag: '',
-      ////////
-
-
-       // filter tags lists - these store the currently selected tags
-
-       /// TEST
-      autocompleteItems: [],
-      /////////////////////////
-      yearTags: [],    
-      facultyTags:[],
-      schoolTags:[],
-      courseTags:[],
-
-// Example of what autocompleteItems should look like
-     // autocompleteItems: [{
-     //      text: 'Spain',
-     //    }, {
-     //      text: 'France',
-     //    }, {
-     //      text: 'USA',
-     //    }, {
-     //      text: 'Germany',
-     //    }, {
-     //      text: 'China',
-     //    }], 
-
-
-    types: [
-      { text: 'Select One', value: null },
-      'bar', 'line',
-    ],
-    years: [],
-    faculties: [],
-    schools: [],
-    courses: [],
-    show: true,
-  }),
+		show: false,
+		showCounter: 0,
+//		chartTypes: [
+//				{ text: 'Select One', value: null },
+//				'bar', 'line', 'pie', 'doughnut', 'radar',
+//		],
+		tagStrs: {   //arrays of strings
+			years: [],
+			faculties: [],
+			schools: [],
+			courses: [],
+		},
+		tagDicts: {	// arrays of array of dictionaries
+			years: [],
+			faculties: [],
+			schools: [],
+			courses: [],
+		},
+		tagAutocompletes: {	//arrays of array of dictionionaries
+			years: [],
+			faculties: [],
+			schools: [],
+			courses: [],
+		},
+		duplicates: [],
+		chosenType: [],
+	}),
 
   /**
    * This is run when the component is first created to initialise it.
    */
   created() {
-    // initialize data.form to have the correct amount of v-models
-    const formKeys = Object.keys(this.form);
-    for (let i = 0; i < formKeys.length; i += 1) {
+		if (this.$props.compare === true){
+			this.loadYears();
+			this.loadFaculties();
+			this.loadSchools();
+			this.loadCourses();
+		}
+    for (let i = 0; i < this.$props.numForms; i += 1) {
+			if (i !== 0){
+				this.$props.chartTypeOptions.push([this.$props.selectedChartType]);
+			}
+			switch (this.$props.selectedChartType){
+				case 'pie':
+					this.$props.chartTypeOptions[i].push('doughnut');
+					break;
+				case 'doughnut':
+					this.$props.chartTypeOptions[i].push('pie');
+					break;
+				case 'line':
+					this.$props.chartTypeOptions[i].push('bar');
+					break;
+				case 'bar':
+					this.$props.chartTypeOptions[i].push('line');
+					break;
+			}
+		}
+		// initialize data.form to have the correct amount of v-models
+    const formKeys = Object.keys(this.tagDicts);
+		if (this.$props.selectedDuplicate === false){
+			this.duplicates.push(false);
+		} else {
+			this.duplicates.push(true);
+		}
+
+		for (let i = 0; i < formKeys.length; i += 1) {
       for (let j = 0; j < this.$props.numForms; j += 1) {
-        this.form[formKeys[i]].push([null]);
-      }
-    }
+				this.tagStrs[formKeys[i]].push('');
+				this.tagAutocompletes[formKeys[i]].push([]);
+				if (j === 0){
+					if(this.$props.selectedChartType !== undefined){
+						this.chosenType.push(this.$props.selectedChartType);
+					} else {
+						this.chosenType.push('');
+					}
 
-    // initialize data arrays to fit the amount of tables being displayed
-    for (let j = 0; j < this.$props.numForms; j += 1) {
-      this.schools.push([]);
-      this.courses.push([]);
-    }
+					let selected = [];
+          switch(formKeys[i]){
+						case 'years':
+							if(this.$props.selectedYear !== undefined){
+								selected = this.$props.selectedYear;
+							} else {
+								selected = [];
+							}
+							break;
+						case 'faculties':
+							if(this.$props.selectedFaculty !== undefined){
+								selected = this.$props.selectedFaculty;
+							} else {
+								selected = [];
+							}
+							break;
+						case 'schools':
+							if(this.$props.selectedSchool !== undefined){
+								selected = this.$props.selectedSchool;
+							} else {
+								selected = [];
+							}
+							break;
+						case 'courses':
+							if(this.$props.selectedCourse !== undefined){
+								selected = this.$props.selectedCourse;
+							} else {
+								selected = [];
+							}
+							break;
+						default:
+							selected = []
+					}
+				  if(typeof selected === "string"){
+            selected = [selected];
+          }
+					let dicts = []
+					for (let k = 0; k < selected.length; k += 1){
+						dicts.push({text: selected[k]});
+					}
+					this.tagDicts[formKeys[i]].push(dicts)
 
-    // Load years and faculties for basic form
-    this.loadYears();
-    this.loadFaculties();
-  },
 
-  /**
-   * Updated whenever their dependencies are changed.
-   */
+				} else {
+					this.tagDicts[formKeys[i]].push([]);
+					this.chosenType.push('');
+				}
+			}
+		}
+	},
   computed: {
-    derivedYears() {
-        // let list = this.years
-        //   list = list.map(x => {
-        //   return({text: x});
-        //   });
-        //     this.years=list; 
-
-            return this.years ? this.years : ['loading data from database...'];
-       
-    },
-    derivedFaculties() {
-      return this.faculties ? this.faculties : ['loading data from database...'];
-    },
-    derivedSchools() {
-      return this.schools ? this.schools : ['loading data from database...'];
-    },
-    derivedCourses() {
-      return this.courses ? this.courses : ['loading data from database...'];
-    },
-
-
-    // *** this needs fixing filtertags - Not working currently
-    // filteredItems1() {
-    //   console.log("PPPPPPPPPP")
-    //   console.log(this.years)
-    //   return this.years.filter((i) => new RegExp(this.tag, 'i').test(i.text));
-    // },
-
+    ...mapGetters([
+      'numCharts',
+    ]),
+		loadedPercent() {
+			return (100.0 * this.showCounter)/Object.keys(this.tagDicts).length;
+		},
   },
-
-  // https://stackoverflow.com/questions/52724773/javascript-get-data-from-promise-axios
-  methods: {
-    /**
-     * loads available years from the database into this.years
-     */
-    update(newTags) {
-      this.autocompleteItems = [];
-      this.yearTags = newTags;
+	methods: {
+    filteredItemsYears(index) {
+      return this.tagAutocompletes.years[index].filter((i) => new RegExp(this.tagStrs.years[index], 'i').test(i.text)).slice(0,10);
+    },
+    filteredItemsFaculties(index) {
+      return this.tagAutocompletes.faculties[index].filter((i) => new RegExp(this.tagStrs.faculties[index], 'i').test(i.text)).slice(0,10);
+    },
+    filteredItemsSchools(index) {
+      return this.tagAutocompletes.schools[index].filter((i) => new RegExp(this.tagStrs.schools[index], 'i').test(i.text)).slice(0,10);
+    },
+    filteredItemsCourses(index) {
+      return this.tagAutocompletes.courses[index].filter((i) => new RegExp(this.tagStrs.courses[index], 'i').test(i.text)).slice(0,10);
     },
 
-
-    loadYears() {
+		makeShow() {
+			this.showCounter += 1;
+			if (this.showCounter === Object.keys(this.tagDicts).length){
+				console.log("Finished loading data for form")
+				this.show = true;
+			}
+		},
+		loadData(){
+			this.loadYears();
+			this.loadFaculties();
+			this.loadSchools();
+			this.loadCourses();
+		},
+		loadYears() {
       apiQuery.getYears()
         .then((response) => response.data)
         .then((data) => {
-          this.autocompleteItems = Object.values(data.results).map(a => {
-            return { text: a};  });       
           // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
           // can probably clean this up and reduce redundency
-         
+					for (let i = 0; i < this.tagAutocompletes.years.length; i += 1){
+          	this.tagAutocompletes.years[i] = 
+							Object.values(data.results).map(a => {return { text: a};  });      
+					}
+					this.makeShow();
         });
-
     },
-
-    /**
-     * loads available faculties from the database into this.faculties
-     */
-    loadFaculties() {
+		loadFaculties() {
       apiQuery.getFaculties()
         .then((response) => response.data)
         .then((data) => {
-          this.faculties = Object.values(data.results);
+          // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
+          // can probably clean this up and reduce redundency
+					for (let i = 0; i < this.tagAutocompletes.faculties.length; i += 1){
+          	this.tagAutocompletes.faculties[i] = 
+							Object.values(data.results).map(a => {return { text: a};  });      
+					}
+					this.makeShow();
         });
     },
-
-    /**
-     * filters schools in database that are in this.faculty and puts it in this.schools
-     * @param index
-     */
-    loadSchools(facultyTaglits,index) {
-      // gets called when form.faculty changes, so it gets called unnecessarily with created()
-      console.log(facultyTaglits)
-
-      if (facultyTaglits.length !== 0) {
-        console.log(this.form.faculty)
-              console.log("Hellllllllllllllllllo")
-
-        // the query will get schools for the following faculties:
-        var faculties =[];
-        this.facultyTags=[];//re-init the selected tags,(user changed mind)
-        for(var f =0;f<facultyTaglits.length;f++){
-          faculties.push(facultyTaglits[f].text); //for the getFaculties query. shist but yea...
-          this.facultyTags.push(facultyTaglits[f]);//update the taglist
-        }
-         
-        apiQuery.getFacultySchools(faculties)
-          .then((response) => response.data)
-          .then((data) => {
-            this.schools[index] = Object.values(data.results);
-            console.log(data.results)
-            this.$forceUpdate();
-          });
-      }
+		loadSchools() {
+      apiQuery.getSchools()
+        .then((response) => response.data)
+        .then((data) => {
+          // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
+          // can probably clean this up and reduce redundency
+					for (let i = 0; i < this.tagAutocompletes.schools.length; i += 1){
+          	this.tagAutocompletes.schools[i] = 
+							Object.values(data.results).map(a => {return { text: a};  });      
+					}
+					this.makeShow();
+        });
     },
-
-    /**
-     * filters courses in database that are in this.schools and puts it in this.courses
-     * @param index
-     */
-    loadCourses(schoolTaglits,index) {
-
-      if (schoolTaglits.length !== 0) {
-        // the query will get courses for the following schools:
-        var schoolz =[];
-        this.schoolTags=[];//re-init the selected tags, (user changed mind)
-        for(var f =0;f<schoolTaglits.length;f++){
-          schoolz.push(schoolTaglits[f].text);
-          this.schoolTags.push(schoolTaglits[f]);//update the taglist
-        }
-
-        // this.form.school[index]=schoolz; //caused a bug where text would appear next to tag
-        apiQuery.getSchoolsCourses(schoolz)
-          .then((response) => response.data)
-          .then((data) => {
-            this.courses[index] = Object.values(data.results);
-            this.$forceUpdate();
-          });
-      }
+		loadCourses() {
+      apiQuery.getCourses()
+        .then((response) => response.data)
+        .then((data) => {
+          // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
+          // can probably clean this up and reduce redundency
+					for (let i = 0; i < this.tagAutocompletes.courses.length; i += 1){
+          	this.tagAutocompletes.courses[i] = 
+							Object.values(data.results).map(a => {return { text: a};  });      
+					}
+					this.makeShow();
+        });
     },
+		onSubmit(){
+			let name;
+      if(apiQuery.nameToColumn[this.$props.groupByDesc] !== undefined){
+        name = apiQuery.nameToColumn[this.$props.groupByDesc];
+      } else{
+        name = this.$props.groupByDesc;
+			}
 
-    /**
-     * analyse data and make chart when submitting form
-     */
-    onSubmit(event) {
+			// Convert FilterTags into arrays to pass into the query:
 
-// Convert FilterTags into arrays to pass into the query:
-
-// convert years tags to an array
+			// convert years tags to an array
       var submitYears = new Array();
-      for (var key in this.yearTags) {
-        submitYears.push(this.yearTags[key].text);
-      }
-      this.form.year[0]=submitYears
-
-// convert faculty tags to an array
-      var submitFacs = new Array();
-      for (var key in this.facultyTags) {
-        submitFacs.push(this.facultyTags[key].text);
-      }
-      this.form.faculty[0]=submitFacs;
-
-// convert schools tags to an array
+      var submitFaculties = new Array();
       var submitSchools = new Array();
-      for (var key in this.schoolTags) {
-        submitSchools.push(this.schoolTags[key].text);
-      }
-      this.form.school[0]=submitSchools;
-
-// convert courses tags to an array
       var submitCourses = new Array();
-      for (var key in this.courseTags) {
-        submitCourses.push(this.courseTags[key].text);
-      }
-      this.form.course[0]=submitCourses;
+			for (let i = 0; i < this.$props.numForms; i += 1) {
+				submitYears.push([]);
+				submitFaculties.push([]);
+				submitSchools.push([]);
+				submitCourses.push([]);
+				for (var key in this.tagDicts.years[i]) {
+					submitYears[i].push(this.tagDicts.years[i][key].text);
+				}
+				// convert faculty tags to an array
+				for (var key in this.tagDicts.faculties[i]) {
+					submitFaculties[i].push(this.tagDicts.faculties[i][key].text);
+				}
 
-//end conversions: Nathan is now Jewish
+				// convert schools tags to an array
+				for (var key in this.tagDicts.schools[i]) {
+					submitSchools[i].push(this.tagDicts.schools[i][key].text);
+				}
 
-//begin query :
-      const name = apiQuery.nameToColumn[this.$props.groupByDesc];
-      if (this.form.year.length > 1) {
-        console.log('Only 1 form is supported at the moment, this will be fixed in future');
-      }
+				// convert courses tags to an array
+				for (var key in this.tagDicts.courses[i]) {
+					submitCourses[i].push(this.tagDicts.courses[i][key].text);
+				}
+			}
+			//end conversions
 
-      // go to url
-      this.$router.push({
-        path: '/templates/chart',
-        query: {
-          chartType: this.chartType,
+			let chartArr = []
+      for (let i = 0; i < this.$props.numForms; i += 1) {
+        chartArr.push({
+          chartType: this.chosenType[i],
           groupBy: name,
-          // TODO: Multiple sub-charts
-          years: this.form.year[0],
-          faculties: this.form.faculty[0],
-          schools: this.form.school[0],
-          courses: this.form.course[0],
+          years: submitYears[i],
+          faculties: submitFaculties[i],
+          schools: submitSchools[i],
+          courses: submitCourses[i],
+          duplicate: (this.duplicates[i] === true),
+        })
+			}
+
+			// add chart to store
+      this.$store.dispatch({
+        type: 'createDashboardChart',
+        charts: chartArr,
+        layout: {
+          x: 0,
+          y: 0,
+          w: 27,
+          h: 1,
+          i: this.numCharts + 1
         },
       });
-    },
 
-    /**
-     * close popup when pressing popup button
-     */
-    onClose(event) {
+      // close form
+      try {
+        this.$parent.$parent.deleteChart();
+      } catch(err) {
+        console.log("no delete chart function when calling from template screen");
+      }
       this.$parent.$parent.hideModal();
-    },
-  }, /* >>> END METHODS <<< */
-  // watch: {
-  //   'tag': 'loadYears',
-  //   'autocompleteItems':'loadYears',
+      // go to url
+      this.$router.push({
+        path: '/dashboard',
+      });
+		},
+		onClose(event) {
+			this.$parent.$parent.hideModal();
+		},
+	},
+};    
 
-  // },
-};
+
 </script>
-
-<style>
-</style>

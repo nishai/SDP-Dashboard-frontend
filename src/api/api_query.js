@@ -37,6 +37,8 @@ function getYears() {
             by: [
               'calendar_instance_year',
             ],
+            distinctGrouping: true,
+            removeDuplicateCountings: false,
           },
         },
       ],
@@ -54,6 +56,46 @@ function getFaculties() {
             by: [
               'faculty',
             ],
+            distinctGrouping: true,
+            removeDuplicateCountings: false,
+          },
+        },
+      ],
+    },
+  );
+}
+
+function getSchools() {
+  return requester.post(
+    'school_info/query',
+    {
+      chain: [
+        {
+          group: {
+            by: [
+              'school',
+            ],
+            distinctGrouping: true,
+            removeDuplicateCountings: false,
+          },
+        },
+      ],
+    },
+  );
+}
+
+function getCourses(schools) {
+  return requester.post(
+    'course_info/query',
+    {
+      chain: [
+        {
+          group: {
+            by: [
+              'course_name',
+            ],
+            distinctGrouping: true,
+            removeDuplicateCountings: false,
           },
         },
       ],
@@ -78,6 +120,8 @@ function getFacultySchools(faculties) {
             by: [
               'school',
             ],
+            distinctGrouping: true,
+            removeDuplicateCountings: false,
           },
         },
       ],
@@ -102,6 +146,8 @@ function getSchoolsCourses(schools) {
             by: [
               'course_name',
             ],
+            distinctGrouping: true,
+            removeDuplicateCountings: false,
           },
         },
       ],
@@ -109,16 +155,21 @@ function getSchoolsCourses(schools) {
   );
 }
 
-function getCourseStats(groupBy, years, faculties, schools, courses) {
+function determineYield(groupBy) {
+  return groupBy;
+}
+
+function getCourseStats(modelName ,groupBy, years, faculties, schools, courses, duplicate) {
+  const yieldBy = determineYield(groupBy);
   return requester.post(
-    'course_stats/query',
+    modelName + '/query',
     {
       chain: [
         {
           filter: [
             {
               field: 'calendar_instance_year',
-              operator: 'startswith', // TODO: FIX ON FRONTEND
+              operator: 'exact', // TODO: FIX ON FRONTEND
               value: years,
             },
             {
@@ -145,9 +196,11 @@ function getCourseStats(groupBy, years, faculties, schools, courses) {
               {
                 name: 'count',
                 via: 'count',
-                from: groupBy,
+                from: yieldBy,
               },
             ],
+            distinctGrouping: false,
+            removeDuplicateCountings: duplicate,
           },
         },
       ],
@@ -155,18 +208,23 @@ function getCourseStats(groupBy, years, faculties, schools, courses) {
   );
 }
 
-
 const nameToColumn = {
   'Race': 'race_description',
   'Gender': 'gender',
   'Nationality': 'nationality_short_name',
   'Home Language': 'home_language_description',
+  'Bell curve': 'final_mark',
+	'Pass rates by year': 'pass_rates_by_year',
+	'Pass rates by faculty/course': 'pass_rates_by_course',
+	'Progress outcome by faculty/course': 'progress_outcome_by_course',
 };
 
 export default {
   getCourseStats,
   getYears,
   getFaculties,
+	getSchools,
+	getCourses,
   getFacultySchools,
   getSchoolsCourses,
   getLoginToken,
