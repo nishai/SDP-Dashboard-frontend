@@ -2,22 +2,29 @@
   <div class="dashboard">
     <!-- Modal Component -->
 	  <b-modal ref="compareModal" id="compareModal" title="Compare Options" size="lg" hide-footer>
-      <FilterForm
-				v-if="showModal"
-        v-bind:chartType="true"
-        v-bind:groupByDesc="popupChart.charts[0].groupBy"
-        v-bind:fyear="true"
-        v-bind:fcourse="true"
-        v-bind:ffaculty="true"
-        v-bind:fschool="true"
-        v-bind:numForms="2"
-        v-bind:selectedChartType="popupChart.charts[0].chartType"
-        v-bind:selectedYear="popupChart.charts[0].years"
-        v-bind:selectedCourse="popupChart.charts[0].courses"
-        v-bind:selectedFaculty="popupChart.charts[0].faculties"
-        v-bind:selectedSchool="popupChart.charts[0].schools"
-        v-bind:selectedDuplicate="popupChart.charts[0].duplicate">
-      </FilterForm>
+			<b-container fluid>
+				<div>
+					<FilterForm
+						v-if="showModal"
+						v-bind:chartTypeOptions="[[popupChart.charts[0].chartType]]"
+						v-bind:chartType="popupChart.charts[0].chartType"
+						v-bind:groupByDesc="popupChart.charts[0].groupBy"
+						v-bind:fyear="true"
+						v-bind:fcourse="true"
+						v-bind:ffaculty="true"
+						v-bind:fschool="true"
+						v-bind:ftype="true"
+						v-bind:numForms="2"
+						v-bind:selectedChartType="popupChart.charts[0].chartType"
+						v-bind:selectedYear="popupChart.charts[0].years"
+						v-bind:selectedCourse="popupChart.charts[0].courses"
+						v-bind:selectedFaculty="popupChart.charts[0].faculties"
+						v-bind:selectedSchool="popupChart.charts[0].schools"
+						v-bind:selectedDuplicate="popupChart.charts[0].duplicate"
+						v-bind:compare="true">
+					</FilterForm>
+				</div>
+			</b-container>
     </b-modal>
 
     <Heading heading_text="Dashboard"></Heading>
@@ -52,8 +59,9 @@
     </div>
     <div
 			id="dashDiv"
-			ref="dashdiv"
-			style="height: 3500px; width: 100%; position:relative;">
+      ref="dashdiv"
+			style="min-height:1000px; position:relative; "
+      >
 			<grid-layout
 				:layout="layouts"
 				:col-num="100"
@@ -199,21 +207,42 @@ export default {
 	  },
     doPDF() {
       var doc = new jsPDF('p', 'pt', 'a4');
-      doc.text(20, 20, "Report");
+      doc.text(20, 30, "Report");
 
       let currdiv = this.$refs.dashdiv;
-      console.log(currdiv);
-      html2canvas(currdiv, {allowTaint: true})
+      currdiv = currdiv.children[0].children;
+
+      let num_charts = this.$store.getters.numCharts;
+      var num_done = 0;
+
+    
+
+      for (var i=0; i < num_charts; i++){
+        let currchart = currdiv[i].children[0];
+        let imod2 = i%2;
+        let imod4 = i%4;
+        let x = (imod2 == 0) ? 20 : 300;
+        let y = ((imod4 == 0) || (imod4 == 1)) ? 50 : 450;
+
+        html2canvas(currchart, {allowTaint: true})
         .then(canvas => {  
           var imgData = canvas.toDataURL('image/png', 0.1);   
           
-          var ratio = canvas.height / canvas.width;
-          var width = doc.internal.pageSize.getWidth();
-          var height = ratio * width;
+          var ratio = canvas.width / canvas.height;
+          var height = 375;
+          var width = ratio * height;
           
-          doc.addImage(imgData, 'PNG', 10, 30, width, height, '', 'FAST');
-          doc.output('dataurlnewwindow');
+          if ((imod4 == 0) && (num_done >= 4)){
+            doc.addPage();
+            doc.setPage((i/4) + 1);
+          }
+          doc.addImage(imgData, 'PNG', x, y, width, height, '', 'FAST');
+          // doc.output('dataurlnewwindow');
+          num_done++;
+
+          if (num_done == num_charts) doc.save('report.pdf');
         });
+      }
     },
   }
 };

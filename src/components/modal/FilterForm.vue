@@ -5,6 +5,21 @@
     <b-row>
       <!-- create numForms amount of copies of the form side by side-->
       <b-col v-for="i in numForms" :key="groupByDesc + '-' + i">
+				<!-- CHART TYPE -->
+        <b-form-group
+          v-if="ftype === true"
+          id="typeGroup"
+          label="Chart Type:"
+          label-for="Type"
+          horizontal>
+          <b-form-select
+            id="Type"
+            :options="chartTypeOptions[i-1]"
+            required
+            v-model="chosenType[i-1]">
+          </b-form-select>
+        </b-form-group>
+
 				<!-- YEARS -->
         <b-form-group
           v-if="fyear === true"
@@ -19,7 +34,7 @@
               :tags="tagDicts.years[i-1]"
               :autocomplete-items="filteredItemsYears(i-1)"
               :add-only-from-autocomplete="true"  
-              @tags-changed="newTags => tagDicts.years[0] = newTags"> 
+              @tags-changed="newTags => tagDicts.years[i-1] = newTags"> 
             </vue-tags-input>
           </div>
         </b-form-group>
@@ -37,7 +52,7 @@
               :tags="tagDicts.faculties[i-1]"
               :autocomplete-items="filteredItemsFaculties(i-1)"
               :add-only-from-autocomplete="true"  
-              @tags-changed="newTags => tagDicts.faculties[0] = newTags"> 
+              @tags-changed="newTags => tagDicts.faculties[i-1] = newTags"> 
             </vue-tags-input>
           </div>
         </b-form-group>
@@ -55,7 +70,7 @@
               :tags="tagDicts.schools[i-1]"
               :autocomplete-items="filteredItemsSchools(i-1)"
               :add-only-from-autocomplete="true"  
-              @tags-changed="newTags => tagDicts.schools[0] = newTags"> 
+              @tags-changed="newTags => tagDicts.schools[i-1] = newTags"> 
             </vue-tags-input>
           </div>
         </b-form-group>
@@ -73,17 +88,33 @@
               :tags="tagDicts.courses[i-1]"
               :autocomplete-items="filteredItemsCourses(i-1)"
               :add-only-from-autocomplete="true"  
-              @tags-changed="newTags => tagDicts.courses[0] = newTags"> 
+              @tags-changed="newTags => tagDicts.courses[i-1] = newTags"> 
             </vue-tags-input>
           </div>
         </b-form-group>
 
-
-
+				<!-- Duplicate Data Checkbox-->
+        <b-form-group
+          checked=true
+          id="DuplicateGroup">
+          <b-form-checkbox
+            v-model="duplicates[i-1]">
+            Don't Duplicate data across fields
+          </b-form-checkbox>
+        </b-form-group>
 
 			</b-col>
 		</b-row>
+		<b-row>
+      <b-col>
+        <b-button variant="primary" type="primary">Filter</b-button>
+			</b-col>
+			<b-col>
+        <b-button @click="onClose" variant="secondary">Close</b-button>
+      </b-col>
+    </b-row>
 	</b-form>
+	<h1 v-else> Loading Data For Form, Please Wait... {{loadedPercent}}% Loaded</h1>
 </template>
 
 <script>
@@ -94,7 +125,7 @@ import VueTagsInput from '@johmun/vue-tags-input';
 export default {
   name: 'FilterForm',
   props: [
-    'chartType', // contains the type of graph to be used (pie, bar. etc)
+    'chartTypeOptions', // contains the options for chart types available (pie, bar. etc)
     'groupByDesc', // contains the type of graph to be used (race, bell curve, etc)
     'fyear', // boolean for whether form has year field
     'ffaculty', // boolean for whether form has faculty field
@@ -112,6 +143,8 @@ export default {
     'selectedCourse',
     'selectedType',
     'selectedDuplicate',
+
+		'compare',
   ],
 
 	components: {
@@ -121,10 +154,10 @@ export default {
   data: () => ({
 		show: false,
 		showCounter: 0,
-		chartTypes: [
-				{ text: 'Select One', value: null },
-				'bar', 'line', 'pie', 'doughnut', 'radar',
-		],
+//		chartTypes: [
+//				{ text: 'Select One', value: null },
+//				'bar', 'line', 'pie', 'doughnut', 'radar',
+//		],
 		tagStrs: {   //arrays of strings
 			years: [],
 			faculties: [],
@@ -151,6 +184,31 @@ export default {
    * This is run when the component is first created to initialise it.
    */
   created() {
+		if (this.$props.compare === true){
+			this.loadYears();
+			this.loadFaculties();
+			this.loadSchools();
+			this.loadCourses();
+		}
+    for (let i = 0; i < this.$props.numForms; i += 1) {
+			if (i !== 0){
+				this.$props.chartTypeOptions.push([this.$props.selectedChartType]);
+			}
+			switch (this.$props.selectedChartType){
+				case 'pie':
+					this.$props.chartTypeOptions[i].push('doughnut');
+					break;
+				case 'doughnut':
+					this.$props.chartTypeOptions[i].push('pie');
+					break;
+				case 'line':
+					this.$props.chartTypeOptions[i].push('bar');
+					break;
+				case 'bar':
+					this.$props.chartTypeOptions[i].push('line');
+					break;
+			}
+		}
 		// initialize data.form to have the correct amount of v-models
     const formKeys = Object.keys(this.tagDicts);
 		if (this.$props.selectedDuplicate === false){
@@ -158,41 +216,42 @@ export default {
 		} else {
 			this.duplicates.push(true);
 		}
-    if(this.$props.selectedChartType !== undefined){
-	    this.chosenType = this.$props.selectedChartType;
-    } else {
-			this.chosenType = this.$props.chartType
-		}
 
 		for (let i = 0; i < formKeys.length; i += 1) {
       for (let j = 0; j < this.$props.numForms; j += 1) {
 				this.tagStrs[formKeys[i]].push('');
 				this.tagAutocompletes[formKeys[i]].push([]);
 				if (j === 0){
+					if(this.$props.selectedChartType !== undefined){
+						this.chosenType.push(this.$props.selectedChartType);
+					} else {
+						this.chosenType.push('');
+					}
+
 					let selected = [];
           switch(formKeys[i]){
-						case 'year':
+						case 'years':
 							if(this.$props.selectedYear !== undefined){
 								selected = this.$props.selectedYear;
 							} else {
 								selected = [];
 							}
 							break;
-						case 'faculty':
+						case 'faculties':
 							if(this.$props.selectedFaculty !== undefined){
 								selected = this.$props.selectedFaculty;
 							} else {
 								selected = [];
 							}
 							break;
-						case 'school':
+						case 'schools':
 							if(this.$props.selectedSchool !== undefined){
 								selected = this.$props.selectedSchool;
 							} else {
 								selected = [];
 							}
 							break;
-						case 'course':
+						case 'courses':
 							if(this.$props.selectedCourse !== undefined){
 								selected = this.$props.selectedCourse;
 							} else {
@@ -205,9 +264,8 @@ export default {
 				  if(typeof selected === "string"){
             selected = [selected];
           }
-
 					let dicts = []
-					for (let k = 0; i < selected.length; k += 1){
+					for (let k = 0; k < selected.length; k += 1){
 						dicts.push({text: selected[k]});
 					}
 					this.tagDicts[formKeys[i]].push(dicts)
@@ -215,6 +273,7 @@ export default {
 
 				} else {
 					this.tagDicts[formKeys[i]].push([]);
+					this.chosenType.push('');
 				}
 			}
 		}
@@ -222,26 +281,28 @@ export default {
   computed: {
     ...mapGetters([
       'numCharts',
-    ]),     
-
+    ]),
+		loadedPercent() {
+			return (100.0 * this.showCounter)/Object.keys(this.tagDicts).length;
+		},
   },
 	methods: {
     filteredItemsYears(index) {
-      return this.tagAutocompletes.years[0].filter((i) => new RegExp(this.tagStrs.years[0], 'i').test(i.text)).slice(0,10);
+      return this.tagAutocompletes.years[index].filter((i) => new RegExp(this.tagStrs.years[index], 'i').test(i.text)).slice(0,10);
     },
     filteredItemsFaculties(index) {
-      return this.tagAutocompletes.faculties[0].filter((i) => new RegExp(this.tagStrs.faculties[0], 'i').test(i.text)).slice(0,10);
+      return this.tagAutocompletes.faculties[index].filter((i) => new RegExp(this.tagStrs.faculties[index], 'i').test(i.text)).slice(0,10);
     },
     filteredItemsSchools(index) {
-      return this.tagAutocompletes.schools[0].filter((i) => new RegExp(this.tagStrs.schools[0], 'i').test(i.text)).slice(0,10);
+      return this.tagAutocompletes.schools[index].filter((i) => new RegExp(this.tagStrs.schools[index], 'i').test(i.text)).slice(0,10);
     },
     filteredItemsCourses(index) {
-      return this.tagAutocompletes.courses[0].filter((i) => new RegExp(this.tagStrs.courses[0], 'i').test(i.text)).slice(0,10);
+      return this.tagAutocompletes.courses[index].filter((i) => new RegExp(this.tagStrs.courses[index], 'i').test(i.text)).slice(0,10);
     },
 
 		makeShow() {
 			this.showCounter += 1;
-			if (this.showCounter === 4){
+			if (this.showCounter === Object.keys(this.tagDicts).length){
 				console.log("Finished loading data for form")
 				this.show = true;
 			}
@@ -324,22 +385,22 @@ export default {
 				submitFaculties.push([]);
 				submitSchools.push([]);
 				submitCourses.push([]);
-				for (var key in this.tagsDicts.years[i]) {
-					submitYears[i].push(this.tagsDicts.years[i][key].text);
+				for (var key in this.tagDicts.years[i]) {
+					submitYears[i].push(this.tagDicts.years[i][key].text);
 				}
 				// convert faculty tags to an array
-				for (var key in this.tagsDicts.faculties[i]) {
-					submitFaculties[i].push(this.tagsDicts.faculties[i][key].text);
+				for (var key in this.tagDicts.faculties[i]) {
+					submitFaculties[i].push(this.tagDicts.faculties[i][key].text);
 				}
 
 				// convert schools tags to an array
-				for (var key in this.tagsDicts.schools[i]) {
-					submitSchools[i].push(this.tagsDicts.schools[i][key].text);
+				for (var key in this.tagDicts.schools[i]) {
+					submitSchools[i].push(this.tagDicts.schools[i][key].text);
 				}
 
 				// convert courses tags to an array
-				for (var key in this.tagsDicts.courses[i]) {
-					submitCourses[i].push(this.tagsDicts.courses[i][key].text);
+				for (var key in this.tagDicts.courses[i]) {
+					submitCourses[i].push(this.tagDicts.courses[i][key].text);
 				}
 			}
 			//end conversions
@@ -347,18 +408,17 @@ export default {
 			let chartArr = []
       for (let i = 0; i < this.$props.numForms; i += 1) {
         chartArr.push({
-          chartType: this.form.type[i], //*******************
+          chartType: this.chosenType[i],
           groupBy: name,
           years: submitYears[i],
           faculties: submitFaculties[i],
           schools: submitSchools[i],
           courses: submitCourses[i],
-          duplicate: (this.form.duplicate[i] === true), //***********************
+          duplicate: (this.duplicates[i] === true),
         })
 			}
 
 			// add chart to store
-      // TODO: Multiple sub-charts
       this.$store.dispatch({
         type: 'createDashboardChart',
         charts: chartArr,
@@ -382,6 +442,9 @@ export default {
       this.$router.push({
         path: '/dashboard',
       });
+		},
+		onClose(event) {
+			this.$parent.$parent.hideModal();
 		},
 	},
 };    
