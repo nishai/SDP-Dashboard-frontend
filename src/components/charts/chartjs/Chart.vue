@@ -262,6 +262,7 @@ export default {
         }
 
 
+				let beginZero = false;
         for (let i = 0; i < this.$props.chartData.length; i += 1) {
           labels = [...new Set([...labels, ...this.chartResultsLabels[i]])];
 					let data = [];
@@ -272,7 +273,8 @@ export default {
 			  		for (var j = 0; j < this.chartResultsData[i].length; j += 1){
 				  		data.push({
   							x: this.chartResultsLabels[i][j],
-	  						y: this.chartResultsData[i][j],
+	  						y: (100.0 * this.chartResultsData[i][j]) / this.chartResultsData[i].reduce((a, b) => a + b, 0),
+	  						//y: this.chartResultsData[i][j]),
 		  				})
 			  		}
 						labels = labels.sort((a, b) => transform(a) - transform(b));
@@ -282,6 +284,7 @@ export default {
 	  			let colors;
 					if(this.$props.chartData[i].chartType === "line" ||
 						this.$props.chartData[i].chartType === "bar"){
+						beginZero = true;
 						colors = palette(
 							'tol-rainbow',
 							this.$props.chartData.length
@@ -298,6 +301,17 @@ export default {
 		  			label: this.$props.chartData[i].courses,
           });
         }
+
+				let scales = {}
+				if (beginZero){
+					scales = {
+						yAxes: [{
+							ticks: {
+								beginAtZero: true,
+							}
+						}]
+					}
+				}
         this.$refs.chart.renderChart(
           {
             // type: this.chartType,
@@ -307,13 +321,7 @@ export default {
           {
             responsive: true,
             maintainAspectRatio: false,
-						scales: {
-							yAxes: [{
-								ticks: {
-									beginAtZero: true,
-								}
-							}]
-						}
+						scales: scales,
           },
         );
       }
