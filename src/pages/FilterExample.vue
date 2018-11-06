@@ -1,4 +1,4 @@
-<template> 
+<template>
 
 <div>
   <div>
@@ -26,7 +26,7 @@
       v-model="tag3"
       :tags="tags3"
       :autocomplete-items="filteredItems3"
-      :add-only-from-autocomplete="true"    
+      :add-only-from-autocomplete="true"
       @tags-changed="newTags => tags3 = newTags">
     </vue-tags-input>
 
@@ -53,8 +53,6 @@
       @tags-changed="update">
     </vue-tags-input>
   </div> -->
-
-        
 
 </div>
 </template>
@@ -140,7 +138,7 @@ export default {
 
 <!-- axios example -->
 
-<!-- 
+<!--
 <script>
 import VueTagsInput from '@johmun/vue-tags-input';
 import axios from 'axios';

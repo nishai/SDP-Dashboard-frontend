@@ -16,6 +16,11 @@ const requester = axios.create({
 /* Helper                                                                     */
 /* ========================================================================== */
 
+/**
+ * @param {Array} fields
+ * @param {Integer} minItems
+ * @return {Array} fields
+ */
 function stringOrExprArray(fields, minItems = 1) {
   if (fields.length <= minItems) {
     throw new Error(`must have ${minItems} or more fields`);
@@ -35,6 +40,11 @@ function stringOrExprArray(fields, minItems = 1) {
   return fields;
 }
 
+/**
+ * @param {Array} fields
+ * @param {Integer} minItems
+ * @return {Array} fields
+ */
 function stringArray(fields, minItems = 1) {
   if (fields.length <= minItems) {
     throw new Error(`must have ${minItems} or more fields`);
@@ -50,6 +60,11 @@ function stringArray(fields, minItems = 1) {
   return fields;
 }
 
+/**
+ * @param {Array} fields
+ * @param {Integer} minItems
+ * @return {Array} fields
+ */
 function exprArray(fields, minItems = 1) {
   if (fields.length <= minItems) {
     throw new Error(`must have ${minItems} or more fields`);
@@ -71,7 +86,10 @@ function exprArray(fields, minItems = 1) {
 /* Queryset                                                                   */
 /* ========================================================================== */
 
-class Queryset {
+export class Queryset {
+  /**
+   * @param endpoint
+   */
   constructor(endpoint) {
     this._endpoint = endpoint.replace(/^[/]/g, '');
     this._queryset = [];
@@ -79,26 +97,43 @@ class Queryset {
 
   /* COMPUTED PROPS */
 
+  /**
+   * @return {{queryset: Array}}
+   */
   get data() {
     return { 'queryset': this._queryset };
   }
 
   /* QUERY */
 
+  /**
+   * @return {Queryset}
+   */
   clone() {
     return _.cloneDeep(this);
   }
 
-  post(fake = false) {
+  /**
+   * @param fake
+   * @return {AxiosPromise<any>}
+   */
+  POST(fake = false) {
     return requester.post(`${this._endpoint}?fake=${fake ? 1 : 0}`, { 'queryset': this.data });
   }
 
-  options() {
+  /**
+   * @return {AxiosPromise<any>}
+   */
+  OPTIONS() {
     return requester.post(this._endpoint, { 'queryset': this.data });
   }
 
   /* QUERYSET BUILDER */
 
+  /**
+   * @param fields
+   * @return {Queryset}
+   */
   filter(...fields) {
     this._queryset.push({
       'action': 'filter',
@@ -107,6 +142,10 @@ class Queryset {
     return this;
   }
 
+  /**
+   * @param fields
+   * @return {Queryset}
+   */
   exclude(...fields) {
     this._queryset.push({
       'action': 'exclude',
@@ -115,6 +154,10 @@ class Queryset {
     return this;
   }
 
+  /**
+   * @param fields
+   * @return {Queryset}
+   */
   annotate(...fields) {
     this._queryset.push({
       'action': 'annotate',
@@ -123,6 +166,10 @@ class Queryset {
     return this;
   }
 
+  /**
+   * @param fields
+   * @return {Queryset}
+   */
   values(...fields) {
     this._queryset.push({
       'action': 'values',
@@ -131,6 +178,12 @@ class Queryset {
     return this;
   }
 
+  /**
+   * @param flat
+   * @param named
+   * @param fields
+   * @return {Queryset}
+   */
   valuesList(flat = false, named = false, ...fields) {
     if (flat && named) {
       throw new Error("Both 'flat' and 'named' cannot be true");
@@ -144,6 +197,10 @@ class Queryset {
     return this;
   }
 
+  /**
+   * @param fields
+   * @return {Queryset}
+   */
   orderBy(...fields) {
     for (let i = 0; i < fields.length; i += 1) {
       const item = fields[i];
@@ -161,6 +218,12 @@ class Queryset {
     return this;
   }
 
+  /**
+   * @param type
+   * @param num
+   * @param index
+   * @return {Queryset}
+   */
   limit(type, num, index) {
     if (type === 'page' || type === 'first' || type === 'last') {
       this._queryset.push({
@@ -175,6 +238,10 @@ class Queryset {
     return this;
   }
 
+  /**
+   * @param fields
+   * @return {Queryset}
+   */
   distinct(...fields) {
     this._queryset.push({
       'action': 'distinct',
@@ -183,6 +250,9 @@ class Queryset {
     return this;
   }
 
+  /**
+   * @return {Queryset}
+   */
   reverse() {
     this._queryset.push({
       'action': 'reverse',
@@ -190,6 +260,9 @@ class Queryset {
     return this;
   }
 
+  /**
+   * @return {Queryset}
+   */
   all() {
     this._queryset.push({
       'action': 'all',
@@ -197,6 +270,9 @@ class Queryset {
     return this;
   }
 
+  /**
+   * @return {Queryset}
+   */
   none() {
     this._queryset.push({
       'action': 'none',
@@ -210,7 +286,7 @@ class Queryset {
 /* ========================================================================== */
 
 
-const nameToEndpoint = {
+export const nameToEndpoint = {
   faculty: 'query/faculties',
   school: 'query/schools',
   course: 'query/courses',
@@ -229,18 +305,29 @@ const nameToEndpoint = {
 
 /* EXPORT */
 
+export const QuerysetFactory = {
+  /** @return {Queryset} */
+  faculty() { return new Queryset(nameToEndpoint.faculty); },
+  /** @return {Queryset} */
+  school() { return new Queryset(nameToEndpoint.school); },
+  /** @return {Queryset} */
+  course() { return new Queryset(nameToEndpoint.course); },
+  /** @return {Queryset} */
+  program() { return new Queryset(nameToEndpoint.program); },
+  /** @return {Queryset} */
+  outcome() { return new Queryset(nameToEndpoint.outcome); },
+  /** @return {Queryset} */
+  highschool() { return new Queryset(nameToEndpoint.highschool); },
+  /** @return {Queryset} */
+  student() { return new Queryset(nameToEndpoint.student); },
+  /** @return {Queryset} */
+  enrolledyear() { return new Queryset(nameToEndpoint.enrolledyear); },
+  /** @return {Queryset} */
+  enrolledcourse() { return new Queryset(nameToEndpoint.enrolledcourse); },
+};
+
 export default {
   Queryset,
-  QueryFactory: {
-    faculty() { return Queryset(nameToEndpoint.faculty); },
-    school() { return Queryset(nameToEndpoint.school); },
-    course() { return Queryset(nameToEndpoint.course); },
-    program() { return Queryset(nameToEndpoint.program); },
-    outcome() { return Queryset(nameToEndpoint.outcome); },
-    highschool() { return Queryset(nameToEndpoint.highschool); },
-    student() { return Queryset(nameToEndpoint.student); },
-    enrolledyear() { return Queryset(nameToEndpoint.enrolledyear); },
-    enrolledcourse() { return Queryset(nameToEndpoint.enrolledcourse); },
-  },
+  QuerysetFactory,
   nameToEndpoint,
 };
