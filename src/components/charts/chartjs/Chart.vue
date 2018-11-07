@@ -98,7 +98,7 @@ export default {
 				switch(this.$props.chartData[index].groupBy){
 					case 'pass_rates_by_year':
 						queryArr = [
-							'course-stats',
+							'course_stats',
 							'final_mark',
 							this.$props.chartData[index].years[j],
 							this.$props.chartData[index].faculties,
@@ -109,7 +109,7 @@ export default {
 						break;
 					case 'pass_rates_by_course':
 						queryArr = [
-							'course-stats',
+							'course_stats',
 							'final_mark',
 							this.$props.chartData[index].years,
 							this.$props.chartData[index].faculties,
@@ -120,7 +120,7 @@ export default {
 						break;
 					case 'progress_outcome_by_course':
 						queryArr = [
-							'average-year-stats',
+							'average_year_stats',
 							'progress_outcome_type',
 							this.$props.chartData[index].years,
 							this.$props.chartData[index].faculties,

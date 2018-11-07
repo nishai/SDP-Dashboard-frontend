@@ -29,7 +29,7 @@ function refreshToken(token) {
 
 function getYears() {
   return requester.post(
-    'query/course-stats',
+    'course_stats/query',
     {
       chain: [
         {
@@ -48,7 +48,7 @@ function getYears() {
 
 function getFaculties() {
   return requester.post(
-    'query/school-info',
+    'school_info/query',
     {
       chain: [
         {
@@ -67,7 +67,7 @@ function getFaculties() {
 
 function getSchools() {
   return requester.post(
-    'query/school-info',
+    'school_info/query',
     {
       chain: [
         {
@@ -86,7 +86,7 @@ function getSchools() {
 
 function getCourses(schools) {
   return requester.post(
-    'query/course-info',
+    'course_info/query',
     {
       chain: [
         {
@@ -105,7 +105,7 @@ function getCourses(schools) {
 
 function getFacultySchools(faculties) {
   return requester.post(
-    'query/school-info',
+    'school_info/query',
     {
       chain: [
         {
@@ -131,7 +131,7 @@ function getFacultySchools(faculties) {
 
 function getSchoolsCourses(schools) {
   return requester.post(
-    'query/course-info',
+    'course_info/query',
     {
       chain: [
         {
@@ -162,7 +162,7 @@ function determineYield(groupBy) {
 function getCourseStats(modelName, groupBy, years, faculties, schools, courses, duplicate) {
   const yieldBy = determineYield(groupBy);
   return requester.post(
-    `query/${modelName}`,
+    `${modelName}/query`,
     {
       chain: [
         {
