@@ -17,23 +17,32 @@ const requester = axios.create({
 /* Query & Functions                                                          */
 /* ========================================================================== */
 
-class Q {
-  constructor(field = null, value = null) {
-    this.field = field;
-    this.value = value;
+export class Q {
+  constructor(meta = null, expr = null) {
+    this.meta = meta;
+    this.expr = expr;
 
     this.l = null;
     this.r = null;
+    this.negated = false;
     this.operator = null;
   }
 
   /**
-   * @param {Q} r
+   * @param {String|Q} rOrMeta
+   * @param {String|null} expr
    * @param {String} operator
    * @return {Q}
    * @private
    */
-  _join(r, operator) {
+  _join(rOrMeta, expr = null, operator) {
+    let r = rOrMeta;
+    if (expr !== null) {
+      if (typeof rOrMeta !== 'string' || typeof expr !== 'string') {
+        throw Error('Two args only must both be strings, One arg only must be an instance of Q');
+      }
+      r = new Q(rOrMeta, expr);
+    }
     if (!(r instanceof Q)) {
       throw Error('Must be another Query');
     }
@@ -45,29 +54,28 @@ class Q {
   }
 
   /**
-   * @param {Q} r
+   * @param {String|Q} rOrMeta
+   * @param {String|null} expr
    * @return {Q}
    */
-  and(r) {
-    return this._join(r, '&');
+  and(rOrMeta, expr = null) {
+    return this._join(rOrMeta, expr, '&');
   }
 
   /**
-   * @param {Q} r
+   * @param {String|Q} rOrMeta
+   * @param {String|null} expr
    * @return {Q}
    */
-  or(r) {
-    return this._join(r, '|');
+  or(rOrMeta, expr = null) {
+    return this._join(rOrMeta, expr, '|');
   }
 
   /**
    * @return {Q}
    */
   not() {
-    if (this.operator != null && this.operator !== '~') {
-      throw Error('Runtime Error');
-    }
-    this.operator = (this.operator == null) ? '~' : null;
+    this.negated = !this.negated;
     return this;
   }
 
@@ -77,20 +85,23 @@ class Q {
    */
   toRpnArray(stack = []) {
     if (!!this.l && !!this.r) { // children present
-      if (!this.l || !this.r || (this.operator !== '|' && this.operator !== '&') || this.field || this.value) { // overly verbose, but i was too lazy to make a separate class for operators
+      if (!this.l || !this.r || !(this.operator === '|' || this.operator === '&') || this.meta || this.expr) { // overly verbose, but i was too lazy to make a separate class for operators
         throw Error('Runtime Error');
       }
       this.l.toRpnArray(stack);
       this.r.toRpnArray(stack);
       stack.push(this.operator);
     } else { // no children
-      if (this.l || this.r || this.operator === '~' || !this.field || !this.value) { // overly verbose, but i was too lazy to make a separate class for operators
+      if (this.l || this.r || this.operator !== null || !this.meta || !this.expr) { // overly verbose, but i was too lazy to make a separate class for operators
         throw Error('Runtime Error');
       }
       stack.push({
-        'field': this.field,
-        'value': this.value,
+        'meta': this.meta,
+        'expr': this.expr,
       });
+    }
+    if (this.negated) {
+      stack.push('~');
     }
     return stack;
   }
@@ -107,13 +118,13 @@ class Q {
  * @return {Array}
  */
 function checkArray(array, minItems, functions) {
-  if (array.length <= minItems) {
+  if (array.length < minItems) {
     throw new Error(`must have ${minItems} or more fields`);
   }
   for (let i = 0; i < array.length; i += 1) {
     const item = array[i];
     let flag = false;
-    for (let j = 0; i < functions.length; j += 1) {
+    for (let j = 0; j < functions.length; j += 1) {
       const func = functions[j];
       if (func(item)) {
         flag = true;
@@ -134,8 +145,8 @@ function checkArray(array, minItems, functions) {
  */
 function stringOrFilterArray(array, minItems = 1) {
   return checkArray(array, minItems, [
-    (x) => typeof item === 'string',
-    (x) => typeof item === 'object' && 'field' in x && 'operator' in x && 'value' in x,
+    (x) => typeof x === 'string',
+    (x) => typeof x === 'object' && 'meta' in x && 'expr' in x,
   ]);
 }
 
@@ -146,8 +157,8 @@ function stringOrFilterArray(array, minItems = 1) {
  */
 function stringOrExprArray(array, minItems = 1) {
   return checkArray(array, minItems, [
-    (x) => typeof item === 'string',
-    (x) => typeof item === 'object' && 'field' in x && 'expr' in x,
+    (x) => typeof x === 'string',
+    (x) => typeof x === 'object' && 'field' in x && 'expr' in x,
   ]);
 }
 
@@ -158,7 +169,7 @@ function stringOrExprArray(array, minItems = 1) {
  */
 function stringArray(array, minItems = 1) {
   return checkArray(array, minItems, [
-    (x) => typeof item === 'string',
+    (x) => typeof x === 'string',
   ]);
 }
 
@@ -169,7 +180,7 @@ function stringArray(array, minItems = 1) {
  */
 function exprArray(array, minItems = 1) {
   return checkArray(array, minItems, [
-    (x) => typeof item === 'object' && 'field' in x && 'expr' in x,
+    (x) => typeof x === 'object' && 'field' in x && 'expr' in x,
   ]);
 }
 
@@ -209,14 +220,14 @@ export class Queryset {
    * @return {AxiosPromise<any>}
    */
   POST(fake = false) {
-    return requester.post(`${this._endpoint}?fake=${fake ? 1 : 0}`, { 'queryset': this.data });
+    return requester.post(`${this._endpoint}?fake=${fake ? 1 : 0}`, this.data);
   }
 
   /**
    * @return {AxiosPromise<any>}
    */
   OPTIONS() {
-    return requester.post(this._endpoint, { 'queryset': this.data });
+    return requester.post(this._endpoint, this.data);
   }
 
   /* QUERYSET BUILDER */
@@ -239,19 +250,16 @@ export class Queryset {
    *   "action": "filter",
    *   "expr": [
    *     {
-   *       "field": "question",
-   *       "operator": "startswith",
+   *       "meta": "question__startswith",
    *       "expr": "Who"
    *     },
    *     {
-   *       "field": "pub_date",
-   *       "operator": "exact",
+   *       "meta": "pub_date",
    *       "expr": "2014"
    *     },
    *     "&",
    *     {
-   *       "field": "pub_date",
-   *       "operator": "exact",
+   *       "meta": "pub_date",
    *       "expr": "2005"
    *     },
    *     "~",
@@ -284,9 +292,13 @@ export class Queryset {
    * @return {Queryset}
    */
   exclude(...fields) {
+    let array = fields;
+    if (fields.length === 1 && fields[0] instanceof Q) {
+      array = fields[0].toRpnArray();
+    }
     this._queryset.push({
       'action': 'exclude',
-      'fields': stringOrExprArray(fields, 1),
+      'expr': stringOrFilterArray(array, 1),
     });
     return this;
   }
@@ -463,19 +475,29 @@ export class Queryset {
    *   "index": 3
    * }
    *
-   * @param type
+   * @param method
    * @param num
    * @param index
    * @return {Queryset}
    */
-  limit(type, num, index) {
-    if (type === 'page' || type === 'first' || type === 'last') {
+  limit(method, num, ...index) {
+    if (index.length > 1) {
+      throw new Error('At most 1 value can exist for the index');
+    }
+    if (method === 'page' || method === 'first' || method === 'last') {
       this._queryset.push({
         'action': 'limit',
-        type,
+        method,
         num,
-        index,
       });
+      if (method !== 'page' && index.length !== 0) {
+        throw new Error('Only pagination can have index specified');
+      } else if (method === 'page') {
+        if (index.length === 0) {
+          throw new Error('Pagination must have index specified');
+        }
+        this._queryset[this._queryset.length - 1].index = index[0];
+      }
     } else {
       throw new Error('Invalid limit');
     }

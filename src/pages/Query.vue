@@ -11,18 +11,22 @@
     </p>
     <div>
       <h3> Query 01 </h3>
+      <p>{{ json01 }}</p>
       <p>{{ query01 }}</p>
     </div>
     <div>
       <h3> Query 02 </h3>
+      <p>{{ json02 }}</p>
       <p>{{ query02 }}</p>
     </div>
     <div>
       <h3> Query 03 </h3>
+      <p>{{ json03 }}</p>
       <p>{{ query03 }}</p>
     </div>
     <div>
       <h3> Query 04 </h3>
+      <p>{{ json04 }}</p>
       <p>{{ query04 }}</p>
     </div>
   </div>
@@ -34,7 +38,7 @@ import axios from 'axios';
 import Heading from '../components/misc/Heading.vue';
 import Chart from '../components/charts/chartjs/Chart.vue';
 import QueryFilter from '../components/query/QueryFilter.vue';
-import { QuerysetFactory as Q } from '../api/queryset';
+import { QuerysetFactory, Q } from '../api/queryset';
 
 export default {
   name: 'Query',
@@ -49,6 +53,10 @@ export default {
       children: [
         QueryFilter,
       ],
+      json01: null,
+      json02: null,
+      json03: null,
+      json04: null,
       query01: null,
       query02: null,
       query03: null,
@@ -68,7 +76,10 @@ export default {
       });
 
 
-    Q.school().all().POST()
+    const q01 = QuerysetFactory.school().limit('first', 10);
+
+    this.json01 = q01.data;
+    q01.POST()
       .then((response) => {
         this.query01 = response.data;
       })
@@ -76,7 +87,10 @@ export default {
         this.query01 = 'FAILED';
       });
 
-    Q.faculty().all().POST()
+    const q02 = QuerysetFactory.faculty().limit('first', 10);
+
+    this.json02 = q02.data;
+    q02.POST()
       .then((response) => {
         this.query02 = response.data;
       })
@@ -84,7 +98,14 @@ export default {
         this.query02 = 'FAILED';
       });
 
-    Q.course().all().POST()
+    const q03 = QuerysetFactory.course()
+      .filter(new Q('school_id__faculty_title__icontains', 'science')
+        .or('school_id__faculty_title__icontains', 'art')
+        .and('school_id__faculty_title__icontains', 'arts').not())
+      .limit('first', 10);
+
+    this.json03 = q03.data;
+    q03.POST()
       .then((response) => {
         this.query03 = response.data;
       })
@@ -92,12 +113,15 @@ export default {
         this.query03 = 'FAILED';
       });
 
-    Q.student().all().limit('first', 10, null).POST()
+    const q04 = QuerysetFactory.student().limit('first', 10);
+
+    this.json04 = q04.data;
+    q04.POST()
       .then((response) => {
-        this.query03 = response.data;
+        this.query04 = response.data;
       })
       .catch((response) => {
-        this.query03 = 'FAILED';
+        this.query04 = 'FAILED';
       });
   },
 };
