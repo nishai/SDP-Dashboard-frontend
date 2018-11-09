@@ -45,7 +45,7 @@
 				variant="outline-success"
 				size="lg"
 				@click="create">
-					 New Chart 
+					 New Chart
 				</b-button>
       <!-- </router-link> -->
       <b-button
@@ -118,8 +118,8 @@ export default {
     return {
       add_table: false,
       add_list: false,
-			showModal: false,
-			popupchartId: 0,
+      showModal: false,
+      popupchartId: 0,
     };
   },
   components: {
@@ -129,17 +129,17 @@ export default {
     DashboardChart,
     GridLayout,
     GridItem,
-		FilterForm,
+    FilterForm,
   },
   computed: {
     ...mapGetters([
       'getCharts',
-			'getChart',
+      'getChart',
     ]),
     layouts() {
       let layouts = [];
-      let charts = this.getCharts;
-      for(var chartId in charts){
+      const charts = this.getCharts;
+      for (const chartId in charts) {
         layouts = layouts.concat({
           x: charts[chartId].layout.x,
           y: charts[chartId].layout.y,
@@ -155,20 +155,20 @@ export default {
     },
   },
 
-  methods:{
-    create(){
+  methods: {
+    create() {
       this.$router.push({ path: '/' });
     },
     openPopup(chartId) {
       console.log('Opening Popup');
-			this.showModal = true;
-			this.popupChartId = chartId;
+      this.showModal = true;
+      this.popupChartId = chartId;
       this.$refs.compareModal.show();
     },
 
     hideModal() { // needs to have same name as in FilterFormModal
       console.log('Closing Popup');
-			this.showModal = false;
+      this.showModal = false;
       this.$refs.compareModal.hide();
     },
     deleteChart() {
@@ -177,74 +177,73 @@ export default {
       this.$store.dispatch('deleteDashboardChart', { dashboardChartId: this.popupChartId });
     },
 
-		resizeEvent(i, newH, newW, newHPx, newWPx){
-			this.$store.dispatch(
+    resizeEvent(i, newH, newW, newHPx, newWPx) {
+      this.$store.dispatch(
 			  'updateChartLayout',
-				{
+        {
 				  newLayout: [{
-						x: -1,
-						y: -1,
-						w: newW,
-						h: newH,
-						i: i,
-					}],
-				}
+            x: -1,
+            y: -1,
+            w: newW,
+            h: newH,
+            i,
+          }],
+        },
 		  );
-		},
-		moveEvent(i, newX, newY){
-			this.$store.dispatch(
+    },
+    moveEvent(i, newX, newY) {
+      this.$store.dispatch(
 			  'updateChartLayout',
-				{
+        {
 				  newLayout: [{
-						x: newX,
-						y: newY,
-						w: -1,
-						h: -1,
-						i: i,
-					}],
-				}
+            x: newX,
+            y: newY,
+            w: -1,
+            h: -1,
+            i,
+          }],
+        },
 		  );
 	  },
     doPDF() {
-      var doc = new jsPDF('p', 'pt', 'a4');
-      doc.text(20, 30, "Report");
+      const doc = new jsPDF('p', 'pt', 'a4');
+      doc.text(20, 30, 'Report');
 
       let currdiv = this.$refs.dashdiv;
       currdiv = currdiv.children[0].children;
 
-      let num_charts = this.$store.getters.numCharts;
-      var num_done = 0;
+      const num_charts = this.$store.getters.numCharts;
+      let num_done = 0;
 
-    
 
-      for (var i=0; i < num_charts; i++){
-        let currchart = currdiv[i].children[0];
-        let imod2 = i%2;
-        let imod4 = i%4;
-        let x = (imod2 == 0) ? 20 : 300;
-        let y = ((imod4 == 0) || (imod4 == 1)) ? 50 : 450;
+      for (var i = 0; i < num_charts; i++) {
+        const currchart = currdiv[i].children[0];
+        const imod2 = i % 2;
+        const imod4 = i % 4;
+        const x = (imod2 == 0) ? 20 : 300;
+        const y = ((imod4 == 0) || (imod4 == 1)) ? 50 : 450;
 
-        html2canvas(currchart, {allowTaint: true})
-        .then(canvas => {  
-          var imgData = canvas.toDataURL('image/png', 0.1);   
-          
-          var ratio = canvas.width / canvas.height;
-          var height = 375;
-          var width = ratio * height;
-          
-          if ((imod4 == 0) && (num_done >= 4)){
-            doc.addPage();
-            doc.setPage((i/4) + 1);
-          }
-          doc.addImage(imgData, 'PNG', x, y, width, height, '', 'FAST');
-          // doc.output('dataurlnewwindow');
-          num_done++;
+        html2canvas(currchart, { allowTaint: true })
+          .then((canvas) => {
+            const imgData = canvas.toDataURL('image/png', 0.1);
 
-          if (num_done == num_charts) doc.save('report.pdf');
-        });
+            const ratio = canvas.width / canvas.height;
+            const height = 375;
+            const width = ratio * height;
+
+            if ((imod4 == 0) && (num_done >= 4)) {
+              doc.addPage();
+              doc.setPage((i / 4) + 1);
+            }
+            doc.addImage(imgData, 'PNG', x, y, width, height, '', 'FAST');
+            // doc.output('dataurlnewwindow');
+            num_done++;
+
+            if (num_done == num_charts) doc.save('report.pdf');
+          });
       }
     },
-  }
+  },
 };
 </script>
 

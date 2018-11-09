@@ -187,41 +187,41 @@ export default {
   methods: {
     showModal() {
       this.$refs.popupRef.show();
-			switch(this.groupByDesc){
-				case "Race":
-					this.$refs.raceForm.loadData();
-					break;
-				case "Gender":
-					this.$refs.genderForm.loadData();
-					break;
-				case "Nationality":
-					this.$refs.nationalityForm.loadData();
-					break;
-				case "Home Language":
-					this.$refs.languageForm.loadData();
-					break;
-				case "Demographics vs Marks":
-					this.$refs.demographicsForm.loadData();
-					break;
-				case "Pass rates by year":
-					this.$refs.passByYearForm.loadData();
-					break;
-				case "Pass rates by faculty/course":
-					this.$refs.passByCourseForm.loadData();
-					break;
-				case "Bell curve":
-					this.$refs.bellForm.loadData();
-					break;
-				case "Progress outcome by faculty/course":
-					this.$refs.progressForm.loadData();
-					break;
-				case "Class size vs pass rate":
-					this.$refs.classSizeForm.loadData();
-					break;
-				case "Average class size by faculty/course":
-					this.$refs.classSizeByCourseForm.loadData();
-					break;
-			};
+      switch (this.groupByDesc) {
+        case 'Race':
+          this.$refs.raceForm.loadData();
+          break;
+        case 'Gender':
+          this.$refs.genderForm.loadData();
+          break;
+        case 'Nationality':
+          this.$refs.nationalityForm.loadData();
+          break;
+        case 'Home Language':
+          this.$refs.languageForm.loadData();
+          break;
+        case 'Demographics vs Marks':
+          this.$refs.demographicsForm.loadData();
+          break;
+        case 'Pass rates by year':
+          this.$refs.passByYearForm.loadData();
+          break;
+        case 'Pass rates by faculty/course':
+          this.$refs.passByCourseForm.loadData();
+          break;
+        case 'Bell curve':
+          this.$refs.bellForm.loadData();
+          break;
+        case 'Progress outcome by faculty/course':
+          this.$refs.progressForm.loadData();
+          break;
+        case 'Class size vs pass rate':
+          this.$refs.classSizeForm.loadData();
+          break;
+        case 'Average class size by faculty/course':
+          this.$refs.classSizeByCourseForm.loadData();
+          break;
+      }
     },
     hideModal() {
       this.$refs.popupRef.hide();

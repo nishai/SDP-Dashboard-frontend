@@ -1,9 +1,9 @@
-import ChartExamples from '../pages/ChartExamples.vue';
-import Query from '../pages/Query.vue';
-import Reports from '../pages/ReportList.vue';
-import Report from '../pages/Report.vue';
+// import ChartExamples from '../pages/ChartExamples.vue';
+// import Query from '../pages/Query.vue';
+// import Reports from '../pages/ReportList.vue';
+// import Report from '../pages/Report.vue';
+// import GridExample from '../pages/GridExample.vue';
 import Dashboard from '../pages/Dashboard.vue';
-import GridExample from '../pages/GridExample.vue';
 import ChartTemplates from '../pages/ChartTemplates.vue';
 
 /* Define the routes */
@@ -19,31 +19,29 @@ export const navRoutes = [
     path: '/templates',
     component: ChartTemplates,
   },
-/**
-  {
-    name: 'Chart Examples',
-    path: '/examples',
-    component: ChartExamples,
-    query: {
-      templateType: '',
-    },
-  },
-  {
-    name: 'Queries',
-    path: '/query',
-    component: Query,
-  },
-  {
-    name: 'Reports',
-    path: '/reports',
-    component: Reports,
-  },
-  {
-    name: 'GridExample',
-    path: '/grid',
-    component: GridExample,
-  },
-*/
+  // {
+  //   name: 'Chart Examples',
+  //   path: '/examples',
+  //   component: ChartExamples,
+  //   query: {
+  //     templateType: '',
+  //   },
+  // },
+  // {
+  //   name: 'Queries',
+  //   path: '/query',
+  //   component: Query,
+  // },
+  // {
+  //   name: 'Reports',
+  //   path: '/reports',
+  //   component: Reports,
+  // },
+  // {
+  //   name: 'GridExample',
+  //   path: '/grid',
+  //   component: GridExample,
+  // },
   {
     name: 'Dashboard',
     path: '/dashboard',
@@ -54,16 +52,16 @@ export const navRoutes = [
 /* not part of route definitions, used by navbar */
 
 export const hiddenRoutes = [
-/**  {
-    name: 'Report',
-    path: '/reports/:id',
-    component: Report,
-  },
-  {
-    name: 'Reports 404',
-    path: '/reports/*',
-    redirect: '/reports',
-  },*/
+  // {
+  //   name: 'Report',
+  //   path: '/reports/:id',
+  //   component: Report,
+  // },
+  // {
+  //   name: 'Reports 404',
+  //   path: '/reports/*',
+  //   redirect: '/reports',
+  // },
   {
     name: '404',
     path: '*',

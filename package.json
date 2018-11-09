@@ -64,6 +64,14 @@
           "code": 120
         }
       ],
+      "prefer-destructuring": [
+        "error", {
+          "array": false,
+          "object": true
+        }, {
+          "enforceForRenamedProperties": false
+        }
+      ],
       "no-param-reassign": [
         "error",
         {

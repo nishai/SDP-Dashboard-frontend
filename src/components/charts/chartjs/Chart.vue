@@ -46,7 +46,7 @@ export default {
   }),
 
   computed: {
-    component(){
+    component() {
       return chartTypes[this.$props.chartData[0].chartType];
     },
   },
@@ -55,19 +55,20 @@ export default {
    */
   mounted() {
     for (let i = 0; i < this.$props.chartData.length; i += 1) {
-      console.log('Mounted!',
+      console.log(
+        'Mounted!',
         this.$props.chartData[i].groupBy,
         this.$props.chartData[i].years,
         this.$props.chartData[i].faculties,
         this.$props.chartData[i].schools,
         this.$props.chartData[i].courses,
-        this.$props.chartData[i].duplicate
+        this.$props.chartData[i].duplicate,
       );
-			if(this.$props.chartData[0].chartType === 'bar'){
-				this.getBarData(i);
-			} else {
+      if (this.$props.chartData[0].chartType === 'bar') {
+        this.getBarData(i);
+      } else {
 	      this.getData(i);
-			}
+      }
     }
     // this.renderChart();
   },
@@ -77,115 +78,115 @@ export default {
    */
   methods: {
 
-		getBarData(index) {
-			let forLimit;
-			switch(this.$props.chartData[index].groupBy){
-				case 'pass_rates_by_year':
-					forLimit = this.$props.chartData[index].years.length;
-					break;
-				case 'pass_rates_by_course':
-				case 'progress_outcome_by_course':
-					forLimit = this.$props.chartData[index].courses.length;
-					break;
-			}
-			this.chartResultsLabels.push([]);
-			this.chartResultsData.push([]);
-			for(let j = 0; j < forLimit; j += 1){
-				this.chartResultsLabels[index].push(null);
-				this.chartResultsData[index].push(null);
+    getBarData(index) {
+      let forLimit;
+      switch (this.$props.chartData[index].groupBy) {
+        case 'pass_rates_by_year':
+          forLimit = this.$props.chartData[index].years.length;
+          break;
+        case 'pass_rates_by_course':
+        case 'progress_outcome_by_course':
+          forLimit = this.$props.chartData[index].courses.length;
+          break;
+      }
+      this.chartResultsLabels.push([]);
+      this.chartResultsData.push([]);
+      for (let j = 0; j < forLimit; j += 1) {
+        this.chartResultsLabels[index].push(null);
+        this.chartResultsData[index].push(null);
 
-				let queryArr;
-				switch(this.$props.chartData[index].groupBy){
-					case 'pass_rates_by_year':
-						queryArr = [
-							'course_stats',
-							'final_mark',
-							this.$props.chartData[index].years[j],
-							this.$props.chartData[index].faculties,
-							this.$props.chartData[index].schools,
-							this.$props.chartData[index].courses,
-							this.$props.chartData[index].duplicate
-						]
-						break;
-					case 'pass_rates_by_course':
-						queryArr = [
-							'course_stats',
-							'final_mark',
-							this.$props.chartData[index].years,
-							this.$props.chartData[index].faculties,
-							this.$props.chartData[index].schools,
-							this.$props.chartData[index].courses[j],
-							this.$props.chartData[index].duplicate
-						]
-						break;
-					case 'progress_outcome_by_course':
-						queryArr = [
-							'average_year_stats',
-							'progress_outcome_type',
-							this.$props.chartData[index].years,
-							this.$props.chartData[index].faculties,
-							this.$props.chartData[index].schools,
-							this.$props.chartData[index].courses[j],
-							this.$props.chartData[index].duplicate
-						]
-						break;
-				}
-				console.log(queryArr[0], queryArr[1], queryArr[2], queryArr[3], queryArr[4], queryArr[5], queryArr[6])
-				apiQuery.getCourseStats(
-					queryArr[0],
-					queryArr[1],
-					queryArr[2],
-					queryArr[3],
-					queryArr[4],
-					queryArr[5],
-					queryArr[6],
-					).then((response) => {
-						const { results } = response.data;
-						console.log('RESPONSE DATA:', response.data);
-						if (response.data.results.length !== 0) {
-							const keys = Object.keys(results[0]);
-							let sum = 0;
-							let numDatapoints = 0;
-							let labels = [];
-							let data = [];
-							for (let k = 0; k < results.length; k += 1) {
-								//sum += parseInt(results[k][keys[0]], 10) * parseInt(results[k][keys[1]],10); // for average mark
-								switch(this.$props.chartData[index].groupBy){
-									case 'pass_rates_by_year':
-									case 'pass_rates_by_course':
-										if (parseInt(results[k][keys[0]], 10) > 50) {
-											sum += parseInt(results[k][keys[1]],10);
-										}
-										numDatapoints += parseInt(results[k][keys[1]], 10)
-										break;
-									case 'progress_outcome_by_course':
-										labels.push(results[k][keys[0]]);
-										data.push(results[k][keys[1]]);
-										break;
-								}
-							}
-							var avg = sum/numDatapoints;
+        let queryArr;
+        switch (this.$props.chartData[index].groupBy) {
+          case 'pass_rates_by_year':
+            queryArr = [
+              'course_stats',
+              'final_mark',
+              this.$props.chartData[index].years[j],
+              this.$props.chartData[index].faculties,
+              this.$props.chartData[index].schools,
+              this.$props.chartData[index].courses,
+              this.$props.chartData[index].duplicate,
+            ];
+            break;
+          case 'pass_rates_by_course':
+            queryArr = [
+              'course_stats',
+              'final_mark',
+              this.$props.chartData[index].years,
+              this.$props.chartData[index].faculties,
+              this.$props.chartData[index].schools,
+              this.$props.chartData[index].courses[j],
+              this.$props.chartData[index].duplicate,
+            ];
+            break;
+          case 'progress_outcome_by_course':
+            queryArr = [
+              'average_year_stats',
+              'progress_outcome_type',
+              this.$props.chartData[index].years,
+              this.$props.chartData[index].faculties,
+              this.$props.chartData[index].schools,
+              this.$props.chartData[index].courses[j],
+              this.$props.chartData[index].duplicate,
+            ];
+            break;
+        }
+        console.log(queryArr[0], queryArr[1], queryArr[2], queryArr[3], queryArr[4], queryArr[5], queryArr[6]);
+        apiQuery.getCourseStats(
+          queryArr[0],
+          queryArr[1],
+          queryArr[2],
+          queryArr[3],
+          queryArr[4],
+          queryArr[5],
+          queryArr[6],
+        ).then((response) => {
+          const { results } = response.data;
+          console.log('RESPONSE DATA:', response.data);
+          if (response.data.results.length !== 0) {
+            const keys = Object.keys(results[0]);
+            let sum = 0;
+            let numDatapoints = 0;
+            const labels = [];
+            const data = [];
+            for (let k = 0; k < results.length; k += 1) {
+              // sum += parseInt(results[k][keys[0]], 10) * parseInt(results[k][keys[1]],10); // for average mark
+              switch (this.$props.chartData[index].groupBy) {
+                case 'pass_rates_by_year':
+                case 'pass_rates_by_course':
+                  if (parseInt(results[k][keys[0]], 10) > 50) {
+                    sum += parseInt(results[k][keys[1]], 10);
+                  }
+                  numDatapoints += parseInt(results[k][keys[1]], 10);
+                  break;
+                case 'progress_outcome_by_course':
+                  labels.push(results[k][keys[0]]);
+                  data.push(results[k][keys[1]]);
+                  break;
+              }
+            }
+            const avg = sum / numDatapoints;
 
-							this.isData = true;
-							switch(this.$props.chartData[index].groupBy){
-								case 'pass_rates_by_year':
-									this.chartResultsLabels[index][j] = this.$props.chartData[index].years[j];
-									this.chartResultsData[index][j] = avg;
-									break;
-								case 'pass_rates_by_course':
-									this.chartResultsLabels[index][j] = this.$props.chartData[index].courses[j];
-									this.chartResultsData[index][j] = avg;
-									break;
-								case 'progress_outcome_by_course':
-									this.chartResultsLabels[index] = labels;
-									this.chartResultsData[index] = data;
-									break;
-							}
+            this.isData = true;
+            switch (this.$props.chartData[index].groupBy) {
+              case 'pass_rates_by_year':
+                this.chartResultsLabels[index][j] = this.$props.chartData[index].years[j];
+                this.chartResultsData[index][j] = avg;
+                break;
+              case 'pass_rates_by_course':
+                this.chartResultsLabels[index][j] = this.$props.chartData[index].courses[j];
+                this.chartResultsData[index][j] = avg;
+                break;
+              case 'progress_outcome_by_course':
+                this.chartResultsLabels[index] = labels;
+                this.chartResultsData[index] = data;
+                break;
+            }
             	this.renderChart();
-						}
-					});
-			}
-		},
+          }
+        });
+      }
+    },
 
     /**
      * Query for the data to render based on the current url parameters
@@ -194,107 +195,106 @@ export default {
       console.log('LOADING DATA');
       // TODO: Multiple sub-charts
       apiQuery.getCourseStats(
-				'course-stats',
+        'course-stats',
         this.$props.chartData[index].groupBy,
         this.$props.chartData[index].years,
         this.$props.chartData[index].faculties,
         this.$props.chartData[index].schools,
         this.$props.chartData[index].courses,
-        this.$props.chartData[index].duplicate
-        ).then((response) => {
-          const { results } = response.data;
-          console.log('RESPONSE DATA:', response.data);
-          if (response.data.results.length !== 0) {
-            const keys = Object.keys(results[0]);
-            const labels = [];
-            const data = [];
-            for (let j = 0; j < results.length; j += 1) { // TODO: add query parameter to perform this on the backend
-              labels.push(results[j][keys[0]]);
-              data.push(results[j][keys[1]]);
-            }
-            this.isData = true;
-            this.chartResultsLabels.push(labels)
-            this.chartResultsData.push(data);
-            this.renderChart();
+        this.$props.chartData[index].duplicate,
+      ).then((response) => {
+        const { results } = response.data;
+        console.log('RESPONSE DATA:', response.data);
+        if (response.data.results.length !== 0) {
+          const keys = Object.keys(results[0]);
+          const labels = [];
+          const data = [];
+          for (let j = 0; j < results.length; j += 1) { // TODO: add query parameter to perform this on the backend
+            labels.push(results[j][keys[0]]);
+            data.push(results[j][keys[1]]);
           }
-        });
+          this.isData = true;
+          this.chartResultsLabels.push(labels);
+          this.chartResultsData.push(data);
+          this.renderChart();
+        }
+      });
     },
 
     /**
      * Render the current loaded data to the chart component
      */
     renderChart() {
-
-			let barFlag = true;
-			for (let l = 0; l < this.chartResultsData.length; l += 1) {
-				let ifTest;
-				switch(this.$props.chartData[l].groupBy){
-					case 'pass_rates_by_year':
-						ifTest = this.chartData[l].years.length;
-						break;
-					case 'pass_rates_by_course':
-						ifTest = this.chartData[l].courses.length;
-						break;
-				}
-				if (this.chartResultsData[l].length !== ifTest ||
-					this.chartResultsData[l].includes(null)){
-					barFlag = false;
-				}
-			}
-      if(
-				(this.$props.chartData[0].chartType !== 'bar' ||
+      let barFlag = true;
+      for (let l = 0; l < this.chartResultsData.length; l += 1) {
+        let ifTest;
+        switch (this.$props.chartData[l].groupBy) {
+          case 'pass_rates_by_year':
+            ifTest = this.chartData[l].years.length;
+            break;
+          case 'pass_rates_by_course':
+            ifTest = this.chartData[l].courses.length;
+            break;
+        }
+        if (this.chartResultsData[l].length !== ifTest ||
+					this.chartResultsData[l].includes(null)) {
+          barFlag = false;
+        }
+      }
+      if (
+        (this.$props.chartData[0].chartType !== 'bar' ||
 				this.$props.chartData[0].chartType === 'bar' &&
 				barFlag)
-			){
-				console.log(this.chartResultsData)
-				console.log(this.chartResultsLabels)
-        /*if (labels.length !== data.length) {
+      ) {
+        console.log(this.chartResultsData);
+        console.log(this.chartResultsLabels);
+        /* if (labels.length !== data.length) {
           throw new Error('Label length not equal to data length');
-        }*/
-        let datasets = [];
+        } */
+        const datasets = [];
         let labels = [];
 
-				//https://stackoverflow.com/questions/51560507/javascript-sort-an-array-of-string-numbers
-				const transform = k => {
+        // https://stackoverflow.com/questions/51560507/javascript-sort-an-array-of-string-numbers
+        const transform = (k) => {
 			    if (k === 'K') return 0;
  		  	  else if (k === 'N') return 13;
-          else return +k;
-        }
+          return +k;
+        };
 
 
-				let beginZero = false;
+        let beginZero = false;
         for (let i = 0; i < this.$props.chartData.length; i += 1) {
           labels = [...new Set([...labels, ...this.chartResultsLabels[i]])];
-					let data = [];
-					if(this.$props.chartData[i].chartType === "line"){
+          let data = [];
+          if (this.$props.chartData[i].chartType === 'line') {
   					data.push({
-	  					labels: this.chartResultsLabels[i]
-		  			})
-			  		for (var j = 0; j < this.chartResultsData[i].length; j += 1){
+	  					labels: this.chartResultsLabels[i],
+		  			});
+			  		for (let j = 0; j < this.chartResultsData[i].length; j += 1) {
 				  		data.push({
   							x: this.chartResultsLabels[i][j],
 	  						y: (100.0 * this.chartResultsData[i][j]) / this.chartResultsData[i].reduce((a, b) => a + b, 0),
-	  						//y: this.chartResultsData[i][j]),
-		  				})
+	  						// y: this.chartResultsData[i][j]),
+		  				});
 			  		}
-						labels = labels.sort((a, b) => transform(a) - transform(b));
-					} else {
-						data = this.chartResultsData[i];
-					}
+            labels = labels.sort((a, b) => transform(a) - transform(b));
+          } else {
+            data = this.chartResultsData[i];
+          }
 	  			let colors;
-					if(this.$props.chartData[i].chartType === "line" ||
-						this.$props.chartData[i].chartType === "bar"){
-						beginZero = true;
-						colors = palette(
-							'tol-rainbow',
-							this.$props.chartData.length
-						).map((color) => `#${color}`)[i];
-					} else {
-						colors = palette('tol-rainbow', labels.length).map((color) => `#${color}`);
-					}
+          if (this.$props.chartData[i].chartType === 'line' ||
+						this.$props.chartData[i].chartType === 'bar') {
+            beginZero = true;
+            colors = palette(
+              'tol-rainbow',
+              this.$props.chartData.length,
+            ).map((color) => `#${color}`)[i];
+          } else {
+            colors = palette('tol-rainbow', labels.length).map((color) => `#${color}`);
+          }
           datasets.push({
             backgroundColor: colors, // http://google.github.io/palette.js/
-            data: data,
+            data,
             borderWidth: 2,
             type: this.$props.chartData[i].chartType,
             fill: true,
@@ -302,26 +302,26 @@ export default {
           });
         }
 
-				let scales = {}
-				if (beginZero){
-					scales = {
-						yAxes: [{
-							ticks: {
-								beginAtZero: true,
-							}
-						}]
-					}
-				}
+        let scales = {};
+        if (beginZero) {
+          scales = {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true,
+              },
+            }],
+          };
+        }
         this.$refs.chart.renderChart(
           {
             // type: this.chartType,
-            labels: labels,
-            datasets: datasets,
+            labels,
+            datasets,
           },
           {
             responsive: true,
             maintainAspectRatio: false,
-						scales: scales,
+            scales,
           },
         );
       }
