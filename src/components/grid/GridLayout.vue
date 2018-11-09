@@ -17,14 +17,11 @@
     }
 </style>
 <script>
+import elementResizeDetectorMaker from 'element-resize-detector';
 import Vue from 'vue';
-
-import { bottom, compact, getLayoutItem, moveElement, validateLayout } from '/helpers/utils';
-// var eventBus = require('./eventBus');
+import { bottom, compact, getLayoutItem, moveElement, validateLayout } from './helpers/utils';
+import { addWindowEventListener, removeWindowEventListener } from './helpers/DOM';
 import GridItem from './GridItem.vue';
-import { addWindowEventListener, removeWindowEventListener } from '/helpers/DOM';
-
-const elementResizeDetectorMaker = require('element-resize-detector');
 
 export default {
   name: 'GridLayout',
@@ -104,18 +101,18 @@ export default {
     const self = this;
 
     // Accessible refernces of functions for removing in beforeDestroy
-    self.resizeEventHandler = function (eventType, i, x, y, h, w) {
+    this.resizeEventHandler = function resizeEventHandler(eventType, i, x, y, h, w) {
       self.resizeEvent(eventType, i, x, y, h, w);
     };
 
-    self.dragEventHandler = function (eventType, i, x, y, h, w) {
+    this.dragEventHandler = function dragEventHandler(eventType, i, x, y, h, w) {
       self.dragEvent(eventType, i, x, y, h, w);
     };
 
-    self._provided.eventBus = new Vue();
-    self.eventBus = self._provided.eventBus;
-    self.eventBus.$on('resizeEvent', self.resizeEventHandler);
-    self.eventBus.$on('dragEvent', self.dragEventHandler);
+    this._provided.eventBus = new Vue();
+    this.eventBus = this._provided.eventBus;
+    this.eventBus.$on('resizeEvent', this.resizeEventHandler);
+    this.eventBus.$on('dragEvent', this.dragEventHandler);
   },
   beforeDestroy() {
     // Remove listeners
@@ -124,7 +121,7 @@ export default {
     removeWindowEventListener('resize', this.onWindowResize);
   },
   mounted() {
-    this.$nextTick(function () {
+    this.$nextTick(function nextTick() {
       validateLayout(this.layout);
       const self = this;
       this.$nextTick(() => {
@@ -151,7 +148,7 @@ export default {
   },
   watch: {
     width() {
-      this.$nextTick(function () {
+      this.$nextTick(function nextTick() {
         // this.$broadcast("updateWidth", this.width);
         this.eventBus.$emit('updateWidth', this.width);
         this.updateHeight();
@@ -216,7 +213,9 @@ export default {
       }
     },
     containerHeight() {
-      if (!this.autoSize) return;
+      if (!this.autoSize) {
+        return null;
+      }
       return `${bottom(this.layout) * (this.rowHeight + this.margin[1]) + this.margin[1]}px`;
     },
     dragEvent(eventName, id, x, y, h, w) {
@@ -226,13 +225,13 @@ export default {
         this.placeholder.y = y;
         this.placeholder.w = w;
         this.placeholder.h = h;
-        this.$nextTick(function () {
+        this.$nextTick(function nextTick() {
           this.isDragging = true;
         });
         // this.$broadcast("updateWidth", this.width);
         this.eventBus.$emit('updateWidth', this.width);
       } else {
-        this.$nextTick(function () {
+        this.$nextTick(function nextTick() {
           this.isDragging = false;
         });
       }
@@ -259,13 +258,13 @@ export default {
         this.placeholder.y = y;
         this.placeholder.w = w;
         this.placeholder.h = h;
-        this.$nextTick(function () {
+        this.$nextTick(function nextTick() {
           this.isDragging = true;
         });
         // this.$broadcast("updateWidth", this.width);
         this.eventBus.$emit('updateWidth', this.width);
       } else {
-        this.$nextTick(function () {
+        this.$nextTick(function nextTick() {
           this.isDragging = false;
         });
       }

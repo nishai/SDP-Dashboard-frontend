@@ -81,12 +81,11 @@
     }
 </style>
 <script>
-import { setTopLeft, setTopRight, setTransformRtl, setTransform } from '../helpers/utils';
-import { getControlPosition, createCoreData } from '../helpers/draggableUtils';
-import { getDocumentDir } from '../helpers/DOM';
-//    var eventBus = require('./eventBus');
+import interact from 'interactjs';
+import { setTopLeft, setTopRight, setTransformRtl, setTransform } from './helpers/utils.ts';
+import { getControlPosition, createCoreData } from './helpers/draggableUtils';
+import { getDocumentDir } from './helpers/DOM';
 
-const interact = require('interactjs');
 
 export default {
   name: 'GridItem',
@@ -227,27 +226,27 @@ export default {
     const self = this;
 
     // Accessible refernces of functions for removing in beforeDestroy
-    self.updateWidthHandler = function (width) {
+    self.updateWidthHandler = function updateWidthHandler(width) {
       self.updateWidth(width);
     };
 
-    self.compactHandler = function (layout) {
+    self.compactHandler = function compactHandler(layout) {
       self.compact(layout);
     };
 
-    self.setDraggableHandler = function (isDraggable) {
+    self.setDraggableHandler = function setDraggableHandler(isDraggable) {
       if (self.isDraggable === null) {
         self.draggable = isDraggable;
       }
     };
 
-    self.setResizableHandler = function (isResizable) {
+    self.setResizableHandler = function setResizableHandler(isResizable) {
       if (self.isResizable === null) {
         self.resizable = isResizable;
       }
     };
 
-    self.setRowHeightHandler = function (rowHeight) {
+    self.setRowHeightHandler = function setRowHeightHandler(rowHeight) {
       self.rowHeight = rowHeight;
     };
 
@@ -257,7 +256,7 @@ export default {
     };
 
     self.setColNum = (colNum) => {
-      self.cols = parseInt(colNum);
+      self.cols = parseInt(colNum, 10);
     };
 
     this.eventBus.$on('updateWidth', self.updateWidthHandler);
@@ -416,6 +415,7 @@ export default {
         }
       } else { // top,left (slow)
         //                    Add rtl support
+        /* eslint no-lonely-if: 0 */
         if (this.renderRtl) {
           style = setTopRight(pos.top, pos.right, pos.width, pos.height);
         } else {
@@ -467,6 +467,8 @@ export default {
           this.isResizing = false;
           break;
         }
+        default:
+          throw Error(`Unknown Case: ${event.type}`);
       }
 
       // Get new WH
@@ -563,6 +565,8 @@ export default {
           this.dragging = newPosition;
           break;
         }
+        default:
+          throw Error(`Unknown Case: ${event.type}`);
       }
 
       // Get new XY
@@ -641,9 +645,8 @@ export default {
     },
     // Helper for generating column width
     calcColWidth() {
-      const colWidth = (this.containerWidth - (this.margin[0] * (this.cols + 1))) / this.cols;
       // console.log("### COLS=" + this.cols + " COL WIDTH=" + colWidth + " MARGIN " + this.margin[0]);
-      return colWidth;
+      return (this.containerWidth - (this.margin[0] * (this.cols + 1))) / this.cols;
     },
 
     /**

@@ -136,7 +136,7 @@
 </template>
 
 <script>
-import FilterForm from 'src/components/filter/FilterForm2.vue';
+import FilterForm2 from './FilterForm2.vue';
 
 export default {
   name: 'FilterFormModal',

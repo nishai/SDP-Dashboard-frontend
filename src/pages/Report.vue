@@ -14,8 +14,6 @@
 <script>
 import Heading from '../components/misc/Heading.vue';
 import ReportChart from '../components/reports/ReportChart.vue';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 
 export default {
   name: 'Report',

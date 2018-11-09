@@ -54,7 +54,7 @@ function uuidv4() {
 /* STATE                                                                      */
 /* ========================================================================== */
 
-var stateData = {
+const stateData = {
   dashboardCharts: {
     // '1d090475-3c50-4075-bcf2-1b7f23a2a7cd': testDashboardChart,
   },
@@ -65,9 +65,9 @@ var stateData = {
 /* ========================================================================== */
 
 const getters = {
-  getChart: (state) => (id) => { return state.dashboardCharts[id] },
-  numCharts: (state) => { return Object.keys(state.dashboardCharts).length },
-  getCharts: (state) => { return state.dashboardCharts },
+  getChart: (state) => (id) => state.dashboardCharts[id],
+  numCharts: (state) => Object.keys(state.dashboardCharts).length,
+  getCharts: (state) => state.dashboardCharts,
 };
 
 /* ========================================================================== */
@@ -80,13 +80,13 @@ const mutations = {
     {
       charts,
       layout,
-    }
+    },
   ) {
     const uuid = uuidv4();
-    var dashboardChart = {
+    const dashboardChart = {
       name: uuid,
-      charts: charts,
-      layout: layout,
+      charts,
+      layout,
     };
     Vue.set(state.dashboardCharts, uuid, dashboardChart);
   },
@@ -100,28 +100,28 @@ const mutations = {
     state.dashboardCharts[id].name = name;
   },
   [mutators.UPDATE_CHART_LAYOUT](state, { newLayout }) {
-    for(var chartId in state.dashboardCharts){
-      for(let j = 0; j < newLayout.length; j += 1){
-        if(state.dashboardCharts[chartId].layout.i === newLayout[j].i){
-					if (newLayout[j].x === -1){
-						newLayout[j].x = state.dashboardCharts[chartId].layout.x;
-					}
-					if (newLayout[j].y === -1){
-						newLayout[j].y = state.dashboardCharts[chartId].layout.y;
-					}
-					if (newLayout[j].w === -1){
-						newLayout[j].w = state.dashboardCharts[chartId].layout.w;
-					}
-					if (newLayout[j].h === -1){
-						newLayout[j].h = state.dashboardCharts[chartId].layout.h;
-					}
+    for (const chartId in state.dashboardCharts) {
+      for (let j = 0; j < newLayout.length; j += 1) {
+        if (state.dashboardCharts[chartId].layout.i === newLayout[j].i) {
+          if (newLayout[j].x === -1) {
+            newLayout[j].x = state.dashboardCharts[chartId].layout.x;
+          }
+          if (newLayout[j].y === -1) {
+            newLayout[j].y = state.dashboardCharts[chartId].layout.y;
+          }
+          if (newLayout[j].w === -1) {
+            newLayout[j].w = state.dashboardCharts[chartId].layout.w;
+          }
+          if (newLayout[j].h === -1) {
+            newLayout[j].h = state.dashboardCharts[chartId].layout.h;
+          }
           state.dashboardCharts[chartId].layout = {
-						x: newLayout[j].x,
+            x: newLayout[j].x,
             y: newLayout[j].y,
             w: newLayout[j].w,
             h: newLayout[j].h,
             i: newLayout[j].i,
-				  }
+          };
         }
       }
     }
@@ -141,14 +141,14 @@ const actions = {
     {
       charts,
       layout,
-    }
+    },
   ) {
     commit(
       mutators.CREATE_DASHBOARD_CHART,
       {
         charts,
         layout,
-      }
+      },
     );
   },
   deleteDashboardChart({ commit, state }, { dashboardChartId }) {

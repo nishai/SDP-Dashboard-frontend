@@ -67,7 +67,7 @@ export default {
       if (this.$props.chartData[0].chartType === 'bar') {
         this.getBarData(i);
       } else {
-	      this.getData(i);
+        this.getData(i);
       }
     }
     // this.renderChart();
@@ -130,6 +130,8 @@ export default {
               this.$props.chartData[index].duplicate,
             ];
             break;
+          default:
+            // continue
         }
         console.log(queryArr[0], queryArr[1], queryArr[2], queryArr[3], queryArr[4], queryArr[5], queryArr[6]);
         apiQuery.getCourseStats(
@@ -163,6 +165,8 @@ export default {
                   labels.push(results[k][keys[0]]);
                   data.push(results[k][keys[1]]);
                   break;
+                default:
+                // continue
               }
             }
             const avg = sum / numDatapoints;
@@ -181,8 +185,10 @@ export default {
                 this.chartResultsLabels[index] = labels;
                 this.chartResultsData[index] = data;
                 break;
+              default:
+                // continue
             }
-            	this.renderChart();
+            this.renderChart();
           }
         });
       }
@@ -235,17 +241,15 @@ export default {
           case 'pass_rates_by_course':
             ifTest = this.chartData[l].courses.length;
             break;
+          default:
+          // continue
         }
         if (this.chartResultsData[l].length !== ifTest ||
-					this.chartResultsData[l].includes(null)) {
+          this.chartResultsData[l].includes(null)) {
           barFlag = false;
         }
       }
-      if (
-        (this.$props.chartData[0].chartType !== 'bar' ||
-				this.$props.chartData[0].chartType === 'bar' &&
-				barFlag)
-      ) {
+      if (this.$props.chartData[0].chartType !== 'bar' || (this.$props.chartData[0].chartType === 'bar' && barFlag)) {
         console.log(this.chartResultsData);
         console.log(this.chartResultsLabels);
         /* if (labels.length !== data.length) {
@@ -256,8 +260,11 @@ export default {
 
         // https://stackoverflow.com/questions/51560507/javascript-sort-an-array-of-string-numbers
         const transform = (k) => {
-			    if (k === 'K') return 0;
- 		  	  else if (k === 'N') return 13;
+          if (k === 'K') {
+            return 0;
+          } else if (k === 'N') {
+            return 13;
+          }
           return +k;
         };
 
@@ -267,23 +274,23 @@ export default {
           labels = [...new Set([...labels, ...this.chartResultsLabels[i]])];
           let data = [];
           if (this.$props.chartData[i].chartType === 'line') {
-  					data.push({
-	  					labels: this.chartResultsLabels[i],
-		  			});
-			  		for (let j = 0; j < this.chartResultsData[i].length; j += 1) {
-				  		data.push({
-  							x: this.chartResultsLabels[i][j],
-	  						y: (100.0 * this.chartResultsData[i][j]) / this.chartResultsData[i].reduce((a, b) => a + b, 0),
-	  						// y: this.chartResultsData[i][j]),
-		  				});
-			  		}
+            data.push({
+              labels: this.chartResultsLabels[i],
+            });
+            for (let j = 0; j < this.chartResultsData[i].length; j += 1) {
+              data.push({
+                x: this.chartResultsLabels[i][j],
+                y: (100.0 * this.chartResultsData[i][j]) / this.chartResultsData[i].reduce((a, b) => a + b, 0),
+                // y: this.chartResultsData[i][j]),
+              });
+            }
             labels = labels.sort((a, b) => transform(a) - transform(b));
           } else {
             data = this.chartResultsData[i];
           }
-	  			let colors;
+          let colors;
           if (this.$props.chartData[i].chartType === 'line' ||
-						this.$props.chartData[i].chartType === 'bar') {
+            this.$props.chartData[i].chartType === 'bar') {
             beginZero = true;
             colors = palette(
               'tol-rainbow',
@@ -298,7 +305,7 @@ export default {
             borderWidth: 2,
             type: this.$props.chartData[i].chartType,
             fill: true,
-		  			label: this.$props.chartData[i].courses,
+            label: this.$props.chartData[i].courses,
           });
         }
 

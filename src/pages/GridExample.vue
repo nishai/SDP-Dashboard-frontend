@@ -41,13 +41,11 @@
 </template>
 
 <script>
+import { GridLayout, GridItem } from 'vue-grid-layout';
 import Heading from '../components/misc/Heading.vue';
 import Chart from '../components/charts/chartjs/Chart.vue';
 import Table from '../components/charts/chartjs/Table.vue';
 import DashboardChart from '../components/dashboard/DashboardChart.vue';
-import { GridLayout } from 'vue-grid-layout';
-import { GridItem } from 'vue-grid-layout';
-
 
 const testLayout = [
   {

@@ -5,7 +5,7 @@
     <b-row>
       <!-- create numForms amount of copies of the form side by side-->
       <b-col v-for="i in numForms" :key="groupByDesc + '-' + i">
-				<!-- CHART TYPE -->
+        <!-- CHART TYPE -->
         <b-form-group
           v-if="ftype === true"
           id="typeGroup"
@@ -20,14 +20,14 @@
           </b-form-select>
         </b-form-group>
 
-				<!-- YEARS -->
+        <!-- YEARS -->
         <b-form-group
           v-if="fyear === true"
           id="YearGroup"
           label="Year:"
           label-for="Year"
           horizontal>
-					<!-- Filter Tags -->
+          <!-- Filter Tags -->
           <div>
             <vue-tags-input
               v-model="tagStrs.years[i-1]"
@@ -38,14 +38,14 @@
             </vue-tags-input>
           </div>
         </b-form-group>
-				<!-- FACULTY -->
+        <!-- FACULTY -->
         <b-form-group
           v-if="ffaculty === true"
           id="FacultyGroup"
           label="Faculty:"
           label-for="Faculty"
           horizontal>
-					<!-- Filter Tags -->
+          <!-- Filter Tags -->
           <div>
             <vue-tags-input
               v-model="tagStrs.faculties[i-1]"
@@ -56,14 +56,14 @@
             </vue-tags-input>
           </div>
         </b-form-group>
-				<!-- SCHOOL -->
+        <!-- SCHOOL -->
         <b-form-group
           v-if="fschool === true"
           id="SchoolGroup"
           label="School:"
           label-for="School"
           horizontal>
-					<!-- Filter Tags -->
+          <!-- Filter Tags -->
           <div>
             <vue-tags-input
               v-model="tagStrs.schools[i-1]"
@@ -74,14 +74,14 @@
             </vue-tags-input>
           </div>
         </b-form-group>
-				<!-- COURSES -->
+        <!-- COURSES -->
         <b-form-group
           v-if="fcourse === true"
           id="CourseGroup"
           label="Course:"
           label-for="Course"
           horizontal>
-					<!-- Filter Tags -->
+          <!-- Filter Tags -->
           <div>
             <vue-tags-input
               v-model="tagStrs.courses[i-1]"
@@ -93,7 +93,7 @@
           </div>
         </b-form-group>
 
-				<!-- Duplicate Data Checkbox-->
+        <!-- Duplicate Data Checkbox-->
         <b-form-group
           checked=true
           id="DuplicateGroup">
@@ -103,24 +103,25 @@
           </b-form-checkbox>
         </b-form-group>
 
-			</b-col>
-		</b-row>
-		<b-row>
+      </b-col>
+    </b-row>
+    <b-row>
       <b-col>
         <b-button variant="primary" type="primary">Filter</b-button>
-			</b-col>
-			<b-col>
+      </b-col>
+      <b-col>
         <b-button @click="onClose" variant="secondary">Close</b-button>
       </b-col>
     </b-row>
-	</b-form>
-	<h1 v-else> Loading Data For Form, Please Wait... {{loadedPercent}}% Loaded</h1>
+  </b-form>
+  <h1 v-else> Loading Data For Form, Please Wait... {{loadedPercent}}% Loaded</h1>
 </template>
 
 <script>
-import apiQuery from '../../api/api_query';
 import { mapGetters } from 'vuex';
 import VueTagsInput from '@johmun/vue-tags-input';
+import apiQuery from '../../api/api_query';
+
 
 export default {
   name: 'FilterForm',
@@ -154,23 +155,23 @@ export default {
   data: () => ({
     show: false,
     showCounter: 0,
-    //		chartTypes: [
-    //				{ text: 'Select One', value: null },
-    //				'bar', 'line', 'pie', 'doughnut', 'radar',
-    //		],
+    //    chartTypes: [
+    //        { text: 'Select One', value: null },
+    //        'bar', 'line', 'pie', 'doughnut', 'radar',
+    //    ],
     tagStrs: { // arrays of strings
       years: [],
       faculties: [],
       schools: [],
       courses: [],
     },
-    tagDicts: {	// arrays of array of dictionaries
+    tagDicts: { // arrays of array of dictionaries
       years: [],
       faculties: [],
       schools: [],
       courses: [],
     },
-    tagAutocompletes: {	// arrays of array of dictionionaries
+    tagAutocompletes: { // arrays of array of dictionionaries
       years: [],
       faculties: [],
       schools: [],
@@ -261,7 +262,7 @@ export default {
             default:
               selected = [];
           }
-				  if (typeof selected === 'string') {
+          if (typeof selected === 'string') {
             selected = [selected];
           }
           const dicts = [];
@@ -286,16 +287,24 @@ export default {
   },
   methods: {
     filteredItemsYears(index) {
-      return this.tagAutocompletes.years[index].filter((i) => new RegExp(this.tagStrs.years[index], 'i').test(i.text)).slice(0, 10);
+      return this.tagAutocompletes.years[index].filter(
+        (i) => new RegExp(this.tagStrs.years[index], 'i').test(i.text),
+      ).slice(0, 10);
     },
     filteredItemsFaculties(index) {
-      return this.tagAutocompletes.faculties[index].filter((i) => new RegExp(this.tagStrs.faculties[index], 'i').test(i.text)).slice(0, 10);
+      return this.tagAutocompletes.faculties[index].filter(
+        (i) => new RegExp(this.tagStrs.faculties[index], 'i').test(i.text),
+      ).slice(0, 10);
     },
     filteredItemsSchools(index) {
-      return this.tagAutocompletes.schools[index].filter((i) => new RegExp(this.tagStrs.schools[index], 'i').test(i.text)).slice(0, 10);
+      return this.tagAutocompletes.schools[index].filter(
+        (i) => new RegExp(this.tagStrs.schools[index], 'i').test(i.text),
+      ).slice(0, 10);
     },
     filteredItemsCourses(index) {
-      return this.tagAutocompletes.courses[index].filter((i) => new RegExp(this.tagStrs.courses[index], 'i').test(i.text)).slice(0, 10);
+      return this.tagAutocompletes.courses[index].filter(
+        (i) => new RegExp(this.tagStrs.courses[index], 'i').test(i.text),
+      ).slice(0, 10);
     },
 
     makeShow() {
@@ -318,8 +327,8 @@ export default {
           // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
           // can probably clean this up and reduce redundency
           for (let i = 0; i < this.tagAutocompletes.years.length; i += 1) {
-          	this.tagAutocompletes.years[i] =
-							Object.values(data.results).map((a) => ({ text: a }));
+            this.tagAutocompletes.years[i] =
+              Object.values(data.results).map((a) => ({ text: a }));
           }
           this.makeShow();
         });
@@ -331,8 +340,8 @@ export default {
           // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
           // can probably clean this up and reduce redundency
           for (let i = 0; i < this.tagAutocompletes.faculties.length; i += 1) {
-          	this.tagAutocompletes.faculties[i] =
-							Object.values(data.results).map((a) => ({ text: a }));
+            this.tagAutocompletes.faculties[i] =
+              Object.values(data.results).map((a) => ({ text: a }));
           }
           this.makeShow();
         });
@@ -344,8 +353,8 @@ export default {
           // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
           // can probably clean this up and reduce redundency
           for (let i = 0; i < this.tagAutocompletes.schools.length; i += 1) {
-          	this.tagAutocompletes.schools[i] =
-							Object.values(data.results).map((a) => ({ text: a }));
+            this.tagAutocompletes.schools[i] =
+              Object.values(data.results).map((a) => ({ text: a }));
           }
           this.makeShow();
         });
@@ -357,8 +366,8 @@ export default {
           // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
           // can probably clean this up and reduce redundency
           for (let i = 0; i < this.tagAutocompletes.courses.length; i += 1) {
-          	this.tagAutocompletes.courses[i] =
-							Object.values(data.results).map((a) => ({ text: a }));
+            this.tagAutocompletes.courses[i] =
+              Object.values(data.results).map((a) => ({ text: a }));
           }
           this.makeShow();
         });
@@ -374,30 +383,30 @@ export default {
       // Convert FilterTags into arrays to pass into the query:
 
       // convert years tags to an array
-      const submitYears = new Array();
-      const submitFaculties = new Array();
-      const submitSchools = new Array();
-      const submitCourses = new Array();
+      const submitYears = [];
+      const submitFaculties = [];
+      const submitSchools = [];
+      const submitCourses = [];
       for (let i = 0; i < this.$props.numForms; i += 1) {
         submitYears.push([]);
         submitFaculties.push([]);
         submitSchools.push([]);
         submitCourses.push([]);
-        for (var key in this.tagDicts.years[i]) {
+        for (const key in this.tagDicts.years[i]) {
           submitYears[i].push(this.tagDicts.years[i][key].text);
         }
         // convert faculty tags to an array
-        for (var key in this.tagDicts.faculties[i]) {
+        for (const key in this.tagDicts.faculties[i]) {
           submitFaculties[i].push(this.tagDicts.faculties[i][key].text);
         }
 
         // convert schools tags to an array
-        for (var key in this.tagDicts.schools[i]) {
+        for (const key in this.tagDicts.schools[i]) {
           submitSchools[i].push(this.tagDicts.schools[i][key].text);
         }
 
         // convert courses tags to an array
-        for (var key in this.tagDicts.courses[i]) {
+        for (const key in this.tagDicts.courses[i]) {
           submitCourses[i].push(this.tagDicts.courses[i][key].text);
         }
       }
