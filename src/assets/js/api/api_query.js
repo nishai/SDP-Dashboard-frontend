@@ -31,6 +31,7 @@ function refreshToken(token) {
 function getYears() {
   return QuerysetFactory.enrolledyear()
     .values('calendar_instance_year')
+    .orderBy({ field: 'calendar_instance_year' })
     .distinct()
     .debug()
     .POST();
@@ -39,6 +40,7 @@ function getYears() {
 function getFaculties() {
   return QuerysetFactory.faculty()
     .values('faculty_title')
+    .orderBy({ 'field': 'faculty_title' })
     .debug()
     .POST();
 }
@@ -46,6 +48,7 @@ function getFaculties() {
 function getSchools() {
   return QuerysetFactory.school()
     .values('school_title')
+    .orderBy({ 'field': 'school_title' })
     .debug()
     .POST();
 }
@@ -53,6 +56,7 @@ function getSchools() {
 function getCourses() {
   return QuerysetFactory.course()
     .values('course_code')
+    .orderBy({ 'field': 'course_code' })
     .debug()
     .POST();
 }

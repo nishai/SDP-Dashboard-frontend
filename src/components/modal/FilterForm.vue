@@ -328,7 +328,7 @@ export default {
           // can probably clean this up and reduce redundency
           for (let i = 0; i < this.tagAutocompletes.years.length; i += 1) {
             this.tagAutocompletes.years[i] =
-              Object.values(data.results).map((a) => ({ text: a }));
+              Object.values(data.results).map(({ 'calendar_instance_year': a }) => ({ text: a }));
           }
           this.makeShow();
         });
@@ -341,7 +341,7 @@ export default {
           // can probably clean this up and reduce redundency
           for (let i = 0; i < this.tagAutocompletes.faculties.length; i += 1) {
             this.tagAutocompletes.faculties[i] =
-              Object.values(data.results).map((a) => ({ text: a }));
+              Object.values(data.results).map(({ 'faculty_title': a }) => ({ text: a }));
           }
           this.makeShow();
         });
@@ -354,7 +354,7 @@ export default {
           // can probably clean this up and reduce redundency
           for (let i = 0; i < this.tagAutocompletes.schools.length; i += 1) {
             this.tagAutocompletes.schools[i] =
-              Object.values(data.results).map((a) => ({ text: a }));
+              Object.values(data.results).map(({ 'school_title': a }) => ({ text: a }));
           }
           this.makeShow();
         });
@@ -367,7 +367,7 @@ export default {
           // can probably clean this up and reduce redundency
           for (let i = 0; i < this.tagAutocompletes.courses.length; i += 1) {
             this.tagAutocompletes.courses[i] =
-              Object.values(data.results).map((a) => ({ text: a }));
+              Object.values(data.results).map(({ 'course_code': a }) => ({ text: a }));
           }
           this.makeShow();
         });
