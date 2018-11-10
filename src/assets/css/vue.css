@@ -1,0 +1,38 @@
+
+/* This file is imported globally in "main.js" or "App.vue" */
+
+/* ========================================================================== */
+/* Transitions                                                                */
+/* ========================================================================== */
+
+/*
+ * Transitions can be used for example by surrounding a v-if element
+ * with a <transition name="transition-name"> element.
+ * - https://vuejs.org/v2/guide/transitions.html
+ */
+
+/* <transition name="fade"> */
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .25s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+/* <transition name="slide-left-2"> */
+
+.slide-left-enter-active, .slide-left-leave-active {
+  transition: all .5s ease;
+}
+
+.slide-left-enter-to, .slide-left-leave {
+  transform: translate3d(0, 0, 0);
+  visibility: visible;
+}
+
+.slide-left-enter, .slide-left-leave-to {
+  transform: translate3d(-100%, 0, 0);
+  visibility: hidden;
+}

@@ -1,0 +1,19 @@
+
+/* This file is imported globally in "main.js" or "App.vue" */
+
+
+/* ========================================================================== */
+/* Override Bulma                                                             */
+/*   - https://buefy.github.io/documentation/customization                    */
+/* ========================================================================== */
+
+/*
+ * Override Bulma defaults.
+ * -
+ * - https://bulma.io/documentation
+ */
+
+
+.footer {
+  padding: 1.5rem 1.5rem 1.5rem; /* default: 3rem 1.5rem 6rem */
+}
