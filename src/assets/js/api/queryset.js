@@ -597,6 +597,70 @@ export class Queryset {
 /* Vars                                                                       */
 /* ========================================================================== */
 
+// TODO convert these to something that can be type hinted at in webstorm.
+
+export const fieldsFaculty = [
+  'faculty_id',
+  'faculty_title',
+];
+
+export const fieldsSchool = [
+  'school_id',
+  'school_title',
+  'faculty_id',
+];
+
+export const fieldsCourse = [
+  'course_code',
+  // 'course_title', NOT IMPLEMENTED IN BACKEND
+  'school_id',
+];
+
+export const fieldsProgram = [
+  'program_code',
+  'program_title',
+];
+
+export const fieldsProgressOutcome = [
+  'progress_outcome_type',
+  'progress_outcome_type_description',
+];
+
+export const fieldsSecondarySchool = [
+  'secondary_school_name',
+  'secondary_school_quintile',
+  'urban_rural_secondary_school',
+];
+
+export const fieldsStudent = [
+  'encrypted_student_no',
+  'nationality_short_name',
+  'home_language_description',
+  'race_description',
+  'gender',
+  'age',
+  'secondary_school_name',
+];
+
+export const fieldsEnrolledYear = [
+  'encrypted_student_no',
+  'program_code',
+  'calendar_instance_year',
+  'year_of_study',
+  'award_grade',
+  'average_marks',
+  'progress_outcome_type',
+];
+
+
+export const fieldsEnrolledCourse = [
+  'enrolled_year_id',
+  'course_code',
+  'final_mark',
+  'final_grade',
+];
+
+/* ENDPOINT NAMES */
 
 export const nameToEndpoint = {
   faculty: 'query/faculties',
@@ -609,11 +673,6 @@ export const nameToEndpoint = {
   enrolledyear: 'query/year-enrollment',
   enrolledcourse: 'query/course-enrollment',
 };
-
-// const nameToGenerator = {};
-// Object.keys(nameToEndpoint).forEach((key) => {
-//   nameToGenerator[key] = (function temp() { return Queryset(nameToEndpoint[key]); });
-// });
 
 /* EXPORT */
 
@@ -638,6 +697,8 @@ export const QuerysetFactory = {
   enrolledcourse() { return new Queryset(nameToEndpoint.enrolledcourse); },
 };
 
+/* EXPORT */
+
 export const nameToQuerysetFactory = {
   faculty: QuerysetFactory.faculty,
   school: QuerysetFactory.school,
@@ -650,9 +711,24 @@ export const nameToQuerysetFactory = {
   enrolledcourse: QuerysetFactory.enrolledcourse,
 };
 
+/* export everything */
+
 export default {
   Q,
   Queryset,
+  // HELPER
   QuerysetFactory,
+  // CONVERSIONS
   nameToEndpoint,
+  nameToQuerysetFactory,
+  // ALL FIELDS
+  fieldsFaculty,
+  fieldsSchool,
+  fieldsCourse,
+  fieldsProgram,
+  fieldsProgressOutcome,
+  fieldsSecondarySchool,
+  fieldsStudent,
+  fieldsEnrolledYear,
+  fieldsEnrolledCourse,
 };
