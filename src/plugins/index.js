@@ -7,6 +7,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 import '@/assets/css/defaults.css';
 import '@/assets/css/bootstrapExtensions.css';
 import '@/assets/css/dashboard.css';
+import '@/assets/css/vue.css';
 import '@/assets/css/wits.css';
 
 /* external plugins */
@@ -18,6 +19,8 @@ import Vuex from 'vuex';
 import GlobalComponents from './globalComponents';
 import GlobalDirectives from './globalDirectives';
 
+
+/* initialise on export */
 
 export default {
   install(Vue) {

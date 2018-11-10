@@ -5,7 +5,6 @@
       <img :src="src" alt="chart" width="120" @click="openPopup" >
       <div class="chart_link_text"> {{ desc }} </div>
     </div>
-
   </div>
 </template>
 

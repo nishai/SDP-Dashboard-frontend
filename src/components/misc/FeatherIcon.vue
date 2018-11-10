@@ -21,8 +21,7 @@ export default {
     name: { type: String },
     args: { type: Object, default: () => ({}) },
     /* override args */
-    width: { type: Number, default: 16 },
-    height: { type: Number, default: 16 },
+    size: { type: Number, default: 16 },
     fill: { type: String, default: null },
     stroke: { type: String, default: null },
     strokeWidth: { type: Number, default: 2 },
@@ -36,8 +35,8 @@ export default {
       /* shallow copy */
       const args = Object.assign({}, this.args);
       /* replace if not null */
-      if (this.width != null) args.width = this.width;
-      if (this.height != null) args.height = this.height;
+      if (this.size != null) args.width = this.size;
+      if (this.size != null) args.height = this.size;
       if (this.fill != null) args.fill = this.fill;
       if (this.stroke != null) args.stroke = this.stroke;
       if (this.strokeWidth != null) args['stroke-width'] = this.strokeWidth;

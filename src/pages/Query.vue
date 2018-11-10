@@ -38,7 +38,7 @@ import axios from 'axios';
 import Heading from '../components/misc/Heading.vue';
 import Chart from '../components/charts/chartjs/Chart.vue';
 import QueryFilter from '../components/query/QueryFilter.vue';
-import { QuerysetFactory, Q } from '../api/queryset';
+import { QuerysetFactory, Q } from '../assets/js/api/queryset';
 
 export default {
   name: 'Query',
