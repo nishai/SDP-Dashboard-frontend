@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import queryApi from '../../api/api_query';
+import queryApi from '../../assets/js/api/api_query';
 
 export default {
   name: 'Menubar',
