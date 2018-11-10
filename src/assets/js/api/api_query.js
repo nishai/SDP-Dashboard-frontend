@@ -1,5 +1,6 @@
 
 import axios from 'axios';
+import { QuerysetFactory, Q } from './queryset';
 
 
 const requester = axios.create({
@@ -28,139 +29,55 @@ function refreshToken(token) {
 }
 
 function getYears() {
-  return requester.post(
-    'course_stats/query',
-    {
-      chain: [
-        {
-          group: {
-            by: [
-              'calendar_instance_year',
-            ],
-            distinctGrouping: true,
-            removeDuplicateCountings: false,
-          },
-        },
-      ],
-    },
-  );
+  return QuerysetFactory.enrolledyear()
+    .values('calendar_instance_year')
+    .distinct()
+    .debug()
+    .POST();
 }
 
 function getFaculties() {
-  return requester.post(
-    'school_info/query',
-    {
-      chain: [
-        {
-          group: {
-            by: [
-              'faculty',
-            ],
-            distinctGrouping: true,
-            removeDuplicateCountings: false,
-          },
-        },
-      ],
-    },
-  );
+  return QuerysetFactory.faculty()
+    .values('faculty_title')
+    .debug()
+    .POST();
 }
 
 function getSchools() {
-  return requester.post(
-    'school_info/query',
-    {
-      chain: [
-        {
-          group: {
-            by: [
-              'school',
-            ],
-            distinctGrouping: true,
-            removeDuplicateCountings: false,
-          },
-        },
-      ],
-    },
-  );
+  return QuerysetFactory.school()
+    .values('school_title')
+    .debug()
+    .POST();
 }
 
-function getCourses(schools) {
-  return requester.post(
-    'course_info/query',
-    {
-      chain: [
-        {
-          group: {
-            by: [
-              'course_name',
-            ],
-            distinctGrouping: true,
-            removeDuplicateCountings: false,
-          },
-        },
-      ],
-    },
-  );
+function getCourses() {
+  return QuerysetFactory.course()
+    .values('course_code')
+    .debug()
+    .POST();
 }
 
 function getFacultySchools(faculties) {
-  return requester.post(
-    'school_info/query',
-    {
-      chain: [
-        {
-          filter: [
-            {
-              field: 'faculty',
-              operator: 'exact',
-              value: faculties,
-            },
-          ],
-          group: {
-            by: [
-              'school',
-            ],
-            distinctGrouping: true,
-            removeDuplicateCountings: false,
-          },
-        },
-      ],
-    },
-  );
+  return QuerysetFactory.school()
+    .filter(Q('faculty_id__faculty_title__in', faculties))
+    .values('school_title')
+    .debug()
+    .POST();
 }
 
 function getSchoolsCourses(schools) {
-  return requester.post(
-    'course_info/query',
-    {
-      chain: [
-        {
-          filter: [
-            {
-              field: 'school',
-              operator: 'exact',
-              value: schools,
-            },
-          ],
-          group: {
-            by: [
-              'course_name',
-            ],
-            distinctGrouping: true,
-            removeDuplicateCountings: false,
-          },
-        },
-      ],
-    },
-  );
+  return QuerysetFactory.school()
+    .filter(Q('school_id__school_title__in', schools))
+    .values('course_code')
+    .debug()
+    .POST();
 }
 
-function determineYield(groupBy) {
-  return groupBy;
-}
+// function determineYield(groupBy) {
+//   return groupBy;
+// }
 
 function getCourseStats(modelName, groupBy, years, faculties, schools, courses, duplicate) {
-  const yieldBy = determineYield(groupBy);
   return requester.post(
     `${modelName}/query`,
     {
@@ -196,7 +113,7 @@ function getCourseStats(modelName, groupBy, years, faculties, schools, courses, 
               {
                 name: 'count',
                 via: 'count',
-                from: yieldBy,
+                from: groupBy,
               },
             ],
             distinctGrouping: false,

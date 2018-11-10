@@ -194,6 +194,7 @@ export class Queryset {
   constructor(endpoint) {
     this._endpoint = endpoint.replace(/^[/]/g, '');
     this._queryset = [];
+    this._debug = false;
   }
 
   /* COMPUTED PROPS */
@@ -215,11 +216,37 @@ export class Queryset {
   }
 
   /**
+   * Print out the current state.
+   * @return {Queryset}
+   */
+  log() {
+    console.log('Queryset: ', this._queryset);
+    return this;
+  }
+
+  /**
+   * Make the POST or OPTIONS methods log debug data.
+   * @return {Queryset}
+   */
+  debug() {
+    this._debug = true;
+    return this;
+  }
+
+  /**
    * @param fake
+   * @param debug
    * @return {AxiosPromise<any>}
    */
   POST(fake = false) {
-    return requester.post(`${this._endpoint}?fake=${fake ? 1 : 0}`, this.data);
+    let promise = requester.post(`${this._endpoint}?fake=${fake ? 1 : 0}`, this.data);
+    if (this._debug) {
+      promise = promise.then((response) => {
+        console.log('Queryset: ', this._queryset, 'Response: ', response);
+        return response;
+      });
+    }
+    return promise;
   }
 
   /**
@@ -609,6 +636,18 @@ export const QuerysetFactory = {
   enrolledyear() { return new Queryset(nameToEndpoint.enrolledyear); },
   /** @return {Queryset} */
   enrolledcourse() { return new Queryset(nameToEndpoint.enrolledcourse); },
+};
+
+export const nameToQuerysetFactory = {
+  faculty: QuerysetFactory.faculty,
+  school: QuerysetFactory.school,
+  course: QuerysetFactory.course,
+  program: QuerysetFactory.program,
+  outcome: QuerysetFactory.outcome,
+  highschool: QuerysetFactory.highschool,
+  student: QuerysetFactory.student,
+  enrolledyear: QuerysetFactory.enrolledyear,
+  enrolledcourse: QuerysetFactory.enrolledcourse,
 };
 
 export default {
