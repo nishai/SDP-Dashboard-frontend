@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import apiQuery from '../../assets/js/api/api_query';
+import apiQuery from '../../assets/js/api/witsapi';
 import VueTagsInput from '@johmun/vue-tags-input';
 
 export default {

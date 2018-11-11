@@ -1,7 +1,12 @@
 
-import axios from 'axios';
-import { QuerysetFactory, Q } from './queryset';
+/* eslint-disable no-unused-vars */
+/* eslint-disable prefer-template */
 
+import axios from 'axios';
+import { Faculty, School, Course, AsdfObj, Program, ProgressOutcome, SecondarySchool, Student, EnrolledYear, EnrollCourse } from './witsmodels';
+import { Q } from './queryset';
+
+/* eslint-enable no-unused-vars */
 
 const requester = axios.create({
   baseURL: `http://${process.env.VUE_APP_API}/`,
@@ -29,50 +34,50 @@ function refreshToken(token) {
 }
 
 function getYears() {
-  return QuerysetFactory.enrolledyear()
-    .values('calendar_instance_year')
-    .orderBy({ field: 'calendar_instance_year' })
+  return EnrolledYear.query()
+    .values(EnrolledYear.calendar_instance_year)
+    .orderBy(EnrolledYear.calendar_instance_year)
     .distinct()
     .debug()
     .POST();
 }
 
 function getFaculties() {
-  return QuerysetFactory.faculty()
-    .values('faculty_title')
-    .orderBy({ 'field': 'faculty_title' })
+  return Faculty.query()
+    .values(Faculty.faculty_title)
+    .orderBy(Faculty.faculty_title)
     .debug()
     .POST();
 }
 
 function getSchools() {
-  return QuerysetFactory.school()
-    .values('school_title')
-    .orderBy({ 'field': 'school_title' })
+  return School.query()
+    .values(School.school_title)
+    .orderBy(School.school_title)
     .debug()
     .POST();
 }
 
 function getCourses() {
-  return QuerysetFactory.course()
-    .values('course_code')
-    .orderBy({ 'field': 'course_code' })
+  return Course.query()
+    .values(Course.course_code)
+    .orderBy(Course.course_code)
     .debug()
     .POST();
 }
 
 function getFacultySchools(faculties) {
-  return QuerysetFactory.school()
-    .filter(Q('faculty_id__faculty_title__in', faculties))
-    .values('school_title')
+  return School.query()
+    .filter(Q(School.faculty_id.faculty_title + '__in', faculties))
+    .values(School.school_title)
     .debug()
     .POST();
 }
 
 function getSchoolsCourses(schools) {
-  return QuerysetFactory.school()
-    .filter(Q('school_id__school_title__in', schools))
-    .values('course_code')
+  return Course.query()
+    .filter(Q(Course.course_code, schools))
+    .values(Course.course_code)
     .debug()
     .POST();
 }
@@ -129,19 +134,18 @@ function getCourseStats(modelName, groupBy, years, faculties, schools, courses, 
   );
 }
 
-const nameToColumn = {
-  'Race': 'race_description',
-  'Gender': 'gender',
-  'Nationality': 'nationality_short_name',
-  'Home Language': 'home_language_description',
-  'Bell curve': 'final_mark',
-  'Pass rates by year': 'pass_rates_by_year',
-  'Pass rates by faculty/course': 'pass_rates_by_course',
-  'Progress outcome by faculty/course': 'progress_outcome_by_course',
-};
+// const nameToColumn = {
+//   'Race': 'race_description',
+//   'Gender': 'gender',
+//   'Nationality': 'nationality_short_name',
+//   'Home Language': 'home_language_description',
+//   'Bell curve': 'final_mark',
+//   'Pass rates by year': 'pass_rates_by_year',
+//   'Pass rates by faculty/course': 'pass_rates_by_course',
+//   'Progress outcome by faculty/course': 'progress_outcome_by_course',
+// };
 
 export default {
-  getCourseStats,
   getYears,
   getFaculties,
   getSchools,
@@ -150,5 +154,4 @@ export default {
   getSchoolsCourses,
   getLoginToken,
   refreshToken,
-  nameToColumn,
 };

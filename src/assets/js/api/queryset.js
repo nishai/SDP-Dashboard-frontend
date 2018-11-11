@@ -259,13 +259,16 @@ export class Queryset {
   /* QUERYSET BUILDER */
 
   /**
-   * QuerySet.filter() Generates:
+   * QuerySet.filter(
+   *   Q('question__startswith, 'Who').and(Q('pub_date__year', 2004)).or(Q('pub_date__year', 2005).not())
+   * ) Generates:
+   *
    * {
    *   "action": "filter",
    *   "expr": "Q(question__startswith='Who', pub_date__year=2004) | ~Q(pub_date__year=2005)"
    * }
    *
-   * QuerySet.filter() Generates:
+   * QuerySet.filter Generates:
    * {
    *   "action": "filter",
    *   "expr": "Q(question__startswith='Who') & Q(pub_date__year=F('del_date__year') + 4 - 1) | ~Q(pub_date__year=2005)"
@@ -302,6 +305,8 @@ export class Queryset {
     let array = fields;
     if (fields.length === 1 && fields[0] instanceof Q) {
       array = fields[0].toRpnArray();
+    } else if (fields.length > 1 && fields[0] instanceof Q) {
+      throw Error('Only one item Q can be passed');
     }
     this._queryset.push({
       'action': 'filter',
@@ -411,7 +416,7 @@ export class Queryset {
    *   "fields": [
    *     {
    *       "field": "asdf",
-   *       "descending": true
+   *       "descending": false,
    *     }
    *   ]
    * },
@@ -459,16 +464,18 @@ export class Queryset {
    * }
    *
    * @param fields
-   * @return {Queryset}
+   * @return { Queryset }
    */
   orderBy(...fields) {
     for (let i = 0; i < fields.length; i += 1) {
-      const item = fields[i];
-      if (!('field' in item)) {
+      if (typeof fields[i] === 'string') {
+        fields[i] = { 'field': fields[i] };
+      }
+      if (!('field' in fields[i])) {
         throw new Error('field not present');
       }
-      if (!('descending' in item)) {
-        // continue
+      if (!('descending' in fields[i])) {
+        fields[i].descending = false;
       }
     }
     this._queryset.push({
@@ -593,142 +600,9 @@ export class Queryset {
   }
 }
 
-/* ========================================================================== */
-/* Vars                                                                       */
-/* ========================================================================== */
-
-// TODO convert these to something that can be type hinted at in webstorm.
-
-export const fieldsFaculty = [
-  'faculty_id',
-  'faculty_title',
-];
-
-export const fieldsSchool = [
-  'school_id',
-  'school_title',
-  'faculty_id',
-];
-
-export const fieldsCourse = [
-  'course_code',
-  // 'course_title', NOT IMPLEMENTED IN BACKEND
-  'school_id',
-];
-
-export const fieldsProgram = [
-  'program_code',
-  'program_title',
-];
-
-export const fieldsProgressOutcome = [
-  'progress_outcome_type',
-  'progress_outcome_type_description',
-];
-
-export const fieldsSecondarySchool = [
-  'secondary_school_name',
-  'secondary_school_quintile',
-  'urban_rural_secondary_school',
-];
-
-export const fieldsStudent = [
-  'encrypted_student_no',
-  'nationality_short_name',
-  'home_language_description',
-  'race_description',
-  'gender',
-  'age',
-  'secondary_school_name',
-];
-
-export const fieldsEnrolledYear = [
-  'encrypted_student_no',
-  'program_code',
-  'calendar_instance_year',
-  'year_of_study',
-  'award_grade',
-  'average_marks',
-  'progress_outcome_type',
-];
-
-
-export const fieldsEnrolledCourse = [
-  'enrolled_year_id',
-  'course_code',
-  'final_mark',
-  'final_grade',
-];
-
-/* ENDPOINT NAMES */
-
-export const nameToEndpoint = {
-  faculty: 'query/faculties',
-  school: 'query/schools',
-  course: 'query/courses',
-  program: 'query/programs',
-  outcome: 'query/outcomes',
-  highschool: 'query/high-schools',
-  student: 'query/students',
-  enrolledyear: 'query/year-enrollment',
-  enrolledcourse: 'query/course-enrollment',
-};
-
-/* EXPORT */
-
-export const QuerysetFactory = {
-  /** @return {Queryset} */
-  faculty() { return new Queryset(nameToEndpoint.faculty); },
-  /** @return {Queryset} */
-  school() { return new Queryset(nameToEndpoint.school); },
-  /** @return {Queryset} */
-  course() { return new Queryset(nameToEndpoint.course); },
-  /** @return {Queryset} */
-  program() { return new Queryset(nameToEndpoint.program); },
-  /** @return {Queryset} */
-  outcome() { return new Queryset(nameToEndpoint.outcome); },
-  /** @return {Queryset} */
-  highschool() { return new Queryset(nameToEndpoint.highschool); },
-  /** @return {Queryset} */
-  student() { return new Queryset(nameToEndpoint.student); },
-  /** @return {Queryset} */
-  enrolledyear() { return new Queryset(nameToEndpoint.enrolledyear); },
-  /** @return {Queryset} */
-  enrolledcourse() { return new Queryset(nameToEndpoint.enrolledcourse); },
-};
-
-/* EXPORT */
-
-export const nameToQuerysetFactory = {
-  faculty: QuerysetFactory.faculty,
-  school: QuerysetFactory.school,
-  course: QuerysetFactory.course,
-  program: QuerysetFactory.program,
-  outcome: QuerysetFactory.outcome,
-  highschool: QuerysetFactory.highschool,
-  student: QuerysetFactory.student,
-  enrolledyear: QuerysetFactory.enrolledyear,
-  enrolledcourse: QuerysetFactory.enrolledcourse,
-};
-
 /* export everything */
 
 export default {
   Q,
   Queryset,
-  // HELPER
-  QuerysetFactory,
-  // CONVERSIONS
-  nameToEndpoint,
-  nameToQuerysetFactory,
-  // ALL FIELDS
-  fieldsFaculty,
-  fieldsSchool,
-  fieldsCourse,
-  fieldsProgram,
-  fieldsProgressOutcome,
-  fieldsSecondarySchool,
-  fieldsStudent,
-  fieldsEnrolledYear,
-  fieldsEnrolledCourse,
 };
