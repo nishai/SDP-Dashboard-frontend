@@ -3,12 +3,6 @@
  * for models and fields inside webstorm at least.
  */
 
-/* eslint-disable func-names */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable max-len */
-/* eslint-disable no-multi-spaces */
-/* eslint-disable key-spacing */
-
 import { Queryset, Q } from './queryset';
 
 /* ========================================================================== */
@@ -74,431 +68,326 @@ import { Queryset, Q } from './queryset';
 /**
  * Used to construct field relationship.
  * eg. school_id__faculty_id__faculty_title
- *
- * Do not set parent stack manually, this field is only used internally.
- * @param {Array<string>} parentStack
- * @return {FieldBuilder}
- * @constructor
  */
-function FieldBuilder(parentStack = []) {
-  // Check if "new" keyword is not used on this constructor.
-  if (!(this instanceof FieldBuilder)) { return new FieldBuilder(parentStack); }
-  // no need to check all values, as parentStack is only used internally.
-  if (parentStack.length > 0 && parentStack[parentStack.length - 1].includes('__')) {
-    throw Error('double underscores "__" should not appear in parent stack');
+class FieldBuilder {
+  /**
+   * Do not set parent stack manually, this field is only used internally.
+   * @param {Array<String>} parentStack
+   */
+  constructor(parentStack = []) {
+    // no need to check all values, as parentStack is only used internally.
+    if (parentStack.length > 0 && parentStack[parentStack.length - 1].includes('__')) {
+      throw Error('double underscores "__" should not appear in parent stack');
+    }
+    this.parentStack = parentStack;
   }
-  this.parentStack = parentStack;
+
+  /**
+   * @template T
+   * @param {T} Cls
+   * @param {string} field
+   * @return {T}
+   * @protected
+   */
+  _getForeign(Cls, field) {
+    console.log(Cls, typeof Cls, field);
+    return new Cls(this.parentStack.push(field));
+  }
+
+  /**
+   * @template T
+   * @param {T} Cls
+   * @param {string} reverse
+   * @return {T}
+   * @protected
+   */
+  _getReverse(Cls, reverse) {
+    console.log(Cls, typeof Cls, reverse);
+    return new Cls(this.parentStack.push(reverse));
+  }
+
+  /**
+   * @param {String} field
+   * @return {String}
+   * @protected
+   */
+  _getField(field) {
+    return this + field;
+  }
+
+  /**
+   * @override
+   * @return {string}
+   */
+  toString() {
+    return this.parentStack.join('__');
+  }
 }
-
-/**
- * @template T
- * @param {T} Cls
- * @param {string} field
- * @return {T}
- * @protected
- */
-FieldBuilder.prototype._getForeign = function (Cls, field) {
-  return new Cls(this.parentStack.push(field));
-};
-
-/**
- * @template T
- * @param {T} Cls
- * @param {string} reverse
- * @return {T}
- * @protected
- */
-FieldBuilder.prototype._getReverse = function (Cls, reverse) {
-  return new Cls(this.parentStack.push(reverse));
-};
-
-/**
- * @param {string} field
- * @return {string}
- * @protected
- */
-FieldBuilder.prototype._getField = function (field) {
-  return this + field;
-};
-
-/**
- * @override
- * @return {string}
- */
-FieldBuilder.prototype.toString = function () {
-  return this.parentStack.join('__');
-};
-
 
 /* ========================================================================== */
 /* Models                                                                     */
 /* ========================================================================== */
 
-// DEFINE BEFOREHAND BECAUSE THERE ARE CYCLIC RELATIONSHIPS BETWEEN THEM
-// es6 classes will not work in this situation. (too my knowledge)
-
-/**
- * Do not set parent stack manually, this field is only used internally.
- * @param {Array<string>} parentStack
- * @return {Faculty}
- * @constructor
- */
-export function Faculty(parentStack = []) {
-  // Check if "new" keyword is not used on this constructor.
-  if (!(this instanceof Faculty)) { return new Faculty(parentStack); }
-  FieldBuilder.call(this, parentStack);
-}
-
-/**
- * Do not set parent stack manually, this field is only used internally.
- * @param {Array<string>} parentStack
- * @return {School}
- * @constructor
- */
-export function School(parentStack = []) {
-  // Check if "new" keyword is not used on this constructor.
-  if (!(this instanceof School)) { return new School(parentStack); }
-  FieldBuilder.call(this, parentStack);
-}
-
-/**
- * Do not set parent stack manually, this field is only used internally.
- * @param {Array<string>} parentStack
- * @return {Course}
- * @constructor
- */
-export function Course(parentStack = []) {
-  // Check if "new" keyword is not used on this constructor.
-  if (!(this instanceof Course)) { return new Course(parentStack); }
-  FieldBuilder.call(this, parentStack);
-}
-
-/**
- * Do not set parent stack manually, this field is only used internally.
- * @param {Array<string>} parentStack
- * @return {Program}
- * @constructor
- */
-export function Program(parentStack = []) {
-  // Check if "new" keyword is not used on this constructor.
-  if (!(this instanceof Program)) { return new Program(parentStack); }
-  FieldBuilder.call(this, parentStack);
-}
-
-/**
- * Do not set parent stack manually, this field is only used internally.
- * @param {Array<string>} parentStack
- * @return {ProgressOutcome}
- * @constructor
- */
-export function ProgressOutcome(parentStack = []) {
-  // Check if "new" keyword is not used on this constructor.
-  if (!(this instanceof ProgressOutcome)) { return new ProgressOutcome(parentStack); }
-  FieldBuilder.call(this, parentStack);
-}
-
-/**
- * Do not set parent stack manually, this field is only used internally.
- * @param {Array<string>} parentStack
- * @return {SecondarySchool}
- * @constructor
- */
-export function SecondarySchool(parentStack = []) {
-  // Check if "new" keyword is not used on this constructor.
-  if (!(this instanceof SecondarySchool)) { return new SecondarySchool(parentStack); }
-  FieldBuilder.call(this, parentStack);
-}
-
-/**
- * Do not set parent stack manually, this field is only used internally.
- * @param {Array<string>} parentStack
- * @return {Student}
- * @constructor
- */
-export function Student(parentStack = []) {
-  // Check if "new" keyword is not used on this constructor.
-  if (!(this instanceof Student)) { return new Student(parentStack); }
-  FieldBuilder.call(this, parentStack);
-}
-
-/**
- * Do not set parent stack manually, this field is only used internally.
- * @param {Array<string>} parentStack
- * @return {EnrolledYear}
- * @constructor
- */
-export function EnrolledYear(parentStack = []) {
-  // Check if "new" keyword is not used on this constructor.
-  if (!(this instanceof EnrolledYear)) { return new EnrolledYear(parentStack); }
-  FieldBuilder.call(this, parentStack);
-}
-
-/**
- * Do not set parent stack manually, this field is only used internally.
- * @param {Array<string>} parentStack
- * @return {EnrolledCourse}
- * @constructor
- */
-export function EnrolledCourse(parentStack = []) {
-  // Check if "new" keyword is not used on this constructor.
-  if (!(this instanceof EnrolledCourse)) { return new EnrolledCourse(parentStack); }
-  FieldBuilder.call(this, parentStack);
-}
-
-
-// INHERIT FROM FIELD_BUILDER
-
-Faculty.prototype = Object.create(FieldBuilder.prototype);
-School.prototype = Object.create(FieldBuilder.prototype);
-Course.prototype = Object.create(FieldBuilder.prototype);
-Program.prototype = Object.create(FieldBuilder.prototype);
-ProgressOutcome.prototype = Object.create(FieldBuilder.prototype);
-SecondarySchool.prototype = Object.create(FieldBuilder.prototype);
-Student.prototype = Object.create(FieldBuilder.prototype);
-EnrolledYear.prototype = Object.create(FieldBuilder.prototype);
-EnrolledCourse.prototype = Object.create(FieldBuilder.prototype);
-
-// Object.setPrototypeOf(Faculty,         FieldBuilder);
-// Object.setPrototypeOf(School,          FieldBuilder);
-// Object.setPrototypeOf(Course,          FieldBuilder);
-// Object.setPrototypeOf(Program,         FieldBuilder);
-// Object.setPrototypeOf(ProgressOutcome, FieldBuilder);
-// Object.setPrototypeOf(SecondarySchool, FieldBuilder);
-// Object.setPrototypeOf(Student,         FieldBuilder);
-// Object.setPrototypeOf(EnrolledYear,    FieldBuilder);
-// Object.setPrototypeOf(EnrolledCourse,  FieldBuilder);
-
-// STATIC - ENDPOINTS
-
-Faculty.endpoint         = 'query/faculties';
-School.endpoint          = 'query/schools';
-Course.endpoint          = 'query/courses';
-Program.endpoint         = 'query/programs';
-ProgressOutcome.endpoint = 'query/outcomes';
-SecondarySchool.endpoint = 'query/high-schools';
-Student.endpoint         = 'query/students';
-EnrolledYear.endpoint    = 'query/year-enrollment';
-EnrolledCourse.endpoint  = 'query/course-enrollment';
-
-// STATIC - QUERYSETS
-
-/** @return {Queryset} */ Faculty.query         = function () { return new Queryset(Faculty.endpoint); };
-/** @return {Queryset} */ School.query          = function () { return new Queryset(School.endpoint); };
-/** @return {Queryset} */ Course.query          = function () { return new Queryset(Course.endpoint); };
-/** @return {Queryset} */ Program.query         = function () { return new Queryset(Program.endpoint); };
-/** @return {Queryset} */ ProgressOutcome.query = function () { return new Queryset(ProgressOutcome.endpoint); };
-/** @return {Queryset} */ SecondarySchool.query = function () { return new Queryset(SecondarySchool.endpoint); };
-/** @return {Queryset} */ Student.query         = function () { return new Queryset(Student.endpoint); };
-/** @return {Queryset} */ EnrolledYear.query    = function () { return new Queryset(EnrolledYear.endpoint); };
-/** @return {Queryset} */ EnrolledCourse.query  = function () { return new Queryset(EnrolledCourse.endpoint); };
+/* eslint-disable camelcase */
+/* eslint-disable max-len */
+/* eslint-disable no-multi-spaces */
+/* eslint-disable key-spacing */
 
 /* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 /* Faculty                                                                    */
 /* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 
-// new Faculty(). | Faculty().
-
-Object.defineProperties(Faculty.prototype, {
-  /** @return {string} */ faculty_id:    { get() { return this._getField('faculty_id'); } },
-  /** @return {string} */ faculty_title: { get() { return this._getField('faculty_title'); } },
-  /** @return {School} */ schools:       { get() { return this._getReverse(School, 'schools'); } },
-});
-
-// Faculty.
+export class Faculty extends FieldBuilder {
+  /** @return {String} */ get faculty_id()    { return this._getField('faculty_id'); }
+  /** @return {String} */ get faculty_title() { return this._getField('faculty_title'); }
+}
 
 Object.defineProperties(Faculty, {
-  /** @return {string} */ faculty_id:    { get() { return new Faculty().faculty_id; } },
-  /** @return {string} */ faculty_title: { get() { return new Faculty().faculty_title; } },
-  /** @return {School} */ schools:       { get() { return new Faculty().schools; } },
+  /** @return {String} */ faculty_id:    { get() { return new Faculty().faculty_id; } },
+  /** @return {String} */ faculty_title: { get() { return new Faculty().faculty_title; } },
 });
 
 /* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 /* School                                                                     */
 /* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 
-// new School(). | School().
-
-Object.defineProperties(School.prototype, {
-  /** @return {string}  */ school_id:    { get() { return this._getField('school_id'); } },
-  /** @return {string}  */ school_title: { get() { return this._getField('school_title'); } },
-  /** @return {Faculty} */ faculty_id:   { get() { return this._getForeign(Faculty, 'faculty_id'); } },
-  /** @return {Course}  */ courses:      { get() { return this._getReverse(Course, 'courses'); } },
-});
-
-// School.
+export class School extends FieldBuilder {
+  /** @return {String}  */ get school_id()    { return this._getField('school_id'); }
+  /** @return {String}  */ get school_title() { return this._getField('school_title'); }
+  /** @return {Faculty} */ get faculty_id()   { return this._getForeign(Faculty, 'faculty_id'); }
+}
 
 Object.defineProperties(School, {
-  /** @return {string}  */ school_id:    { get() { return new School().school_id; } },
-  /** @return {string}  */ school_title: { get() { return new School().school_title; } },
+  /** @return {String}  */ school_id:    { get() { return new School().school_id; } },
+  /** @return {String}  */ school_title: { get() { return new School().school_title; } },
   /** @return {Faculty} */ faculty_id:   { get() { return new School().faculty_id; } },
-  /** @return {Course}  */ courses:      { get() { return new School().courses; } },
 });
 
 /* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 /* Course                                                                     */
 /* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 
-// new Course(). | Course().
-
-Object.defineProperties(Course.prototype, {
+export class Course extends FieldBuilder {
   // course_title: 'course_title', NOT IMPLEMENTED IN BACKEND
-  /** @return {string}         */ course_code:      { get() { return this._getField('course_code'); } },
-  /** @return {School}         */ school_id:        { get() { return this._getForeign(School, 'school_id'); } },
-  /** @return {EnrolledCourse} */ enrolled_courses: { get() { return this._getReverse(EnrolledCourse, 'enrolled_courses'); } },
-});
-
-// Course.
+  /** @return {String}         */ get course_code()      { return this._getField('course_code'); }
+  /** @return {School}         */ get school_id()        { return this._getForeign(School, 'school_id'); }
+}
 
 Object.defineProperties(Course, {
   // course_title: 'course_title', NOT IMPLEMENTED IN BACKEND
-  /** @return {string}         */ course_code:      { get() { return new Course().course_code; } },
+  /** @return {String}         */ course_code:      { get() { return new Course().course_code; } },
   /** @return {School}         */ school_id:        { get() { return new Course().school_id; } },
-  /** @return {EnrolledCourse} */ enrolled_courses: { get() { return new Course().enrolled_courses; } },
 });
 
 /* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 /* Program                                                                    */
 /* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 
-// new Program(). | Program().
-
-Object.defineProperties(Program.prototype, {
-  /** @return {string}       */ program_code:   { get() { return this._getField('program_code'); } },
-  /** @return {string}       */ program_title:  { get() { return this._getField('program_title'); } },
-  /** @return {EnrolledYear} */ enrolled_years: { get() { return this._getReverse(EnrolledYear, 'enrolled_years'); } },
-});
-
-// Program.
+export class Program extends FieldBuilder {
+  /** @return {String}       */ get program_code()   { return this._getField('program_code'); }
+  /** @return {String}       */ get program_title()  { return this._getField('program_title'); }
+}
 
 Object.defineProperties(Program, {
-  /** @return {string}       */ program_code:   { get() { return new Program().program_code; } },
-  /** @return {string}       */ program_title:  { get() { return new Program().program_title; } },
-  /** @return {EnrolledYear} */ enrolled_years: { get() { return new Program().enrolled_years; } },
+  /** @return {String}       */ program_code:   { get() { return new Program().program_code; } },
+  /** @return {String}       */ program_title:  { get() { return new Program().program_title; } },
 });
 
 /* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 /* ProgressOutcome                                                            */
 /* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 
-// new ProgressOutcome(). | ProgressOutcome().
-
-Object.defineProperties(ProgressOutcome.prototype, {
-  /** @return {string}       */ progress_outcome_type:             { get() { return this._getField('progress_outcome_type'); } },
-  /** @return {string}       */ progress_outcome_type_description: { get() { return this._getField('progress_outcome_type_description'); } },
-  /** @return {EnrolledYear} */ enrolled_years:                    { get() { return this._getReverse(EnrolledYear, 'enrolled_years'); } },
-});
-
-// ProgressOutcome.
+export class ProgressOutcome extends FieldBuilder {
+  /** @return {String}       */ get progress_outcome_type()             { return this._getField('progress_outcome_type'); }
+  /** @return {String}       */ get progress_outcome_type_description() { return this._getField('progress_outcome_type_description'); }
+}
 
 Object.defineProperties(ProgressOutcome, {
-  /** @return {string}       */ progress_outcome_type:             { get() { return new ProgressOutcome().progress_outcome_type; } },
-  /** @return {string}       */ progress_outcome_type_description: { get() { return new ProgressOutcome().progress_outcome_type_description; } },
-  /** @return {EnrolledYear} */ enrolled_years:                    { get() { return new ProgressOutcome().enrolled_years; } },
+  /** @return {String}       */ progress_outcome_type:             { get() { return new ProgressOutcome().progress_outcome_type; } },
+  /** @return {String}       */ progress_outcome_type_description: { get() { return new ProgressOutcome().progress_outcome_type_description; } },
 });
 
 /* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 /* SecondarySchool                                                            */
 /* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 
-// new SecondarySchool(). | SecondarySchool().
-
-Object.defineProperties(SecondarySchool.prototype, {
-  /** @return {string}  */ secondary_school_name:        { get() { return this._getField('secondary_school_name'); } },
-  /** @return {string}  */ secondary_school_quintile:    { get() { return this._getField('secondary_school_quintile'); } },
-  /** @return {string}  */ urban_rural_secondary_school: { get() { return this._getField('urban_rural_secondary_school'); } },
-  /** @return {Student} */ students:                     { get() { return this._getReverse(Student, 'students'); } },
-});
-
-// SecondarySchool.
+export class SecondarySchool extends FieldBuilder {
+  /** @return {String}  */ get secondary_school_name()        { return this._getField('secondary_school_name'); }
+  /** @return {String}  */ get secondary_school_quintile()    { return this._getField('secondary_school_quintile'); }
+  /** @return {String}  */ get urban_rural_secondary_school() { return this._getField('urban_rural_secondary_school'); }
+}
 
 Object.defineProperties(SecondarySchool, {
-  /** @return {string}  */ secondary_school_name:        { get() { return new SecondarySchool().secondary_school_name; } },
-  /** @return {string}  */ secondary_school_quintile:    { get() { return new SecondarySchool().secondary_school_quintile; } },
-  /** @return {string}  */ urban_rural_secondary_school: { get() { return new SecondarySchool().urban_rural_secondary_school; } },
-  /** @return {Student} */ students:                     { get() { return new SecondarySchool().students; } },
+  /** @return {String}  */ secondary_school_name:        { get() { return new SecondarySchool().secondary_school_name; } },
+  /** @return {String}  */ secondary_school_quintile:    { get() { return new SecondarySchool().secondary_school_quintile; } },
+  /** @return {String}  */ urban_rural_secondary_school: { get() { return new SecondarySchool().urban_rural_secondary_school; } },
 });
 
 /* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 /* Student                                                                    */
 /* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 
-// new Student(). | Student().
-
-Object.defineProperties(Student.prototype, {
-  /** @return {string}          */ encrypted_student_no:      { get() { return this._getField('encrypted_student_no'); } },
-  /** @return {string}          */ nationality_short_name:    { get() { return this._getField('nationality_short_name'); } },
-  /** @return {string}          */ home_language_description: { get() { return this._getField('home_language_description'); } },
-  /** @return {string}          */ race_description:          { get() { return this._getField('race_description'); } },
-  /** @return {string}          */ gender:                    { get() { return this._getField('gender'); } },
-  /** @return {string}          */ age:                       { get() { return this._getField('age'); } },
-  /** @return {SecondarySchool} */ secondary_school_name:     { get() { return this._getForeign(SecondarySchool, 'secondary_school_name'); } },
-  /** @return {EnrolledYear}    */ enrolled_years:            { get() { return this._getReverse(EnrolledYear, 'enrolled_years'); } },
-});
-
-// Student.
+export class Student extends FieldBuilder {
+  /** @return {String}          */ get encrypted_student_no()      { return this._getField('encrypted_student_no'); }
+  /** @return {String}          */ get nationality_short_name()    { return this._getField('nationality_short_name'); }
+  /** @return {String}          */ get home_language_description() { return this._getField('home_language_description'); }
+  /** @return {String}          */ get race_description()          { return this._getField('race_description'); }
+  /** @return {String}          */ get gender()                    { return this._getField('gender'); }
+  /** @return {String}          */ get age()                       { return this._getField('age'); }
+  /** @return {SecondarySchool} */ get secondary_school_name()     { return this._getForeign(SecondarySchool, 'secondary_school_name'); }
+}
 
 Object.defineProperties(Student, {
-  /** @return {string}          */ encrypted_student_no:      { get() { return new Student().encrypted_student_no; } },
-  /** @return {string}          */ nationality_short_name:    { get() { return new Student().nationality_short_name; } },
-  /** @return {string}          */ home_language_description: { get() { return new Student().home_language_description; } },
-  /** @return {string}          */ race_description:          { get() { return new Student().race_description; } },
-  /** @return {string}          */ gender:                    { get() { return new Student().gender; } },
-  /** @return {string}          */ age:                       { get() { return new Student().age; } },
+  /** @return {String}          */ encrypted_student_no:      { get() { return new Student().encrypted_student_no; } },
+  /** @return {String}          */ nationality_short_name:    { get() { return new Student().nationality_short_name; } },
+  /** @return {String}          */ home_language_description: { get() { return new Student().home_language_description; } },
+  /** @return {String}          */ race_description:          { get() { return new Student().race_description; } },
+  /** @return {String}          */ gender:                    { get() { return new Student().gender; } },
+  /** @return {String}          */ age:                       { get() { return new Student().age; } },
   /** @return {SecondarySchool} */ secondary_school_name:     { get() { return new Student().secondary_school_name; } },
-  /** @return {EnrolledYear}    */ enrolled_years:            { get() { return new Student().enrolled_years; } },
 });
 
 /* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 /* EnrolledYear                                                               */
 /* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 
-// new EnrolledYear(). | EnrolledYear().
-
-Object.defineProperties(EnrolledYear.prototype, {
-  /** @return {Student}         */ encrypted_student_no:   { get() { return this._getForeign(Student, 'encrypted_student_no'); } },
-  /** @return {Program}         */ program_code:           { get() { return this._getForeign(Program, 'program_code'); } },
-  /** @return {string}          */ calendar_instance_year: { get() { return this._getField('calendar_instance_year'); } },
-  /** @return {string}          */ year_of_study:          { get() { return this._getField('year_of_study'); } },
-  /** @return {string}          */ award_grade:            { get() { return this._getField('award_grade'); } },
-  /** @return {string}          */ average_marks:          { get() { return this._getField('average_marks'); } },
-  /** @return {ProgressOutcome} */ progress_outcome_type:  { get() { return this._getForeign(ProgressOutcome, 'progress_outcome_type'); } },
-  /** @return {EnrolledCourse}  */ enrolled_courses:       { get() { return this._getReverse(EnrolledCourse, 'enrolled_courses'); } },
-});
-
-// EnrolledYear.
+export class EnrolledYear extends FieldBuilder {
+  /** @return {Student}         */ get encrypted_student_no()   { return this._getForeign(Student, 'encrypted_student_no'); }
+  /** @return {Program}         */ get program_code()           { return this._getForeign(Program, 'program_code'); }
+  /** @return {String}          */ get calendar_instance_year() { return this._getField('calendar_instance_year'); }
+  /** @return {String}          */ get year_of_study()          { return this._getField('year_of_study'); }
+  /** @return {String}          */ get award_grade()            { return this._getField('award_grade'); }
+  /** @return {String}          */ get average_marks()          { return this._getField('average_marks'); }
+  /** @return {ProgressOutcome} */ get progress_outcome_type()  { return this._getForeign(ProgressOutcome, 'progress_outcome_type'); }
+}
 
 Object.defineProperties(EnrolledYear, {
-  get encrypted_student_no() { return new EnrolledYear().encrypted_student_no; },
-  /** @return {Student}         */ program_code:           { get() { return new EnrolledYear().program_code; } },
-  /** @return {Program}         */ calendar_instance_year: { get() { return new EnrolledYear().calendar_instance_year; } },
-  /** @return {string}          */ year_of_study:          { get() { return new EnrolledYear().year_of_study; } },
-  /** @return {string}          */ award_grade:            { get() { return new EnrolledYear().award_grade; } },
-  /** @return {string}          */ average_marks:          { get() { return new EnrolledYear().average_marks; } },
-  /** @return {string}          */ progress_outcome_type:  { get() { return new EnrolledYear().progress_outcome_type; } },
-  /** @return {ProgressOutcome} */ enrolled_courses:       { get() { return new EnrolledYear().enrolled_courses; } },
+  /** @return {Student}         */ encrypted_student_no:   { get() { return new EnrolledYear().encrypted_student_no; } },
+  /** @return {Program}         */ program_code:           { get() { return new EnrolledYear().program_code; } },
+  /** @return {String}          */ calendar_instance_year: { get() { return new EnrolledYear().calendar_instance_year; } },
+  /** @return {String}          */ year_of_study:          { get() { return new EnrolledYear().year_of_study; } },
+  /** @return {String}          */ award_grade:            { get() { return new EnrolledYear().award_grade; } },
+  /** @return {String}          */ average_marks:          { get() { return new EnrolledYear().average_marks; } },
+  /** @return {ProgressOutcome} */ progress_outcome_type:  { get() { return new EnrolledYear().progress_outcome_type; } },
 });
 
 /* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 /* EnrolledCourse                                                             */
 /* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 
-// new EnrolledCourse(). | EnrolledCourse().
-
-Object.defineProperties(EnrolledCourse.prototype, {
-  /** @return {Student} */ enrolled_year_id: { get() { return this._getForeign(EnrolledYear, 'enrolled_year_id'); } },
-  /** @return {Course}  */ course_code:      { get() { return this._getForeign(Course, 'course_code'); } },
-  /** @return {string}  */ final_mark:       { get() { return this._getField('final_mark'); } },
-  /** @return {string}  */ final_grade:      { get() { return this._getField('final_grade'); } },
-});
-
-// EnrolledCourse.
+export class EnrolledCourse extends FieldBuilder {
+  /** @return {Student} */ get enrolled_year_id() { return this._getForeign(EnrolledYear, 'enrolled_year_id'); }
+  /** @return {Course}  */ get course_code()      { return this._getForeign(Course, 'course_code'); }
+  /** @return {String}  */ get final_mark()       { return this._getField('final_mark'); }
+  /** @return {String}  */ get final_grade()      { return this._getField('final_grade'); }
+}
 
 Object.defineProperties(EnrolledCourse, {
   /** @return {Student} */ enrolled_year_id: { get() { return new EnrolledCourse().enrolled_year_id; } },
   /** @return {Course}  */ course_code:      { get() { return new EnrolledCourse().course_code; } },
-  /** @return {string}  */ final_mark:       { get() { return new EnrolledCourse().final_mark; } },
-  /** @return {string}  */ final_grade:      { get() { return new EnrolledCourse().final_grade; } },
+  /** @return {String}  */ final_mark:       { get() { return new EnrolledCourse().final_mark; } },
+  /** @return {String}  */ final_grade:      { get() { return new EnrolledCourse().final_grade; } },
 });
+
+/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
+/* Reverse Relations                                                          */
+/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
+
+// FACULTY
+
+Object.defineProperties(Faculty.prototype, {
+  /** @return {School} */ schools: { get() { return this._getReverse(School, 'schools'); } },
+});
+Object.defineProperties(Faculty, {
+  /** @return {School} */ schools: { get() { return new Faculty().schools; } },
+});
+
+// SCHOOL
+
+Object.defineProperties(School.prototype, {
+  /** @return {Course}  */ courses: { get() { return this._getReverse(Course, 'courses'); } },
+});
+Object.defineProperties(School, {
+  /** @return {Course}  */ courses: { get() { return new School().courses; } },
+});
+
+// COURSE
+
+Object.defineProperties(Course.prototype, {
+  /** @return {EnrolledCourse} */ enrolled_courses: { get() { return this._getReverse(EnrolledCourse, 'enrolled_courses'); } },
+});
+Object.defineProperties(Course, {
+  /** @return {EnrolledCourse} */ enrolled_courses: { get() { return new Course().enrolled_courses; } },
+});
+
+// PROGRAM
+
+Object.defineProperties(Program.prototype, {
+  /** @return {EnrolledYear} */ enrolled_years: { get() { return this._getReverse(EnrolledYear, 'enrolled_years'); } },
+});
+Object.defineProperties(Program, {
+  /** @return {EnrolledYear} */ enrolled_years: { get() { return new Program().enrolled_years; } },
+});
+
+// PROGRESS OUTCOME
+
+Object.defineProperties(ProgressOutcome.prototype, {
+  /** @return {EnrolledYear} */ enrolled_years: { get() { return this._getReverse(EnrolledYear, 'enrolled_years'); } },
+});
+Object.defineProperties(ProgressOutcome, {
+  /** @return {EnrolledYear} */ enrolled_years: { get() { return new ProgressOutcome().enrolled_years; } },
+});
+
+// SECONDARY SCHOOL
+
+Object.defineProperties(SecondarySchool.prototype, {
+  /** @return {Student} */ students: { get() { return this._getReverse(Student, 'students'); } },
+});
+Object.defineProperties(SecondarySchool, {
+  /** @return {Student} */ students: { get() { return new SecondarySchool().students; } },
+});
+
+// STUDENT
+
+Object.defineProperties(Student.prototype, {
+  /** @return {EnrolledYear} */ enrolled_years: { get() { return this._getReverse(EnrolledYear, 'enrolled_years'); } },
+});
+Object.defineProperties(Student, {
+  /** @return {EnrolledYear} */ enrolled_years: { get() { return new Student().enrolled_years; } },
+});
+
+// ENROLLED YEAR
+
+Object.defineProperties(EnrolledYear.prototype, {
+  /** @return {EnrolledCourse} */ enrolled_courses: { get() { return this._getReverse(EnrolledCourse, 'enrolled_courses'); } },
+});
+Object.defineProperties(EnrolledYear, {
+  /** @return {EnrolledCourse} */ enrolled_courses: { get() { return new EnrolledYear().enrolled_courses; } },
+});
+
+/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
+/* Properties                                                                 */
+/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
+
+Object.defineProperties(Faculty,         { endpoint: { writable: false, value: 'query/faculties' } });
+Object.defineProperties(School,          { endpoint: { writable: false, value: 'query/schools' } });
+Object.defineProperties(Course,          { endpoint: { writable: false, value: 'query/courses' } });
+Object.defineProperties(Program,         { endpoint: { writable: false, value: 'query/programs' } });
+Object.defineProperties(ProgressOutcome, { endpoint: { writable: false, value: 'query/outcomes' } });
+Object.defineProperties(SecondarySchool, { endpoint: { writable: false, value: 'query/high-schools' } });
+Object.defineProperties(Student,         { endpoint: { writable: false, value: 'query/students' } });
+Object.defineProperties(EnrolledYear,    { endpoint: { writable: false, value: 'query/year-enrollment' } });
+Object.defineProperties(EnrolledCourse,  { endpoint: { writable: false, value: 'query/course-enrollment' } });
+
+Object.defineProperties(Faculty,         { /** @return {Queryset} */ query: { writable: false, value() { return new Queryset(Faculty.endpoint); } } });
+Object.defineProperties(School,          { /** @return {Queryset} */ query: { writable: false, value() { return new Queryset(School.endpoint); } } });
+Object.defineProperties(Course,          { /** @return {Queryset} */ query: { writable: false, value() { return new Queryset(Course.endpoint); } } });
+Object.defineProperties(Program,         { /** @return {Queryset} */ query: { writable: false, value() { return new Queryset(Program.endpoint); } } });
+Object.defineProperties(ProgressOutcome, { /** @return {Queryset} */ query: { writable: false, value() { return new Queryset(ProgressOutcome.endpoint); } } });
+Object.defineProperties(SecondarySchool, { /** @return {Queryset} */ query: { writable: false, value() { return new Queryset(SecondarySchool.endpoint); } } });
+Object.defineProperties(Student,         { /** @return {Queryset} */ query: { writable: false, value() { return new Queryset(Student.endpoint); } } });
+Object.defineProperties(EnrolledYear,    { /** @return {Queryset} */ query: { writable: false, value() { return new Queryset(EnrolledYear.endpoint); } } });
+Object.defineProperties(EnrolledCourse,  { /** @return {Queryset} */ query: { writable: false, value() { return new Queryset(EnrolledCourse.endpoint); } } });
 
 /* ========================================================================== */
 /* Factory                                                                    */
@@ -523,7 +412,6 @@ export const MODELS = {
 export default {
   // forwarded from queryset
   Q,
-  // Field,
   // classes
   Faculty,
   School,
