@@ -34,7 +34,7 @@ function refreshToken(token) {
 }
 
 function getYears() {
-  return EnrolledYear.query()
+  return EnrolledYear.query
     .values(EnrolledYear.calendar_instance_year)
     .orderBy(EnrolledYear.calendar_instance_year)
     .distinct()
@@ -43,7 +43,7 @@ function getYears() {
 }
 
 function getFaculties() {
-  return Faculty.query()
+  return Faculty.query
     .values(Faculty.faculty_title)
     .orderBy(Faculty.faculty_title)
     .debug()
@@ -51,7 +51,7 @@ function getFaculties() {
 }
 
 function getSchools() {
-  return School.query()
+  return School.query
     .values(School.school_title)
     .orderBy(School.school_title)
     .debug()
@@ -59,7 +59,7 @@ function getSchools() {
 }
 
 function getCourses() {
-  return Course.query()
+  return Course.query
     .values(Course.course_code)
     .orderBy(Course.course_code)
     .debug()
@@ -67,15 +67,15 @@ function getCourses() {
 }
 
 function getFacultySchools(faculties) {
-  return School.query()
-    .filter(Q(School.faculty_id.faculty_title + '__in', faculties))
+  return School.query
+    .filter(Q(School.faculty_id.faculty_title.$in, faculties))
     .values(School.school_title)
     .debug()
     .POST();
 }
 
 function getSchoolsCourses(schools) {
-  return Course.query()
+  return Course.query
     .filter(Q(Course.course_code, schools))
     .values(Course.course_code)
     .debug()

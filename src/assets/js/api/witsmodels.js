@@ -9,56 +9,45 @@ import { Queryset, Q } from './queryset';
 /* Standard Field                                                             */
 /* ========================================================================== */
 
+/*
+ * sorry that this pollutes the global space...
+ * but whatever...
+ * I like auto-completion too much...
+ */
 
-// /**
-//  * @param {String} name
-//  * @return {Field}
-//  * @constructor
-//  * @extends {String}
-//  */
-// export function Field(name) {
-//   if (!(this instanceof Field)) { return new Field(name); }
-//   String.call(this, name);
-// }
-//
-// /* extends strings */
-// Field.prototype = Object.create(String.prototype);
-//
-// Object.defineProperties(Field, {
-//   /** @type {string} */ exact: { value: 'exact', writable: false },
-//   /** @type {string} */ iexact: { value: 'iexact', writable: false },
-//   /** @type {string} */ contains: { value: 'contains', writable: false },
-//   /** @type {string} */ icontains: { value: 'icontains', writable: false },
-//   /** @type {string} */ startswith: { value: 'startswith', writable: false },
-//   /** @type {string} */ istartswith: { value: 'istartswith', writable: false },
-//   /** @type {string} */ endswith: { value: 'endswith', writable: false },
-//   /** @type {string} */ iendswith: { value: 'iendswith', writable: false },
-//   /** @type {string} */ regex: { value: 'regex', writable: false },
-//   /** @type {string} */ iregex: { value: 'iregex', writable: false },
-//   /** @type {string} */ lt: { value: 'lt', writable: false },
-//   /** @type {string} */ lte: { value: 'lte', writable: false },
-//   /** @type {string} */ gt: { value: 'gt', writable: false },
-//   /** @type {string} */ gte: { value: 'gte', writable: false },
-//   /** @type {string} */ in: { value: 'in', writable: false },
-// });
-//
-// Object.defineProperties(Field.prototype, {
-//   /** @return {string} */ exact: { get() { return `${this}__exact`; } },
-//   /** @return {string} */ iexact: { get() { return `${this}__iexact`; } },
-//   /** @return {string} */ contains: { get() { return `${this}__icontains`; } },
-//   /** @return {string} */ icontains: { get() { return `${this}__icontains`; } },
-//   /** @return {string} */ startswith: { get() { return `${this}__startswith`; } },
-//   /** @return {string} */ istartswith: { get() { return `${this}__istartswith`; } },
-//   /** @return {string} */ endswith: { get() { return `${this}__endswith`; } },
-//   /** @return {string} */ iendswith: { get() { return `${this}__iendswith`; } },
-//   /** @return {string} */ regex: { get() { return `${this}__regex`; } },
-//   /** @return {string} */ iregex: { get() { return `${this}__iregex`; } },
-//   /** @return {string} */ lt: { get() { return `${this}__lt`; } },
-//   /** @return {string} */ lte: { get() { return `${this}__lte`; } },
-//   /** @return {string} */ gt: { get() { return `${this}__gt`; } },
-//   /** @return {string} */ gte: { get() { return `${this}__gte`; } },
-//   /** @return {string} */ in: { get() { return `${this}__in`; } },
-// });
+/** @member {String} String.prototype.$exact */
+/** @member {String} String.prototype.$iexact */
+/** @member {String} String.prototype.$contains */
+/** @member {String} String.prototype.$icontains */
+/** @member {String} String.prototype.$startswith */
+/** @member {String} String.prototype.$istartswith */
+/** @member {String} String.prototype.$endswith */
+/** @member {String} String.prototype.$iendswith */
+/** @member {String} String.prototype.$regex */
+/** @member {String} String.prototype.$iregex */
+/** @member {String} String.prototype.$lt */
+/** @member {String} String.prototype.$lte */
+/** @member {String} String.prototype.$gt */
+/** @member {String} String.prototype.$gte */
+/** @member {String} String.prototype.$in */
+
+Object.assign(String.prototype, {
+  get $exact() { return `${this}__exact`; },
+  get $iexact() { return `${this}__iexact`; },
+  get $contains() { return `${this}__icontains`; },
+  get $icontains() { return `${this}__icontains`; },
+  get $startswith() { return `${this}__startswith`; },
+  get $istartswith() { return `${this}__istartswith`; },
+  get $endswith() { return `${this}__endswith`; },
+  get $iendswith() { return `${this}__iendswith`; },
+  get $regex() { return `${this}__regex`; },
+  get $iregex() { return `${this}__iregex`; },
+  get $lt() { return `${this}__lt`; },
+  get $lte() { return `${this}__lte`; },
+  get $gt() { return `${this}__gt`; },
+  get $gte() { return `${this}__gte`; },
+  get $in() { return `${this}__in`; },
+});
 
 
 /* ========================================================================== */
@@ -85,24 +74,22 @@ class FieldBuilder {
   /**
    * @template T
    * @param {T} Cls
-   * @param {string} field
+   * @param {String} field
    * @return {T}
    * @protected
    */
   _getForeign(Cls, field) {
-    console.log(Cls, typeof Cls, field);
     return new Cls(this.parentStack.push(field));
   }
 
   /**
    * @template T
    * @param {T} Cls
-   * @param {string} reverse
+   * @param {String} reverse
    * @return {T}
    * @protected
    */
   _getReverse(Cls, reverse) {
-    console.log(Cls, typeof Cls, reverse);
     return new Cls(this.parentStack.push(reverse));
   }
 
@@ -112,12 +99,12 @@ class FieldBuilder {
    * @protected
    */
   _getField(field) {
-    return this + field;
+    return `${this}${field}`;
   }
 
   /**
    * @override
-   * @return {string}
+   * @return {String}
    */
   toString() {
     return this.parentStack.join('__');
@@ -133,30 +120,16 @@ class FieldBuilder {
 /* eslint-disable no-multi-spaces */
 /* eslint-disable key-spacing */
 
-/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
-/* Faculty                                                                    */
-/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
-
 export class Faculty extends FieldBuilder {
   /** @return {String} */ get faculty_id()    { return this._getField('faculty_id'); }
   /** @return {String} */ get faculty_title() { return this._getField('faculty_title'); }
   /* OVERRIDDEN BELOW */
   /** @return {School} */ get schools()       { throw Error(`Unimplemented Reverse Relation: ${this}`); }
+
+  /** @return {String} */ static get faculty_id()    { return new Faculty().faculty_id; }
+  /** @return {String} */ static get faculty_title() { return new Faculty().faculty_title; }
+  /** @return {School} */ static get schools()       { return new Faculty().schools; }
 }
-
-/** @member {String} Faculty.faculty_id */
-/** @member {String} Faculty.faculty_title */
-/** @member {School} Faculty.schools */
-Object.defineProperties(Faculty, {
-  faculty_id:    { get() { return new Faculty().faculty_id; } },
-  faculty_title: { get() { return new Faculty().faculty_title; } },
-  schools:       { get() { return new Faculty().schools; } },
-});
-
-/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
-/* School                                                                     */
-/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
-
 
 export class School extends FieldBuilder {
   /** @return {String}  */ get school_id()    { return this._getField('school_id'); }
@@ -164,23 +137,12 @@ export class School extends FieldBuilder {
   /** @return {Faculty} */ get faculty_id()   { return this._getForeign(Faculty, 'faculty_id'); }
   /* OVERRIDDEN BELOW */
   /** @return {Course}  */ get courses()      { throw Error(`Unimplemented Reverse Relation: ${this}`); }
+
+  /** @return {String}  */ static get school_id()    { return new School().school_id; }
+  /** @return {String}  */ static get school_title() { return new School().school_title; }
+  /** @return {Faculty} */ static get faculty_id()   { return new School().faculty_id; }
+  /** @return {Course}  */ static get courses()      { return new School().courses; }
 }
-
-/** @member {String}  School.school_id */
-/** @member {String}  School.school_title */
-/** @member {Faculty} School.faculty_id */
-/** @member {Course}  School.courses */
-Object.defineProperties(School, {
-  school_id:    { get() { return new School().school_id; } },
-  school_title: { get() { return new School().school_title; } },
-  faculty_id:   { get() { return new School().faculty_id; } },
-  courses:      { get() { return new School().courses; } },
-});
-
-/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
-/* Course                                                                     */
-/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
-
 
 export class Course extends FieldBuilder {
   // course_title: 'course_title', NOT IMPLEMENTED IN BACKEND
@@ -188,61 +150,33 @@ export class Course extends FieldBuilder {
   /** @return {School}         */ get school_id()        { return this._getForeign(School, 'school_id'); }
   /* OVERRIDDEN BELOW */
   /** @return {EnrolledCourse} */ get enrolled_courses() { throw Error(`Unimplemented Reverse Relation: ${this}`); }
+
+  /** @return {String}         */ static get course_code()      { return new Course().course_code; }
+  /** @return {School}         */ static get school_id()        { return new Course().school_id; }
+  /** @return {EnrolledCourse} */ static get enrolled_courses() { return new Course().enrolled_courses; }
 }
-
-/** @member {String}         Course.course_code */
-/** @member {School}         Course.school_id */
-/** @member {EnrolledCourse} Course.enrolled_courses */
-Object.defineProperties(Course, {
-  // course_title: 'course_title', NOT IMPLEMENTED IN BACKEND
-  course_code:      { get() { return new Course().course_code; } },
-  school_id:        { get() { return new Course().school_id; } },
-  enrolled_courses: { get() { return new Course().enrolled_courses; } },
-});
-
-/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
-/* Program                                                                    */
-/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 
 export class Program extends FieldBuilder {
   /** @return {String}       */ get program_code()   { return this._getField('program_code'); }
   /** @return {String}       */ get program_title()  { return this._getField('program_title'); }
   /* OVERRIDDEN BELOW */
   /** @return {EnrolledYear} */ get enrolled_years() { throw Error(`Unimplemented Reverse Relation: ${this}`); }
+
+  /** @return {String}       */ static get program_code()   { return new Program().program_code; }
+  /** @return {String}       */ static get program_title()  { return new Program().program_title; }
+  /** @return {EnrolledYear} */ static get enrolled_years() { return new Program().enrolled_years; }
 }
-
-/** @member {String}       Program.program_code */
-/** @member {String}       Program.program_title */
-/** @member {EnrolledYear} Program.enrolled_years */
-Object.defineProperties(Program, {
-  program_code:   { get() { return new Program().program_code; } },
-  program_title:  { get() { return new Program().program_title; } },
-  enrolled_years: { get() { return new Program().enrolled_years; } },
-});
-
-/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
-/* ProgressOutcome                                                            */
-/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 
 export class ProgressOutcome extends FieldBuilder {
   /** @return {String}       */ get progress_outcome_type()             { return this._getField('progress_outcome_type'); }
   /** @return {String}       */ get progress_outcome_type_description() { return this._getField('progress_outcome_type_description'); }
   /* OVERRIDDEN BELOW */
   /** @return {EnrolledYear} */ get enrolled_years()                    { throw Error(`Unimplemented Reverse Relation: ${this}`); }
+
+  /** @return {String}       */ static get progress_outcome_type()             { return new ProgressOutcome().progress_outcome_type; }
+  /** @return {String}       */ static get progress_outcome_type_description() { return new ProgressOutcome().progress_outcome_type_description; }
+  /** @return {EnrolledYear} */ static get enrolled_years()                    { return new ProgressOutcome().enrolled_years; }
 }
-
-/** @member {String}       ProgressOutcome.progress_outcome_type */
-/** @member {String}       ProgressOutcome.progress_outcome_type_description */
-/** @member {EnrolledYear} ProgressOutcome.enrolled_years */
-Object.defineProperties(ProgressOutcome, {
-  progress_outcome_type:             { get() { return new ProgressOutcome().progress_outcome_type; } },
-  progress_outcome_type_description: { get() { return new ProgressOutcome().progress_outcome_type_description; } },
-  enrolled_years:                    { get() { return new ProgressOutcome().enrolled_years; } },
-});
-
-/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
-/* SecondarySchool                                                            */
-/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 
 export class SecondarySchool extends FieldBuilder {
   /** @return {String}  */ get secondary_school_name()        { return this._getField('secondary_school_name'); }
@@ -250,23 +184,12 @@ export class SecondarySchool extends FieldBuilder {
   /** @return {String}  */ get urban_rural_secondary_school() { return this._getField('urban_rural_secondary_school'); }
   /* OVERRIDDEN BELOW */
   /** @return {Student} */ get students()                     { throw Error(`Unimplemented Reverse Relation: ${this}`); }
+
+  /** @return {String}  */ static get secondary_school_name()        { return new SecondarySchool().secondary_school_name; }
+  /** @return {String}  */ static get secondary_school_quintile()    { return new SecondarySchool().secondary_school_quintile; }
+  /** @return {String}  */ static get urban_rural_secondary_school() { return new SecondarySchool().urban_rural_secondary_school; }
+  /** @return {Student} */ static get students()                     { return new SecondarySchool().students; }
 }
-
-/** @member {String}  SecondarySchool.secondary_school_name */
-/** @member {String}  SecondarySchool.secondary_school_quintile */
-/** @member {String}  SecondarySchool.urban_rural_secondary_school */
-/** @member {Student} SecondarySchool.students */
-Object.defineProperties(SecondarySchool, {
-  secondary_school_name:        { get() { return new SecondarySchool().secondary_school_name; } },
-  secondary_school_quintile:    { get() { return new SecondarySchool().secondary_school_quintile; } },
-  urban_rural_secondary_school: { get() { return new SecondarySchool().urban_rural_secondary_school; } },
-  students:                     { get() { return new SecondarySchool().students; } },
-});
-
-/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
-/* Student                                                                    */
-/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
-
 
 export class Student extends FieldBuilder {
   /** @return {String}          */ get encrypted_student_no()      { return this._getField('encrypted_student_no'); }
@@ -278,30 +201,16 @@ export class Student extends FieldBuilder {
   /** @return {SecondarySchool} */ get secondary_school_name()     { return this._getForeign(SecondarySchool, 'secondary_school_name'); }
   /* OVERRIDDEN BELOW */
   /** @return {EnrolledYear}    */ get enrolled_years()            { throw Error(`Unimplemented Reverse Relation: ${this}`); }
+
+  /** @return {String}          */ static get encrypted_student_no()      { return new Student().encrypted_student_no; }
+  /** @return {String}          */ static get nationality_short_name()    { return new Student().nationality_short_name; }
+  /** @return {String}          */ static get home_language_description() { return new Student().home_language_description; }
+  /** @return {String}          */ static get race_description()          { return new Student().race_description; }
+  /** @return {String}          */ static get gender()                    { return new Student().gender; }
+  /** @return {String}          */ static get age()                       { return new Student().age; }
+  /** @return {SecondarySchool} */ static get secondary_school_name()     { return new Student().secondary_school_name; }
+  /** @return {EnrolledYear}    */ static get enrolled_years()            { return new Student().enrolled_years; }
 }
-
-/** @member {String}          Student.encrypted_student_no */
-/** @member {String}          Student.nationality_short_name */
-/** @member {String}          Student.home_language_description */
-/** @member {String}          Student.race_description */
-/** @member {String}          Student.gender */
-/** @member {String}          Student.age */
-/** @member {SecondarySchool} Student.secondary_school_name */
-/** @member {EnrolledYear}    Student.enrolled_years */
-Object.defineProperties(Student, {
-  encrypted_student_no:      { get() { return new Student().encrypted_student_no; } },
-  nationality_short_name:    { get() { return new Student().nationality_short_name; } },
-  home_language_description: { get() { return new Student().home_language_description; } },
-  race_description:          { get() { return new Student().race_description; } },
-  gender:                    { get() { return new Student().gender; } },
-  age:                       { get() { return new Student().age; } },
-  secondary_school_name:     { get() { return new Student().secondary_school_name; } },
-  enrolled_years:            { get() { return new Student().enrolled_years; } },
-});
-
-/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
-/* EnrolledYear                                                               */
-/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 
 export class EnrolledYear extends FieldBuilder {
   /** @return {Student}         */ get encrypted_student_no()   { return this._getForeign(Student, 'encrypted_student_no'); }
@@ -313,49 +222,28 @@ export class EnrolledYear extends FieldBuilder {
   /** @return {ProgressOutcome} */ get progress_outcome_type()  { return this._getForeign(ProgressOutcome, 'progress_outcome_type'); }
   /* OVERRIDDEN BELOW */
   /** @return {EnrolledCourse}  */ get enrolled_courses()       { throw Error(`Unimplemented Reverse Relation: ${this}`); }
+
+  /** @return {Student}         */ static get encrypted_student_no()   { return new EnrolledYear().encrypted_student_no; }
+  /** @return {Program}         */ static get program_code()           { return new EnrolledYear().program_code; }
+  /** @return {String}          */ static get calendar_instance_year() { return new EnrolledYear().calendar_instance_year; }
+  /** @return {String}          */ static get year_of_study()          { return new EnrolledYear().year_of_study; }
+  /** @return {String}          */ static get award_grade()            { return new EnrolledYear().award_grade; }
+  /** @return {String}          */ static get average_marks()          { return new EnrolledYear().average_marks; }
+  /** @return {ProgressOutcome} */ static get progress_outcome_type()  { return new EnrolledYear().progress_outcome_type; }
+  /** @return {EnrolledCourse}  */ static get enrolled_courses()       { return new EnrolledYear().enrolled_courses; }
 }
-
-/** @member {Student}         EnrolledYear.encrypted_student_no */
-/** @member {Program}         EnrolledYear.program_code */
-/** @member {String}          EnrolledYear.calendar_instance_year */
-/** @member {String}          EnrolledYear.year_of_study */
-/** @member {String}          EnrolledYear.award_grade */
-/** @member {String}          EnrolledYear.average_marks */
-/** @member {ProgressOutcome} EnrolledYear.progress_outcome_type */
-/** @member {EnrolledCourse}  EnrolledYear.enrolled_courses */
-Object.defineProperties(EnrolledYear, {
-  encrypted_student_no:   { get() { return new EnrolledYear().encrypted_student_no; } },
-  program_code:           { get() { return new EnrolledYear().program_code; } },
-  calendar_instance_year: { get() { return new EnrolledYear().calendar_instance_year; } },
-  year_of_study:          { get() { return new EnrolledYear().year_of_study; } },
-  award_grade:            { get() { return new EnrolledYear().award_grade; } },
-  average_marks:          { get() { return new EnrolledYear().average_marks; } },
-  progress_outcome_type:  { get() { return new EnrolledYear().progress_outcome_type; } },
-  enrolled_courses:       { get() { return new EnrolledYear().enrolled_courses; } },
-});
-
-/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
-/* EnrolledCourse                                                             */
-/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
-
 
 export class EnrolledCourse extends FieldBuilder {
   /** @return {EnrolledYear} */ get enrolled_year_id() { return this._getForeign(EnrolledYear, 'enrolled_year_id'); }
   /** @return {Course} */       get course_code()      { return this._getForeign(Course, 'course_code'); }
   /** @return {String} */       get final_mark()       { return this._getField('final_mark'); }
   /** @return {String} */       get final_grade()      { return this._getField('final_grade'); }
-}
 
-/** @member {EnrolledYear} EnrolledCourse.enrolled_year_id */
-/** @member {Course}       EnrolledCourse.course_code */
-/** @member {String}       EnrolledCourse.final_mark */
-/** @member {string}       EnrolledCourse.final_grade */
-Object.defineProperties(EnrolledCourse, {
-  enrolled_year_id: { get() { return new EnrolledCourse().enrolled_year_id; } },
-  course_code:      { get() { return new EnrolledCourse().course_code; } },
-  final_mark:       { get() { return new EnrolledCourse().final_mark; } },
-  final_grade:      { get() { return new EnrolledCourse().final_grade; } },
-});
+  /** @return {EnrolledYear} */ static get enrolled_year_id() { return new EnrolledCourse().enrolled_year_id; }
+  /** @return {Course} */       static get course_code()      { return new EnrolledCourse().course_code; }
+  /** @return {String} */       static get final_mark()       { return new EnrolledCourse().final_mark; }
+  /** @return {String} */       static get final_grade()      { return new EnrolledCourse().final_grade; }
+}
 
 /* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 /* Reverse Relations                                                          */
