@@ -16,36 +16,50 @@ const requester = axios.create({
 /* Query & Functions                                                          */
 /* ========================================================================== */
 
-export class Q {
+class QBuilder {
+  /**
+   * @param {QBuilder|String|null} meta
+   * @param {any|null} expr
+   */
   constructor(meta = null, expr = null) {
+    // nullable
     this.meta = meta;
     this.expr = expr;
-
     this.l = null;
     this.r = null;
-    this.negated = false;
     this.operator = null;
+    // other
+    this.negated = false;
+  }
+
+  isEmpty() {
+    return this.meta == null && this.expr == null && this.l == null && this.r == null && this.operator == null;
   }
 
   /**
-   * @param {String|Q} rOrMeta
+   * @param {String|QBuilder} rOrMeta
    * @param {String|null} expr
    * @param {String} operator
-   * @return {Q}
+   * @return {QBuilder}
    * @private
    */
   _join(rOrMeta, expr = null, operator) {
     let r = rOrMeta;
+    // normalise for one or two args.
     if (expr !== null) {
-      if (typeof rOrMeta !== 'string' || typeof expr !== 'string') {
-        throw Error('Two args only must both be strings, One arg only must be an instance of Q');
+      if (typeof rOrMeta !== 'string') {
+        throw Error('For two args, the meta must be a string. For one arg only, it must be an instance of Q');
       }
-      r = new Q(rOrMeta, expr);
+      r = new QBuilder(rOrMeta, expr);
     }
-    if (!(r instanceof Q)) {
+    if (!(r instanceof QBuilder)) {
       throw Error('Must be another Query');
     }
-    const parent = new Q();
+    // exit early
+    if (this.isEmpty()) {
+      return r;
+    }
+    const parent = new QBuilder();
     parent.operator = operator;
     parent.r = r;
     parent.l = this;
@@ -53,25 +67,25 @@ export class Q {
   }
 
   /**
-   * @param {String|Q} rOrMeta
+   * @param {String|QBuilder} rOrMeta
    * @param {String|null} expr
-   * @return {Q}
+   * @return {QBuilder}
    */
   and(rOrMeta, expr = null) {
     return this._join(rOrMeta, expr, '&');
   }
 
   /**
-   * @param {String|Q} rOrMeta
+   * @param {String|QBuilder} rOrMeta
    * @param {String|null} expr
-   * @return {Q}
+   * @return {QBuilder}
    */
   or(rOrMeta, expr = null) {
     return this._join(rOrMeta, expr, '|');
   }
 
   /**
-   * @return {Q}
+   * @return {QBuilder}
    */
   not() {
     this.negated = !this.negated;
@@ -104,6 +118,16 @@ export class Q {
     }
     return stack;
   }
+}
+
+/**
+ * @param {QBuilder|String} meta
+ * @param {null|any} expr
+ * @return {QBuilder}
+ * @constructor
+ */
+export function Q(meta = null, expr = null) {
+  return new QBuilder(meta, expr);
 }
 
 /* ========================================================================== */
@@ -189,7 +213,7 @@ function exprArray(array, minItems = 1) {
 
 export class Queryset {
   /**
-   * @param endpoint
+   * @param {String} endpoint
    */
   constructor(endpoint) {
     this._endpoint = endpoint.replace(/^[/]/g, '');
@@ -234,8 +258,7 @@ export class Queryset {
   }
 
   /**
-   * @param fake
-   * @param debug
+   * @param {boolean} fake
    * @return {AxiosPromise<any>}
    */
   POST(fake = false) {
@@ -298,19 +321,22 @@ export class Queryset {
    *
    * All the above should be equivalent.
    *
-   * @param fields
+   * @param {QBuilder|{meta: string, expr: any}|'&'|'l'} fields
    * @return {Queryset}
    */
   filter(...fields) {
     let array = fields;
-    if (fields.length === 1 && fields[0] instanceof Q) {
+    if (fields.length === 1 && fields[0] instanceof QBuilder) {
+      if (fields[0].isEmpty()) { // exit early
+        return this;
+      }
       array = fields[0].toRpnArray();
-    } else if (fields.length > 1 && fields[0] instanceof Q) {
+    } else if (fields.length > 1 && fields[0] instanceof QBuilder) {
       throw Error('Only one item Q can be passed');
     }
     this._queryset.push({
       'action': 'filter',
-      'expr': stringOrFilterArray(array, 1),
+      'expr': stringOrFilterArray(array, 1), // RPN formatted - array of {meta: string, expr: any}) and ('&' or '|')
     });
     return this;
   }
@@ -319,18 +345,12 @@ export class Queryset {
    * exclude() Generates:
    * <see FilterAction>
    *
-   * @param fields
+   * @param {QBuilder|{meta: string, expr: any}|'&'|'l'} fields
    * @return {Queryset}
    */
   exclude(...fields) {
-    let array = fields;
-    if (fields.length === 1 && fields[0] instanceof Q) {
-      array = fields[0].toRpnArray();
-    }
-    this._queryset.push({
-      'action': 'exclude',
-      'expr': stringOrFilterArray(array, 1),
-    });
+    this.filter(...fields);
+    this._queryset[this._queryset.length - 1].action = 'exclude';
     return this;
   }
 
@@ -351,7 +371,7 @@ export class Queryset {
    * }
    *
    * Use ValuesAction followed by AnnotateAction to "group_by"
-   * @param fields
+   * @param {{field: string, expr: any}} fields
    * @return {Queryset}
    */
   annotate(...fields) {
@@ -374,7 +394,7 @@ export class Queryset {
    *
    * Use ValuesAction followed by AnnotateAction to "group_by"
    *
-   * @param fields
+   * @param {String|{field: string, expr: any}} fields
    * @return {Queryset}
    */
   values(...fields) {
@@ -391,9 +411,9 @@ export class Queryset {
    Indicates that a QuerySet should rather be serialised as
    an array of tuples instead of an array of dictionaries
    """
-   * @param flat
-   * @param named
-   * @param fields
+   * @param {boolean} flat
+   * @param {boolean} named
+   * @param {String} fields
    * @return {Queryset}
    */
   valuesList(flat = false, named = false, ...fields) {
@@ -463,7 +483,7 @@ export class Queryset {
    *   ]
    * }
    *
-   * @param fields
+   * @param {String|{field: string, descending: boolean}} fields
    * @return { Queryset }
    */
   orderBy(...fields) {
@@ -508,9 +528,9 @@ export class Queryset {
    *   "index": 3
    * }
    *
-   * @param method
-   * @param num
-   * @param index
+   * @param {'page'|'first'|'last'} method
+   * @param {number} num
+   * @param {number|null} index
    * @return {Queryset}
    */
   limit(method, num, ...index) {
@@ -543,7 +563,7 @@ export class Queryset {
    *   "action": "distinct"
    * }
    *
-   * @param fields
+   * @param {String} fields
    * @return {Queryset}
    */
   distinct(...fields) {

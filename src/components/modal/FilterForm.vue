@@ -120,7 +120,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import VueTagsInput from '@johmun/vue-tags-input';
-import apiQuery from '../../assets/js/api/witsapi';
+import * as apiQuery from '../../assets/js/api/witsapi';
 
 
 export default {
@@ -208,6 +208,7 @@ export default {
         case 'bar':
           this.$props.chartTypeOptions[i].push('line');
           break;
+        default:
       }
     }
     // initialize data.form to have the correct amount of v-models
@@ -321,7 +322,7 @@ export default {
       this.loadCourses();
     },
     loadYears() {
-      apiQuery.getYears()
+      apiQuery.queryYears()
         .then((response) => response.data)
         .then((data) => {
           // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
@@ -334,7 +335,7 @@ export default {
         });
     },
     loadFaculties() {
-      apiQuery.getFaculties()
+      apiQuery.queryFaculties()
         .then((response) => response.data)
         .then((data) => {
           // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
@@ -347,7 +348,7 @@ export default {
         });
     },
     loadSchools() {
-      apiQuery.getSchools()
+      apiQuery.querySchools()
         .then((response) => response.data)
         .then((data) => {
           // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
@@ -360,7 +361,7 @@ export default {
         });
     },
     loadCourses() {
-      apiQuery.getCourses()
+      apiQuery.queryCourses()
         .then((response) => response.data)
         .then((data) => {
           // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]

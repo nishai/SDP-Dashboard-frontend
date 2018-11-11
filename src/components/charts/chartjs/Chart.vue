@@ -8,18 +8,17 @@
 </template>
 
 <script>
-
+import ChartModule from 'chartjs-plugin-labels';
 import palette from 'google-palette';
 import vueCharts from 'vue-chartjs';
-import apiQuery from '../../../assets/js/api/witsapi';
-import ChartModule from 'chartjs-plugin-labels';
+import * as apiQuery from '../../../assets/js/api/witsapi';
 
 // https://github.com/emn178/chartjs-plugin-labels
-Chart.defaults.global.plugins.labels = {
-  render: 'percentage',
-  fontColor: '#333',
-  precision: 2,
-};
+// Chart.defaults.global.plugins.labels = {
+//   render: 'percentage',
+//   fontColor: '#333',
+//   precision: 2,
+// };
 
 const chartTypes = {
   'bar': vueCharts.Bar,
@@ -88,6 +87,7 @@ export default {
         case 'progress_outcome_by_course':
           forLimit = this.$props.chartData[index].courses.length;
           break;
+        default:
       }
       this.chartResultsLabels.push([]);
       this.chartResultsData.push([]);
@@ -134,7 +134,7 @@ export default {
             // continue
         }
         console.log(queryArr[0], queryArr[1], queryArr[2], queryArr[3], queryArr[4], queryArr[5], queryArr[6]);
-        apiQuery.getCourseStats(
+        apiQuery.queryCommon(
           queryArr[0],
           queryArr[1],
           queryArr[2],
@@ -200,7 +200,7 @@ export default {
     getData(index) {
       console.log('LOADING DATA');
       // TODO: Multiple sub-charts
-      apiQuery.getCourseStats(
+      apiQuery.queryCommon(
         'course-stats',
         this.$props.chartData[index].groupBy,
         this.$props.chartData[index].years,
