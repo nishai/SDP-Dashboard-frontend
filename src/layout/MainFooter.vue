@@ -11,7 +11,7 @@ The default footer for the app.
 
 <script>
 export default {
-  name: 'Footer',
+  name: 'MainFooter',
 };
 </script>
 

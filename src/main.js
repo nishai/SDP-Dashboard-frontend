@@ -23,11 +23,8 @@ Vue.use(plugins);
 Vue.config.productionTip = false;
 
 const app = new Vue({
+  el: '#app',
   render: h => h(App),
   router,
   store,
 });
-
-/* Inject App Into Page */
-
-app.$mount('#app');

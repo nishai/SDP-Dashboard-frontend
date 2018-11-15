@@ -1,15 +1,6 @@
 
 import _ from 'lodash';
-import axios from 'axios';
-
-/* ========================================================================== */
-/* Axios                                                                      */
-/* ========================================================================== */
-
-const requester = axios.create({
-  baseURL: `http://${process.env.VUE_APP_API}/`,
-  timeout: 10000,
-});
+import { cachiosInstance as cachios } from '../plugins/vue-axios';
 
 
 /* ========================================================================== */
@@ -213,12 +204,42 @@ function exprArray(array, minItems = 1) {
 
 export class Queryset {
   /**
-   * @param {String} endpoint
+   * @param {FieldBuilder} sourceModel
    */
-  constructor(endpoint) {
-    this._endpoint = endpoint.replace(/^[/]/g, '');
+  constructor(sourceModel) {
     this._queryset = [];
+    if (!sourceModel) {
+      throw new Error('Queryset source model not specified');
+    }
+    if (typeof sourceModel.endpoint !== 'string' || sourceModel.endpoint.length < 1) {
+      throw new Error('SourceModel does not have a valid endpoint defined.');
+    }
+    this._sourceModel = sourceModel;
+    this._endpoint = sourceModel.endpoint.replace(/^[/]/g, '');
+    /* options */
     this._debug = false;
+    this._fake = false;
+    this._explain = false;
+    /* if the queryset has come to an end, due to certain operations */
+    this._lockedBy = null;
+  }
+
+  get isLocked() {
+    return !!this._lockedBy;
+  }
+
+  _assertNotLocked() {
+    if (this.isLocked) {
+      throw Error(`The Queryset was locked by: ${this._lockedBy}`);
+    }
+  }
+
+  _lock(by) {
+    this._assertNotLocked();
+    if (typeof by !== 'string' || by.length < 1) {
+      throw Error('lock string cannot be empty or null');
+    }
+    this._lockedBy = by;
   }
 
   /* COMPUTED PROPS */
@@ -227,7 +248,10 @@ export class Queryset {
    * @return {{queryset: Array}}
    */
   get data() {
-    return { 'queryset': this._queryset };
+    return {
+      'explain': this._explain,
+      'queryset': this._queryset,
+    };
   }
 
   /* QUERY */
@@ -258,11 +282,27 @@ export class Queryset {
   }
 
   /**
+   * @return {Queryset}
+   */
+  fake() {
+    this._fake = true;
+    return this;
+  }
+
+  /**
+   * @return {Queryset}
+   */
+  explain() {
+    this._explain = true;
+    return this;
+  }
+
+  /**
    * @param {boolean} fake
    * @return {AxiosPromise<any>}
    */
-  POST(fake = false) {
-    let promise = requester.post(`${this._endpoint}?fake=${fake ? 1 : 0}`, this.data);
+  POST() {
+    let promise = cachios.post(`${this._endpoint}?fake=${this._fake ? 1 : 0}`, this.data);
     if (this._debug) {
       promise = promise.then((response) => {
         console.log('Queryset: ', this._queryset, 'Response: ', response);
@@ -273,13 +313,91 @@ export class Queryset {
   }
 
   /**
+   * Accepts a query, returns a promise for the result
+   * - the result is api specific, in this case. (request.data.results)
+   * @return {Promise<any>}
+   */
+  RESULT() {
+    return new Promise((accept, reject) => {
+      this.POST()
+        .then((response) => {
+          if (!response.data) {
+            reject(new Error('Response has no data'));
+          }
+          if (!response.data.results) {
+            reject(new Error('Response data has no results'));
+          }
+          accept(response.data.results);
+        })
+        .catch((error) => {
+          reject(error, undefined);
+        });
+    });
+  }
+
+  /**
+   * @param {Function} callback
+   * @return {Promise<any>}
+   */
+  then(callback) {
+    return this.RESULT().then((results) => {
+      const val = callback(results);
+      if (val !== undefined) {
+        return val;
+      }
+      return results;
+    });
+  }
+
+  /**
+   * @param {Function|null} callback
+   * @return {Promise<any>}
+   */
+  thenStripPrefixes(callback = null) {
+    return this.RESULT().then((results) => {
+      let items = results;
+      if (Array.isArray(items) && items.length > 0) {
+        /* get key map */
+        const keysMap = {};
+        let renameCount = 0;
+        /* get new names */
+        Object.keys(items[0]).forEach((key) => {
+          const indexOf = key.lastIndexOf('__');
+          const renamed = indexOf < 0 ? key : key.substring(indexOf + 2);
+          if (renamed !== key) {
+            renameCount += 1;
+          }
+          keysMap[key] = renamed;
+        });
+        /* rename entries */
+        if (renameCount > 0) {
+          items = items.map((item) => {
+            const temp = {};
+            Object.entries(keysMap).forEach(([key, renamed]) => { temp[renamed] = item[key]; });
+            return temp;
+          });
+        }
+      }
+      if (callback) {
+        const val = callback(items);
+        if (val !== undefined) {
+          return val;
+        }
+      }
+      return items;
+    });
+  }
+
+  /**
    * @return {AxiosPromise<any>}
    */
   OPTIONS() {
-    return requester.post(this._endpoint, this.data);
+    return cachios.post(this._endpoint, this.data);
   }
 
-  /* QUERYSET BUILDER */
+  /* QUERYSET BUILDER - NON LOCKING OPERATIONS */
+  /* QUERYSET BUILDER - NON LOCKING OPERATIONS */
+  /* QUERYSET BUILDER - NON LOCKING OPERATIONS */
 
   /**
    * QuerySet.filter(
@@ -325,6 +443,7 @@ export class Queryset {
    * @return {Queryset}
    */
   filter(...fields) {
+    this._assertNotLocked();
     let array = fields;
     if (fields.length === 1 && fields[0] instanceof QBuilder) {
       if (fields[0].isEmpty()) { // exit early
@@ -349,6 +468,7 @@ export class Queryset {
    * @return {Queryset}
    */
   exclude(...fields) {
+    this._assertNotLocked();
     this.filter(...fields);
     this._queryset[this._queryset.length - 1].action = 'exclude';
     return this;
@@ -371,10 +491,11 @@ export class Queryset {
    * }
    *
    * Use ValuesAction followed by AnnotateAction to "group_by"
-   * @param {{field: string, expr: any}} fields
+   * @param { {field: string, expr: any} } fields
    * @return {Queryset}
    */
   annotate(...fields) {
+    this._assertNotLocked();
     this._queryset.push({
       'action': 'annotate',
       'fields': exprArray(fields, 0),
@@ -398,6 +519,7 @@ export class Queryset {
    * @return {Queryset}
    */
   values(...fields) {
+    this._assertNotLocked();
     this._queryset.push({
       'action': 'values',
       'fields': stringOrExprArray(fields, 1),
@@ -417,6 +539,7 @@ export class Queryset {
    * @return {Queryset}
    */
   valuesList(flat = false, named = false, ...fields) {
+    this._assertNotLocked();
     if (flat && named) {
       throw new Error("Both 'flat' and 'named' cannot be true");
     }
@@ -487,6 +610,7 @@ export class Queryset {
    * @return { Queryset }
    */
   orderBy(...fields) {
+    this._assertNotLocked();
     for (let i = 0; i < fields.length; i += 1) {
       if (typeof fields[i] === 'string') {
         fields[i] = { 'field': fields[i] };
@@ -534,6 +658,7 @@ export class Queryset {
    * @return {Queryset}
    */
   limit(method, num, ...index) {
+    this._assertNotLocked();
     if (index.length > 1) {
       throw new Error('At most 1 value can exist for the index');
     }
@@ -567,6 +692,7 @@ export class Queryset {
    * @return {Queryset}
    */
   distinct(...fields) {
+    this._assertNotLocked();
     this._queryset.push({
       'action': 'distinct',
       'fields': stringArray(fields, 0),
@@ -583,6 +709,7 @@ export class Queryset {
    * @return {Queryset}
    */
   reverse() {
+    this._assertNotLocked();
     this._queryset.push({
       'action': 'reverse',
     });
@@ -598,6 +725,7 @@ export class Queryset {
    * @return {Queryset}
    */
   all() {
+    this._assertNotLocked();
     this._queryset.push({
       'action': 'all',
     });
@@ -613,11 +741,102 @@ export class Queryset {
    * @return {Queryset}
    */
   none() {
+    this._assertNotLocked();
     this._queryset.push({
       'action': 'none',
     });
     return this;
   }
+
+  /* LOCKING OPERATIONS */
+  /* LOCKING OPERATIONS */
+  /* LOCKING OPERATIONS */
+
+  /**
+   * count() Generates:
+   * {
+   *   "action": "count"
+   * }
+   *
+   * @return {Queryset}
+   */
+  count() {
+    this._assertNotLocked();
+    this._lock('count');
+    this._queryset.push({
+      'action': 'count',
+    });
+    return this;
+  }
+
+  /**
+   * first() Generates:
+   * {
+   *   "action": "first"
+   * }
+   *
+   * @return {Queryset}
+   */
+  first() {
+    this._assertNotLocked();
+    this._lock('first');
+    this._queryset.push({
+      'action': 'first',
+    });
+    return this;
+  }
+
+  /**
+   * last() Generates:
+   * {
+   *   "action": "last"
+   * }
+   *
+   * @return {Queryset}
+   */
+  last() {
+    this._assertNotLocked();
+    this._lock('last');
+    this._queryset.push({
+      'action': 'last',
+    });
+    return this;
+  }
+
+  /**
+   * aggregate is like annotate but works on the current model.
+   *
+   * annotate() Generates:
+   * {
+   *   "action": "annotate",
+   *   "fields": [
+   *     {
+   *       "field": "asdf",
+   *       "expr": "max('final_mark')"
+   *     },
+   *     {
+   *         "field": "year",
+   *         "expr": "-2000 + F('enrolled_year_id__calendar_instance_year')"
+   *     }
+   *   ]
+   * }
+   *
+   * @param {{field: string, expr: any}} fields
+   * @return {Queryset}
+   */
+  aggregate(...fields) {
+    this._assertNotLocked();
+    this._lock('aggregate');
+    this._queryset.push({
+      'action': 'aggregate',
+      'fields': exprArray(fields, 1),
+    });
+    return this;
+  }
+
+  /* TODO: exists */
+  /* TODO: explain */
+  /* TODO: in_bulk */
 }
 
 /* export everything */

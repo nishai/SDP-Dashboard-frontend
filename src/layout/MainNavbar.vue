@@ -31,7 +31,7 @@
 import queryApi from '../assets/js/api/wits-api';
 
 export default {
-  name: 'Menubar',
+  name: 'MainMenubar',
   data: () => ({
     username: null,
     password: null,

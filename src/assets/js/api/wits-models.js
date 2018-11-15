@@ -15,38 +15,39 @@ import { Queryset, Q } from './queryset';
  * I like auto-completion too much...
  */
 
-/** @member {String} String.prototype.$exact */
-/** @member {String} String.prototype.$iexact */
-/** @member {String} String.prototype.$contains */
-/** @member {String} String.prototype.$icontains */
-/** @member {String} String.prototype.$startswith */
-/** @member {String} String.prototype.$istartswith */
-/** @member {String} String.prototype.$endswith */
-/** @member {String} String.prototype.$iendswith */
-/** @member {String} String.prototype.$regex */
-/** @member {String} String.prototype.$iregex */
-/** @member {String} String.prototype.$lt */
-/** @member {String} String.prototype.$lte */
-/** @member {String} String.prototype.$gt */
-/** @member {String} String.prototype.$gte */
-/** @member {String} String.prototype.$in */
+// /** @member {String} String.prototype.$exact */
+// /** @member {String} String.prototype.$iexact */
+// /** @member {String} String.prototype.$contains */
+// /** @member {String} String.prototype.$icontains */
+// /** @member {String} String.prototype.$startswith */
+// /** @member {String} String.prototype.$istartswith */
+// /** @member {String} String.prototype.$endswith */
+// /** @member {String} String.prototype.$iendswith */
+// /** @member {String} String.prototype.$regex */
+// /** @member {String} String.prototype.$iregex */
+// /** @member {String} String.prototype.$lt */
+// /** @member {String} String.prototype.$lte */
+// /** @member {String} String.prototype.$gt */
+// /** @member {String} String.prototype.$gte */
+// /** @member {String} String.prototype.$in */
 
 Object.assign(String.prototype, {
-  get $exact() { return `${this}__exact`; },
-  get $iexact() { return `${this}__iexact`; },
-  get $contains() { return `${this}__icontains`; },
-  get $icontains() { return `${this}__icontains`; },
-  get $startswith() { return `${this}__startswith`; },
-  get $istartswith() { return `${this}__istartswith`; },
-  get $endswith() { return `${this}__endswith`; },
-  get $iendswith() { return `${this}__iendswith`; },
-  get $regex() { return `${this}__regex`; },
-  get $iregex() { return `${this}__iregex`; },
-  get $lt() { return `${this}__lt`; },
-  get $lte() { return `${this}__lte`; },
-  get $gt() { return `${this}__gt`; },
-  get $gte() { return `${this}__gte`; },
-  get $in() { return `${this}__in`; },
+  $exact() { return `${this}__exact`; },
+  $iexact() { return `${this}__iexact`; },
+  $contains() { return `${this}__icontains`; },
+  $icontains() { return `${this}__icontains`; },
+  $startswith() { return `${this}__startswith`; },
+  $istartswith() { return `${this}__istartswith`; },
+  $endswith() { return `${this}__endswith`; },
+  $iendswith() { return `${this}__iendswith`; },
+  $regex() { return `${this}__regex`; },
+  $iregex() { return `${this}__iregex`; },
+  $lt() { return `${this}__lt`; },
+  $lte() { return `${this}__lte`; },
+  $gt() { return `${this}__gt`; },
+  $gte() { return `${this}__gte`; },
+  $in() { return `${this}__in`; },
+  $isnull() { return `${this}__isnull`; },
 });
 
 /* ========================================================================== */
@@ -63,11 +64,15 @@ class FieldBuilder {
    * @param {Array<String>} parentStack
    */
   constructor(parentStack = []) {
+    if (!Array.isArray(parentStack)) {
+      throw new Error(`parentStack is not an array: ${parentStack}`);
+    }
     // no need to check all values, as parentStack is only used internally.
     if (parentStack.length > 0 && parentStack[parentStack.length - 1].includes('__')) {
       throw Error('double underscores "__" should not appear in parent stack');
     }
     this.parentStack = parentStack;
+    this.endpoint = undefined;
   }
 
   /**
@@ -78,7 +83,8 @@ class FieldBuilder {
    * @protected
    */
   _getForeign(Cls, field) {
-    return new Cls(this.parentStack.push(field));
+    this.parentStack.push(field);
+    return new Cls(this.parentStack);
   }
 
   /**
@@ -89,7 +95,8 @@ class FieldBuilder {
    * @protected
    */
   _getReverse(Cls, reverse) {
-    return new Cls(this.parentStack.push(reverse));
+    this.parentStack.push(reverse);
+    return new Cls(this.parentStack);
   }
 
   /**
@@ -98,7 +105,8 @@ class FieldBuilder {
    * @protected
    */
   _getField(field) {
-    return `${this}${field}`;
+    this.parentStack.push(field);
+    return this.toString();
   }
 
   /**
@@ -271,21 +279,21 @@ export class EnrolledCourse extends FieldBuilder {
 /** @member {String} EnrolledYear   .endpoint */ Object.defineProperty(EnrolledYear,    'endpoint', { get() { return 'query/year-enrollment'; } });
 /** @member {String} EnrolledCourse .endpoint */ Object.defineProperty(EnrolledCourse,  'endpoint', { get() { return 'query/course-enrollment'; } });
 
-/** @member {Queryset} Faculty        .query */ Object.defineProperty(Faculty,         'query', { get() { return new Queryset(Faculty.endpoint); } });
-/** @member {Queryset} School         .query */ Object.defineProperty(School,          'query', { get() { return new Queryset(School.endpoint); } });
-/** @member {Queryset} Course         .query */ Object.defineProperty(Course,          'query', { get() { return new Queryset(Course.endpoint); } });
-/** @member {Queryset} Program        .query */ Object.defineProperty(Program,         'query', { get() { return new Queryset(Program.endpoint); } });
-/** @member {Queryset} ProgressOutcome.query */ Object.defineProperty(ProgressOutcome, 'query', { get() { return new Queryset(ProgressOutcome.endpoint); } });
-/** @member {Queryset} SecondarySchool.query */ Object.defineProperty(SecondarySchool, 'query', { get() { return new Queryset(SecondarySchool.endpoint); } });
-/** @member {Queryset} Student        .query */ Object.defineProperty(Student,         'query', { get() { return new Queryset(Student.endpoint); } });
-/** @member {Queryset} EnrolledYear   .query */ Object.defineProperty(EnrolledYear,    'query', { get() { return new Queryset(EnrolledYear.endpoint); } });
-/** @member {Queryset} EnrolledCourse .query */ Object.defineProperty(EnrolledCourse,  'query', { get() { return new Queryset(EnrolledCourse.endpoint); } });
+/** @member {Queryset} Faculty        .query */ Object.defineProperty(Faculty,         'query', { get() { return new Queryset(Faculty); } });
+/** @member {Queryset} School         .query */ Object.defineProperty(School,          'query', { get() { return new Queryset(School); } });
+/** @member {Queryset} Course         .query */ Object.defineProperty(Course,          'query', { get() { return new Queryset(Course); } });
+/** @member {Queryset} Program        .query */ Object.defineProperty(Program,         'query', { get() { return new Queryset(Program); } });
+/** @member {Queryset} ProgressOutcome.query */ Object.defineProperty(ProgressOutcome, 'query', { get() { return new Queryset(ProgressOutcome); } });
+/** @member {Queryset} SecondarySchool.query */ Object.defineProperty(SecondarySchool, 'query', { get() { return new Queryset(SecondarySchool); } });
+/** @member {Queryset} Student        .query */ Object.defineProperty(Student,         'query', { get() { return new Queryset(Student); } });
+/** @member {Queryset} EnrolledYear   .query */ Object.defineProperty(EnrolledYear,    'query', { get() { return new Queryset(EnrolledYear); } });
+/** @member {Queryset} EnrolledCourse .query */ Object.defineProperty(EnrolledCourse,  'query', { get() { return new Queryset(EnrolledCourse); } });
 
 /* ========================================================================== */
 /* Factory                                                                    */
 /* ========================================================================== */
 
-export const MODELS = {
+export const NAME_TO_MODEL = {
   faculty: Faculty,
   school: School,
   course: Course,
@@ -295,6 +303,18 @@ export const MODELS = {
   student: Student,
   enrolled_year: EnrolledYear,
   enrolled_course: EnrolledCourse,
+};
+
+export const MODELS = {
+  Faculty,
+  School,
+  Course,
+  Program,
+  ProgressOutcome,
+  SecondarySchool,
+  Student,
+  EnrolledYear,
+  EnrolledCourse,
 };
 
 /* ========================================================================== */

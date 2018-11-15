@@ -21,7 +21,7 @@
 import { navRoutes } from '../router/routes';
 
 export default {
-  name: 'Sidebar',
+  name: 'DashboardSidebar',
   data: () => ({
     links: navRoutes,
   }),

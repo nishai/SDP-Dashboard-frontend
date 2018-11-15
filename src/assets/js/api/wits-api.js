@@ -2,43 +2,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable prefer-template */
 
-import axios from 'axios';
 import { Faculty, School, Course, Program, ProgressOutcome, SecondarySchool, Student, EnrolledYear, EnrolledCourse, Field } from './wits-models';
 import { Q, Queryset } from './queryset';
 
 /* eslint-enable no-unused-vars */
-
-/* ========================================================================== */
-/* AXIOS                                                                      */
-/* ========================================================================== */
-
-const requester = axios.create({
-  baseURL: `http://${process.env.VUE_APP_API}/`,
-  timeout: 10000,
-});
-
-/* ========================================================================== */
-/* AUTH                                                                       */
-/* ========================================================================== */
-
-export function getLoginToken(username, password) {
-  return requester.post(
-    'auth/token/obtain',
-    {
-      username,
-      password,
-    },
-  );
-}
-
-export function refreshToken(token) {
-  return requester.post(
-    'auth/token/refresh',
-    {
-      token,
-    },
-  );
-}
 
 /* ========================================================================== */
 /* FILTERS - Q object factories                                               */
