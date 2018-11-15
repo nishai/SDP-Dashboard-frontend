@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import Heading from '../components/misc/Heading.vue';
+import Heading from '../components/Heading.vue';
 
 export default {
   name: 'ReportList',

@@ -113,8 +113,8 @@
 
 <script>
 /* eslint-disable global-require */
-import Heading from '../components/misc/Heading.vue';
-import ChartExampleLink from '../components/charts/ChartExampleLink.vue';
+import Heading from '../components/Heading.vue';
+import ChartExampleLink from '../components/ChartExampleLink.vue';
 
 export default {
   name: 'ChartTemplates',

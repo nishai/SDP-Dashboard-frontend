@@ -73,9 +73,13 @@
 </template>
 
 <script>
-import Heading from '../components/misc/Heading.vue';
-import Chart from '../components/charts/chartjs/Chart.vue';
-import Table from '../components/charts/chartjs/Table.vue';
+import Heading from '../components/Heading.vue';
+import Chart from '../components/Chart.vue';
+import Table from '../components/Table.vue';
+
+const items = {
+
+}
 
 export default {
   name: 'ChartExamples',

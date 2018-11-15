@@ -32,8 +32,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import Chart from '../charts/chartjs/Chart.vue';
-import FeatherIcon from '../misc/FeatherIcon.vue';
+import Chart from './Chart.vue';
 
 export default {
   name: 'DashboardChart',
@@ -49,7 +48,6 @@ export default {
   },
   components: {
     Chart,
-    FeatherIcon,
   },
   data: () => ({
     optsbarComponentPrivate: null,

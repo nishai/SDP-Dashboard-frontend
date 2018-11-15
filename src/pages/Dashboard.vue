@@ -105,11 +105,11 @@ import { GridLayout, GridItem } from 'vue-grid-layout';
 import { mapGetters } from 'vuex';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import Heading from '../components/misc/Heading.vue';
-import Chart from '../components/charts/chartjs/Chart.vue';
-import Table from '../components/charts/chartjs/Table.vue';
-import DashboardChart from '../components/dashboard/DashboardChart.vue';
-import FilterForm from '../components/modal/FilterForm.vue';
+import Heading from '../components/Heading.vue';
+import Chart from '../components/Chart.vue';
+import Table from '../components/Table.vue';
+import DashboardChart from '../components/DashboardChart.vue';
+import FilterForm from '../components/FilterForm.vue';
 
 
 export default {

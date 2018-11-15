@@ -18,7 +18,7 @@
 <!-- SCRIPT -->
 
 <script>
-import { navRoutes } from '../../router/routes';
+import { navRoutes } from '../router/routes';
 
 export default {
   name: 'Sidebar',

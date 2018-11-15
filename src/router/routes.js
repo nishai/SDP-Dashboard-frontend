@@ -1,8 +1,8 @@
 // import ChartExamples from '../pages/ChartExamples.vue';
 // import Query from '../pages/Query.vue';
-// import Reports from '../pages/ReportList.vue';
-// import Report from '../pages/Report.vue';
-// import GridExample from '../pages/GridExample.vue';
+// import Reports from '../pages/PageReportList.vue';
+// import Report from '../pages/PageReport.vue';
+// import GridExample from '../pages/PageGridExample.vue';
 import Dashboard from '../pages/Dashboard.vue';
 import ChartTemplates from '../pages/ChartTemplates.vue';
 

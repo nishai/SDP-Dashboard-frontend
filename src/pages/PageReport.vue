@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import Heading from '../components/misc/Heading.vue';
-import ReportChart from '../components/reports/ReportChart.vue';
+import Heading from '../components/Heading.vue';
+import ReportChart from '../components/ReportChart.vue';
 
 export default {
   name: 'Report',

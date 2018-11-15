@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import FilterFormModal from '../modal/FilterFormModal.vue';
+import FilterFormModal from './FilterFormModal.vue';
 
 export default {
   name: 'ChartExampleLink',

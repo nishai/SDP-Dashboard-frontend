@@ -30,9 +30,8 @@
 </template>
 
 <script>
-import Chart from '../charts/chartjs/Chart.vue';
+import Chart from './Chart.vue';
 // import ReportChartEdit from '../reports/ReportChartEdit.vue';
-import FeatherIcon from '../misc/FeatherIcon.vue';
 
 export default {
   name: 'ReportChart',
@@ -46,7 +45,6 @@ export default {
   },
   components: {
     Chart,
-    FeatherIcon,
   },
   data: () => ({
     optsbarComponentPrivate: null,

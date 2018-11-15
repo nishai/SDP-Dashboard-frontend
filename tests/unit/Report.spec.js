@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import Report from '../../src/pages/Report.vue';
+import Report from '../../src/pages/PageReport.vue';
 import { mount } from '@vue/test-utils';
 //import store from '../../src/store';
 //import router from '../../src/router';

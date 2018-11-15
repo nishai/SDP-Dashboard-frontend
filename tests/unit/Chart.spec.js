@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import Chart from '../../src/components/charts/chartjs/Chart.vue';
+import Chart from '../../src/components/Chart.vue';
 import { mount } from '@vue/test-utils';
 
 describe('Chart.vue', () =>{

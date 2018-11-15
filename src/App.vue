@@ -24,9 +24,9 @@ The sidebar, footer, and content are defined here.
 <!-- SCRIPT -->
 
 <script>
-import Menubar from './components/menubar/Menubar.vue';
-import Sidebar from './components/sidebar/Sidebar.vue';
-import Footer from './components/Footer.vue';
+import Menubar from './layout/Menubar.vue';
+import Sidebar from './layout/Sidebar.vue';
+import Footer from './layout/Footer.vue';
 
 export default {
   name: 'app',

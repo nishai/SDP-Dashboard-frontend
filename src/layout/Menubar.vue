@@ -1,7 +1,7 @@
 <template>
   <div class="menubar w-100 d-flex flex-row">
     <div class="menubar-left p-2">
-      <img class="menubar-img img-fluid" src="img/logo/wits-logo-white.png"/>
+      <img class="menubar-img img-fluid" src="../../public/img/logo/wits-logo-white.png"/>
     </div>
     <div class="menubar-right p-2 ml-auto">
       <div v-if="!loggedIn" class="d-flex flex-row">
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import queryApi from '../../assets/js/api/witsapi';
+import queryApi from '../assets/js/api/witsapi';
 
 export default {
   name: 'Menubar',
