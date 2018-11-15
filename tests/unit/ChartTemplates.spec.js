@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import ChartTemplates from '../../src/pages/ChartTemplates.vue';
+import ChartTemplates from '../../src/pages/PageDashboardTemplates.vue';
 import { mount } from '@vue/test-utils';
 
 describe('ChartTemplates.vue', () =>{

@@ -1,5 +1,5 @@
 import onFocus from '../directives/focus';
-import onClickOutside from '../directives/click_outside';
+import onClickOutside from '../directives/click-outside';
 
 /**
  * Register global directives here that can be

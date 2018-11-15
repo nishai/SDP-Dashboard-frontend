@@ -3,7 +3,7 @@
 /* eslint-disable prefer-template */
 
 import axios from 'axios';
-import { Faculty, School, Course, Program, ProgressOutcome, SecondarySchool, Student, EnrolledYear, EnrolledCourse, Field } from './witsmodels';
+import { Faculty, School, Course, Program, ProgressOutcome, SecondarySchool, Student, EnrolledYear, EnrolledCourse, Field } from './wits-models';
 import { Q, Queryset } from './queryset';
 
 /* eslint-enable no-unused-vars */

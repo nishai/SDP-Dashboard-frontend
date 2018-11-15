@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import queryApi from '../assets/js/api/witsapi';
+import queryApi from '../assets/js/api/wits-api';
 
 export default {
   name: 'Menubar',

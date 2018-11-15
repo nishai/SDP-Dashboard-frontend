@@ -120,7 +120,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import VueTagsInput from '@johmun/vue-tags-input';
-import * as apiQuery from '../assets/js/api/witsapi';
+import * as apiQuery from '../assets/js/api/wits-api';
 
 
 export default {

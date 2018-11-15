@@ -16,7 +16,7 @@ import Heading from '../components/Heading.vue';
 import ReportChart from '../components/ReportChart.vue';
 
 export default {
-  name: 'Report',
+  name: 'PageReport',
   components: {
     Heading,
     ReportChart,

@@ -30,7 +30,7 @@
 import Heading from '../components/Heading.vue';
 
 export default {
-  name: 'ReportList',
+  name: 'PageReportList',
   components: {
     Heading,
   },

@@ -11,7 +11,7 @@
 import ChartModule from 'chartjs-plugin-labels';
 import palette from 'google-palette';
 import vueCharts from 'vue-chartjs';
-import * as apiQuery from '../assets/js/api/witsapi';
+import * as apiQuery from '../assets/js/api/wits-api';
 
 // https://github.com/emn178/chartjs-plugin-labels
 // Chart.defaults.global.plugins.labels = {
