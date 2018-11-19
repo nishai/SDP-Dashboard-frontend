@@ -14,26 +14,18 @@
     "axios": "^0.18.0",
     "bootstrap": "^4.1.3",
     "bootstrap-vue": "^2.0.0-rc.11",
-    "buefy": "^0.7.0",
     "cachios": "^2.0.0",
     "chart.js": "^2.7.2",
     "chartjs-plugin-labels": "^1.1.0",
-    "crypto-browserify": "^3.11.0",
-    "crypto-js": "^3.1.9-1",
-    "element-resize-detector": "^1.1.14",
-    "feather-icons": "^4.7.3",
     "google-palette": "^1.1.0",
     "html2canvas": "^1.0.0-alpha.12",
-    "interactjs": "^1.3.4",
     "jspdf": "^1.4.1",
-    "lodash": "^4.17.10",
+    "lodash.clone": "^4.5.0",
+    "lodash.clonedeep": "^4.5.0",
     "vue": "^2.5.17",
     "vue-chartjs": "^3.4.0",
-    "vue-grid-layout": "^2.2.0",
-    "vue-resource": "^1.5.1",
+    "vue-grid-layout": "^2.3.1",
     "vue-router": "^3.0.1",
-    "vue-search-select": "^2.7.0",
-    "vuedraggable": "^2.16.0",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
@@ -63,24 +55,114 @@
       "@vue/airbnb"
     ],
     "rules": {
-      "max-len": ["warn", {"ignoreComments": true, "code": 120}],
-      "prefer-destructuring": ["error", {"array": false, "object": true}, {"enforceForRenamedProperties": false}],
-      "no-param-reassign": ["error", {"props": false}],
-      "function-paren-newline": ["warn", "consistent"],
-      "no-underscore-dangle": ["error", {"allowAfterThis": true}],
-      "arrow-parens": ["error", "always"],
-      "no-unused-vars": ["warn", {"vars": "all","args": "none","ignoreRestSiblings": true}],
-      "quote-props": ["warn", "consistent"],
+      "max-len": [
+        "warn",
+        {
+          "ignoreComments": true,
+          "code": 120
+        }
+      ],
+      "prefer-destructuring": [
+        "error",
+        {
+          "array": false,
+          "object": true
+        },
+        {
+          "enforceForRenamedProperties": false
+        }
+      ],
+      "no-param-reassign": [
+        "error",
+        {
+          "props": false
+        }
+      ],
+      "function-paren-newline": [
+        "warn",
+        "consistent"
+      ],
+      "no-underscore-dangle": [
+        "error",
+        {
+          "allowAfterThis": true
+        }
+      ],
+      "arrow-parens": [
+        "error",
+        "always"
+      ],
+      "no-unused-vars": [
+        "warn",
+        {
+          "vars": "all",
+          "args": "none",
+          "ignoreRestSiblings": true
+        }
+      ],
+      "quote-props": [
+        "warn",
+        "consistent"
+      ],
       "object-curly-newline": "off",
-      "no-multi-spaces": ["warn", { "exceptions": { "Property": true, "VariableDeclarator": true, "ImportDeclaration": true } }],
-      "no-mixed-operators": ["error", {"allowSamePrecedence": false, "groups": [
-          ["*","/", "%"], ["%", "**"],
-          ["&", "|"], ["^", "~"], ["<<", ">>", ">>>"],
-          ["==", "!=", "===", "!==", ">", ">=", "<", "<="],
-          ["&&", "||"],
-          ["in", "instanceof"]
-        ]
-      }]
+      "no-multi-spaces": [
+        "warn",
+        {
+          "exceptions": {
+            "Property": true,
+            "VariableDeclarator": true,
+            "ImportDeclaration": true
+          }
+        }
+      ],
+      "no-mixed-operators": [
+        "error",
+        {
+          "allowSamePrecedence": false,
+          "groups": [
+            [
+              "*",
+              "/",
+              "%"
+            ],
+            [
+              "%",
+              "**"
+            ],
+            [
+              "&",
+              "|"
+            ],
+            [
+              "^",
+              "~"
+            ],
+            [
+              "<<",
+              ">>",
+              ">>>"
+            ],
+            [
+              "==",
+              "!=",
+              "===",
+              "!==",
+              ">",
+              ">=",
+              "<",
+              "<="
+            ],
+            [
+              "&&",
+              "||"
+            ],
+            [
+              "in",
+              "instanceof"
+            ]
+          ]
+        }
+      ]
     },
     "parserOptions": {
       "parser": "babel-eslint"
