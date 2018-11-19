@@ -1,6 +1,5 @@
 <template>
   <div align="center">
-    <h6> {{ this.$props.chartData }} </h6>
     <h1 v-if="isData === false"> NO DATA FOUND FOR QUERY </h1>
     <!--component :is="component" ref="chart"></component-->
     <component :is="component" ref="chart"></component>

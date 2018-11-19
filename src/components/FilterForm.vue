@@ -2,7 +2,23 @@
   <!--https://bootstrap-vue.js.org/docs/components/form/-->
   <b-form @submit="onSubmit" v-if="show">
 <!-- http://www.vue-tags-input.com/#/examples/templates -->
-    <b-row>
+    <b-form-row>
+			<b-col>
+				<b-form-group
+					id="nameGroup"
+					label="Chart Name:"
+					label-for="Name"
+					horizontal>
+					<b-form-input
+						id="Name"
+						placeholder="Enter Chart Name Here"
+						required
+						v-model="chosenName">
+					</b-form-input>
+				</b-form-group>
+			</b-col>
+		</b-form-row>
+		<b-form-row>
       <!-- create numForms amount of copies of the form side by side-->
       <b-col v-for="i in numForms" :key="groupByDesc + '-' + i">
         <!-- CHART TYPE -->
@@ -104,15 +120,15 @@
         </b-form-group>
 
       </b-col>
-    </b-row>
-    <b-row>
+    </b-form-row>
+    <b-form-row>
       <b-col>
         <b-button variant="primary" type="primary">Filter</b-button>
       </b-col>
       <b-col>
         <b-button @click="onClose" variant="secondary">Close</b-button>
       </b-col>
-    </b-row>
+    </b-form-row>
   </b-form>
   <h1 v-else> Loading Data For Form, Please Wait... {{loadedPercent}}% Loaded</h1>
 </template>
@@ -136,6 +152,7 @@ export default {
     'numForms', // int for amount of side by side copies of the form for superimposing graphs
 
     // preselected values to be hilighted on form start
+		'selectedChartName',
     'selectedChartType',
     'selectedGroupByDesc',
     'selectedYear',
@@ -179,6 +196,8 @@ export default {
     },
     duplicates: [],
     chosenType: [],
+		chartName: '',
+		chosenName: [],
   }),
 
   /**
@@ -191,6 +210,11 @@ export default {
       this.loadSchools();
       this.loadCourses();
     }
+		if (this.$props.selectedChartName !== undefined){
+			this.chartName = this.$props.selectedChartName;
+		} else {
+			this.chartName = '';
+		}
     for (let i = 0; i < this.$props.numForms; i += 1) {
       if (i !== 0) {
         this.$props.chartTypeOptions.push([this.$props.selectedChartType]);
@@ -429,6 +453,7 @@ export default {
       // add chart to store
       this.$store.dispatch({
         type: 'createDashboardChart',
+				name: this.chosenName,
         charts: chartArr,
         layout: {
           x: 0,

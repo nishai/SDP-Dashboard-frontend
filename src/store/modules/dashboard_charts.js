@@ -78,13 +78,15 @@ const mutations = {
   [mutators.CREATE_DASHBOARD_CHART](
     state,
     {
+			name,
       charts,
       layout,
     },
   ) {
     const uuid = uuidv4();
     const dashboardChart = {
-      name: uuid,
+      uuid: uuid,
+			name: name,
       charts,
       layout,
     };
@@ -139,6 +141,7 @@ const actions = {
       state,
     },
     {
+			name,
       charts,
       layout,
     },
@@ -146,6 +149,7 @@ const actions = {
     commit(
       mutators.CREATE_DASHBOARD_CHART,
       {
+				name,
         charts,
         layout,
       },

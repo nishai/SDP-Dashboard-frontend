@@ -6,6 +6,7 @@
         <div>
           <FilterForm
             v-if="showModal"
+						v-bind:selectedChartName="popupChart.name"
             v-bind:chartTypeOptions="[[popupChart.charts[0].chartType]]"
             v-bind:chartType="popupChart.charts[0].chartType"
             v-bind:groupByDesc="popupChart.charts[0].groupBy"
