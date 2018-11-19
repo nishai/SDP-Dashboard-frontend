@@ -152,7 +152,7 @@ export default {
     'numForms', // int for amount of side by side copies of the form for superimposing graphs
 
     // preselected values to be hilighted on form start
-		'selectedChartName',
+    'selectedChartName',
     'selectedChartType',
     'selectedGroupByDesc',
     'selectedYear',
@@ -196,8 +196,8 @@ export default {
     },
     duplicates: [],
     chosenType: [],
-		chartName: '',
-		chosenName: [],
+    chartName: '',
+    chosenName: [],
   }),
 
   /**
@@ -210,11 +210,11 @@ export default {
       this.loadSchools();
       this.loadCourses();
     }
-		if (this.$props.selectedChartName !== undefined){
-			this.chartName = this.$props.selectedChartName;
-		} else {
-			this.chartName = '';
-		}
+    if (this.$props.selectedChartName !== undefined) {
+      this.chartName = this.$props.selectedChartName;
+    } else {
+      this.chartName = '';
+    }
     for (let i = 0; i < this.$props.numForms; i += 1) {
       if (i !== 0) {
         this.$props.chartTypeOptions.push([this.$props.selectedChartType]);
@@ -453,7 +453,7 @@ export default {
       // add chart to store
       this.$store.dispatch({
         type: 'createDashboardChart',
-				name: this.chosenName,
+        name: this.chosenName,
         charts: chartArr,
         layout: {
           x: 0,
