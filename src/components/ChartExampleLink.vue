@@ -2,8 +2,8 @@
   <div class="chart_link_bounds">
     <FilterFormModal
       ref="templatePopup"
-      :chartType="chartType"
-      :groupByDesc="desc"
+      :title="desc"
+      :options="filterOptions"
     />
     <div class="chart_link">
       <img :src="src" alt="chart" width="120" @click="openPopup" >
@@ -21,6 +21,7 @@ export default {
     'src',
     'desc',
     'chartType',
+    'filterOptions',
   ],
   components: {
     FilterFormModal,

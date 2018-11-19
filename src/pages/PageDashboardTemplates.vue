@@ -17,6 +17,7 @@
             :desc="item.desc"
             :chartType="item.type"
             :src="item.src"
+            :filter-options="item.filterOptions"
           />
         </div>
       </div>
@@ -33,27 +34,27 @@ function getTemplateCategories() {
     {
       title: 'Demographics',
       items: [
-        { desc: 'Race',                                 type: 'doughnut',  src: '/img/charts/doughnut.png'   },
-        { desc: 'Gender',                               type: 'doughnut',  src: '/img/charts/pie2.png'       },
-        { desc: 'Nationality',                          type: 'doughnut',  src: '/img/charts/pie1.png'       },
-        { desc: 'Home Language',                        type: 'doughnut',  src: '/img/charts/pie3.png'       },
-        { desc: 'Demographics vs Marks',                type: 'bar',       src: '/img/charts/line2.png'      },
+        { desc: 'Race',                                 type: 'doughnut',  src: '/img/charts/doughnut.png',   filterOptions: { chartTypeOptions: [['doughnut']] } },
+        { desc: 'Gender',                               type: 'doughnut',  src: '/img/charts/pie2.png',       filterOptions: { chartTypeOptions: [['pie']] } },
+        { desc: 'Nationality',                          type: 'doughnut',  src: '/img/charts/pie1.png',       filterOptions: { chartTypeOptions: [['pie']] } },
+        { desc: 'Home Language',                        type: 'doughnut',  src: '/img/charts/pie3.png',       filterOptions: { chartTypeOptions: [['pie']] } },
+        { desc: 'Demographics vs Marks',                type: 'bar',       src: '/img/charts/line2.png',      filterOptions: { chartTypeOptions: [['line']], numForms: 2 } },
       ],
     },
     {
       title: 'Marks',
       items: [
-        { desc: 'Pass rates by year',                   type: 'bar',       src: '/img/charts/bar1.png'       },
-        { desc: 'Pass rates by faculty/course',         type: 'bar',       src: '/img/charts/bar3.png'       },
-        { desc: 'Bell curve',                           type: 'line',      src: '/img/charts/bell-curve.png' },
-        { desc: 'Progress Outcome by faculty/course',   type: 'bar',       src: '/img/charts/bar2.png'       },
+        { desc: 'Pass rates by year',                   type: 'bar',       src: '/img/charts/bar1.png',       filterOptions: { chartTypeOptions: [['bar']] } },
+        { desc: 'Pass rates by faculty/course',         type: 'bar',       src: '/img/charts/bar3.png',       filterOptions: { chartTypeOptions: [['bar']] } },
+        { desc: 'Bell curve',                           type: 'line',      src: '/img/charts/bell-curve.png', filterOptions: { chartTypeOptions: [['line']] } },
+        { desc: 'Progress Outcome by faculty/course',   type: 'bar',       src: '/img/charts/bar2.png',       filterOptions: { chartTypeOptions: [['bar']] } },
       ],
     },
     {
       title: 'Class Sizes',
       items: [
-        { desc: 'Class size vs pass rate',              type: 'line',      src: '/img/charts/line1.png'      },
-        { desc: 'Average class size by faculty/course', type: 'bar',       src: '/img/charts/bar1.png'       }, // click='two'
+        { desc: 'Class size vs pass rate',              type: 'line',      src: '/img/charts/line1.png',      filterOptions: { chartTypeOptions: [['line']], numForms: 2 } },
+        { desc: 'Average class size by faculty/course', type: 'bar',       src: '/img/charts/bar1.png',       filterOptions: { chartTypeOptions: [['bar']] } }, // click='two'
       ],
     },
   ];
