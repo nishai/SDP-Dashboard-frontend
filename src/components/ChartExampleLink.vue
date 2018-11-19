@@ -1,6 +1,10 @@
 <template>
   <div class="chart_link_bounds">
-    <FilterFormModal ref="templatePopup" :chartType="chartType" :groupByDesc="desc"></FilterFormModal>
+    <FilterFormModal
+      ref="templatePopup"
+      :chartType="chartType"
+      :groupByDesc="desc"
+    />
     <div class="chart_link">
       <img :src="src" alt="chart" width="120" @click="openPopup" >
       <div class="chart_link_text"> {{ desc }} </div>
