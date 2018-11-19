@@ -4,7 +4,7 @@
 <!-- http://www.vue-tags-input.com/#/examples/templates -->
     <b-row>
       <!-- create numForms amount of copies of the form side by side-->
-      <b-col v-for="i in numForms" :key="groupByDesc + '-' + i">
+      <b-col v-for="i in numForms" :key="'form_' + i">
         <!-- CHART TYPE -->
         <b-form-group
           v-if="ftype === true"
@@ -107,7 +107,7 @@
     </b-row>
     <b-row>
       <b-col>
-        <b-button variant="primary" type="primary">Filter</b-button>
+        <b-button variant="primary" type="submit">Filter</b-button>
       </b-col>
       <b-col>
         <b-button @click="onClose" variant="secondary">Close</b-button>
@@ -185,47 +185,47 @@ export default {
    * This is run when the component is first created to initialise it.
    */
   created() {
-    if (this.$props.compare === true) {
+    if (this.compare === true) {
       this.loadYears();
       this.loadFaculties();
       this.loadSchools();
       this.loadCourses();
     }
-    for (let i = 0; i < this.$props.numForms; i += 1) {
+    for (let i = 0; i < this.numForms; i += 1) {
       if (i !== 0) {
-        this.$props.chartTypeOptions.push([this.$props.selectedChartType]);
+        this.chartTypeOptions.push([this.selectedChartType]);
       }
-      switch (this.$props.selectedChartType) {
+      switch (this.selectedChartType) {
         case 'pie':
-          this.$props.chartTypeOptions[i].push('doughnut');
+          this.chartTypeOptions[i].push('doughnut');
           break;
         case 'doughnut':
-          this.$props.chartTypeOptions[i].push('pie');
+          this.chartTypeOptions[i].push('pie');
           break;
         case 'line':
-          this.$props.chartTypeOptions[i].push('bar');
+          this.chartTypeOptions[i].push('bar');
           break;
         case 'bar':
-          this.$props.chartTypeOptions[i].push('line');
+          this.chartTypeOptions[i].push('line');
           break;
         default:
       }
     }
     // initialize data.form to have the correct amount of v-models
     const formKeys = Object.keys(this.tagDicts);
-    if (this.$props.selectedDuplicate === false) {
+    if (this.selectedDuplicate === false) {
       this.duplicates.push(false);
     } else {
       this.duplicates.push(true);
     }
 
     for (let i = 0; i < formKeys.length; i += 1) {
-      for (let j = 0; j < this.$props.numForms; j += 1) {
+      for (let j = 0; j < this.numForms; j += 1) {
         this.tagStrs[formKeys[i]].push('');
         this.tagAutocompletes[formKeys[i]].push([]);
         if (j === 0) {
-          if (this.$props.selectedChartType !== undefined) {
-            this.chosenType.push(this.$props.selectedChartType);
+          if (this.selectedChartType !== undefined) {
+            this.chosenType.push(this.selectedChartType);
           } else {
             this.chosenType.push('');
           }
@@ -233,29 +233,29 @@ export default {
           let selected = [];
           switch (formKeys[i]) {
             case 'years':
-              if (this.$props.selectedYear !== undefined) {
-                selected = this.$props.selectedYear;
+              if (this.selectedYear !== undefined) {
+                selected = this.selectedYear;
               } else {
                 selected = [];
               }
               break;
             case 'faculties':
-              if (this.$props.selectedFaculty !== undefined) {
-                selected = this.$props.selectedFaculty;
+              if (this.selectedFaculty !== undefined) {
+                selected = this.selectedFaculty;
               } else {
                 selected = [];
               }
               break;
             case 'schools':
-              if (this.$props.selectedSchool !== undefined) {
-                selected = this.$props.selectedSchool;
+              if (this.selectedSchool !== undefined) {
+                selected = this.selectedSchool;
               } else {
                 selected = [];
               }
               break;
             case 'courses':
-              if (this.$props.selectedCourse !== undefined) {
-                selected = this.$props.selectedCourse;
+              if (this.selectedCourse !== undefined) {
+                selected = this.selectedCourse;
               } else {
                 selected = [];
               }
@@ -373,12 +373,15 @@ export default {
           this.makeShow();
         });
     },
-    onSubmit() {
+    onSubmit(evt) {
+      // stop browsers from appending a '?' to before the '#' in the url
+      evt.preventDefault();
+
       let name;
-      if (apiQuery.nameToColumn[this.$props.groupByDesc] !== undefined) {
-        name = apiQuery.nameToColumn[this.$props.groupByDesc];
+      if (apiQuery.nameToColumn[this.groupByDesc] !== undefined) {
+        name = apiQuery.nameToColumn[this.groupByDesc];
       } else {
-        name = this.$props.groupByDesc;
+        name = this.groupByDesc;
       }
 
       // Convert FilterTags into arrays to pass into the query:
@@ -388,7 +391,7 @@ export default {
       const submitFaculties = [];
       const submitSchools = [];
       const submitCourses = [];
-      for (let i = 0; i < this.$props.numForms; i += 1) {
+      for (let i = 0; i < this.numForms; i += 1) {
         submitYears.push([]);
         submitFaculties.push([]);
         submitSchools.push([]);
@@ -414,7 +417,7 @@ export default {
       // end conversions
 
       const chartArr = [];
-      for (let i = 0; i < this.$props.numForms; i += 1) {
+      for (let i = 0; i < this.numForms; i += 1) {
         chartArr.push({
           chartType: this.chosenType[i],
           groupBy: name,
@@ -426,18 +429,10 @@ export default {
         });
       }
 
+      console.log(chartArr);
+
       // add chart to store
-      this.$store.dispatch({
-        type: 'createDashboardChart',
-        charts: chartArr,
-        layout: {
-          x: 0,
-          y: 0,
-          w: 27,
-          h: 1,
-          i: this.numCharts + 1,
-        },
-      });
+      this.$store.dispatch({ type: 'createDashboardChart', charts: chartArr });
 
       // close form
       try {
@@ -445,13 +440,14 @@ export default {
       } catch (err) {
         console.log('no delete chart function when calling from template screen');
       }
+
       this.$parent.$parent.hideModal();
+
       // go to url
-      this.$router.push({
-        path: '/dashboard',
-      });
+      this.$router.push('dashboard');
     },
-    onClose(event) {
+    onClose(evt) {
+      evt.preventDefault();
       this.$parent.$parent.hideModal();
     },
   },

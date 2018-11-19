@@ -133,22 +133,10 @@ const mutations = {
 /* ========================================================================== */
 
 const actions = {
-  createDashboardChart(
-    {
-      commit,
-      state,
-    },
-    {
-      charts,
-      layout,
-    },
-  ) {
+  createDashboardChart({ commit, state }, { charts }) {
     commit(
       mutators.CREATE_DASHBOARD_CHART,
-      {
-        charts,
-        layout,
-      },
+      { charts, layout: { x: 0, y: 0, w: 1, h: 1, i: state.numCharts + 1 } },
     );
   },
   deleteDashboardChart({ commit, state }, { dashboardChartId }) {
