@@ -1,10 +1,4 @@
 <template>
-  <!-- TODO: POPULATE BASED OFF DATA RATHER THAN HARD-CODED -->
-  <!-- TODO: POPULATE BASED OFF DATA RATHER THAN HARD-CODED -->
-  <!-- TODO: POPULATE BASED OFF DATA RATHER THAN HARD-CODED -->
-  <!-- TODO: POPULATE BASED OFF DATA RATHER THAN HARD-CODED -->
-  <!-- TODO: POPULATE BASED OFF DATA RATHER THAN HARD-CODED -->
-  <!-- TODO: POPULATE BASED OFF DATA RATHER THAN HARD-CODED -->
   <div id="templates">
     <Heading heading_text="Template Charts"></Heading>
 
@@ -12,109 +6,58 @@
       <input type="checkbox" value="always_show" checked> Always show this page on login<br>
     </div>
 
-    <div class="subheading">
-      <h3>Demographics</h3>
-    </div>
-    <div class="grid-container">
-      <div class="grid-item">
-        <ChartExampleLink
-          desc="Race"
-          chartType="doughnut"
-          :src="doughnut"
-        />
+    <div v-for="(category, i) in categories" :key="'category_'+i">
+      <div class="subheading">
+        <h3> {{ category.title }}</h3>
       </div>
-      <div class="grid-item">
-        <ChartExampleLink
-          desc="Gender"
-          chartType="pie"
-          :src="pie2"
-        />
-      </div>
-      <div class="grid-item">
-        <ChartExampleLink
-          desc="Nationality"
-          chartType="pie"
-          :src="pie1"
-        />
-      </div>
-      <div class="grid-item">
-        <ChartExampleLink
-          desc="Home Language"
-          chartType="pie"
-          :src="pie3"
-        />
-      </div>
-      <div class="grid-item">
-        <ChartExampleLink
-          desc="Demographics vs Marks"
-          chartType="bar"
-          :src="line2"
-        />
-      </div>
-    </div>
 
-    <div class="subheading">
-      <h3>Marks</h3>
-    </div>
-    <div class="grid-container">
-      <div class="grid-item">
-        <ChartExampleLink
-          desc="Pass rates by year"
-          chartType="bar"
-          :src="bar1"
-        />
-      </div>
-      <div class="grid-item">
-        <ChartExampleLink
-          desc="Pass rates by faculty/course"
-          chartType="bar"
-          :src="bar3"
-        />
-      </div>
-      <div class="grid-item">
-        <ChartExampleLink
-          desc="Bell curve"
-          chartType="line"
-          :src="bellcurve"
-        />
-      </div>
-      <div class="grid-item">
-        <ChartExampleLink
-          desc="Progress outcome by faculty/course"
-          chartType="bar"
-          :src="bar2"
-        />
+      <div class="grid-container">
+        <div v-for="(item, j) in category.items" class="grid-item" :key="'category_'+i+'item_'+j">
+          <ChartExampleLink
+            :desc="item.desc"
+            :chartType="item.type"
+            :src="item.src"
+          />
+        </div>
       </div>
     </div>
-
-    <div class="subheading">
-      <h3>Class sizes</h3>
-    </div>
-    <div class="grid-container">
-      <div class="grid-item">
-        <ChartExampleLink
-          desc="Class size vs pass rate"
-          chartType="line"
-          :src="line1"
-        />
-      </div>
-      <div class="grid-item">
-        <ChartExampleLink
-          click="two"
-          desc="Average class size by faculty/course"
-          chartType="bar"
-          :src="bar1"
-        />
-      </div>
-    </div>
-
   </div>
 </template>
 
 <script>
-/* eslint-disable global-require */
 import Heading from '../components/Heading.vue';
 import ChartExampleLink from '../components/ChartExampleLink.vue';
+
+function getTemplateCategories() {
+  return [
+    {
+      title: 'Demographics',
+      items: [
+        { desc: 'Race',                                 type: 'doughnut',  src: '/img/charts/doughnut.png'   },
+        { desc: 'Gender',                               type: 'doughnut',  src: '/img/charts/pie2.png'       },
+        { desc: 'Nationality',                          type: 'doughnut',  src: '/img/charts/pie1.png'       },
+        { desc: 'Home Language',                        type: 'doughnut',  src: '/img/charts/pie3.png'       },
+        { desc: 'Demographics vs Marks',                type: 'bar',       src: '/img/charts/line2.png'      },
+      ],
+    },
+    {
+      title: 'Marks',
+      items: [
+        { desc: 'Pass rates by year',                   type: 'bar',       src: '/img/charts/bar1.png'       },
+        { desc: 'Pass rates by faculty/course',         type: 'bar',       src: '/img/charts/bar3.png'       },
+        { desc: 'Bell curve',                           type: 'line',      src: '/img/charts/bell-curve.png' },
+        { desc: 'Progress Outcome by faculty/course',   type: 'bar',       src: '/img/charts/bar2.png'       },
+      ],
+    },
+    {
+      title: 'Class Sizes',
+      items: [
+        { desc: 'Class size vs pass rate',              type: 'line',      src: '/img/charts/line1.png'      },
+        { desc: 'Average class size by faculty/course', type: 'bar',       src: '/img/charts/bar1.png'       }, // click='two'
+      ],
+    },
+  ];
+}
 
 export default {
   name: 'ChartTemplates',
@@ -124,19 +67,11 @@ export default {
   },
   data() {
     return {
-      bar1: require('../../public/img/charts/bar1.png'),
-      bar2: require('../../public/img/charts/bar2.png'),
-      bar3: require('../../public/img/charts/bar3.png'),
-      pie1: require('../../public/img/charts/pie1.png'),
-      pie2: require('../../public/img/charts/pie2.png'),
-      pie3: require('../../public/img/charts/pie3.png'),
-      line1: require('../../public/img/charts/line1.png'),
-      line2: require('../../public/img/charts/line2.png'),
-      bellcurve: require('../../public/img/charts/bell-curve.png'),
-      doughnut: require('../../public/img/charts/doughnut.png'),
+      categories: getTemplateCategories(),
     };
   },
 };
+
 /* eslint-disable global-require */
 </script>
 
