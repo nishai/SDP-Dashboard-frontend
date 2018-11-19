@@ -65,8 +65,8 @@
       >
       <grid-layout
         :layout="layouts"
-        :col-num="100"
-        :row-height="25"
+        :col-num="12"
+        :row-height="150"
         :is-draggable="true"
         :is-resizable="true"
         :is-mirrored="false"
@@ -81,9 +81,9 @@
           :y="chart.layout.y"
           :w="chart.layout.w"
           :h="chart.layout.h"
-          :max-w="100"
+          :max-w="20"
           :max-h="1"
-          :min-w="10"
+          :min-w="1"
           :min-h="1"
           @resize="resizeEvent"
           @move="moveEvent"

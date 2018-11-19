@@ -458,7 +458,7 @@ export default {
         layout: {
           x: 0,
           y: 0,
-          w: 27,
+          w: 4,
           h: 1,
           i: this.numCharts + 1,
         },
