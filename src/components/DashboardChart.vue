@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-card no-body>
-      <!-- Heading -->
+
       <div slot="header" class="m-0">
         <b-form-input
           class="hidden-input"
@@ -12,42 +12,46 @@
         </b-form-input>
         <small class="d-flex justify-content-between">
           <b-btn size="sm" class="m-1" variant="outline-primary" @click="toggleEditor">Edit</b-btn>
-          <!--<b-btn size="sm" variant="outline-primary" @click="toggleEditor">Opts</b-btn>-->
           <b-btn size="sm" class="m-1" variant="outline-danger" @click="deleteChart">Delete</b-btn>
-          <!--<b-btn v-b-modal.modal1>Launch demo modal</b-btn>-->
-          <!--<FeatherIcon name="trash" class="mr-2" @click="openPopup"></FeatherIcon>-->
-          <!--<FeatherIcon name="edit-2" @click="openPopup"></FeatherIcon>-->
         </small>
       </div>
-      <!-- Chart -->
+
       <b-card-body style="padding: 5px;">
-        <Chart :chartData="dashboardChart.charts"></Chart>
+        <QueryChart
+          :data="data"
+        />
       </b-card-body>
-      <b-btn size="sm" class="m-1" variant="outline-primary" @click="openPopup()">Compare</b-btn>
-      <!-- Info -->
-      <b-card-footer> {{ details }} </b-card-footer>
+
+      <b-btn size="sm" class="m-1" variant="outline-primary" @click="openPopup()">
+        Compare
+      </b-btn>
+
+      <b-card-footer>
+        {{ details }}
+      </b-card-footer>
     </b-card>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import Chart from './Chart.vue';
+import QueryChart from './QueryChart.vue';
 
 export default {
   name: 'DashboardChart',
   props: {
+    data: {
+      type: Object,
+      default: undefined,
+    },
+
     dashboardChartId: {
       type: String,
     },
-    chart: {
-      type: Object,
-      maintainAspectRatio: false,
-      responsive: true,
-    },
+
   },
   components: {
-    Chart,
+    QueryChart,
   },
   data: () => ({
     optsbarComponentPrivate: null,

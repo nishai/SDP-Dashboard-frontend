@@ -75,20 +75,15 @@ const getters = {
 /* ========================================================================== */
 
 const mutations = {
-  [mutators.CREATE_DASHBOARD_CHART](
-    state,
-    {
-      charts,
-      layout,
-    },
-  ) {
+  [mutators.CREATE_DASHBOARD_CHART](state, { data, layout }) {
     const uuid = uuidv4();
     const dashboardChart = {
       name: uuid,
-      charts,
+      data,
       layout,
     };
     Vue.set(state.dashboardCharts, uuid, dashboardChart);
+    console.log('CREATED CHART', state.dashboardCharts);
   },
   [mutators.DELETE_DASHBOARD_CHART](state, { dashboardChartId }) {
     if (!(dashboardChartId in state.dashboardCharts)) {
@@ -133,10 +128,10 @@ const mutations = {
 /* ========================================================================== */
 
 const actions = {
-  createDashboardChart({ commit, state }, { charts }) {
+  createDashboardChart({ commit, state }, { data }) {
     commit(
       mutators.CREATE_DASHBOARD_CHART,
-      { charts, layout: { x: 0, y: 0, w: 1, h: 1, i: state.numCharts + 1 } },
+      { data, layout: { x: 0, y: 0, w: 1, h: 1, i: state.numCharts + 1 } },
     );
   },
   deleteDashboardChart({ commit, state }, { dashboardChartId }) {

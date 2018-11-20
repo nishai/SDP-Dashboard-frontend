@@ -1,5 +1,5 @@
 
-import _ from 'lodash';
+import cloneDeep from 'lodash.clonedeep';
 import { cachiosInstance as cachios } from '../plugins/vue-axios';
 
 
@@ -260,7 +260,7 @@ export class Queryset {
    * @return {Queryset}
    */
   clone() {
-    return _.cloneDeep(this);
+    return cloneDeep(this);
   }
 
   /**
@@ -491,7 +491,7 @@ export class Queryset {
    * }
    *
    * Use ValuesAction followed by AnnotateAction to "group_by"
-   * @param { {field: string, expr: any} } fields
+   * @param { {field: string, expr: any|String} } fields
    * @return {Queryset}
    */
   annotate(...fields) {

@@ -64,36 +64,36 @@
       >
       <grid-layout
         :layout="layouts"
-        :col-num="100"
-        :row-height="25"
+        :col-num="3"
+        :row-height="300"
         :is-draggable="true"
         :is-resizable="true"
         :is-mirrored="false"
         :responsive="true"
-        :margin="[1, 1]"
+        :margin="[10, 10]"
         :use-css-transforms="true">
 
         <grid-item
-          v-for="(chart,id) in getCharts"
+          v-for="(chart, id) in getCharts"
           :key="id"
           :x="chart.layout.x"
           :y="chart.layout.y"
           :w="chart.layout.w"
           :h="chart.layout.h"
-          :max-w="100"
+          :max-w="10"
           :max-h="1"
-          :min-w="10"
+          :min-w="1"
           :min-h="1"
           @resize="resizeEvent"
           @move="moveEvent"
           :i="chart.layout.i">
           <DashboardChart
-            style="width: 100%;position:relative;"
+            style="width: 100%; position:relative;"
             class="m-2"
-            v-bind:key="id"
-            v-bind:dashboardChartId="id">
-          </DashboardChart>
-           <Table v-if="add_table"></Table>
+            :data="chart.data"
+            :dashboard-chart-id="id"
+          />
+          <Table v-if="add_table"></Table>
         </grid-item>
       </grid-layout>
     </div>
@@ -105,12 +105,11 @@ import { GridLayout, GridItem } from 'vue-grid-layout';
 import { mapGetters } from 'vuex';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import Heading from '../components/Heading.vue';
-import Chart from '../components/Chart.vue';
-import Table from '../components/Table.vue';
 import DashboardChart from '../components/DashboardChart.vue';
+import Heading from '../components/Heading.vue';
+import QueryChart from '../components/QueryChart.vue';
+import Table from '../components/Table.vue';
 import FilterForm from '../components/FilterForm.vue';
-
 
 export default {
   name: 'Dashboard',
@@ -123,10 +122,10 @@ export default {
     };
   },
   components: {
-    Heading,
-    Chart,
-    Table,
     DashboardChart,
+    QueryChart,
+    Heading,
+    Table,
     GridLayout,
     GridItem,
     FilterForm,
@@ -137,18 +136,13 @@ export default {
       'getChart',
     ]),
     layouts() {
-      let layouts = [];
-      const charts = this.getCharts;
-      for (const chartId in charts) {
-        layouts = layouts.concat({
-          x: charts[chartId].layout.x,
-          y: charts[chartId].layout.y,
-          w: charts[chartId].layout.w,
-          h: charts[chartId].layout.h,
-          i: charts[chartId].layout.i,
-        });
-      }
-      return layouts;
+      return Object.entries(this.getCharts).map(([uuid, data]) => ({
+        x: data.layout.x,
+        y: data.layout.y,
+        w: data.layout.w,
+        h: data.layout.h,
+        i: data.layout.i,
+      }));
     },
     popupChart() {
       return this.getChart(this.popupChartId);
@@ -157,7 +151,7 @@ export default {
 
   methods: {
     create() {
-      this.$router.push({ path: '/' });
+      this.$router.push('');
     },
     openPopup(chartId) {
       console.log('Opening Popup');

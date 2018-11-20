@@ -1,11 +1,12 @@
+<!-- TODO: split out singular-form -->
+
 <template>
   <!--https://bootstrap-vue.js.org/docs/components/form/-->
   <b-form @submit="onSubmit" v-if="show">
-<!-- http://www.vue-tags-input.com/#/examples/templates -->
+
+    <!-- CHART TYPE -->
     <b-row>
-      <!-- create numForms amount of copies of the form side by side-->
-      <b-col v-for="i in numForms" :key="'form_' + i">
-        <!-- CHART TYPE -->
+      <b-col>
         <b-form-group
           v-if="ftype === true"
           id="typeGroup"
@@ -14,11 +15,18 @@
           horizontal>
           <b-form-select
             id="Type"
-            :options="chartTypeOptions[i-1]"
+            :options="chartTypeOptions"
             required
-            v-model="chosenType[i-1]">
+            v-model="chosenType"
+          >
           </b-form-select>
         </b-form-group>
+      </b-col>
+    </b-row>
+
+    <!-- SELECTORS -->
+    <b-row>
+      <b-col v-for="i in numForms" :key="'form_' + i">
 
         <!-- YEARS -->
         <b-form-group
@@ -34,8 +42,8 @@
               :tags="tagDicts.years[i-1]"
               :autocomplete-items="filteredItemsYears(i-1)"
               :add-only-from-autocomplete="true"
-              @tags-changed="newTags => tagDicts.years[i-1] = newTags">
-            </vue-tags-input>
+              @tags-changed="newTags => tagDicts.years[i-1] = newTags"
+            />
           </div>
         </b-form-group>
         <!-- FACULTY -->
@@ -52,8 +60,8 @@
               :tags="tagDicts.faculties[i-1]"
               :autocomplete-items="filteredItemsFaculties(i-1)"
               :add-only-from-autocomplete="true"
-              @tags-changed="newTags => tagDicts.faculties[i-1] = newTags">
-            </vue-tags-input>
+              @tags-changed="newTags => tagDicts.faculties[i-1] = newTags"
+            />
           </div>
         </b-form-group>
         <!-- SCHOOL -->
@@ -70,8 +78,8 @@
               :tags="tagDicts.schools[i-1]"
               :autocomplete-items="filteredItemsSchools(i-1)"
               :add-only-from-autocomplete="true"
-              @tags-changed="newTags => tagDicts.schools[i-1] = newTags">
-            </vue-tags-input>
+              @tags-changed="newTags => tagDicts.schools[i-1] = newTags"
+            />
           </div>
         </b-form-group>
         <!-- COURSES -->
@@ -88,8 +96,8 @@
               :tags="tagDicts.courses[i-1]"
               :autocomplete-items="filteredItemsCourses(i-1)"
               :add-only-from-autocomplete="true"
-              @tags-changed="newTags => tagDicts.courses[i-1] = newTags">
-            </vue-tags-input>
+              @tags-changed="newTags => tagDicts.courses[i-1] = newTags"
+            />
           </div>
         </b-form-group>
 
@@ -105,14 +113,16 @@
 
       </b-col>
     </b-row>
+
     <b-row>
       <b-col>
-        <b-button variant="primary" type="submit">Filter</b-button>
+        <b-button variant="primary" type="submit"> Filter </b-button> <!-- linked to form above -->
       </b-col>
       <b-col>
-        <b-button @click="onClose" variant="secondary">Close</b-button>
+        <b-button @click="onClose" variant="secondary"> Close </b-button>
       </b-col>
     </b-row>
+
   </b-form>
   <h1 v-else> Loading Data For Form, Please Wait... {{loadedPercent}}% Loaded</h1>
 </template>
@@ -120,97 +130,220 @@
 <script>
 import { mapGetters } from 'vuex';
 import VueTagsInput from '@johmun/vue-tags-input';
-import * as apiQuery from '../assets/js/api/wits-api';
+import { Course, EnrolledYear, Faculty, School } from '../assets/js/api/wits-models';
 
 
 export default {
   name: 'FilterForm',
-  props: [
-    'chartTypeOptions', // contains the options for chart types available (pie, bar. etc)
-    'groupByDesc', // contains the type of graph to be used (race, bell curve, etc)
-    'fyear', // boolean for whether form has year field
-    'ffaculty', // boolean for whether form has faculty field
-    'fschool', // boolean for whether form has school field
-    'fcourse', // boolean for whether form has course field
-    'ftype', // boolean for whether form has type field
-    'numForms', // int for amount of side by side copies of the form for superimposing graphs
 
-    // preselected values to be hilighted on form start
-    'selectedChartType',
-    'selectedGroupByDesc',
-    'selectedYear',
-    'selectedFaculty',
-    'selectedSchool',
-    'selectedCourse',
-    'selectedType',
-    'selectedDuplicate',
-
-    'compare',
-  ],
+  props: {
+    groupByDesc: { // contains the type of graph to be used (race, bell curve, etc)
+      type: String,
+      default: undefined,
+    },
+    options: {
+      type: Object,
+      default() { return {}; },
+    },
+  },
 
   components: {
     VueTagsInput,
   },
 
-  data: () => ({
-    show: false,
-    showCounter: 0,
-    //    chartTypes: [
-    //        { text: 'Select One', value: null },
-    //        'bar', 'line', 'pie', 'doughnut', 'radar',
-    //    ],
-    tagStrs: { // arrays of strings
-      years: [],
-      faculties: [],
-      schools: [],
-      courses: [],
+  computed: {
+    // TODO, this should probably be moved into the FilterForm
+    opts() {
+      return Object.assign({
+        chartTypeOptions: [], // contains the options for chart types available (pie, bar. etc)
+        fyear: true, // boolean for whether form has year field
+        ffaculty: true, // boolean for whether form has faculty field
+        fschool: true, // boolean for whether form has school field
+        fcourse: true, // boolean for whether form has course field
+        ftype: true, // boolean for whether form has type field
+        numForms: 1, // int for amount of side by side copies of the form for superimposing graphs
+        compare: false,
+
+        /* obtain data */
+        getQueryset: () => console.log('NOT OVERRIDDEN'),
+        labelField: 'UNKNOWN',
+        dataField: 'UNKNOWN',
+      }, this.options || {});
     },
-    tagDicts: { // arrays of array of dictionaries
-      years: [],
-      faculties: [],
-      schools: [],
-      courses: [],
+
+    chartTypeOptions() { return this.opts.chartTypeOptions; },
+    fyear() { return this.opts.fyear; },
+    ffaculty() { return this.opts.ffaculty; },
+    fschool() { return this.opts.fschool; },
+    fcourse() { return this.opts.fcourse; },
+    ftype() { return this.opts.ftype; },
+    numForms() { return this.opts.numForms; },
+
+    ...mapGetters([
+      'numCharts',
+    ]),
+
+    loadedPercent() {
+      return (100.0 * this.showCounter) / Object.keys(this.tagDicts).length;
     },
-    tagAutocompletes: { // arrays of array of dictionionaries
-      years: [],
-      faculties: [],
-      schools: [],
-      courses: [],
+  },
+
+  data() {
+    return {
+      // preselected values to be highlighted on form start
+      selectedChartType: undefined,
+      selectedGroupByDesc: undefined,
+      selectedYear: undefined,
+      selectedFaculty: undefined,
+      selectedSchool: undefined,
+      selectedCourse: undefined,
+      selectedType: undefined,
+      selectedDuplicate: undefined,
+
+      show: false,
+      showCounter: 0,
+
+      duplicates: [],
+      chosenType: undefined,
+
+      tagStrs: { years: [], faculties: [], schools: [], courses: [] }, // arrays of strings
+      tagDicts: { years: [], faculties: [], schools: [], courses: [] }, // arrays of array of dictionaries
+      tagAutocompletes: { years: [], faculties: [], schools: [], courses: [] }, // arrays of array of dictionaries
+    };
+  },
+
+  methods: {
+    onSubmit(evt) {
+      // stop browsers from appending a '?' to before the '#' in the url
+      evt.preventDefault();
+
+      // convert years tags to an array
+      const filterSets = [];
+      for (let i = 0; i < this.numForms; i += 1) {
+        filterSets.push({
+          years: this.tagDicts.years[i].map((item) => item.text),
+          faculties: this.tagDicts.faculties[i].map((item) => item.text),
+          schools: this.tagDicts.schools[i].map((item) => item.text),
+          courses: this.tagDicts.courses[i].map((item) => item.text),
+        });
+      }
+
+      const chartData = {
+        type: 'commonFilterChart', // used internally to tell how to retrieve data.
+        /* data */
+        chartType: this.chosenType,
+        labelField: this.opts.labelField,
+        dataField: this.opts.dataField,
+        getQueryset: this.opts.getQueryset,
+        filterSets,
+      };
+
+      // add chart to store
+      console.log('Adding Chart To Store:', chartData);
+      this.$store.dispatch('createDashboardChart', { data: chartData });
+
+      // close form
+      try {
+        this.$parent.$parent.deleteChart();
+      } catch (err) {
+        console.log('no delete chart function when calling from template screen');
+      }
+
+      this.$parent.$parent.hideModal();
+
+      // go to url
+      this.$router.push('dashboard');
     },
-    duplicates: [],
-    chosenType: [],
-  }),
+    onClose(evt) {
+      evt.preventDefault();
+      this.$parent.$parent.hideModal();
+    },
+
+
+    /**
+     * Load the needed data to display all the autocomplete forms.
+     */
+    loadData() {
+      this.loadDataPoint(EnrolledYear, EnrolledYear.calendar_instance_year, 'years');
+      this.loadDataPoint(Faculty, Faculty.faculty_title, 'faculties');
+      this.loadDataPoint(School, School.school_title, 'schools');
+      this.loadDataPoint(Course, Course.course_code, 'courses');
+    },
+    /**
+     * Load data for a single autocomplete form
+     */
+    loadDataPoint(Model, field, autoCompleteField) {
+      Model.query.values(field).orderBy(field).distinct().then((results) => {
+        for (let i = 0; i < this.tagAutocompletes[autoCompleteField].length; i += 1) {
+          // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]// convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
+          this.tagAutocompletes[autoCompleteField][i] = results.map(({ [field]: a }) => ({ text: a }));
+        }
+        // Increment the show counter each time a data point is loaded
+        this.showCounter += 1;
+        if (this.showCounter >= Object.keys(this.tagDicts).length) {
+          this.show = true;
+        }
+      });
+    },
+
+    /**
+     * Handle what is displayed for the selection forms in the results when typing.
+     */
+    filteredItemsYears(index) {
+      return this.tagAutocompletes.years[index].filter(
+        (i) => new RegExp(this.tagStrs.years[index], 'i').test(i.text),
+      ).slice(0, 10);
+    },
+    filteredItemsFaculties(index) {
+      return this.tagAutocompletes.faculties[index].filter(
+        (i) => new RegExp(this.tagStrs.faculties[index], 'i').test(i.text),
+      ).slice(0, 10);
+    },
+    filteredItemsSchools(index) {
+      return this.tagAutocompletes.schools[index].filter(
+        (i) => new RegExp(this.tagStrs.schools[index], 'i').test(i.text),
+      ).slice(0, 10);
+    },
+    filteredItemsCourses(index) {
+      return this.tagAutocompletes.courses[index].filter(
+        (i) => new RegExp(this.tagStrs.courses[index], 'i').test(i.text),
+      ).slice(0, 10);
+    },
+  },
 
   /**
    * This is run when the component is first created to initialise it.
    */
-  created() {
+  mounted() {
     if (this.compare === true) {
-      this.loadYears();
-      this.loadFaculties();
-      this.loadSchools();
-      this.loadCourses();
+      this.loadData();
     }
-    for (let i = 0; i < this.numForms; i += 1) {
-      if (i !== 0) {
-        this.chartTypeOptions.push([this.selectedChartType]);
-      }
+
+    if (!this.selectedChartType && this.chartTypeOptions.length > 0) {
+      this.selectedChartType = this.chartTypeOptions[0];
+    }
+
+    if (this.selectedChartType) {
       switch (this.selectedChartType) {
         case 'pie':
-          this.chartTypeOptions[i].push('doughnut');
+          this.chartTypeOptions.push('doughnut');
           break;
         case 'doughnut':
-          this.chartTypeOptions[i].push('pie');
+          this.chartTypeOptions.push('pie');
           break;
         case 'line':
-          this.chartTypeOptions[i].push('bar');
+          this.chartTypeOptions.push('bar');
           break;
         case 'bar':
-          this.chartTypeOptions[i].push('line');
+          this.chartTypeOptions.push('line');
           break;
         default:
       }
+      this.chosenType = this.selectedChartType;
+    } else {
+      this.chosenType = '';
     }
+
     // initialize data.form to have the correct amount of v-models
     const formKeys = Object.keys(this.tagDicts);
     if (this.selectedDuplicate === false) {
@@ -224,12 +357,6 @@ export default {
         this.tagStrs[formKeys[i]].push('');
         this.tagAutocompletes[formKeys[i]].push([]);
         if (j === 0) {
-          if (this.selectedChartType !== undefined) {
-            this.chosenType.push(this.selectedChartType);
-          } else {
-            this.chosenType.push('');
-          }
-
           let selected = [];
           switch (formKeys[i]) {
             case 'years':
@@ -273,185 +400,9 @@ export default {
           this.tagDicts[formKeys[i]].push(dicts);
         } else {
           this.tagDicts[formKeys[i]].push([]);
-          this.chosenType.push('');
         }
       }
     }
-  },
-  computed: {
-    ...mapGetters([
-      'numCharts',
-    ]),
-    loadedPercent() {
-      return (100.0 * this.showCounter) / Object.keys(this.tagDicts).length;
-    },
-  },
-  methods: {
-    filteredItemsYears(index) {
-      return this.tagAutocompletes.years[index].filter(
-        (i) => new RegExp(this.tagStrs.years[index], 'i').test(i.text),
-      ).slice(0, 10);
-    },
-    filteredItemsFaculties(index) {
-      return this.tagAutocompletes.faculties[index].filter(
-        (i) => new RegExp(this.tagStrs.faculties[index], 'i').test(i.text),
-      ).slice(0, 10);
-    },
-    filteredItemsSchools(index) {
-      return this.tagAutocompletes.schools[index].filter(
-        (i) => new RegExp(this.tagStrs.schools[index], 'i').test(i.text),
-      ).slice(0, 10);
-    },
-    filteredItemsCourses(index) {
-      return this.tagAutocompletes.courses[index].filter(
-        (i) => new RegExp(this.tagStrs.courses[index], 'i').test(i.text),
-      ).slice(0, 10);
-    },
-
-    makeShow() {
-      this.showCounter += 1;
-      if (this.showCounter === Object.keys(this.tagDicts).length) {
-        console.log('Finished loading data for form');
-        this.show = true;
-      }
-    },
-    loadData() {
-      this.loadYears();
-      this.loadFaculties();
-      this.loadSchools();
-      this.loadCourses();
-    },
-    loadYears() {
-      apiQuery.queryYears()
-        .then((response) => response.data)
-        .then((data) => {
-          // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
-          // can probably clean this up and reduce redundency
-          for (let i = 0; i < this.tagAutocompletes.years.length; i += 1) {
-            this.tagAutocompletes.years[i] =
-              Object.values(data.results).map(({ 'calendar_instance_year': a }) => ({ text: a }));
-          }
-          this.makeShow();
-        });
-    },
-    loadFaculties() {
-      apiQuery.queryFaculties()
-        .then((response) => response.data)
-        .then((data) => {
-          // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
-          // can probably clean this up and reduce redundency
-          for (let i = 0; i < this.tagAutocompletes.faculties.length; i += 1) {
-            this.tagAutocompletes.faculties[i] =
-              Object.values(data.results).map(({ 'faculty_title': a }) => ({ text: a }));
-          }
-          this.makeShow();
-        });
-    },
-    loadSchools() {
-      apiQuery.querySchools()
-        .then((response) => response.data)
-        .then((data) => {
-          // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
-          // can probably clean this up and reduce redundency
-          for (let i = 0; i < this.tagAutocompletes.schools.length; i += 1) {
-            this.tagAutocompletes.schools[i] =
-              Object.values(data.results).map(({ 'school_title': a }) => ({ text: a }));
-          }
-          this.makeShow();
-        });
-    },
-    loadCourses() {
-      apiQuery.queryCourses()
-        .then((response) => response.data)
-        .then((data) => {
-          // convert to dictionary for the autocomplete tags so that autocomplete is an array of objects -> [{text: 'value'},{text:'value2'},...]
-          // can probably clean this up and reduce redundency
-          for (let i = 0; i < this.tagAutocompletes.courses.length; i += 1) {
-            this.tagAutocompletes.courses[i] =
-              Object.values(data.results).map(({ 'course_code': a }) => ({ text: a }));
-          }
-          this.makeShow();
-        });
-    },
-    onSubmit(evt) {
-      // stop browsers from appending a '?' to before the '#' in the url
-      evt.preventDefault();
-
-      let name;
-      if (apiQuery.nameToColumn[this.groupByDesc] !== undefined) {
-        name = apiQuery.nameToColumn[this.groupByDesc];
-      } else {
-        name = this.groupByDesc;
-      }
-
-      // Convert FilterTags into arrays to pass into the query:
-
-      // convert years tags to an array
-      const submitYears = [];
-      const submitFaculties = [];
-      const submitSchools = [];
-      const submitCourses = [];
-      for (let i = 0; i < this.numForms; i += 1) {
-        submitYears.push([]);
-        submitFaculties.push([]);
-        submitSchools.push([]);
-        submitCourses.push([]);
-        for (const key in this.tagDicts.years[i]) {
-          submitYears[i].push(this.tagDicts.years[i][key].text);
-        }
-        // convert faculty tags to an array
-        for (const key in this.tagDicts.faculties[i]) {
-          submitFaculties[i].push(this.tagDicts.faculties[i][key].text);
-        }
-
-        // convert schools tags to an array
-        for (const key in this.tagDicts.schools[i]) {
-          submitSchools[i].push(this.tagDicts.schools[i][key].text);
-        }
-
-        // convert courses tags to an array
-        for (const key in this.tagDicts.courses[i]) {
-          submitCourses[i].push(this.tagDicts.courses[i][key].text);
-        }
-      }
-      // end conversions
-
-      const chartArr = [];
-      for (let i = 0; i < this.numForms; i += 1) {
-        chartArr.push({
-          chartType: this.chosenType[i],
-          groupBy: name,
-          years: submitYears[i],
-          faculties: submitFaculties[i],
-          schools: submitSchools[i],
-          courses: submitCourses[i],
-          duplicate: (this.duplicates[i] === true),
-        });
-      }
-
-      console.log(chartArr);
-
-      // add chart to store
-      this.$store.dispatch({ type: 'createDashboardChart', charts: chartArr });
-
-      // close form
-      try {
-        this.$parent.$parent.deleteChart();
-      } catch (err) {
-        console.log('no delete chart function when calling from template screen');
-      }
-
-      this.$parent.$parent.hideModal();
-
-      // go to url
-      this.$router.push('dashboard');
-    },
-    onClose(evt) {
-      evt.preventDefault();
-      this.$parent.$parent.hideModal();
-    },
-  },
+  }, // end created
 };
-
-
 </script>

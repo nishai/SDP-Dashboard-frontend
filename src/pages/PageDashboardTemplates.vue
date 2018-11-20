@@ -26,39 +26,10 @@
 </template>
 
 <script>
+import { getDefaultTemplateCategories } from '../assets/js/defaults';
 import Heading from '../components/Heading.vue';
 import ChartExampleLink from '../components/ChartExampleLink.vue';
 
-function getTemplateCategories() {
-  return [
-    {
-      title: 'Demographics',
-      items: [
-        { desc: 'Race',                                 type: 'doughnut',  src: '/img/charts/doughnut.png',   filterOptions: { chartTypeOptions: [['doughnut']] } },
-        { desc: 'Gender',                               type: 'doughnut',  src: '/img/charts/pie2.png',       filterOptions: { chartTypeOptions: [['pie']] } },
-        { desc: 'Nationality',                          type: 'doughnut',  src: '/img/charts/pie1.png',       filterOptions: { chartTypeOptions: [['pie']] } },
-        { desc: 'Home Language',                        type: 'doughnut',  src: '/img/charts/pie3.png',       filterOptions: { chartTypeOptions: [['pie']] } },
-        { desc: 'Demographics vs Marks',                type: 'bar',       src: '/img/charts/line2.png',      filterOptions: { chartTypeOptions: [['line']], numForms: 2 } },
-      ],
-    },
-    {
-      title: 'Marks',
-      items: [
-        { desc: 'Pass rates by year',                   type: 'bar',       src: '/img/charts/bar1.png',       filterOptions: { chartTypeOptions: [['bar']] } },
-        { desc: 'Pass rates by faculty/course',         type: 'bar',       src: '/img/charts/bar3.png',       filterOptions: { chartTypeOptions: [['bar']] } },
-        { desc: 'Bell curve',                           type: 'line',      src: '/img/charts/bell-curve.png', filterOptions: { chartTypeOptions: [['line']] } },
-        { desc: 'Progress Outcome by faculty/course',   type: 'bar',       src: '/img/charts/bar2.png',       filterOptions: { chartTypeOptions: [['bar']] } },
-      ],
-    },
-    {
-      title: 'Class Sizes',
-      items: [
-        { desc: 'Class size vs pass rate',              type: 'line',      src: '/img/charts/line1.png',      filterOptions: { chartTypeOptions: [['line']], numForms: 2 } },
-        { desc: 'Average class size by faculty/course', type: 'bar',       src: '/img/charts/bar1.png',       filterOptions: { chartTypeOptions: [['bar']] } }, // click='two'
-      ],
-    },
-  ];
-}
 
 export default {
   name: 'ChartTemplates',
@@ -68,7 +39,7 @@ export default {
   },
   data() {
     return {
-      categories: getTemplateCategories(),
+      categories: getDefaultTemplateCategories(),
     };
   },
 };

@@ -6,15 +6,7 @@
         <FilterForm
           ref="filterForm"
           :groupByDesc="title"
-          :chartTypeOptions="opts.chartTypeOptions"
-          :ftype="opts.ftype"
-          :fyear="opts.fyear"
-          :fcourse="opts.fcourse"
-          :ffaculty="opts.ffaculty"
-          :fschool="opts.fschool"
-          :numForms="opts.numForms"
-          :selectedChartType="opts.chartType"
-          :compare="opts.compare"
+          :options="options"
         />
       </b-container>
     </b-modal>
@@ -33,20 +25,7 @@ export default {
   components: {
     FilterForm,
   },
-  computed: {
-    opts() {
-      return Object.assign({
-        chartTypeOptions: [['bar']],
-        ftype: true,
-        fyear: true,
-        fcourse: true,
-        ffaculty: true,
-        fschool: true,
-        numForms: 1,
-        compare: false,
-      }, this.options || {});
-    },
-  },
+
   methods: {
     showModal() {
       this.$refs.popupRef.show();

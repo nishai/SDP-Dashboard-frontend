@@ -1,13 +1,12 @@
 import axios from 'axios';
 import cachios from 'cachios';
-import { cloneDeep } from 'lodash';
 
 
 /* AXIOS - https://github.com/axios/axios */
 
 export const axiosOptions = {
   baseURL: `http://${process.env.VUE_APP_API}/`,
-  timeout: 10000,
+  timeout: 30 * 1000, // 30 seconds
 };
 
 Object.freeze(axiosOptions);
@@ -16,7 +15,8 @@ export const axiosInstance = axios.create(axiosOptions);
 
 if (process.env.NODE_ENV !== 'production') {
   axiosInstance.interceptors.response.use((response) => {
-    console.log('Request  |', response.config.method, response.config.url,
+    console.log(
+      'Request  |', response.config.method, response.config.url,
       '\nResponse |', response.request.status, { response },
     );
     return response;
