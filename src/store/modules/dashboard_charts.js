@@ -1,63 +1,14 @@
 
 import Vue from 'vue';
+import { uuidv4 } from '../../assets/js/util/uuid';
 import * as mutators from '../mutations';
-
-/* ========================================================================== */
-/* EXAMPLE DATA - TODO: REPLACE WITH BACKEND QUERY                            */
-/* ========================================================================== */
-
-// const testDashboardAQuery = {
-//   chain: [
-//     {
-//       filters: [
-//         {
-//           field: 'encrypted_student_no',
-//           operator: 'startswith',
-//           value: '02925A2B8FC1F2FC7132D155EBB4FFB7',
-//           exclude: true,
-//         },
-//       ],
-//       group: {
-//         by: [
-//           'encrypted_student_no',
-//           'calendar_instance_year',
-//           'year_of_study',
-//         ],
-//         yield: [
-//           {
-//             name: 'ave_marks',
-//             via: 'ave',
-//             from: 'average_marks',
-//           },
-//           {
-//             name: 'final_mark_ave',
-//             via: 'ave',
-//             from: 'final_mark',
-//           },
-//         ],
-//       },
-//     },
-//   ],
-//   limit: {
-//     type: 'page',
-//     num: 1000,
-//   },
-// };
-
-function uuidv4() {
-  /* https://stackoverflow.com/questions/105034 */
-  /* eslint-disable space-infix-ops, no-bitwise, no-mixed-operators, max-len */
-  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, (c) => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16));
-}
 
 /* ========================================================================== */
 /* STATE                                                                      */
 /* ========================================================================== */
 
 const stateData = {
-  dashboardCharts: {
-    // '1d090475-3c50-4075-bcf2-1b7f23a2a7cd': testDashboardChart,
-  },
+  dashboardCharts: {},
 };
 
 /* ========================================================================== */
@@ -75,10 +26,11 @@ const getters = {
 /* ========================================================================== */
 
 const mutations = {
-  [mutators.CREATE_DASHBOARD_CHART](state, { data, layout }) {
+  [mutators.CREATE_DASHBOARD_CHART](state, { name, data, layout }) {
     const uuid = uuidv4();
     const dashboardChart = {
-      name: uuid,
+      uuid,
+      name,
       data,
       layout,
     };
@@ -128,10 +80,10 @@ const mutations = {
 /* ========================================================================== */
 
 const actions = {
-  createDashboardChart({ commit, state }, { data }) {
+  createDashboardChart({ commit, state }, { name, data }) {
     commit(
       mutators.CREATE_DASHBOARD_CHART,
-      { data, layout: { x: 0, y: 0, w: 1, h: 1, i: state.numCharts + 1 } },
+      { name, data, layout: { x: 0, y: 0, w: 1, h: 1, i: state.numCharts + 1 } },
     );
   },
   deleteDashboardChart({ commit, state }, { dashboardChartId }) {

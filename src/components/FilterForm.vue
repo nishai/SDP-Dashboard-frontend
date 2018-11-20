@@ -4,8 +4,26 @@
   <!--https://bootstrap-vue.js.org/docs/components/form/-->
   <b-form @submit="onSubmit" v-if="show">
 
+    <b-form-row>
+      <b-col>
+        <b-form-group
+          id="nameGroup"
+          label="Chart Name:"
+          label-for="Name"
+          horizontal>
+          <b-form-input
+            id="Name"
+            placeholder="Enter Chart Name Here"
+            required
+            v-model="chosenName">
+          </b-form-input>
+        </b-form-group>
+      </b-col>
+    </b-form-row>
+
     <!-- CHART TYPE -->
-    <b-row>
+
+    <b-form-row>
       <b-col>
         <b-form-group
           v-if="ftype === true"
@@ -22,10 +40,10 @@
           </b-form-select>
         </b-form-group>
       </b-col>
-    </b-row>
+    </b-form-row>
 
     <!-- SELECTORS -->
-    <b-row>
+    <b-form-row>
       <b-col v-for="i in numForms" :key="'form_' + i">
 
         <!-- YEARS -->
@@ -112,16 +130,16 @@
         </b-form-group>
 
       </b-col>
-    </b-row>
+    </b-form-row>
 
-    <b-row>
+    <b-form-row>
       <b-col>
         <b-button variant="primary" type="submit"> Filter </b-button> <!-- linked to form above -->
       </b-col>
       <b-col>
         <b-button @click="onClose" variant="secondary"> Close </b-button>
       </b-col>
-    </b-row>
+    </b-form-row>
 
   </b-form>
   <h1 v-else> Loading Data For Form, Please Wait... {{loadedPercent}}% Loaded</h1>
@@ -192,6 +210,7 @@ export default {
     return {
       // preselected values to be highlighted on form start
       selectedChartType: undefined,
+      selectedChartName: undefined,
       selectedGroupByDesc: undefined,
       selectedYear: undefined,
       selectedFaculty: undefined,
@@ -205,6 +224,7 @@ export default {
 
       duplicates: [],
       chosenType: undefined,
+      chosenName: undefined,
 
       tagStrs: { years: [], faculties: [], schools: [], courses: [] }, // arrays of strings
       tagDicts: { years: [], faculties: [], schools: [], courses: [] }, // arrays of array of dictionaries
@@ -240,7 +260,7 @@ export default {
 
       // add chart to store
       console.log('Adding Chart To Store:', chartData);
-      this.$store.dispatch('createDashboardChart', { data: chartData });
+      this.$store.dispatch('createDashboardChart', { name: this.chosenName, data: chartData });
 
       // close form
       try {
@@ -254,6 +274,7 @@ export default {
       // go to url
       this.$router.push('dashboard');
     },
+
     onClose(evt) {
       evt.preventDefault();
       this.$parent.$parent.hideModal();
@@ -318,6 +339,8 @@ export default {
     if (this.compare === true) {
       this.loadData();
     }
+
+    this.chosenName = this.selectedChartName ? this.selectedChartName : '';
 
     if (!this.selectedChartType && this.chartTypeOptions.length > 0) {
       this.selectedChartType = this.chartTypeOptions[0];

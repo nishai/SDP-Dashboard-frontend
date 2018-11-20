@@ -29,7 +29,6 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
-    "eslint-plugin-vue": "4.7.1",
     "@types/chart.js": "^2.7.31",
     "@types/lodash": "^4.14.118",
     "@vue/cli-plugin-babel": "^3.0.1",
@@ -40,6 +39,7 @@
     "@vue/test-utils": "^1.0.0-beta.20",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^23.0.1",
+    "eslint-plugin-vue": "4.7.1",
     "lint-staged": "^7.2.2",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1",
@@ -55,114 +55,24 @@
       "@vue/airbnb"
     ],
     "rules": {
-      "max-len": [
-        "warn",
-        {
-          "ignoreComments": true,
-          "code": 120
-        }
-      ],
-      "prefer-destructuring": [
-        "error",
-        {
-          "array": false,
-          "object": true
-        },
-        {
-          "enforceForRenamedProperties": false
-        }
-      ],
-      "no-param-reassign": [
-        "error",
-        {
-          "props": false
-        }
-      ],
-      "function-paren-newline": [
-        "warn",
-        "consistent"
-      ],
-      "no-underscore-dangle": [
-        "error",
-        {
-          "allowAfterThis": true
-        }
-      ],
-      "arrow-parens": [
-        "error",
-        "always"
-      ],
-      "no-unused-vars": [
-        "warn",
-        {
-          "vars": "all",
-          "args": "none",
-          "ignoreRestSiblings": true
-        }
-      ],
-      "quote-props": [
-        "warn",
-        "consistent"
-      ],
+      "max-len": ["warn", {"ignoreComments": true, "code": 120}],
+      "prefer-destructuring": ["error", {"array": false, "object": true}, {"enforceForRenamedProperties": false}],
+      "no-param-reassign": ["error", {"props": false}],
+      "function-paren-newline": ["warn", "consistent"],
+      "no-underscore-dangle": ["error", {"allowAfterThis": true}],
+      "arrow-parens": ["error", "always"],
+      "no-unused-vars": ["warn", {"vars": "all","args": "none","ignoreRestSiblings": true}],
+      "quote-props": ["warn", "consistent"],
       "object-curly-newline": "off",
-      "no-multi-spaces": [
-        "warn",
-        {
-          "exceptions": {
-            "Property": true,
-            "VariableDeclarator": true,
-            "ImportDeclaration": true
-          }
-        }
-      ],
-      "no-mixed-operators": [
-        "error",
-        {
-          "allowSamePrecedence": false,
-          "groups": [
-            [
-              "*",
-              "/",
-              "%"
-            ],
-            [
-              "%",
-              "**"
-            ],
-            [
-              "&",
-              "|"
-            ],
-            [
-              "^",
-              "~"
-            ],
-            [
-              "<<",
-              ">>",
-              ">>>"
-            ],
-            [
-              "==",
-              "!=",
-              "===",
-              "!==",
-              ">",
-              ">=",
-              "<",
-              "<="
-            ],
-            [
-              "&&",
-              "||"
-            ],
-            [
-              "in",
-              "instanceof"
-            ]
-          ]
-        }
+      "no-multi-spaces": ["warn", { "exceptions": { "Property": true, "VariableDeclarator": true, "ImportDeclaration": true } }],
+      "no-mixed-operators": ["error", {"allowSamePrecedence": false, "groups": [
+        ["*","/", "%"], ["%", "**"],
+        ["&", "|"], ["^", "~"], ["<<", ">>", ">>>"],
+        ["==", "!=", "===", "!==", ">", ">=", "<", "<="],
+        ["&&", "||"],
+        ["in", "instanceof"]
       ]
+      }]
     },
     "parserOptions": {
       "parser": "babel-eslint"
