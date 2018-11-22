@@ -1,0 +1,137 @@
+
+/* ========================================================================== */
+/* Import all Beufy Utilities [DO NOT IMPORT IN OTHER FILES]                  */
+/*   - https://bulma.io/documentation/customize/with-node-sass/               */
+/*   - https://buefy.github.io/documentation/customization                    */
+/* ========================================================================== */
+
+
+@import "~bulma/sass/utilities/all";
+
+
+/* ========================================================================== */
+/* COLORS                                                                     */
+/* ========================================================================== */
+
+
+/* - - - - - - - - - - - - - - */
+/* OFFICIAL WITS COLORS SCHEME */
+/* - - - - - - - - - - - - - - */
+                                                                            /* https://coolors.co/003b5c-00bfb2-ffb81c-f06543-b18d5b */
+$color-wits-blue:                 #003B5C;                                  /* https://coolors.co/003b5c-457088-8ba5b4-e7edf0-f8fafa */
+$color-wits-blue-inverse:         findColorInvert($color-wits-blue);
+$color-wits-gold:                 #B18D5B;                                  /* https://coolors.co/816743-b18d5b-c6ac87-e4d4bb-f7f4f0 */
+$color-wits-gold-inverse:         findColorInvert($color-wits-gold);
+$color-wits-yellow:               #FFB81C;                                  /* https://coolors.co/d19717-ffb81c-ffc445-ffd883-ffebc1 */
+$color-wits-yellow-inverse:       findColorInvert($color-wits-yellow);
+                                                                            /* https://coolors.co/9b2242-ffa300-44883e-007377-0057b8 */
+$color-wits-engineering:          #9B2242;                                  /* https://coolors.co/711931-9b2242-bf6b81-d19aa9-e3c2cb */
+$color-wits-engineering-inverse:  findColorInvert($color-wits-engineering);
+$color-wits-humanities:           #FFA300;                                  /* https://coolors.co/d18600-ffa300-ffc054-ffd58b-ffeed0 */
+$color-wits-humanities-inverse:   findColorInvert($color-wits-humanities);
+$color-wits-commerce:              #44883E;                                 /* https://coolors.co/32632e-44883e-84b280-bbd3b8-eef4ed */
+$color-wits-commerce-inverse:     findColorInvert($color-wits-commerce);
+$color-wits-health:               #007377;                                  /* https://coolors.co/005457-007377-5ca5a8-a2cccd-e7f2f2 */
+$color-wits-health-inverse:       findColorInvert($color-wits-health);
+$color-wits-science:              #0057B8;                                  /* https://coolors.co/004086-0057b8-5390d1-b9d1eb-e7eff8 */
+$color-wits-science-inverse:      findColorInvert($color-wits-science);
+
+/* - - - - - - - */
+/* CUSTOM COLORS */
+/* - - - - - - - */
+
+$color-wits-blue-light: #004868;
+$color-wits-blue-light-inverse: findColorInvert($color-wits-blue-light);
+$color-wits-blue-dark: #002d4d;
+$color-wits-blue-dark-inverse: findColorInvert($color-wits-blue-dark);
+
+$color-wits-comp-snow: #EBF5EE;
+$color-wits-comp-snow-inverse: findColorInvert($color-wits-comp-snow);
+$color-wits-comp-blue: #78A1BB;
+$color-wits-comp-blue-inverse: findColorInvert($color-wits-comp-blue);
+$color-wits-comp-teal: #00BFB2;
+$color-wits-comp-teal-inverse: findColorInvert($color-wits-comp-teal);
+$color-wits-comp-orange: #F06543;
+$color-wits-comp-orange-inverse: findColorInvert($color-wits-comp-orange);
+
+
+/* ========================================================================== */
+/* Customise Buefy                                                            */
+/*   - https://buefy.github.io/documentation/customization                    */
+/* ========================================================================== */
+
+
+/* COLOR - OVERRIDES */
+
+$bulma:        #00d1b2;
+$bulma-invert: findColorInvert($bulma);
+
+$primary:          $color-wits-blue-dark;
+$primary-invert:   $color-wits-blue-dark-inverse;
+
+/* CREATE NEW COLORS - key is appended with "is-" */
+
+$colors: (
+  /* existing */
+  "white":    ($white,    $black),
+  "black":    ($black,    $white),
+  "light":    ($light,    $light-invert),
+  "dark":     ($dark,     $dark-invert),
+  "primary":  ($primary,  $primary-invert),
+  "info":     ($info,     $info-invert),
+  "success":  ($success,  $success-invert),
+  "warning":  ($warning,  $warning-invert),
+  "danger":   ($danger,   $danger-invert),
+  /* custom */
+  "bulma":            ($bulma,   $bulma-invert),
+  "wits-blue":        ($color-wits-blue,        $color-wits-blue-inverse),
+  "wits-blue-light":  ($color-wits-blue-light,  $color-wits-blue-light-inverse),
+  "wits-yellow":      ($color-wits-yellow,      $color-wits-yellow-inverse),
+  "wits-gold":        ($color-wits-gold,        $color-wits-gold-inverse),
+  "wits-engineering": ($color-wits-engineering, $color-wits-engineering-inverse),
+  "wits-humanities":  ($color-wits-humanities,  $color-wits-humanities-inverse),
+  "wits-commerce":    ($color-wits-commerce,    $color-wits-commerce-inverse),
+  "wits-health":      ($color-wits-health,      $color-wits-health-inverse),
+  "wits-science":     ($color-wits-science,     $color-wits-science-inverse),
+);
+
+/* this is just so that webstorm autocompletes everything... but the values are overridden by the above. */
+$is-wits-blue: none;
+$is-wits-yellow: none;
+$is-wits-gold: none;
+$is-wits-engineering: none;
+$is-wits-humanities: none;
+$is-wits-commerce: none;
+$is-wits-science: none;
+
+/* LINK - OVERRIDES */
+
+$link:              $primary;
+$link-invert:       $primary-invert;
+$link-focus-border: $primary;
+
+
+/* ========================================================================== */
+/* Override Defaults                                                          */
+/* - I am not sure why this needs to before the imports below.                */
+/* ========================================================================== */
+
+
+/* https://bulma.io/documentation/layout/section/ */
+$section-padding:       1.5rem 1.5rem; /* default: 3rem 1.5rem */
+$section-padding-medium:  3rem 1.5rem; /* default: 9rem 1.5rem */
+$section-padding-large:   9rem 1.5rem; /* default: 18rem 1.5rem */
+
+$navbar-item-img-max-height: 3.5rem; /* default: 1.5rem | BUG: non-default does not center navbar-burger */
+
+
+/* ========================================================================== */
+/* Import Bulma & Buefy [DO NOT IMPORT IN OTHER FILES]                        */
+/*   -  Variables defined above are used to generate theme                    */
+/* ========================================================================== */
+
+
+/* https://bulma.io/documentation/customize/with-node-sass/ */
+@import "~bulma";
+/* https://buefy.github.io/documentation/customization */
+@import "~buefy/src/scss/buefy";
