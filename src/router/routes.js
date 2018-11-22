@@ -1,67 +1,117 @@
-// import ChartExamples from '../pages/ChartExamples.vue';
-// import Query from '../pages/Query.vue';
-// import Reports from '../pages/ReportList.vue';
-// import Report from '../pages/Report.vue';
-// import GridExample from '../pages/GridExample.vue';
-import Dashboard from '../pages/Dashboard.vue';
-import ChartTemplates from '../pages/ChartTemplates.vue';
 
-/* Define the routes */
+/* Layouts */
+import LayoutMain from '../layout/LayoutMain.vue';
+import LayoutSingle from '../layout/LayoutSingle.vue';
+import LayoutDashboard from '../layout/LayoutDashboard.vue';
+import LayoutOverview from '../layout/LayoutOverview.vue';
 
-export const navRoutes = [
+/* MainLayout pages */
+import PageMainAbout from '../pages/PageSingleAbout.vue';
+
+/* DashboardLayout pages */
+import PageDashboardActive from '../pages/PageDashboardActive.vue';
+import PageDashboardTemplates from '../pages/PageDashboardTemplates.vue';
+import PageDashboardReports from '../pages/PageDashboardReports.vue';
+import PageDashboardReport from '../pages/PageDashboardReport.vue';
+
+/* OverviewLayout pages */
+import PageOverviewUniversity from '../pages/PageOverviewUniversity.vue';
+import PageOverviewFaculties from '../pages/PageOverviewFaculties.vue';
+import PageOverviewSchools from '../pages/PageOverviewSchools.vue';
+import PageOverviewCourses from '../pages/PageOverviewCourses.vue';
+
+
+/* todo: remove */
+
+
+const overviewRoutes = [
   {
-    name: 'Home',
-    path: '/',
-    redirect: '/templates',
+    path: '/dashboard/overview/university',
+    name: 'university',
+    component: PageOverviewUniversity,
   },
   {
-    name: 'Chart Templates',
-    path: '/templates',
-    component: ChartTemplates,
+    path: '/dashboard/overview/faculties',
+    name: 'faculties',
+    component: PageOverviewFaculties,
   },
-  // {
-  //   name: 'Chart Examples',
-  //   path: '/examples',
-  //   component: ChartExamples,
-  //   query: {
-  //     templateType: '',
-  //   },
-  // },
-  // {
-  //   name: 'Queries',
-  //   path: '/query',
-  //   component: Query,
-  // },
-  // {
-  //   name: 'Reports',
-  //   path: '/reports',
-  //   component: Reports,
-  // },
-  // {
-  //   name: 'GridExample',
-  //   path: '/grid',
-  //   component: GridExample,
-  // },
   {
-    name: 'Dashboard',
-    path: '/dashboard',
-    component: Dashboard,
+    path: '/dashboard/overview/schools',
+    name: 'school',
+    component: PageOverviewSchools,
+  },
+  {
+    path: '/dashboard/overview/courses',
+    name: 'course',
+    component: PageOverviewCourses,
   },
 ];
 
-/* not part of route definitions, used by navbar */
+const dashboardRoutes = [
+  /* dashboard */
+  {
+    path: '/dashboard/active',
+    name: 'dashboard',
+    component: PageDashboardActive,
+  },
+  {
+    path: '/dashboard/templates',
+    name: 'templates',
+    component: PageDashboardTemplates,
+  },
+  {
+    path: '/dashboard/reports',
+    name: 'reports',
+    component: PageDashboardReports,
+  },
+  /* non-visible pages */
+  {
+    path: '/dashboard/reports/:reportId',
+    name: 'report',
+    component: PageDashboardReport,
+  },
+  /* CHILDREN are OVERVIEWS */
+  {
+    path: '/dashboard/overview',
+    redirect: '/dashboard/overview/university', /* linked to above */
+    component: LayoutOverview,
+    children: overviewRoutes,
+  },
+];
 
-export const hiddenRoutes = [
-  // {
-  //   name: 'Report',
-  //   path: '/reports/:id',
-  //   component: Report,
-  // },
-  // {
-  //   name: 'Reports 404',
-  //   path: '/reports/*',
-  //   redirect: '/reports',
-  // },
+const singleRoutes = [
+  /* about */
+  {
+    path: '/about',
+    name: 'about',
+    component: PageMainAbout,
+  },
+];
+
+const mainRoutes = [
+  /* CHILDREN are DASHBOARDS */
+  {
+    path: '/dashboard',
+    redirect: '/dashboard/active', /* linked to above */
+    component: LayoutDashboard,
+    children: dashboardRoutes,
+  },
+  {
+    path: '/', /* duplicate name allowed for children only */
+    component: LayoutSingle,
+    children: singleRoutes,
+  },
+];
+
+const routes = [
+  /* entrypoint */
+  {
+    path: '/',
+    redirect: '/dashboard',
+    component: LayoutMain,
+    children: mainRoutes,
+  },
+  /* redirect everything thats wrong */
   {
     name: '404',
     path: '*',
@@ -69,6 +119,7 @@ export const hiddenRoutes = [
   },
 ];
 
+
 /* export the routes */
 
-export default navRoutes.concat(hiddenRoutes);
+export default routes;

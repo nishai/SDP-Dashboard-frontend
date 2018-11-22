@@ -33,3 +33,5 @@ coverage/**
 
 #backups
 *.bak
+
+src2/

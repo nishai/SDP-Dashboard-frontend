@@ -1,6 +1,4 @@
 
-/* This file is imported globally in "main.js" or "App.vue" */
-
 /* ========================================================================== */
 /* Fix Defaults - https://gist.github.com/robinrendle/1d20c566c5e5fbd67f25    */
 /* ========================================================================== */
@@ -23,6 +21,7 @@
 html, body {
   height: 100%;
   width: 100%;
+  background: none;
 }
 
 /*

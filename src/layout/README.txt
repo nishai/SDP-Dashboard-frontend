@@ -3,4 +3,4 @@ Layouts are intended for use with the vue router
 the content with the component relating to the
 current url.
 
-This specifies the difference between a layout and a page.
+- This specifies the difference between a layout and a page.
