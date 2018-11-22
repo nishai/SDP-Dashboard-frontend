@@ -168,7 +168,6 @@ export default {
 -->
 
 
-
 <!--
 Wits filter set that manages:
   - years
@@ -180,15 +179,18 @@ Wits filter set that manages:
 <!-- TODO: sync is not fricking working... only events -->
 
 <template>
-  <div class="columns is-multiline">
+  <LoadOrError
+    :active="isLoading"
+    :is-error="isError"
+    class="columns is-multiline"
+  >
+
     <b-field class="column is-half" label="Years">
       <OpinionatedFilterLabels
         placeholder="All Years"
         :items="data.years"
-        :selected.sync="internalSelection.years"
-        field="label"
-        ref="filterLabelsYears"
-        @input="_onInput"
+        :selected.sync="selected.years"
+        ref="tagInputYears"
       />
     </b-field>
 
@@ -196,10 +198,8 @@ Wits filter set that manages:
       <OpinionatedFilterLabels
         placeholder="All Faculties"
         :items="data.faculties"
-        :selected.sync="internalSelection.faculties"
-        field="label"
-        ref="filterLabelsFaculties"
-        @input="_onInput"
+        :selected.sync="selected.faculties"
+        ref="tagInputFaculties"
       />
     </b-field>
 
@@ -207,93 +207,132 @@ Wits filter set that manages:
       <OpinionatedFilterLabels
         placeholder="All Schools"
         :items="data.schools"
-        :selected.sync="internalSelection.schools"
-        field="label"
-        ref="filterLabelsSchools"
-        @input="_onInput"
+        :selected.sync="selected.schools"
+        :filter="schoolFilter"
+        ref="tagInputSchools"
       />
     </b-field>
     <b-field class="column is-half" label="Courses">
       <OpinionatedFilterLabels
         placeholder="All Courses"
         :items="data.courses"
-        :selected.sync="internalSelection.courses"
-        field="label"
-        ref="filterLabelsCourses"
-        @input="_onInput"
+        :selected.sync="selected.courses"
+        :filter="courseFilter"
+        ref="tagInputCourses"
       />
     </b-field>
-  </div>
+
+  </LoadOrError>
 </template>
 
 <script>
 import { cloneDeep } from 'lodash.clonedeep';
+import LoadOrError from '../LoadOrError.vue';
 import OpinionatedFilterLabels from '../opinionated/OpinionatedFilterLabels.vue';
 
+const fields = ['years', 'faculties', 'schools', 'courses'];
+const def = () => fields.reduce((o, f) => Object.assign(o, { [f]: [] }), {});
 
 export default {
-  name: 'DashboardCommonFiltersFormNew',
-  components: { OpinionatedFilterLabels },
+  name: 'DashboardCommonFiltersForm',
+  components: { LoadOrError, OpinionatedFilterLabels },
+
   props: {
-    selection: { type: Object, default() { return {}; } },
+    selected: {
+      type: Object,
+      default: def,
+      validator: (value) => fields.every((field) => Object.prototype.hasOwnProperty.call(value, field)),
+    },
   },
 
   data() {
     return {
-      data: this._fillDefaults(),
-      internalSelection: this._fillDefaults(this.selection),
+      resultMaps: {}, // all items
+      data: def(), // all items (processed results) arrays of labels
+
+      isError: false,
+      isLoading: true,
     };
-  },
-
-  watch: {
-    selection() {
-      this.internalSelection = this._fillDefaults(this.selection);
-    },
-  },
-
-  methods: {
-    _fillDefaults(selection) {
-      return Object.assign(
-        { years: [], faculties: [], schools: [], courses: [] },
-        selection || {},
-      );
-    },
-    _onInput(prop, items) {
-      this.$emit('update:selection', this.internalSelection);
-    },
   },
 
   mounted() {
-    const queryForData = (field, model, ...fields) => {
-      model.query.values(...fields).distinct().orderBy(...fields)
+    /**
+     * @param f - field to set on this.data
+     * @param model - model to begin query
+     * @param fs - fields to retrieive, uses the first field in the list as the label value.
+     * @return {Promise}
+     */
+    const queryForData = (f, model, ...fs) => {
+      return model.query.values(...fs).distinct().orderBy(...fs)
         .thenStripPrefixes((results) => {
-          results.forEach((item) => { item.label = `${item[fields[0]]}`; });
-          this.$set(this.data, field, results);
+          this.$set(this.resultMaps, f, new Map(results.map((item) => [`${item[fs[0]]}`.toLowerCase(), item])));
+          this.$set(this.data, f, results.map((item) => `${item[fs[0]]}`.toLowerCase()));
         });
     };
 
-    queryForData(
+    const promises = [];
+
+    promises.push(queryForData(
       'years', this.$wits.EnrolledYear,
       this.$wits.EnrolledYear.calendar_instance_year,
-    );
+    ));
 
-    queryForData(
+    promises.push(queryForData(
       'faculties', this.$wits.Faculty,
       this.$wits.Faculty.faculty_title,
-    );
+    ));
 
-    queryForData(
+    promises.push(queryForData(
       'schools', this.$wits.School,
       this.$wits.School.school_title,
       this.$wits.School.faculty_id.faculty_title,
-    );
+    ));
 
-    queryForData(
+    promises.push(queryForData(
       'courses', this.$wits.Course,
       this.$wits.Course.course_code,
       this.$wits.Course.school_id.school_title,
       this.$wits.Course.school_id.faculty_id.faculty_title,
-    );
+    ));
+
+    Promise.all(promises)
+      .then(() => {
+        this.isLoading = false;
+      })
+      .catch((error) => {
+        this.isLoading = false;
+        this.isError = true;
+        console.error('Failed to load CommonFiltersFormData:', error);
+      });
+  },
+
+  computed: {
+    facultiesSet() {
+      return new Set(this.selected.faculties);
+    },
+    schoolsSet() {
+      return new Set(this.selected.schools);
+    },
+  },
+
+  watch: {
+    facultiesSet() {
+      this.$refs.tagInputSchools.updateFilteredTags();
+      this.$refs.tagInputCourses.updateFilteredTags();
+    },
+    schoolsSet() {
+      this.$refs.tagInputCourses.updateFilteredTags();
+    },
+  },
+
+  methods: {
+    schoolFilter(value) {
+      return (this.facultiesSet.size < 1 || this.facultiesSet.has(this.resultMaps.schools.get(value).faculty_title));
+    },
+    courseFilter(value) {
+      return (this.facultiesSet.size < 1 || this.facultiesSet.has(this.resultMaps.courses.get(value).faculty_title))
+        && (this.schoolsSet.size < 1 || this.schoolsSet.has(this.resultMaps.courses.get(value).school_title));
+    },
   },
 };
 </script>

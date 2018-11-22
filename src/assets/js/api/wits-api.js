@@ -69,12 +69,30 @@ export function querysetSchoolCourses(schools) {
     .values(Course.course_code);
 }
 
+
+function checkArrays(...arrays) {
+  arrays.forEach((array) => {
+    if ((array && !Array.isArray(array)) || (Array.isArray(array) && array.length > 0 && typeof array[0] === 'object')) {
+      throw Error(`array type is invalid, must contain values not objects: ${array}`);
+    }
+  });
+}
+
 /**
  * @return {Queryset}
  */
-export function querysetCommonGroupByCount(Model, groupBy, { years = null, faculties = null, schools = null, courses = null }) {
+export function querysetCommonGroupByCount(Model, groupBy, { years = null, faculties = null, schools = null, courses = null }, distinct = false) {
+  checkArrays(years, faculties, schools, courses);
   return Model.query
     .filter(commonFilters[Model]({ years, faculties, schools, courses }))
     .values(groupBy)
-    .annotate({ field: 'count', expr: `count(F('${groupBy}'))` });
+    .annotate({ field: 'count', expr: `count('${groupBy}'${distinct ? ', distinct=True' : ''})` });
+}
+
+export function querysetCommonGroupByAve(Model, groupBy, aveBy, { years = null, faculties = null, schools = null, courses = null }) {
+  return Model.query
+    .filter(commonFilters[Model]({ years, faculties, schools, courses }))
+    .values(groupBy)
+    .distinct()
+    .annotate({ field: 'ave', expr: `ave('${aveBy}')` });
 }

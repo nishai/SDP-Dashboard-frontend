@@ -9,7 +9,7 @@ Intended for use for searching through items.
 
 This component provides 5 properties:
   - items: Array            All the selectable items
-  - selected?: Array        All the selected items, use :selected.sync to update parent values.
+  - selected.sync: Array    All the selected items, use :selected.sync to update parent values.
   - icon?: String           Name of the icon to use
   - placeholder?: String    Text to display if nothing is selected
   - field?: String          :leave blank if input items are strings and not objects, otherwise set to the value of the field in the object, default is "label"
@@ -47,10 +47,10 @@ REFERNCE FOR b-taginput:
 -->
 
 <template>
+  <!-- TODO: this component is slightly slow -->
   <b-taginput
     v-model="selected"
     :data="filtered"
-    :field="field"
 
     @typing="onTyping"
     @add="onAdd"
@@ -86,13 +86,9 @@ export default {
       type: String,
       default: 'Select Items',
     },
-    field: { // leave blank if input items are strings and not objects, otherwise set to the value of the field in the object.
-      type: String,
-      default: 'label',
-    },
     filter: {
       type: Function,
-      default: null,
+      default: undefined,
     },
   },
   data() {
@@ -102,21 +98,18 @@ export default {
       lastFilterText: '',
     };
   },
+
   mounted() {
     this.updateFilteredTags();
   },
-  watch: {
-    selected() {
-      this.$emit('update:selected', this.selected);
-      this.$emit('change', this.selected);
-    },
-  },
+
   methods: {
     /**
      * When the user types:
      * store the current text, and update the displayed items.
      */
     onTyping(text) {
+      this.$emit('typing', text);
       if (typeof text === 'string') {
         this.lastFilterText = text;
       }
@@ -128,7 +121,6 @@ export default {
      * based on the previously typed text.
      */
     onRemove(item) {
-      // this.updateFilteredTags();
       this.$emit('removed', item);
     },
 
@@ -137,34 +129,20 @@ export default {
     },
 
     onInput(items) {
-      this.selected = items;
       this.$emit('input', items);
+      this.$emit('update:selected', items);
     },
 
-    /**
-     * Get the field from an item, based on the passed field property,
-     * if the item is an object,
-     */
-    getItemField(item) {
-      if (!this.field || this.field.length < 1) {
-        return item;
-      }
-      return item[this.field];
-    },
     /**
      * Update the displayed list based on the current typed text.
      * Make sure to leave out items already added as tags.
      */
     updateFilteredTags() {
-      this.filtered = this.items.filter((option) => {
-        const matchesText = this.getItemField(option)
-          .toString()
-          .toLowerCase()
-          .indexOf(this.lastFilterText.toLowerCase()) >= 0;
-        const alreadySelected = this.selected.filter(
-          (item) => this.getItemField(item) === this.getItemField(option),
-        ).length > 0;
-        return matchesText && !alreadySelected;
+      const re = new RegExp(this.lastFilterText.toLowerCase(), 'i');
+      const has = new Set(this.selected.map((value) => value.toLowerCase()));
+      this.filtered = this.items.filter((value) => {
+        const val = value.toLowerCase();
+        return re.test(val) && !has.has(val) && (!this.filter || this.filter(val));
       });
     },
   },

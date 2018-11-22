@@ -36,13 +36,14 @@ TODO: I did this page retardedly
           @input="(type)=>selectedItem.type=type"
           :types-enabled="selectedItem.chartTypes"
         />
+
         <!-- TABBED FILTERS -->
         <OpinionatedTabs :items="selectedFilters" @add="onTabAdded" @delete="onTabDelete">
           <template slot-scope="props">
             <b-field label="Dataset Label">
               <b-input v-model="props.item.label"></b-input>
             </b-field>
-            <DashboardCommonFiltersForm :selection.sync="props.item.selection"/>
+            <DashboardCommonFiltersForm :selected.sync="props.item.selected"/>
           </template>
         </OpinionatedTabs>
       </div>
@@ -79,7 +80,7 @@ export default {
       templateCategories: getDefaultTemplateListItems(),
       modalActive: false,
       selectedItem: {},
-      selectedFilters: [{}],
+      selectedFilters: [],
     };
   },
 
@@ -97,7 +98,7 @@ export default {
 
   methods: {
     onTabAdded(index) {
-      this.selectedFilters.push({ label: 'Unknown', selection: {} });
+      this.selectedFilters.push({ label: 'Unknown', selected: { years: [], faculties: [], schools: [], courses: [] } });
     },
 
     onTabDelete(index) {
@@ -106,7 +107,8 @@ export default {
 
     showModal(templateItem) {
       this.selectedItem = templateItem;
-      this.selectedFilters = [{ label: 'Unknown', selection: {} }];
+      this.selectedFilters = [];
+      this.onTabAdded();
       this.modalActive = true;
     },
 
@@ -146,6 +148,8 @@ export default {
     },
 
     isFilterDataValid() {
+      console.log('VALIDATING: ', this.selectedFilters);
+
       if (!this.selectedItem.type) {
         return false;
       }
@@ -155,13 +159,13 @@ export default {
       let valid = true;
       this.selectedFilters.forEach((item, i) => {
         valid = valid && item.label
-          && item.selection.years && item.selection.courses
-          && item.selection.schools && item.selection.faculties;
+          && item.selected.years && item.selected.courses
+          && item.selected.schools && item.selected.faculties;
       });
 
       /* { desc, src, type } */
       console.log(this.selectedItem);
-      /* { label, selection: [{courses:[], faculties:[], schools:[], years:[]}] } */
+      /* { label, selected: [{courses:[], faculties:[], schools:[], years:[]}] } */
       console.log(this.selectedFilters);
 
       return valid;

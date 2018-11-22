@@ -1,6 +1,10 @@
 
 import { Q } from './api/queryset';
-import { querysetCommon, querysetCommonGroupByCount } from './api/wits-api';
+import {
+  querysetCommon,
+  querysetCommonGroupByAve,
+  querysetCommonGroupByCount,
+} from './api/wits-api';
 import { Student, Faculty, EnrolledYear, EnrolledCourse } from './api/wits-models';
 
 
@@ -128,6 +132,12 @@ export function getDefaultTemplateListItems() {
           desc: 'Demographics vs Marks',
           src: '/img/charts/line2.png',
           chartTypes: ['bar', 'line'],
+          data: {
+            dataType: 'commonFilterChart',
+            getQueryset: ({ years, faculties, schools, courses }) => querysetCommonGroupByAve(Student, Student.race_description, Student.enrolled_years.enrolled_courses.final_mark, { years, faculties, schools, courses }),
+            labelField: Student.race_description,
+            dataField: 'ave',
+          },
         },
       ],
     },

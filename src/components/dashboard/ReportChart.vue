@@ -105,9 +105,9 @@ export default {
     // get a handler for the chartData that returns promises for each set of data for the chart.
 
     const handlers = {
-      commonFilterChart: /* { type: 'commonFilterChart', chartType, labelField, dataField, getQueryset, filterSets } */
+      commonFilterChart: /* { type: 'commonFilterChart' } */
         () => meta.filters.map(
-          (filterData, i) => data.getQueryset(filterData)
+          ({ label, selected }, i) => data.getQueryset(selected)
             .thenStripPrefixes()
             .then(getMapperListToLabelsValues(data.labelField, data.dataField)),
         ),

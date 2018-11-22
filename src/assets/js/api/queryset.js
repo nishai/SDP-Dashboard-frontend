@@ -821,7 +821,7 @@ export class Queryset {
    *   ]
    * }
    *
-   * @param {{field: string, expr: any}} fields
+   * @param {{field: String, expr: String}} fields
    * @return {Queryset}
    */
   aggregate(...fields) {
