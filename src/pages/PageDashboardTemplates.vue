@@ -49,6 +49,10 @@ TODO: I did this page retardedly
       </div>
     </OpinionatedModal>
 
+    <div class="button" @click="openSide"> OPEN </div>
+
+    <OpinionatedSteps :steps="[{ label: 'asdfasdf', details: 'asdfadsfafd' }, {}, {}, { icon: 'bug' }]" :completed="2"/>
+
   </div>
 </template>
 
@@ -60,12 +64,15 @@ import DashboardCommonFiltersForm from '../components/dashboard/DashboardCommonF
 import DashboardTemplateList from '../components/dashboard/DashboardTemplateList.vue';
 import OpinionatedModal from '../components/opinionated/OpinionatedModal.vue';
 import OpinionatedFilterLabels from '../components/opinionated/OpinionatedFilterLabels.vue';
+import OpinionatedSteps from '../components/opinionated/OpinionatedSteps.vue';
 import OpinionatedTabs from '../components/opinionated/OpinionatedTabsAddable.vue';
 import StandardPageTitle from '../components/StandardPageTitle.vue';
+import SlideoutTemplateList from '../components/slideout/SlideoutTemplateList.vue';
 
 export default {
-  name: 'PageDashboardHome',
+  name: 'PageDashboardTemplates',
   components: {
+    OpinionatedSteps,
     OpinionatedTabs,
     DashboardCommonFiltersForm,
     StandardPageTitle,
@@ -97,6 +104,14 @@ export default {
   },
 
   methods: {
+    openSide() {
+      // https://officert.github.io/vue-slideout-panel/#/home
+      this.$showPanel.show({
+        component: SlideoutTemplateList,
+        props: {},
+      });
+    },
+
     onTabAdded(index) {
       this.selectedFilters.push({ label: 'Unknown', selected: { years: [], faculties: [], schools: [], courses: [] } });
     },

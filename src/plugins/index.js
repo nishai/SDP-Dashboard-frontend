@@ -5,6 +5,7 @@
 /* ========================================================================== */
 
 import Buefy from 'buefy';
+import { VueSlideoutPanel, vueSlideoutPanelService } from 'vue2-slideout-panel';
 
 /**
  * Register global plugins here
@@ -15,9 +16,32 @@ import Buefy from 'buefy';
  * Note: vuex and vue-router don't count as they are instantiated.
  */
 function installVendorPlugins(Vue) {
-  Vue.use(Buefy, { // options - https://buefy.github.io/documentation/constructor-options
-    defaultIconPack: 'fa', // font-awesome ('fa') | material-design-icons ('mdi')
+  // options - https://buefy.github.io/documentation/constructor-options
+  // font-awesome ('fa') | material-design-icons ('mdi')
+  Vue.use(Buefy, {
+    defaultIconPack: 'fa',
   });
+
+  // https://vue2-slideout-panel.wrkflows.io/en/articles/1001
+  // has component placed inside of LayoutMain
+  Vue.component('slideout-panel', VueSlideoutPanel);
+  // TODO: fix this, it should not be needed.
+  /**
+   * @memberOf {Vue}
+   * @member {vueSlideoutPanelService} $showPanel
+   */
+  Object.defineProperties(Vue, {
+    $showPanel: { get() { return vueSlideoutPanelService; } },
+  });
+  /**
+   * @memberOf {Vue.prototype}
+   * @member {vueSlideoutPanelService} $showPanel
+   */
+  Object.defineProperties(Vue.prototype, {
+    $showPanel: { get() { return vueSlideoutPanelService; } },
+  });
+  // TODO: disable debugging
+  window.vue2PanelDebug = true;
 }
 
 
@@ -30,7 +54,7 @@ function installVendorPlugins(Vue) {
 // material design icons imported here
 import '@/assets/scss/all.scss';
 import VueAuth from '../assets/js/plugins/vue-auth';
-import VueAxios from '../assets/js/plugins/vue-axios';
+import VueAxios, { cachiosInstance } from '../assets/js/plugins/vue-axios';
 import VueWitsModels from '../assets/js/plugins/vue-wits-models';
 
 /**

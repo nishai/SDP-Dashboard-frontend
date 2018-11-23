@@ -37,8 +37,12 @@ has one slot for content
       </section>
 
       <footer class="modal-card-foot">
-        <button class="button is-danger" @click="cancel">Cancel</button>
-        <button class="button is-primary" :disabled="acceptDisabled" @click="accept">Accept</button>
+        <b-level style="width: 100%">
+          <template slot="right">
+            <button class="button is-success" :disabled="acceptDisabled" @click="accept">Accept</button>
+            <button class="button is-danger is-outlined" @click="cancel">Cancel</button>
+          </template>
+        </b-level>
       </footer>
     </div>
   </b-modal>

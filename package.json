@@ -12,6 +12,7 @@
   "dependencies": {
     "@johmun/vue-tags-input": "^1.5.9",
     "axios": "^0.18.0",
+    "bulma-extensions": "^4.0.0",
     "buefy": "^0.7.0",
     "cachios": "^2.0.0",
     "chart.js": "^2.7.2",
@@ -23,6 +24,7 @@
     "vue": "^2.5.17",
     "vue-grid-layout": "^2.3.1",
     "vue-router": "^3.0.1",
+    "vue2-slideout-panel": "^1.0.8",
     "vuex": "^3.0.1",
     "vuex-router-sync": "^5.0.0"
   },
@@ -55,23 +57,104 @@
       "@vue/airbnb"
     ],
     "rules": {
-      "max-len": ["warn", {"ignoreComments": true, "code": 200}],
-      "prefer-destructuring": ["error", {"array": false, "object": true}, {"enforceForRenamedProperties": false}],
-      "no-param-reassign": ["error", {"props": false}],
-      "function-paren-newline": ["warn", "consistent"],
-      "no-underscore-dangle": ["error", {"allowAfterThis": true}],
-      "arrow-parens": ["error", "always"],
-      "no-unused-vars": ["warn", {"vars": "all","args": "none","ignoreRestSiblings": true}],
-      "quote-props": ["warn", "consistent"],
+      "max-len": [
+        "warn",
+        {
+          "ignoreComments": true,
+          "code": 200
+        }
+      ],
+      "prefer-destructuring": [
+        "error",
+        {
+          "array": false,
+          "object": true
+        },
+        {
+          "enforceForRenamedProperties": false
+        }
+      ],
+      "no-param-reassign": [
+        "error",
+        {
+          "props": false
+        }
+      ],
+      "function-paren-newline": [
+        "warn",
+        "consistent"
+      ],
+      "no-underscore-dangle": [
+        "error",
+        {
+          "allowAfterThis": true
+        }
+      ],
+      "arrow-parens": [
+        "error",
+        "always"
+      ],
+      "no-unused-vars": [
+        "warn",
+        {
+          "vars": "all",
+          "args": "none",
+          "ignoreRestSiblings": true
+        }
+      ],
+      "quote-props": [
+        "warn",
+        "consistent"
+      ],
       "object-curly-newline": "off",
-      "no-mixed-operators": ["error", {"allowSamePrecedence": false, "groups": [
-          ["*","/", "%"], ["%", "**"],
-          ["&", "|"], ["^", "~"], ["<<", ">>", ">>>"],
-          ["==", "!=", "===", "!==", ">", ">=", "<", "<="],
-          ["&&", "||"],
-          ["in", "instanceof"]
-        ]
-      }],
+      "no-mixed-operators": [
+        "error",
+        {
+          "allowSamePrecedence": false,
+          "groups": [
+            [
+              "*",
+              "/",
+              "%"
+            ],
+            [
+              "%",
+              "**"
+            ],
+            [
+              "&",
+              "|"
+            ],
+            [
+              "^",
+              "~"
+            ],
+            [
+              "<<",
+              ">>",
+              ">>>"
+            ],
+            [
+              "==",
+              "!=",
+              "===",
+              "!==",
+              ">",
+              ">=",
+              "<",
+              "<="
+            ],
+            [
+              "&&",
+              "||"
+            ],
+            [
+              "in",
+              "instanceof"
+            ]
+          ]
+        }
+      ],
       "key-spacing": "off",
       "no-multi-spaces": "off",
       "no-console": "off"

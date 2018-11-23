@@ -20,9 +20,11 @@
  *     - All CSS files are valid SCSS files.
  */
 
+
 /* ========================================================================== */
 /* Import Everything Needed                                                   */
 /* ========================================================================== */
+
 
 /* external icons */
 @import '~@fortawesome/fontawesome-free/css/all.css';
@@ -30,6 +32,30 @@
 
 /* our buefy theme & colors */
 @import "_theme";
+
+
+/* ========================================================================== */
+/* Import Bulma, Buefy & extensions  [DO NOT IMPORT IN OTHER FILES]           */
+/* NB: Theme must be imported before these                                    */
+/* ========================================================================== */
+
+
+/* https://bulma.io/documentation/customize/with-node-sass/ */
+@import "~bulma";
+
+/* https://buefy.github.io/documentation/customization */
+@import "~buefy/src/scss/buefy";
+
+/* https://wikiki.github.io/ (Importing ~bulma-extensions directly fails with out of memory error) */
+@import '~bulma-extensions/bulma-steps/src/sass/index';
+@import '~bulma-extensions/bulma-divider/src/sass/index';
+@import '~bulma-extensions/bulma-timeline/src/sass/index';
+
+
+/* ========================================================================== */
+/* Import out
+/* ========================================================================== */
+
 
 /* our custom style */
 @import "_defaults";

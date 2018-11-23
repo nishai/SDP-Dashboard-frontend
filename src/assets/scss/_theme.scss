@@ -3,6 +3,8 @@
 /* Import all Beufy Utilities [DO NOT IMPORT IN OTHER FILES]                  */
 /*   - https://bulma.io/documentation/customize/with-node-sass/               */
 /*   - https://buefy.github.io/documentation/customization                    */
+/*                                                                            */
+/* NB: Bulma css must be imported AFTER this file                             */
 /* ========================================================================== */
 
 
@@ -123,15 +125,3 @@ $section-padding-medium:  3rem 1.5rem; /* default: 9rem 1.5rem */
 $section-padding-large:   9rem 1.5rem; /* default: 18rem 1.5rem */
 
 $navbar-item-img-max-height: 3.5rem; /* default: 1.5rem | BUG: non-default does not center navbar-burger */
-
-
-/* ========================================================================== */
-/* Import Bulma & Buefy [DO NOT IMPORT IN OTHER FILES]                        */
-/*   -  Variables defined above are used to generate theme                    */
-/* ========================================================================== */
-
-
-/* https://bulma.io/documentation/customize/with-node-sass/ */
-@import "~bulma";
-/* https://buefy.github.io/documentation/customization */
-@import "~buefy/src/scss/buefy";

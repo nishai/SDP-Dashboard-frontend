@@ -10,6 +10,8 @@ Layout css from: https://codepen.io/ilanf/details/ybNVwg/
     <router-view class="h-expanded"/>
   </div>
   <MainFooter/>
+  <!-- https://vue2-slideout-panel.wrkflows.io/en/articles/1001 -->
+  <slideout-panel/>
 </div>
 </template>
 

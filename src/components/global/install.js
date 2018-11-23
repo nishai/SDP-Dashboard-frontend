@@ -15,6 +15,9 @@ import BulmaLevelItem from './BulmaLevelItem.vue';
 import BulmaNavbar from './BulmaNavbar.vue';
 import BulmaNavbarItem from './BulmaNavbarItem.vue';
 
+import BulmaStep from './BulmaStep.vue';
+import BulmaSteps from './BulmaSteps.vue';
+
 import VueChart from './VueChart.vue';
 
 /*
@@ -39,6 +42,9 @@ const components = [
 
   BulmaNavbar,
   BulmaNavbarItem,
+
+  BulmaStep,
+  BulmaSteps,
 
   VueChart,
 ];

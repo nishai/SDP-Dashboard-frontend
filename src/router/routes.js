@@ -13,6 +13,7 @@ import PageDashboardActive from '../pages/PageDashboardActive.vue';
 import PageDashboardTemplates from '../pages/PageDashboardTemplates.vue';
 import PageDashboardReports from '../pages/PageDashboardReports.vue';
 import PageDashboardReport from '../pages/PageDashboardReport.vue';
+import PageDashboardReportChart from '../pages/PageDashboardReportChart.vue';
 
 /* OverviewLayout pages */
 import PageOverviewUniversity from '../pages/PageOverviewUniversity.vue';
@@ -69,6 +70,11 @@ const dashboardRoutes = [
     path: '/dashboard/reports/:reportId',
     name: 'report',
     component: PageDashboardReport,
+  },
+  {
+    path: '/dashboard/reports/:reportId/charts/:chartId',
+    name: 'chart',
+    component: PageDashboardReportChart,
   },
   /* CHILDREN are OVERVIEWS */
   {

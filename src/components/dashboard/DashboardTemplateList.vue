@@ -1,43 +1,102 @@
 <!--
 takes in a set of categories and items.
 
+props:
+  categories: [... , { title, items: [... , { desc, src }] }]
+  isSelector: Boolean          If the component should be a selector instead.
+  selectorItem.sync
+
 has one event:
   @input="(item) => ..."
 -->
 
 <template>
-  <div>
+  <div v-if="!isSelector">
     <div v-for="(category, i) in categories" :key="'category_'+i" class="section">
-      <p class="title is-5">{{ category.title }}</p>
+
+      <!-- CATEGORY GROUPING -->
+      <p class="title is-5"> {{ category.title }} </p>
       <div class="columns is-multiline">
-        <div class="column is-one-third" v-for="(item, j) in category.items" :key="'category_'+i+'_item_'+j"  @click="() => handleClick(item)">
-          <DashboardTemplateListItem :src="item.src" :label="item.desc"/>
+
+        <!-- TEMPLATE ITEM -->
+        <div
+          v-for="(item, j) in category.items"
+          class="column is-one-third"
+          @click="() => handleClick(item)"
+          :key="'category_'+i+'_item_'+j"
+        >
+          <b-card class="template-list-item-card">
+            <b-card-content class="template-list-item-card-content">
+              <p class="content heading has-text-centered has-padding-top-md has-padding-left-md has-padding-right-md">
+                {{ item.desc }}
+              </p>
+              <b-level>
+                <b-level-item>
+                  <figure class="image is-128x128">
+                    <img :src="item.src" alt="chart">
+                  </figure>
+                </b-level-item>
+              </b-level>
+            </b-card-content>
+          </b-card>
         </div>
+
       </div>
     </div>
+
   </div>
+
+  <!-- IF IS A SELECTOR INSTEAD -->
+  <b-select
+    v-else
+    v-model="selectorItem"
+    @input="handleClick"
+    placeholder="Select a Template Type"
+  >
+    <optgroup v-for="(category, i) in categories" :key="'category_'+i" :label="category.title">
+      <option v-for="(item, j) in category.items" :value="item" :key="'category_'+i+'_item_'+j">
+        {{ item.desc }}
+      </option>
+    </optgroup>
+  </b-select>
+
 </template>
 
 <script>
 import { getDefaultTemplateListItems } from '../../assets/js/defaults';
-import DashboardTemplateListItem from './DashboardTemplateListItem.vue';
 
 export default {
   name: 'DashboardTemplateList',
-  components: { DashboardTemplateListItem },
   props: {
     categories: {
       default: getDefaultTemplateListItems,
       type: Array,
     },
+    isSelector: Boolean,
+    selectorItem: undefined,
   },
   methods: {
     handleClick(item) {
       this.$emit('input', item);
+      this.$emit('update:selectorItem', item);
     },
   },
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+
+.template-list-item-card {
+  height: 250px;
+  box-shadow: none;
+}
+
+.template-list-item-card:hover {
+  background-color: snow;
+}
+
+.template-list-item-card-content {
+  padding: 0rem;
+}
+
 </style>
