@@ -88,56 +88,46 @@ export function getDefaultTemplateListItems() {
           desc: 'Race',
           src: '/img/charts/doughnut.png',
           chartTypes: ['donut', 'pie'],
-          data: {
-            dataType: 'commonFilterChart',
-            getQueryset: ({ years, faculties, schools, courses }) => querysetCommonGroupByCount(Student, Student.race_description, { years, faculties, schools, courses }),
-            labelField: Student.race_description,
-            dataField: 'count',
-          },
+          type: 'commonFilterChart', /* influences fields below */
+          getQueryset: ({ years, faculties, schools, courses }) => querysetCommonGroupByCount(Student, Student.race_description, { years, faculties, schools, courses }),
+          fieldLabel: Student.race_description,
+          dataField: 'count',
         },
         {
           desc: 'Gender',
           src: '/img/charts/pie2.png',
           chartTypes: ['donut', 'pie'],
-          data: {
-            dataType: 'commonFilterChart',
-            getQueryset: ({ years, faculties, schools, courses }) => querysetCommonGroupByCount(Student, Student.gender, { years, faculties, schools, courses }),
-            labelField: Student.gender,
-            dataField: 'count',
-          },
+          type: 'commonFilterChart', /* influences fields below */
+          getQueryset: ({ years, faculties, schools, courses }) => querysetCommonGroupByCount(Student, Student.gender, { years, faculties, schools, courses }),
+          fieldLabel: Student.gender,
+          fieldData: 'count',
         },
         {
           desc: 'Nationality',
           src: '/img/charts/pie1.png',
           chartTypes: ['donut', 'pie'],
-          data: {
-            dataType: 'commonFilterChart',
-            getQueryset: ({ years, faculties, schools, courses }) => querysetCommonGroupByCount(Student, Student.nationality_short_name, { years, faculties, schools, courses }),
-            labelField: Student.nationality_short_name,
-            dataField: 'count',
-          },
+          type: 'commonFilterChart', /* influences fields below */
+          getQueryset: ({ years, faculties, schools, courses }) => querysetCommonGroupByCount(Student, Student.nationality_short_name, { years, faculties, schools, courses }),
+          fieldLabel: Student.nationality_short_name,
+          fieldData: 'count',
         },
         {
           desc: 'Home Language',
           src: '/img/charts/pie3.png',
           chartTypes: ['donut', 'pie'],
-          data: {
-            dataType: 'commonFilterChart',
-            getQueryset: ({ years, faculties, schools, courses }) => querysetCommonGroupByCount(Student, Student.home_language_description, { years, faculties, schools, courses }),
-            labelField: Student.home_language_description,
-            dataField: 'count',
-          },
+          type: 'commonFilterChart', /* influences fields below */
+          getQueryset: ({ years, faculties, schools, courses }) => querysetCommonGroupByCount(Student, Student.home_language_description, { years, faculties, schools, courses }),
+          fieldLabel: Student.home_language_description,
+          fieldData: 'count',
         },
         {
           desc: 'Demographics vs Marks',
           src: '/img/charts/line2.png',
           chartTypes: ['bar', 'line'],
-          data: {
-            dataType: 'commonFilterChart',
-            getQueryset: ({ years, faculties, schools, courses }) => querysetCommonGroupByAve(Student, Student.race_description, Student.enrolled_years.enrolled_courses.final_mark, { years, faculties, schools, courses }),
-            labelField: Student.race_description,
-            dataField: 'ave',
-          },
+          type: 'commonFilterChart', /* influences fields below */
+          getQueryset: ({ years, faculties, schools, courses }) => querysetCommonGroupByAve(Student, Student.race_description, Student.enrolled_years.enrolled_courses.final_mark, { years, faculties, schools, courses }),
+          fieldLabel: Student.race_description,
+          fieldData: 'ave',
         },
       ],
     },

@@ -185,7 +185,7 @@ Wits filter set that manages:
     class="columns is-multiline"
   >
 
-    <b-field class="column is-half" label="Years">
+    <b-field class="column is-full" label="Years">
       <OpinionatedFilterLabels
         placeholder="All Years"
         :items="data.years"
@@ -194,7 +194,7 @@ Wits filter set that manages:
       />
     </b-field>
 
-    <b-field class="column is-half" label="Faculties">
+    <b-field class="column is-full" label="Faculties">
       <OpinionatedFilterLabels
         placeholder="All Faculties"
         :items="data.faculties"
@@ -203,7 +203,7 @@ Wits filter set that manages:
       />
     </b-field>
 
-    <b-field class="column is-half" label="Schools">
+    <b-field class="column is-full" label="Schools">
       <OpinionatedFilterLabels
         placeholder="All Schools"
         :items="data.schools"
@@ -212,7 +212,7 @@ Wits filter set that manages:
         ref="tagInputSchools"
       />
     </b-field>
-    <b-field class="column is-half" label="Courses">
+    <b-field class="column is-full" label="Courses">
       <OpinionatedFilterLabels
         placeholder="All Courses"
         :items="data.courses"

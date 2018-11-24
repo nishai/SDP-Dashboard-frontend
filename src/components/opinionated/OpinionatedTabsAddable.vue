@@ -11,11 +11,12 @@ Wits filter set that manages by default:
 <!-- TODO: for some reason this does not bind the slots to components properly for example if a thing is deleted, the data remains the same... -->
 
 <template>
-  <b-tabs v-model="activeTab" @change="handleTabClick">
+  <b-tabs v-model="activeTab" @change="handleTabClick" class="h-expander">
     <b-tab-item
       v-for="i in Math.min(numTabs + 1, maxTabs)"
       :icon="i > numTabs ? 'plus' : undefined"
       :key="'tab_'+i"
+      class="h-expanded h-expander"
     >
       <template slot="header" v-if="delActive && i <= numTabs">
         <div class="level" @mouseover="showByIndex=i-1" @mouseout="showByIndex=null">
@@ -27,7 +28,7 @@ Wits filter set that manages by default:
           />
         </div>
       </template>
-      <slot v-if="i <= numTabs" :i="i-1" :item="items[i-1]"> <!-- iteration starts at 1 not 0 -->
+      <slot class="h-expanded h-expander" v-if="i <= numTabs" :i="i-1" :item="items[i-1]"> <!-- iteration starts at 1 not 0 -->
         {{ i-1 }} : {{ items[i-1] }}
       </slot>
     </b-tab-item>
@@ -94,5 +95,13 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+
+/* same as extending with h-expander & h-expanded */
+/deep/ .tab-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 </style>

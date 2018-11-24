@@ -15,13 +15,13 @@ has one event:
     <div v-for="(category, i) in categories" :key="'category_'+i" class="section">
 
       <!-- CATEGORY GROUPING -->
-      <p class="title is-5"> {{ category.title }} </p>
+      <p class="title is-5" :class="[singles ? 'has-text-centered' : '']"> {{ category.title }} </p>
       <div class="columns is-multiline">
 
         <!-- TEMPLATE ITEM -->
         <div
           v-for="(item, j) in category.items"
-          class="column is-one-third"
+          class="column" :class="[singles ? 'is-full' : 'is-one-third', singles ? 'is-paddingless' : '']"
           @click="() => handleClick(item)"
           :key="'category_'+i+'_item_'+j"
         >
@@ -74,6 +74,7 @@ export default {
     },
     isSelector: Boolean,
     selectorItem: undefined,
+    singles: Boolean,
   },
   methods: {
     handleClick(item) {

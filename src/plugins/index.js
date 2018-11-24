@@ -5,7 +5,6 @@
 /* ========================================================================== */
 
 import Buefy from 'buefy';
-import { VueSlideoutPanel, vueSlideoutPanelService } from 'vue2-slideout-panel';
 
 /**
  * Register global plugins here
@@ -21,27 +20,6 @@ function installVendorPlugins(Vue) {
   Vue.use(Buefy, {
     defaultIconPack: 'fa',
   });
-
-  // https://vue2-slideout-panel.wrkflows.io/en/articles/1001
-  // has component placed inside of LayoutMain
-  Vue.component('slideout-panel', VueSlideoutPanel);
-  // TODO: fix this, it should not be needed.
-  /**
-   * @memberOf {Vue}
-   * @member {vueSlideoutPanelService} $showPanel
-   */
-  Object.defineProperties(Vue, {
-    $showPanel: { get() { return vueSlideoutPanelService; } },
-  });
-  /**
-   * @memberOf {Vue.prototype}
-   * @member {vueSlideoutPanelService} $showPanel
-   */
-  Object.defineProperties(Vue.prototype, {
-    $showPanel: { get() { return vueSlideoutPanelService; } },
-  });
-  // TODO: disable debugging
-  window.vue2PanelDebug = true;
 }
 
 

@@ -28,30 +28,44 @@ TODO: I did this page retardedly
       </div>
     </section>
 
-    <OpinionatedModal :active.sync="modalActive" @accept="onModalAccept" @cancel="onModalCancel">
-      <div style="min-height: 1000px">
-        <p class="title">{{ selectedItem.desc }}</p>
-        <!-- CHART TYPE SELECTOR -->
-        <DashboardChartTypeSelector
-          @input="(type)=>selectedItem.type=type"
-          :types-enabled="selectedItem.chartTypes"
-        />
+    <!--<OpinionatedModal :active.sync="modalActive" @accept="onModalAccept" @cancel="onModalCancel">-->
+      <!--<SlideoutChartOptions :template="selectedTemplate" :subsets="selectedSubsets"/>-->
+    <!--</OpinionatedModal>-->
 
-        <!-- TABBED FILTERS -->
-        <OpinionatedTabs :items="selectedFilters" @add="onTabAdded" @delete="onTabDelete">
-          <template slot-scope="props">
-            <b-field label="Dataset Label">
-              <b-input v-model="props.item.label"></b-input>
-            </b-field>
-            <DashboardCommonFiltersForm :selected.sync="props.item.selected"/>
-          </template>
-        </OpinionatedTabs>
+
+    <!--<VuePanel-->
+      <!--v-model="modalActive"-->
+      <!--:widths="['400px']"-->
+      <!--@close="modalActive=false"-->
+    <!--&gt;-->
+<!---->
+    <!--</VuePanel>-->
+
+
+    <v-slideout
+      :active.sync="modalActive"
+      :active-extra.sync="modalActiveExtra"
+      width="600px" width-pane="200px" width-pane-extra="400px"
+      parents-disabled
+    >
+      <DashboardTemplateList
+        v-if="reportValid"
+        :categories="templateCategories"
+        @input="(item) => { selectedTemplate=item; modalActiveExtra=true; }"
+        singles
+      />
+
+      <div slot="extra" class="content has-padding-md">
+        <SlideoutChartOptions :template="selectedTemplate" :subsets="selectedSubsets"/>
+        <b-level>
+          <b-field slot="right" grouped>
+            <p class="control button is-danger is-outlined" @click="modalActiveExtra=false"> Back </p>
+            <p class="control button is-success" @click="onModalAccept"> Create </p>
+          </b-field>
+        </b-level>
       </div>
-    </OpinionatedModal>
 
-    <div class="button" @click="openSide"> OPEN </div>
-
-    <OpinionatedSteps :steps="[{ label: 'asdfasdf', details: 'asdfadsfafd' }, {}, {}, { icon: 'bug' }]" :completed="2"/>
+    </v-slideout>
 
   </div>
 </template>
@@ -66,12 +80,13 @@ import OpinionatedModal from '../components/opinionated/OpinionatedModal.vue';
 import OpinionatedFilterLabels from '../components/opinionated/OpinionatedFilterLabels.vue';
 import OpinionatedSteps from '../components/opinionated/OpinionatedSteps.vue';
 import OpinionatedTabs from '../components/opinionated/OpinionatedTabsAddable.vue';
+import SlideoutChartOptions from '../components/slideout/SlideoutChartOptions.vue';
 import StandardPageTitle from '../components/StandardPageTitle.vue';
-import SlideoutTemplateList from '../components/slideout/SlideoutTemplateList.vue';
 
 export default {
   name: 'PageDashboardTemplates',
   components: {
+    SlideoutChartOptions,
     OpinionatedSteps,
     OpinionatedTabs,
     DashboardCommonFiltersForm,
@@ -85,9 +100,13 @@ export default {
   data() {
     return {
       templateCategories: getDefaultTemplateListItems(),
+      selectedTemplate: {},
+      selectedSubsets: [],
+
       modalActive: false,
-      selectedItem: {},
-      selectedFilters: [],
+      modalActiveExtra: false,
+
+      panel: undefined,
     };
   },
 
@@ -104,41 +123,27 @@ export default {
   },
 
   methods: {
-    openSide() {
-      // https://officert.github.io/vue-slideout-panel/#/home
-      this.$showPanel.show({
-        component: SlideoutTemplateList,
-        props: {},
-      });
-    },
-
-    onTabAdded(index) {
-      this.selectedFilters.push({ label: 'Unknown', selected: { years: [], faculties: [], schools: [], courses: [] } });
-    },
-
-    onTabDelete(index) {
-      this.selectedFilters.splice(index, 1);
-    },
 
     showModal(templateItem) {
-      this.selectedItem = templateItem;
-      this.selectedFilters = [];
-      this.onTabAdded();
+      this.selectedTemplate = templateItem;
+      this.selectedSubsets = [];
+
+      this.modalActiveExtra = false;
       this.modalActive = true;
     },
 
     onModalAccept() {
       if (this.isFilterDataValid()) {
         this.modalActive = false;
+        this.modalActiveExtra = false;
 
         // chart format
         const chart = {
           reportId: this.reportId,
-          name: this.selectedItem.desc,
+          name: this.selectedTemplate.desc,
           meta: {
-            chartType: this.selectedItem.type,
-            filters: this.selectedFilters,
-            data: this.selectedItem.data,
+            template: this.selectedTemplate,
+            subsets: this.selectedSubsets,
           },
         };
 
@@ -163,25 +168,25 @@ export default {
     },
 
     isFilterDataValid() {
-      console.log('VALIDATING: ', this.selectedFilters);
+      console.log('VALIDATING: ', this.selectedSubsets);
 
-      if (!this.selectedItem.type) {
+      if (!this.selectedTemplate.type) {
         return false;
       }
-      if (!Array.isArray(this.selectedFilters) || this.selectedFilters.length < 1) {
+      if (!Array.isArray(this.selectedSubsets) || this.selectedSubsets.length < 1) {
         return false;
       }
       let valid = true;
-      this.selectedFilters.forEach((item, i) => {
+      this.selectedSubsets.forEach((item, i) => {
         valid = valid && item.label
           && item.selected.years && item.selected.courses
           && item.selected.schools && item.selected.faculties;
       });
 
       /* { desc, src, type } */
-      console.log(this.selectedItem);
+      console.log(this.selectedTemplate);
       /* { label, selected: [{courses:[], faculties:[], schools:[], years:[]}] } */
-      console.log(this.selectedFilters);
+      console.log(this.selectedSubsets);
 
       return valid;
     },

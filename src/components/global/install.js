@@ -20,6 +20,8 @@ import BulmaSteps from './BulmaSteps.vue';
 
 import VueChart from './VueChart.vue';
 
+import VueSideout from './VueSlideout.vue';
+
 /*
  * REFRAIN FROM WIDE USE, this makes it hard to keep track of things and refactor
  *   - webstorm doesnt know whats going on
@@ -47,6 +49,8 @@ const components = [
   BulmaSteps,
 
   VueChart,
+
+  VueSideout,
 ];
 
 /* installer */
