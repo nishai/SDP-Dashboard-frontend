@@ -128,7 +128,7 @@ export default {
 
       let errorToShow;
 
-      if (this.modalName < 1) {
+      if (this.modalName.length < 1) {
         errorToShow = 'The given name is too short!';
       }
       if (Object.values(this.getReports).some((report) => report.name.toLowerCase() === this.modalName.toLowerCase())) {
@@ -139,7 +139,6 @@ export default {
         this.$toast.open({
           duration: 3000,
           message: errorToShow,
-          position: 'is-bottom',
           type: 'is-danger',
         });
         this.modalCanAccept = false;

@@ -29,11 +29,12 @@
           <p class="control"><button class="button is-info is-outlined" @click="convertToPdf" :disabled="!layout || this.layout.length < 1">
             <span> PDF </span> <b-icon icon="file-download" size="is-small"/>
           </button></p>
-          <p class="control">
-            <button class="button is-danger is-outlined" @click="deleteReport">
-              <span> Delete </span> <b-icon icon="trash-alt" size="is-small"/>
-            </button>
-          </p>
+          <p class="control"><button class="button is-warning is-outlined" @click="onRenameReport">
+            <b-icon icon="pen" size="is-small"/>
+          </button></p>
+          <p class="control"><button class="button is-danger is-outlined" @click="deleteReport">
+            <b-icon icon="trash-alt" size="is-small"/>
+          </button></p>
         </b-field>
       </template>
     </b-level>
@@ -76,7 +77,7 @@
 <script>
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import VueGridLayout from 'vue-grid-layout';
 import DashboardChart from '../components/dashboard/DashboardChart.vue';
 import OpinionatedGridLayout from '../components/opinionated/OpinionatedGridLayout.vue';
@@ -106,7 +107,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['hasReport', 'getReport', 'isDefaultReport']),
+    ...mapGetters(['hasReport', 'getReport', 'isDefaultReport', 'getReports']),
 
     reportId() {
       return this.$route.params.reportId;
@@ -154,6 +155,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(['renameReport']),
+
     /**
      * Reset chart sizes to 1x1 and remove gaps between charts.
      */
@@ -207,6 +210,42 @@ export default {
               type: 'is-danger',
             });
           });
+      });
+    },
+
+    onRenameReport() {
+      console.log('RENAMING');
+
+      if (!this.reportExists) {
+        return;
+      }
+
+      console.log('RENAMING');
+
+      this.$dialog.prompt({
+        message: 'Choose a new name for the report.',
+        inputAttrs: {
+          placeholder: this.name,
+          maxlength: 30,
+        },
+        onConfirm: (value) => {
+          // TODO: logic duplicated in DashboardReports
+          let errorToShow;
+          if (value.length < 1) {
+            errorToShow = 'The given name is too short!';
+          }
+          if (Object.values(this.getReports).some((report) => report.name.toLowerCase() === value.toLowerCase())) {
+            errorToShow = 'The given name is already taken!';
+          }
+          if (errorToShow) {
+            this.$toast.open({ duration: 3000, message: errorToShow, type: 'is-danger' });
+            return;
+          }
+          this.renameReport({ reportId: this.reportId, name: value })
+            .catch(() => {
+              this.$toast.open({ duration: 3000, message: 'An unexpected error occurred while renaming the report.', type: 'is-danger' });
+            });
+        },
       });
     },
 
