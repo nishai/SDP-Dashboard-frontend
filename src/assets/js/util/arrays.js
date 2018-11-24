@@ -1,3 +1,5 @@
+import palette from 'google-palette';
+
 /**
  * @param {Array<any>} list
  * @param {function(any): Boolean} includeItemFunc
@@ -71,6 +73,21 @@ export function getMapperGroupByField(field) {
  * @return {{labels: Array, values: Array}}
  */
 export function listToLabelsValues(list, labelField, valueField) {
+  if (!labelField || !valueField) {
+    throw new Error(`labelField (${labelField}) or valueField (${valueField}) are invalid`);
+  }
+
+  if (Array.isArray(list) && list.length < 1) {
+    console.warn(`Results list is empty, expected to obtain fields: labels (${labelField}) and values (${valueField})`);
+  }
+
+  if (list.length > 0 && !(Object.prototype.hasOwnProperty.call(list[0], labelField) && Object.prototype.hasOwnProperty.call(list[0], valueField))) {
+    console.warn(
+      `WARNING: label (${labelField}) or value (${valueField}) attributes missing from results. `
+      + `Options are: [${Object.keys(list[0]).join(', ')}]`,
+    );
+  }
+
   return {
     labels: list.map((item) => item[labelField]),
     values: list.map((item) => item[valueField]),
@@ -96,16 +113,14 @@ export function labelsValuesListToChartData(list) {
 
   list.forEach(({ labels, values }, index) => {
     if (labels.length !== values.length) {
-      throw Error('length of labels != length of values')
+      throw Error('length of labels != length of values');
     }
-    for (let i = 0; i < labels.length; i += 1) {
-      const label = labels[i];
-      const value = values[i];
-      if (!labelsMap.has(value)) {
+    labels.forEach((label, i) => {
+      if (!labelsMap.has(label)) {
         labelsMap.set(label, new Array(list.length));
       }
-      labelsMap.get(label)[index] = value;
-    }
+      labelsMap.get(label)[index] = values[i];
+    });
   });
 
   const labels = [...labelsMap.keys()];
@@ -121,6 +136,68 @@ export function labelsValuesListToChartData(list) {
 
 export function getMapperLabelsValuesListToChartData() {
   return labelsValuesListToChartData;
+}
+
+
+/* COLORIZE CHART LABELS */
+
+
+/**
+ * Colorize the labels of all the datasets.
+ * http://google.github.io/palette.js/
+ *
+ * @param {{ labels: Array, datasets: Array }} data
+ * @param {String} paletteName - any length: ['tol-dv', 'tol-rainbow', 'tol-sq'], length <= 12: ['tol'], length <= 11: ['cb-BrBG', 'cb-PRGn', 'cb-RdYlBu', ...]
+ * @return {{ labels: Array, datasets: Array }}
+ */
+export function colorizeChartLabels(data, paletteName = 'tol-dv') {
+  const colors = palette('tol-rainbow', data.labels.length).map((color) => `#${color}`);
+
+  if (data.labels.length !== colors.length) {
+    throw Error('length of labels != length of colors, use a different color scheme.');
+  }
+
+  data.datasets.forEach((dataset, i) => {
+    if (data.labels.length !== dataset.data.length) {
+      throw Error('length of labels != length of dataset.data (and thus also not equal to the colors length)');
+    }
+    dataset.backgroundColor = colors;
+  });
+
+  return data;
+}
+
+export function getMapperColorizeChartLabels(paletteName = 'tol-dv') {
+  return (data) => colorizeChartLabels(data, paletteName);
+}
+
+/* COLORIZE CHART DATASETS */
+
+/**
+ * Colorize the individual datasets.
+ * http://google.github.io/palette.js/
+ *
+ * @param {{ labels: Array, datasets: Array }} data
+ * @param {String} paletteName - any length: ['tol-dv', 'tol-rainbow', 'tol-sq'], length <= 12: ['tol'], length <= 11: ['cb-BrBG', 'cb-PRGn', 'cb-RdYlBu', ...]
+ * @return {{ labels: Array, datasets: Array }}
+ */
+export function colorizeChartDatasets(data, paletteName = 'tol-rainbow') {
+
+  const colors = palette('tol-rainbow', data.datasets.length).map((color) => `#${color}`);
+
+  if (data.datasets.length !== colors.length) {
+    throw Error('length of datasets != length of colors, use a different color scheme.');
+  }
+
+  data.datasets.forEach((dataset, i) => {
+    dataset.backgroundColor = colors[i];
+  });
+
+  return data;
+}
+
+export function getMapperColorizeChartDatasets(paletteName = 'tol-rainbow') {
+  return (data) => colorizeChartDatasets(data, paletteName);
 }
 
 

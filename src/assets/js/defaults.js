@@ -90,7 +90,7 @@ export function getDefaultTemplateListItems() {
           type: 'commonFilterChart', /* influences fields below */
           getQueryset: ({ years, faculties, schools, courses }) => querysetCommonGroupByCount(Student, Student.race_description, { years, faculties, schools, courses }),
           fieldLabel: Student.race_description,
-          dataField: 'count',
+          fieldData: 'count',
         },
         {
           desc: 'Gender',

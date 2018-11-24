@@ -39,7 +39,13 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { getMapperLabelsValuesListToChartData, getMapperListToLabelsValues } from '../../assets/js/util/arrays.js';
+import {
+  getMapperColorizeChartData,
+  getMapperColorizeChartDatasets,
+  getMapperColorizeChartLabels,
+  getMapperLabelsValuesListToChartData,
+  getMapperListToLabelsValues
+} from '../../assets/js/util/arrays';
 import SlideoutChartOptions from '../slideout/SlideoutChartOptions.vue';
 
 export default {
@@ -131,7 +137,9 @@ export default {
 
       Promise.all(allPromises)
         .then(getMapperLabelsValuesListToChartData())
+        .then(getMapperColorizeChartLabels(template.colorPalette || 'tol-dv'))
         .then((chartData) => {
+          console.log('Chart Refreshed:', chartData, this.chart);
           this.chartData = chartData;
         });
     },
