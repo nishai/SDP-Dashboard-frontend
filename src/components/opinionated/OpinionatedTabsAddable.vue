@@ -104,4 +104,14 @@ export default {
   flex: 1;
 }
 
+/* Header was indented for some reason */
+/deep/ nav.tabs ul {
+  margin: 0;
+}
+
+/* First item was raised for some reason */
+/deep/ nav.tabs ul li {
+  margin: 0;
+}
+
 </style>

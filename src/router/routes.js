@@ -10,7 +10,6 @@ import PageMainAbout from '../pages/PageSingleAbout.vue';
 
 /* DashboardLayout pages */
 import PageDashboardActive from '../pages/PageDashboardActive.vue';
-import PageDashboardTemplates from '../pages/PageDashboardTemplates.vue';
 import PageDashboardReports from '../pages/PageDashboardReports.vue';
 import PageDashboardReport from '../pages/PageDashboardReport.vue';
 import PageDashboardReportChart from '../pages/PageDashboardReportChart.vue';
@@ -54,11 +53,6 @@ const dashboardRoutes = [
     path: '/dashboard/active',
     name: 'dashboard',
     component: PageDashboardActive,
-  },
-  {
-    path: '/dashboard/templates',
-    name: 'templates',
-    component: PageDashboardTemplates,
   },
   {
     path: '/dashboard/reports',

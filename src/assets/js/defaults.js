@@ -32,7 +32,6 @@ export function getDefaultSidebarSections() {
       name: 'Reports',
       routes: [
         { name: 'Active Report',     icon: 'star', type: 'is-warning', to: '/dashboard/active' },
-        { name: 'Templates',     icon: 'file-alt',  type: 'is-danger',    to: '/dashboard/templates' },
         { name: 'Reports', icon: 'chart-pie',  type: 'is-bulma', to: '/dashboard/reports' },
       ],
     },
@@ -75,7 +74,7 @@ export function getDefaultChartInfo() {
 
 
 /* ========================================================================== */
-/* DashboardTemplateList.vue                                                  */
+/* DashboardChartOptionsTemplates.vue                                                  */
 /* ========================================================================== */
 
 
@@ -171,7 +170,7 @@ export function getDefaultTemplateListItems() {
 }
 
 /* ========================================================================== */
-/* DashboardCommonFiltersForm.vue                                             */
+/* DashboardChartOptionsFilterForm.vue                                             */
 /* ========================================================================== */
 
 

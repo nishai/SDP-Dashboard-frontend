@@ -21,24 +21,22 @@ has one event:
         <!-- TEMPLATE ITEM -->
         <div
           v-for="(item, j) in category.items"
-          class="column" :class="[singles ? 'is-full' : 'is-one-third', singles ? 'is-paddingless' : '']"
+          class="column template-list-item" :class="[singles ? 'is-full' : 'is-one-third', singles ? 'is-paddingless' : '']"
           @click="() => handleClick(item)"
           :key="'category_'+i+'_item_'+j"
         >
-          <b-card class="template-list-item-card">
-            <b-card-content class="template-list-item-card-content">
-              <p class="content heading has-text-centered has-padding-top-md has-padding-left-md has-padding-right-md">
-                {{ item.desc }}
-              </p>
-              <b-level>
-                <b-level-item>
-                  <figure class="image is-128x128">
-                    <img :src="item.src" alt="chart">
-                  </figure>
-                </b-level-item>
-              </b-level>
-            </b-card-content>
-          </b-card>
+          <section class="has-padding-md">
+            <b-level class="is-marginless">
+              <b-level-item>
+                <figure class="image" :class="[singles ? 'is-64x64' : 'is-128x128']">
+                  <img :src="item.src" alt="chart">
+                </figure>
+              </b-level-item>
+            </b-level>
+            <p class="content heading has-text-centered is-marginless has-padding-top-sm has-padding-left-sm has-padding-right-sm">
+              {{ item.desc }}
+            </p>
+          </section>
         </div>
 
       </div>
@@ -64,9 +62,11 @@ has one event:
 
 <script>
 import { getDefaultTemplateListItems } from '../../assets/js/defaults';
+import BLevelItem from '../global/BulmaLevelItem.vue';
 
 export default {
-  name: 'DashboardTemplateList',
+  name: 'DashboardChartOptionsTemplates',
+  components: { BLevelItem },
   props: {
     categories: {
       default: getDefaultTemplateListItems,
@@ -87,17 +87,8 @@ export default {
 
 <style scoped lang="scss">
 
-.template-list-item-card {
-  height: 250px;
-  box-shadow: none;
-}
-
-.template-list-item-card:hover {
-  background-color: snow;
-}
-
-.template-list-item-card-content {
-  padding: 0rem;
+.template-list-item:hover {
+  background-color: whitesmoke;
 }
 
 </style>

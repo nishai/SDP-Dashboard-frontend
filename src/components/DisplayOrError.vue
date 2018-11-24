@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: 'LoadOrError',
+  name: 'DisplayOrError',
 
   props: {
     active: Boolean,
@@ -32,7 +32,7 @@ export default {
     },
     errorIconPack: {
       type: String,
-      defualt: undefined,
+      default: undefined,
     },
   },
 };

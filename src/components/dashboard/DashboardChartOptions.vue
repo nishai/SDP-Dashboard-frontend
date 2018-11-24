@@ -1,0 +1,90 @@
+<template>
+  <div style="height: 100%; min-height: 1000px" class="h-expander">
+    <p class="title">{{ template.desc }}</p>
+
+    <b-field label="Chart Name">
+      <b-input :value="name" @input="onNameChange" :placeholder="template.desc" expanded></b-input>
+    </b-field>
+
+    <!-- CHART TYPE SELECTOR -->
+    <DashboardChartOptionsType
+      @input="onTypeChange"
+      :type="type"
+      :types="template.chartTypes"
+      expanded
+    />
+
+    <!-- TABBED FILTERS -->
+    <OpinionatedTabs class="h-expanded h-expander" :items="subsets" @add="onTabAdded" @delete="onTabDelete">
+      <template slot-scope="props">
+        <b-field label="Dataset Label">
+          <b-input v-model="props.item.label"></b-input>
+        </b-field>
+        <DashboardChartOptionsFilterForm class="h-expanded" :selected.sync="props.item.selected"/>
+      </template>
+    </OpinionatedTabs>
+  </div>
+</template>
+
+<script>
+import DashboardChartOptionsType from './DashboardChartOptionsType.vue';
+import DashboardChartOptionsFilterForm from './DashboardChartOptionsFilterForm.vue';
+import OpinionatedTabs from '../opinionated/OpinionatedTabsAddable.vue';
+
+export default {
+  name: 'DashboardChartOptions',
+  components: {
+    DashboardChartOptionsFilterForm,
+    DashboardChartOptionsType,
+    OpinionatedTabs,
+  },
+  props: {
+    name: {
+      type: String,
+      default: undefined,
+    },
+    type: {
+      type: String,
+      default: undefined,
+    },
+    template: {
+      type: Object,
+      default: undefined,
+    },
+    subsets: {
+      type: Array,
+      default: undefined,
+    },
+  },
+
+  created() {
+    if (this.subsets.length < 1) {
+      this.onTabAdded();
+    }
+  },
+
+  methods: {
+    onNameChange(value) {
+      this.$emit('update:name', value);
+    },
+
+    onTypeChange(value) {
+      this.$emit('update:type', value);
+    },
+
+    onTabAdded(index) {
+      this.subsets.push({ label: 'Unknown', selected: { years: [], faculties: [], schools: [], courses: [] } });
+      this.$emit('update:subsets', this.subsets);
+    },
+
+    onTabDelete(index) {
+      this.subsets.splice(index, 1);
+      this.$emit('update:subsets', this.subsets);
+    },
+  },
+};
+</script>
+
+<style scoped>
+
+</style>

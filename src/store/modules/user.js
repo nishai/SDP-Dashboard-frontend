@@ -78,7 +78,7 @@ const mutationMap = {
     });
   },
 
-  [m.CREATE_REPORT_CHART](state, { reportId, chartId, name, meta }) {
+  [m.CREATE_REPORT_CHART](state, { reportId, chartId }) {
     const report = state.reports[reportId];
     if (!report) {
       throw new Error(`The specified report does not exist: ${reportId}`);
@@ -90,8 +90,11 @@ const mutationMap = {
     Vue.set(report.charts, chartId, {
       isChart: true,
       id: chartId,
-      name,
-      meta,
+      name: chartId,
+      meta: {
+        template: {},
+        subsets: [],
+      },
     });
 
     // TODO: no magic variables.
@@ -150,8 +153,50 @@ const mutationMap = {
     if (!chart) {
       throw new Error(`The specified chart does not exist: ${chartId}`);
     }
+    /* update */
     Vue.set(chart, 'name', name);
   },
+
+  [m.UPDATE_REPORT_CHART](state, { reportId, chartId, meta }) {
+    const report = state.reports[reportId];
+    if (!report) {
+      throw new Error(`The specified report does not exist: ${reportId}`);
+    }
+    const chart = report.charts[chartId];
+    if (!chart) {
+      throw new Error(`The specified chart does not exist: ${chartId}`);
+    }
+
+    /* { desc, src, type } */
+    if (!meta.template || !meta.template.type || !Array.isArray(meta.template.chartTypes) || meta.template.chartTypes.length < 1) {
+      throw new Error(`meta.template is invalid, ${meta.template}`);
+    }
+
+    if (!meta.chartType || meta.template.chartTypes.indexOf(meta.chartType) < 0) {
+      throw new Error(`Chart type is invalid "${meta.chartType}", allowedTypes are: [${meta.template.chartTypes}]`);
+    }
+
+    if (!Array.isArray(meta.subsets)) {
+      throw new Error(`meta.subsets is invalid, ${meta.subsets}`);
+    }
+
+    /* { label, selected: [{courses:[], faculties:[], schools:[], years:[]}] } */
+    const valid = meta.subsets.reduce((flag, item) => (
+      flag
+      && item.label
+      && item.selected.years && item.selected.courses
+      && item.selected.schools && item.selected.faculties
+    ), true);
+
+    if (!valid) {
+      throw new Error(`items in meta.subsets are invalid, ${meta.subsets}`);
+    }
+
+    Vue.set(chart, 'meta', meta);
+
+    console.log(m.UPDATE_REPORT_CHART, 'updated chart:', chart);
+  },
+
 
   [m.UPDATE_REPORT_LAYOUT](state, { reportId, layout }) {
     const report = state.reports[reportId];
@@ -196,8 +241,23 @@ const actionMap = {
 
   createReportChart({ commit, state, getters }, { reportId, name, meta }) {
     const newChartId = uuidv4();
-    commit(m.CREATE_REPORT_CHART, { reportId, chartId: newChartId, name, meta });
+    commit(m.CREATE_REPORT_CHART, { reportId, chartId: newChartId });
+    if (name) {
+      commit(m.RENAME_REPORT_CHART, { reportId, chartId: newChartId, name });
+    }
+    if (meta) {
+      commit(m.UPDATE_REPORT_CHART, { reportId, chartId: newChartId, meta });
+    }
     return newChartId;
+  },
+
+  updateReportChart({ commit, state, getters }, { reportId, chartId, name = undefined, meta = undefined }) {
+    if (name) {
+      commit(m.RENAME_REPORT_CHART, { reportId, chartId, name });
+    }
+    if (meta) {
+      commit(m.UPDATE_REPORT_CHART, { reportId, chartId, meta });
+    }
   },
 
   deleteReport({ commit, state, getters }, { reportId }) {

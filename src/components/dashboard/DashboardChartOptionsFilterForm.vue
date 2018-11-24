@@ -105,7 +105,7 @@ function makeFilterableUpdateMap(filterables) {
 /* ========================================================================== */
 
 export default {
-  name: 'DashboardCommonFiltersForm',
+  name: 'DashboardChartOptionsFilterForm',
   components: { OpinionatedFilterLabels },
   props: {
     filterables: {
@@ -176,16 +176,13 @@ Wits filter set that manages:
   - courses
 -->
 
-<!-- TODO: sync is not fricking working... only events -->
-
 <template>
-  <LoadOrError
+  <DisplayOrError
     :active="isLoading"
     :is-error="isError"
-    class="columns is-multiline"
   >
 
-    <b-field class="column is-full" label="Years">
+    <b-field label="Years">
       <OpinionatedFilterLabels
         placeholder="All Years"
         :items="data.years"
@@ -194,7 +191,7 @@ Wits filter set that manages:
       />
     </b-field>
 
-    <b-field class="column is-full" label="Faculties">
+    <b-field label="Faculties">
       <OpinionatedFilterLabels
         placeholder="All Faculties"
         :items="data.faculties"
@@ -203,7 +200,7 @@ Wits filter set that manages:
       />
     </b-field>
 
-    <b-field class="column is-full" label="Schools">
+    <b-field label="Schools">
       <OpinionatedFilterLabels
         placeholder="All Schools"
         :items="data.schools"
@@ -212,7 +209,7 @@ Wits filter set that manages:
         ref="tagInputSchools"
       />
     </b-field>
-    <b-field class="column is-full" label="Courses">
+    <b-field label="Courses">
       <OpinionatedFilterLabels
         placeholder="All Courses"
         :items="data.courses"
@@ -222,20 +219,20 @@ Wits filter set that manages:
       />
     </b-field>
 
-  </LoadOrError>
+  </DisplayOrError>
 </template>
 
 <script>
 import { cloneDeep } from 'lodash.clonedeep';
-import LoadOrError from '../LoadOrError.vue';
+import DisplayOrError from '../DisplayOrError.vue';
 import OpinionatedFilterLabels from '../opinionated/OpinionatedFilterLabels.vue';
 
 const fields = ['years', 'faculties', 'schools', 'courses'];
 const def = () => fields.reduce((o, f) => Object.assign(o, { [f]: [] }), {});
 
 export default {
-  name: 'DashboardCommonFiltersForm',
-  components: { LoadOrError, OpinionatedFilterLabels },
+  name: 'DashboardChartOptionsFilterForm',
+  components: { DisplayOrError, OpinionatedFilterLabels },
 
   props: {
     selected: {

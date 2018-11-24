@@ -47,11 +47,12 @@
         ref="gridLayout"
       >
         <template slot-scope="props">
-          <ReportChart
+          <DashboardChart
             :report-id="reportId"
             :chart-id="props.meta.i"
             :ref="'chart-'+props.meta.i"
             style="height: 100%"
+            @edit="editChart"
           />
         </template>
       </OpinionatedGridLayout>
@@ -65,6 +66,9 @@
     <!-- USED FOR SAVING -->
     <b-loading :active="isSaving" :can-cancel="false"/>
 
+    <!-- SLIDEOUT FOR EDITING CHARTS, provides a method that returns a promise -->
+    <SlideoutChartOptions ref="slideout"/>
+
   </div>
 </template>
 
@@ -73,8 +77,9 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { mapGetters } from 'vuex';
 import VueGridLayout from 'vue-grid-layout';
-import ReportChart from '../components/dashboard/ReportChart.vue';
+import DashboardChart from '../components/dashboard/DashboardChart.vue';
 import OpinionatedGridLayout from '../components/opinionated/OpinionatedGridLayout.vue';
+import SlideoutChartOptions from '../components/slideout/SlideoutChartOptions.vue';
 import StandardPageTitle from '../components/StandardPageTitle.vue';
 
 
@@ -82,7 +87,8 @@ export default {
   name: 'PageDashboardReport',
 
   components: {
-    ReportChart,
+    SlideoutChartOptions,
+    DashboardChart,
     StandardPageTitle,
     OpinionatedGridLayout,
     GridLayout: VueGridLayout.GridLayout,
@@ -92,6 +98,9 @@ export default {
   data() {
     return {
       isSaving: false,
+      /* editing */
+      editReportId: undefined,
+      editChartId: undefined,
     };
   },
 
@@ -155,7 +164,49 @@ export default {
      * Creates a chart for this report in the vuex store.
      */
     createChart() {
-      this.$router.push({ name: 'templates', query: { reportId: this.reportId } });
+      this.$refs.slideout.open().then(({ name, meta }) => {
+        console.log('SLIDEOUT PROMISE CREATE', name, meta);
+        this.$store.dispatch('createReportChart', { reportId: this.reportId, name, meta })
+          .then((chartId) => {
+            this.$toast.open({
+              duration: 3000,
+              type: 'is-success',
+              message: 'Please edit your new chart.',
+            });
+          })
+          .catch((error) => {
+            this.$toast.open({
+              duration: 3000,
+              type: 'is-danger',
+              message: 'There was an error creating the chart.',
+            });
+          });
+      });
+    },
+
+    /**
+     * Show the editor slideout to edit the specified chart.
+     * And then commit mutations based on the promise it returns.
+     */
+    editChart(reportId, chartId) {
+      this.$refs.slideout.open(reportId, chartId).then(({ name, meta }) => {
+        console.log('SLIDEOUT PROMISE EDIT', name, meta);
+        this.$store.dispatch('updateReportChart', { reportId, chartId, name, meta })
+          .then(() => {
+            this.$toast.open({
+              duration: 3000,
+              type: 'is-success',
+              message: 'Successfully modified your chart.',
+            });
+          })
+          .catch(() => {
+            this.$toast.open({
+              duration: 3000,
+              message: 'Failed to edit your chart.',
+              type: 'is-danger',
+            });
+          });
+      });
     },
 
     /**

@@ -22,7 +22,9 @@ The above was retarded, convoluted and an absolute mess.
     <transition
       name="slide-out"
       @enter="_onTransitionContainerEnter"
-
+      @after-leave="_onTransitionContainerAfterLeave"
+      @before-enter="_onTransitionContainerBeforeEnter"
+      @after-enter="_onTransitionContainerAfterEnter"
     >
       <div v-if="active" ref="container" class="panel-container panel-transform" :style="styleContainer">
 
@@ -79,6 +81,13 @@ export default {
     disableParents: Boolean,
   },
 
+  data() {
+    return {
+      /* fix animations */
+      delayedOpenExtra: false,
+    };
+  },
+
   watch: {
     active(value) {
       if (value) { this.open(); } else { this.close(); }
@@ -105,9 +114,14 @@ export default {
     },
 
     openExtra() {
-      this.$refs.container.style.right = '0';
-      this.$emit('update:activeExtra', true);
-      this.$emit('openExtra');
+      if (this.isEntering) {
+        /* If the user clicks to quickly on a chart */
+        this.delayedOpenExtra = true;
+      } else {
+        this.$refs.container.style.right = '0';
+        this.$emit('update:activeExtra', true);
+        this.$emit('openExtra');
+      }
     },
 
     close() {
@@ -141,7 +155,7 @@ export default {
     },
 
     _onMainPaneClick(event) {
-      if (this.activeExtra && this.disableParents) {
+      if (this.parentsDisabled) {
         let canceled = false;
         this.$emit('beforeCloseExtra', () => { canceled = true; }, event);
         if (!canceled) {
@@ -158,6 +172,27 @@ export default {
       if (!this.activeExtra) {
         this.closeExtra();
       }
+    },
+
+    /**
+     * Reset after closing, done here
+     * otherwise animation is jittery.
+     */
+    _onTransitionContainerAfterLeave() {
+      if (this.activeExtra) {
+        this.closeExtra();
+      }
+    },
+
+    _onTransitionContainerBeforeEnter() {
+      this.isEntering = true;
+    },
+    _onTransitionContainerAfterEnter() {
+      this.isEntering = false;
+      if (this.delayedOpenExtra && this.active) {
+        this.openExtra();
+      }
+      this.delayedOpenExtra = false;
     },
   },
 
