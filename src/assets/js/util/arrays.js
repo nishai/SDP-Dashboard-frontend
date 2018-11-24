@@ -147,11 +147,11 @@ export function getMapperLabelsValuesListToChartData() {
  * http://google.github.io/palette.js/
  *
  * @param {{ labels: Array, datasets: Array }} data
- * @param {String} paletteName - any length: ['tol-dv', 'tol-rainbow', 'tol-sq'], length <= 12: ['tol'], length <= 11: ['cb-BrBG', 'cb-PRGn', 'cb-RdYlBu', ...]
+ * @param {String} colorPalette - any length: ['tol-dv', 'tol-rainbow', 'tol-sq'], length <= 12: ['tol'], length <= 11: ['cb-BrBG', 'cb-PRGn', 'cb-RdYlBu', ...]
  * @return {{ labels: Array, datasets: Array }}
  */
-export function colorizeChartLabels(data, paletteName = 'tol-dv') {
-  const colors = palette('tol-rainbow', data.labels.length).map((color) => `#${color}`);
+export function colorizeChartLabels(data, colorPalette = 'tol-dv') {
+  const colors = palette(colorPalette, data.labels.length).map((color) => `#${color}`);
 
   if (data.labels.length !== colors.length) {
     throw Error('length of labels != length of colors, use a different color scheme.');
@@ -167,8 +167,8 @@ export function colorizeChartLabels(data, paletteName = 'tol-dv') {
   return data;
 }
 
-export function getMapperColorizeChartLabels(paletteName = 'tol-dv') {
-  return (data) => colorizeChartLabels(data, paletteName);
+export function getMapperColorizeChartLabels(colorPalette = 'tol-dv') {
+  return (data) => colorizeChartLabels(data, colorPalette);
 }
 
 /* COLORIZE CHART DATASETS */
@@ -178,12 +178,11 @@ export function getMapperColorizeChartLabels(paletteName = 'tol-dv') {
  * http://google.github.io/palette.js/
  *
  * @param {{ labels: Array, datasets: Array }} data
- * @param {String} paletteName - any length: ['tol-dv', 'tol-rainbow', 'tol-sq'], length <= 12: ['tol'], length <= 11: ['cb-BrBG', 'cb-PRGn', 'cb-RdYlBu', ...]
+ * @param {String} colorPalette - any length: ['tol-dv', 'tol-rainbow', 'tol-sq'], length <= 12: ['tol'], length <= 11: ['cb-BrBG', 'cb-PRGn', 'cb-RdYlBu', ...]
  * @return {{ labels: Array, datasets: Array }}
  */
-export function colorizeChartDatasets(data, paletteName = 'tol-rainbow') {
-
-  const colors = palette('tol-rainbow', data.datasets.length).map((color) => `#${color}`);
+export function colorizeChartDatasets(data, colorPalette = 'tol-dv') {
+  const colors = palette(colorPalette, data.datasets.length).map((color) => `#${color}`);
 
   if (data.datasets.length !== colors.length) {
     throw Error('length of datasets != length of colors, use a different color scheme.');
@@ -196,8 +195,8 @@ export function colorizeChartDatasets(data, paletteName = 'tol-rainbow') {
   return data;
 }
 
-export function getMapperColorizeChartDatasets(paletteName = 'tol-rainbow') {
-  return (data) => colorizeChartDatasets(data, paletteName);
+export function getMapperColorizeChartDatasets(colorPalette = 'tol-dv') {
+  return (data) => colorizeChartDatasets(data, colorPalette);
 }
 
 
