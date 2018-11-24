@@ -37,14 +37,6 @@
 /* ========================================================================== */
 
 /*
- * chartjs responsive fix:
- * https://github.com/chartjs/Chart.js/issues/4156
- */
-.column {
-  min-width: 0;
-}
-
-/*
  * No left padding for sections...
  * its nicer when everything is aligned...
  */
@@ -70,8 +62,32 @@
 /*
  * Mark children of h-expander to expand vertically.
  */
-.h-expander .h-expanded {
+.h-expanded {
   flex: 1;
+}
+
+/*
+ * union of .h-expander & .h-expanded
+ */
+.h-expand {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/*
+ * by default a flex box cannot be smaller than its content.
+ * This is needed for chartjs to be able to resize itself.
+ *
+ * chartjs responsive fix:
+ * https://github.com/chartjs/Chart.js/issues/4156
+ */
+.h-expander.no-min,
+.h-expand.no-min,
+.h-expanded.no-min,
+.column {
+  min-width: 0;
+  min-height: 0;
 }
 
 .d-footer {

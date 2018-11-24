@@ -6,7 +6,7 @@ Layout css from: https://codepen.io/ilanf/details/ybNVwg/
 <template>
 <div class="h-expander" style="min-height: 100vh">
   <MainNavbar/>
-  <div class="h-expanded h-expander">
+  <div class="h-expand">
     <router-view class="h-expanded"/>
   </div>
   <MainFooter/>

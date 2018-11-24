@@ -12,9 +12,9 @@ import { Q, Queryset } from './queryset';
 /* ========================================================================== */
 
 
-// TODO, add more pathways.
+// TODO, add more pathways, and validation
 export function makeCommonFilterGetter(pathYear, pathFaculties, pathSchools, pathCourses) {
-  return (years, faculties, schools, courses) => {
+  return ({ years, faculties, schools, courses }) => {
     let q = Q();
     if (pathYear && Array.isArray(years) && years.length > 0) q = q.and(pathYear.$in(), years);
     if (pathFaculties && Array.isArray(faculties) && faculties.length > 0) q = q.and(pathFaculties.$in(), faculties);

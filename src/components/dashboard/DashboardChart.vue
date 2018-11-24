@@ -1,5 +1,5 @@
 <template>
-  <b-card class="report-card">
+  <b-card class="report-card h-expander">
 
     <!-- HEADER -->
     <b-card-header>
@@ -17,9 +17,10 @@
     </b-card-header>
 
     <!-- CHART -->
-    <b-card-content class="has-text-centered">
+    <b-card-content class="has-text-centered h-expand">
       <!-- VALID -->
       <v-chart
+        class="h-expanded no-min"
         v-if="isValid"
         :type="chartType"
         :options="chartOptions"
@@ -39,14 +40,14 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import { getDefaultChartTooltipCallbacks } from '../../assets/js/defaults';
 import {
-  getMapperColorizeChartData,
-  getMapperColorizeChartDatasets,
-  getMapperColorizeChartLabels,
   getMapperLabelsValuesListToChartData,
-  getMapperListToLabelsValues
+  getMapperListToLabelsValues,
+  getMapperColorizeChartData,
 } from '../../assets/js/util/arrays';
 import SlideoutChartOptions from '../slideout/SlideoutChartOptions.vue';
+
 
 export default {
   name: 'DashboardChart',
@@ -132,12 +133,27 @@ export default {
       }
 
       const allPromises = handlers[template.type]();
+      const colors = template.colors || {};
+      const labels = template.labels || {};
+
+      this.chartOptions.tooltips = {
+        callbacks: getDefaultChartTooltipCallbacks({
+          postfix: labels.postfix || '',
+          rounding: labels.rounding || false,
+          percent: labels.percent || false,
+        }),
+      };
 
       // Resolve promises for data.
 
       Promise.all(allPromises)
-        .then(getMapperLabelsValuesListToChartData())
-        .then(getMapperColorizeChartLabels(template.colorPalette || 'tol-dv'))
+        .then(getMapperLabelsValuesListToChartData(subsets.map((subset) => subset.label)))
+        .then(getMapperColorizeChartData({
+          colorPalette: colors.palette || 'tol-rainbow',
+          datasetNotLabels: colors.datasetNotLabels || false,
+          shade: colors.shaded || true,
+          borders: colors.borders || false,
+        }))
         .then((chartData) => {
           console.log('Chart Refreshed:', chartData, this.chart);
           this.chartData = chartData;

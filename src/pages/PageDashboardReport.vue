@@ -45,6 +45,7 @@
         v-if="layout && layout.length > 0"
         :layout.sync="layout"
         ref="gridLayout"
+        class="has-margin-bottom-xl"
       >
         <template slot-scope="props">
           <DashboardChart

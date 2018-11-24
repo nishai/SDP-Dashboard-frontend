@@ -11,7 +11,7 @@ Layout css from: https://codepen.io/ilanf/details/ybNVwg/
       </div>
     </aside>
     <main class="column is-paddingless h-expander">
-      <div class="section has-side-padding h-expanded h-expander">
+      <div class="section has-side-padding h-expand">
         <DashboardRouterBreadcrumb/>
         <transition name="fade">
           <router-view class="h-expanded"></router-view>

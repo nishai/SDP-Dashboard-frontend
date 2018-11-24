@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%; min-height: 1000px" class="h-expander">
+  <div style="height: 100%" class="h-expander">
     <p class="title">{{ template.desc }}</p>
 
     <b-field label="Chart Name">
@@ -15,7 +15,7 @@
     />
 
     <!-- TABBED FILTERS -->
-    <OpinionatedTabs class="h-expanded h-expander" :items="subsets" @add="onTabAdded" @delete="onTabDelete">
+    <OpinionatedTabs class="h-expand" :items="subsets" @add="onTabAdded" @delete="onTabDelete">
       <template slot-scope="props">
         <b-field label="Dataset Label">
           <b-input v-model="props.item.label"></b-input>
@@ -73,7 +73,7 @@ export default {
     },
 
     onTabAdded(index) {
-      this.subsets.push({ label: 'Unknown', selected: { years: [], faculties: [], schools: [], courses: [] } });
+      this.subsets.push({ label: 'Unnamed Dataset', selected: { years: [], faculties: [], schools: [], courses: [] } });
       this.$emit('update:subsets', this.subsets);
     },
 

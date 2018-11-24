@@ -46,7 +46,7 @@ https://vue-chartjs.org/api/#events
 
 <template>
   <!-- USED TO MAKE THE CHART RESPONSIVE -->
-  <div style="position: relative; width: 99%">
+  <div style="position: relative">
     <canvas class="chart-canvas" ref="canvas"/>
     <b-loading :active="!data || !type" :is-full-page="false"/>
   </div>
@@ -54,8 +54,8 @@ https://vue-chartjs.org/api/#events
 
 
 <script>
+import clonedeep from 'lodash.clonedeep';
 import Chart from 'chart.js';
-import * as _ from 'lodash';
 
 /**
  * Aliases are the keys in this dictionary.
@@ -106,7 +106,7 @@ export default {
      * based on the props of the component.
      */
     overriddenOptions() {
-      const options = Object.assign(_.cloneDeep(this.options || {}), {
+      const options = Object.assign(clonedeep(this.options || {}), {
         responsive: this.responsive,
         maintainAspectRatio: this.maintainAspectRatio,
         onResize: this.onResize,

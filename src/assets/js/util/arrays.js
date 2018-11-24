@@ -1,4 +1,5 @@
 import palette from 'google-palette';
+import Color from 'color';
 
 /**
  * @param {Array<any>} list
@@ -108,8 +109,12 @@ export function getMapperListToLabelsValues(labelField, valueField) {
 /* LIST OF LABELS VALUES OBJECTS TO OBJECT OF LABELS, VALUES LIST */
 
 
-export function labelsValuesListToChartData(list) {
+export function labelsValuesListToChartData(list, datasetLabels) {
   const labelsMap = new Map();
+
+  if (datasetLabels && list.length !== datasetLabels.length) {
+    throw new Error(`length of labelsValuesList: ${list} is not equal to the length of the dataset labels: ${datasetLabels}`);
+  }
 
   list.forEach(({ labels, values }, index) => {
     if (labels.length !== values.length) {
@@ -126,6 +131,7 @@ export function labelsValuesListToChartData(list) {
   const labels = [...labelsMap.keys()];
   const datasets = list.map((_, index) => ({
     data: labels.map((label) => labelsMap.get(label)[index]),
+    label: datasetLabels ? datasetLabels[index] : undefined,
   }));
 
   return {
@@ -134,69 +140,58 @@ export function labelsValuesListToChartData(list) {
   };
 }
 
-export function getMapperLabelsValuesListToChartData() {
-  return labelsValuesListToChartData;
-}
-
-
-/* COLORIZE CHART LABELS */
-
-
-/**
- * Colorize the labels of all the datasets.
- * http://google.github.io/palette.js/
- *
- * @param {{ labels: Array, datasets: Array }} data
- * @param {String} colorPalette - any length: ['tol-dv', 'tol-rainbow', 'tol-sq'], length <= 12: ['tol'], length <= 11: ['cb-BrBG', 'cb-PRGn', 'cb-RdYlBu', ...]
- * @return {{ labels: Array, datasets: Array }}
- */
-export function colorizeChartLabels(data, colorPalette = 'tol-dv') {
-  const colors = palette(colorPalette, data.labels.length).map((color) => `#${color}`);
-
-  if (data.labels.length !== colors.length) {
-    throw Error('length of labels != length of colors, use a different color scheme.');
-  }
-
-  data.datasets.forEach((dataset, i) => {
-    if (data.labels.length !== dataset.data.length) {
-      throw Error('length of labels != length of dataset.data (and thus also not equal to the colors length)');
-    }
-    dataset.backgroundColor = colors;
-  });
-
-  return data;
-}
-
-export function getMapperColorizeChartLabels(colorPalette = 'tol-dv') {
-  return (data) => colorizeChartLabels(data, colorPalette);
+export function getMapperLabelsValuesListToChartData(datasetLabels) {
+  return (list) =>  labelsValuesListToChartData(list, datasetLabels);
 }
 
 /* COLORIZE CHART DATASETS */
 
 /**
- * Colorize the individual datasets.
+ * Colorize a chart data object.
+ *
  * http://google.github.io/palette.js/
  *
  * @param {{ labels: Array, datasets: Array }} data
  * @param {String} colorPalette - any length: ['tol-dv', 'tol-rainbow', 'tol-sq'], length <= 12: ['tol'], length <= 11: ['cb-BrBG', 'cb-PRGn', 'cb-RdYlBu', ...]
+ * @param {Boolean} datasetNotLabels - if the datasets themselves should be individually coloured rather than their labels.
  * @return {{ labels: Array, datasets: Array }}
  */
-export function colorizeChartDatasets(data, colorPalette = 'tol-dv') {
-  const colors = palette(colorPalette, data.datasets.length).map((color) => `#${color}`);
+export function colorizeChartData(data, { colorPalette = 'tol-rainbow', datasetNotLabels = false, shade = true, borders = false }) {
+  const length = datasetNotLabels ? data.datasets.length : data.labels.length;
+  const colors = palette(colorPalette, length).map((c) => Color(`#${c}`));
 
-  if (data.datasets.length !== colors.length) {
-    throw Error('length of datasets != length of colors, use a different color scheme.');
+  if (length !== colors.length) {
+    throw Error('length mismatch, probably not enough colors, try use a different color scheme.');
   }
 
   data.datasets.forEach((dataset, i) => {
-    dataset.backgroundColor = colors[i];
+    if (!datasetNotLabels && data.labels.length !== dataset.data.length) {
+      throw Error('length of labels != length of dataset.data (and thus also not equal to the colors length)');
+    }
+
+    const l = data.datasets.length - 1;
+    const lightenRatio = (l > 0 && shade) ? i * (0.5 / l) : 0;
+
+    if (datasetNotLabels) {
+      const c = colors[i].lighten(lightenRatio);
+      dataset.backgroundColor = borders ? c.alpha(0.1).string() : c.string();
+      if (borders) {
+        dataset.borderColor = c.string();
+      }
+    } else {
+      const cs = colors.map((c) => c.lighten(lightenRatio));
+      dataset.backgroundColor = borders ? cs.map((c) => c.alpha(0.1).string()) : cs.map((c) => c.string());
+      if (borders) {
+        dataset.borderColor = cs.map((c) => c.string());
+      }
+    }
   });
 
   return data;
 }
 
-export function getMapperColorizeChartDatasets(colorPalette = 'tol-dv') {
-  return (data) => colorizeChartDatasets(data, colorPalette);
+export function getMapperColorizeChartData({ colorPalette = 'tol-rainbow', datasetNotLabels = false, shade = true, borders = false }) {
+  return (data) => colorizeChartData(data, { colorPalette, datasetNotLabels, shade, borders });
 }
 
 

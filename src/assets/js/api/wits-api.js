@@ -2,7 +2,19 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable prefer-template */
 
-import { Faculty, School, Course, Program, ProgressOutcome, SecondarySchool, Student, EnrolledYear, EnrolledCourse, Field } from './wits-models';
+import {
+  Faculty,
+  School,
+  Course,
+  Program,
+  ProgressOutcome,
+  SecondarySchool,
+  Student,
+  EnrolledYear,
+  EnrolledCourse,
+  Field,
+  CLASS_NAME_TO_MODEL
+} from './wits-models';
 import { Q, Queryset } from './queryset';
 import commonFilters from './wits-common-filter';
 
@@ -81,10 +93,17 @@ function checkArrays(...arrays) {
 /**
  * @return {Queryset}
  */
-export function querysetCommonGroupByCount(Model, groupBy, { years = null, faculties = null, schools = null, courses = null }, distinct = false) {
+export function querysetCommonGroupByCount(model, groupBy, { years = null, faculties = null, schools = null, courses = null }, distinct = false) {
   checkArrays(years, faculties, schools, courses);
-  return Model.query
-    .filter(commonFilters[Model]({ years, faculties, schools, courses }))
+
+  const modelClass = (typeof model === 'string') ? CLASS_NAME_TO_MODEL[model] : model;
+
+  if (!commonFilters[modelClass]) {
+    throw new Error(`Model seems to be invalid: ${model}`);
+  }
+
+  return modelClass.query
+    .filter(commonFilters[modelClass]({ years, faculties, schools, courses }))
     .values(groupBy)
     .annotate({ field: 'count', expr: `count('${groupBy}'${distinct ? ', distinct=True' : ''})` });
 }

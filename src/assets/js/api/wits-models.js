@@ -305,6 +305,18 @@ export const NAME_TO_MODEL = {
   enrolled_course: EnrolledCourse,
 };
 
+export const CLASS_NAME_TO_MODEL = {
+  Faculty,
+  School,
+  Course,
+  Program,
+  ProgressOutcome,
+  SecondarySchool,
+  Student,
+  EnrolledYear,
+  EnrolledCourse,
+};
+
 export const MODELS = {
   Faculty,
   School,

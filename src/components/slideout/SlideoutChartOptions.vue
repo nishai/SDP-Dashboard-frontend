@@ -15,6 +15,7 @@
     <!-- OPTIONS -->
     <div slot="extra" class="content has-padding-md">
       <DashboardChartOptions
+        style="min-height: 900px"
         :name.sync="selectedName"
         :type.sync="selectedChartType"
         :template="selectedTemplate"
@@ -37,6 +38,7 @@
     <!-- OPTIONS -->
     <div class="content has-padding-md">
       <DashboardChartOptions
+        style="min-height: 900px"
         :name.sync="selectedName"
         :type.sync="selectedChartType"
         :template="selectedTemplate"

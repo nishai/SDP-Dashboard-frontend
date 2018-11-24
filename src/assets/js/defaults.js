@@ -1,4 +1,5 @@
 
+import Color from 'color';
 import { Q } from './api/queryset';
 import {
   querysetCommon,
@@ -72,11 +73,79 @@ export function getDefaultChartInfo() {
 /* eslint-enable no-multi-spaces */
 /* eslint-enable max-len */
 
+/* ========================================================================== */
+/* DashboardReportChart.vue                                                   */
+/* ========================================================================== */
+
+
+// options.tooltips.callbacks
+export const getDefaultChartTooltipCallbacks = ({ postfix = '', rounding = -1, percent = true }) => ({
+  beforeTitle(tooltipItems, data) {
+    const dataset = data.datasets[tooltipItems[0].datasetIndex];
+    return dataset.label ? `${dataset.label}` : undefined;
+  },
+  label(tooltipItem, data) {
+    const dataset = data.datasets[tooltipItem.datasetIndex];
+    const currentValue = dataset.data[tooltipItem.index];
+    let currVal = (rounding >= 0 && typeof currentValue === 'number') ? currentValue.toFixed(rounding) : currentValue;
+    if (postfix) {
+      currVal = `${currVal}${postfix}`;
+    }
+    if (percent && typeof currentValue === 'number') {
+      const meta = dataset._meta[Object.keys(dataset._meta)[0]];
+      const { total } = meta;
+      const percentage = parseFloat(((currentValue / total) * 100).toFixed(2));
+      if (percentage) {
+        return `${currVal} (${percentage}%)`;
+      }
+    }
+    return currVal;
+  },
+  title(tooltipItem, data) {
+    return data.labels[tooltipItem[0].index];
+  },
+  labelColor(tooltipItem, chart) {
+    const cs = chart.data.datasets[tooltipItem.datasetIndex].backgroundColor;
+    const c = (Array.isArray(cs)) ? cs[tooltipItem.index] : ((typeof cs === 'string') ? cs : undefined);
+    return {
+      backgroundColor: Color(c).hex(),
+    };
+  },
+});
+
 
 /* ========================================================================== */
-/* DashboardChartOptionsTemplates.vue                                                  */
+/* DashboardChartOptionsTemplates.vue                                         */
 /* ========================================================================== */
 
+
+const getCommonMetaBase = () => ({
+  type: 'commonFilterChart', /* influences fields below */
+});
+
+const getDatasetsCommonMeta = () => ({
+  ...getCommonMetaBase(),
+  chartTypes: ['line', 'bar'],
+  colors: {
+    colorPalette: 'tol-rainbow',
+    datasetNotLabels: true,
+    shade: true,
+    borders: true,
+  },
+});
+
+const getLabeledCommonMeta = () => ({
+  ...getCommonMetaBase(),
+  chartTypes: ['donut', 'pie'],
+  colors: {
+    colorPalette: 'tol-rainbow',
+    datasetNotLabels: false,
+    shade: true,
+    borders: false,
+  },
+});
+
+/* ACTUAL DEFAULTS */
 
 export function getDefaultTemplateListItems() {
   return [
@@ -84,70 +153,74 @@ export function getDefaultTemplateListItems() {
       title: 'Demographics',
       items: [
         {
+          ...getLabeledCommonMeta(),
           desc: 'Race',
           src: '/img/charts/doughnut.png',
-          chartTypes: ['donut', 'pie'],
-          type: 'commonFilterChart', /* influences fields below */
           getQueryset: ({ years, faculties, schools, courses }) => querysetCommonGroupByCount(Student, Student.race_description, { years, faculties, schools, courses }),
           fieldLabel: Student.race_description,
           fieldData: 'count',
+          labels: { postfix: ' students', percent: true },
         },
         {
+          ...getLabeledCommonMeta(),
           desc: 'Gender',
           src: '/img/charts/pie2.png',
-          chartTypes: ['donut', 'pie'],
-          type: 'commonFilterChart', /* influences fields below */
           getQueryset: ({ years, faculties, schools, courses }) => querysetCommonGroupByCount(Student, Student.gender, { years, faculties, schools, courses }),
           fieldLabel: Student.gender,
           fieldData: 'count',
+          labels: { postfix: ' students', percent: true },
         },
         {
+          ...getLabeledCommonMeta(),
           desc: 'Nationality',
           src: '/img/charts/pie1.png',
-          chartTypes: ['donut', 'pie'],
-          type: 'commonFilterChart', /* influences fields below */
           getQueryset: ({ years, faculties, schools, courses }) => querysetCommonGroupByCount(Student, Student.nationality_short_name, { years, faculties, schools, courses }),
           fieldLabel: Student.nationality_short_name,
           fieldData: 'count',
+          labels: { postfix: ' students', percent: true },
         },
         {
+          ...getLabeledCommonMeta(),
           desc: 'Home Language',
           src: '/img/charts/pie3.png',
-          chartTypes: ['donut', 'pie'],
-          type: 'commonFilterChart', /* influences fields below */
           getQueryset: ({ years, faculties, schools, courses }) => querysetCommonGroupByCount(Student, Student.home_language_description, { years, faculties, schools, courses }),
           fieldLabel: Student.home_language_description,
           fieldData: 'count',
+          labels: { postfix: ' students', percent: true },
         },
         {
+          ...getDatasetsCommonMeta(),
           desc: 'Demographics vs Marks',
           src: '/img/charts/line2.png',
-          chartTypes: ['bar', 'line'],
-          type: 'commonFilterChart', /* influences fields below */
           getQueryset: ({ years, faculties, schools, courses }) => querysetCommonGroupByAve(Student, Student.race_description, Student.enrolled_years.enrolled_courses.final_mark, { years, faculties, schools, courses }),
           fieldLabel: Student.race_description,
           fieldData: 'ave',
+          labels: { postfix: ' of 100', rounding: 2 },
         },
       ],
     },
     {
       title: 'Marks',
       items: [
-        { desc: 'Pass rates by year',
+        {
+          ...getDatasetsCommonMeta(),
+          desc: 'Pass rates by year',
           src: '/img/charts/bar1.png',
-          chartTypes: ['bar', 'line'],
         },
-        { desc: 'Pass rates by faculty/course',
+        {
+          ...getDatasetsCommonMeta(),
+          desc: 'Pass rates by faculty/course',
           src: '/img/charts/bar3.png',
-          chartTypes: ['bar', 'line'],
         },
-        { desc: 'Bell curve',
+        {
+          ...getDatasetsCommonMeta(),
+          desc: 'Bell curve',
           src: '/img/charts/bell-curve.png',
-          chartTypes: ['line', 'bar'],
         },
-        { desc: 'Progress Outcome by faculty/course',
+        {
+          ...getDatasetsCommonMeta(),
+          desc: 'Progress Outcome by faculty/course',
           src: '/img/charts/bar2.png',
-          chartTypes: ['bar', 'line'],
         },
       ],
     },
@@ -155,14 +228,14 @@ export function getDefaultTemplateListItems() {
       title: 'Class Sizes',
       items: [
         {
+          ...getDatasetsCommonMeta(),
           desc: 'Class size vs pass rate',
           src: '/img/charts/line1.png',
-          chartTypes: ['line', 'bar'],
         },
         {
+          ...getDatasetsCommonMeta(),
           desc: 'Average class size by faculty/course',
           src: '/img/charts/bar1.png',
-          chartTypes: ['bar', 'line'],
         }, // click='two'
       ],
     },

@@ -16,7 +16,7 @@ Wits filter set that manages by default:
       v-for="i in Math.min(numTabs + 1, maxTabs)"
       :icon="i > numTabs ? 'plus' : undefined"
       :key="'tab_'+i"
-      class="h-expanded h-expander"
+      class="h-expand"
     >
       <template slot="header" v-if="delActive && i <= numTabs">
         <div class="level" @mouseover="showByIndex=i-1" @mouseout="showByIndex=null">
@@ -28,7 +28,7 @@ Wits filter set that manages by default:
           />
         </div>
       </template>
-      <slot class="h-expanded h-expander" v-if="i <= numTabs" :i="i-1" :item="items[i-1]"> <!-- iteration starts at 1 not 0 -->
+      <slot class="h-expand" v-if="i <= numTabs" :i="i-1" :item="items[i-1]"> <!-- iteration starts at 1 not 0 -->
         {{ i-1 }} : {{ items[i-1] }}
       </slot>
     </b-tab-item>

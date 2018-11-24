@@ -15,8 +15,10 @@ export const axiosInstance = axios.create(axiosOptions);
 
 if (process.env.NODE_ENV !== 'production') {
   axiosInstance.interceptors.response.use((response) => {
+    let { data } = response.config;
+    try { data = JSON.parse(response.config.data); } catch (e) { /* continue */ } finally { data = { data }; }
     console.log(
-      'Request  |', response.config.method, response.config.url,
+      'Request  |', response.config.method, response.config.url, data,
       '\nResponse |', response.request.status, { response },
     );
     return response;
@@ -72,18 +74,34 @@ function installVueAxios(Vue) {
 
   /**
    * @memberOf {Vue}
-   * @member {cachios} $axios
+   * @member {axios} $axios
    */
   Object.defineProperties(Vue, {
-    $axios: { get() { return cachiosInstance; } },
+    $axios: { get() { return axiosInstance; } },
   });
 
   /**
    * @memberOf {Vue.prototype}
-   * @member {cachios} $axios
+   * @member {axios} $axios
    */
   Object.defineProperties(Vue.prototype, {
-    $axios: { get() { return cachiosInstance; } },
+    $axios: { get() { return axiosInstance; } },
+  });
+
+  /**
+   * @memberOf {Vue}
+   * @member {cachios} cachios
+   */
+  Object.defineProperties(Vue, {
+    $cachios: { get() { return cachiosInstance; } },
+  });
+
+  /**
+   * @memberOf {Vue.prototype}
+   * @member {cachios} cachios
+   */
+  Object.defineProperties(Vue.prototype, {
+    $cachios: { get() { return cachiosInstance; } },
   });
 
   /**
@@ -91,7 +109,7 @@ function installVueAxios(Vue) {
    * @member {cachios} $http
    */
   Object.defineProperties(Vue.prototype, {
-    $http: { get() { return cachiosInstance; } },
+    $http: { get() { return axiosInstance; } },
   });
 }
 
