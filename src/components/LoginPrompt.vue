@@ -98,7 +98,7 @@ export default {
      * force logout
      */
     logOut() {
-      this.emit('logout:request');
+      this.$emit('logout:request');
       this.$dialog.confirm({
         title: 'Please Confirm',
         message: 'Are you sure you want to log out?',
@@ -109,11 +109,11 @@ export default {
           this.auth.logout();
           this.details = {};
           this.showAlert(`Successfully logged off as: ${email}`);
-          this.emit('logout');
+          this.$emit('logout');
           this.$emit('update', null);
         },
         onCancel: () => {
-          this.emit('logout:fail');
+          this.$emit('logout:fail');
         },
       });
     },

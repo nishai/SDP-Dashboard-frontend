@@ -162,6 +162,7 @@ export default {
       this.$emit('edit', this.reportId, this.chartId);
     },
 
+    // TODO: This needs to be cleaned up.
     refresh() {
       const template = CHART_TEMPLATES[this.chart.meta.template];
       const { subsets } = this.chart.meta;

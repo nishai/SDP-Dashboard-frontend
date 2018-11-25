@@ -1,6 +1,16 @@
 import { axiosInstance } from './vue-axios';
 
 
+// TODO: this should be converted to vuex
+// TODO: this should be converted to vuex
+// TODO: this should be converted to vuex
+// TODO: this should be converted to vuex
+// TODO: this should be converted to vuex
+// TODO: this should be converted to vuex
+// TODO: this should be converted to vuex
+// TODO: this should be converted to vuex
+
+
 class VueJWT {
   /**
    * @param localStorageName
@@ -62,7 +72,7 @@ class VueJWT {
    * @return {boolean}
    */
   get authorized() {
-    return this.token !== null;
+    return !!this.token;
   }
 
   /**
@@ -178,6 +188,8 @@ class VueJWT {
   }
 }
 
+export const authInstance = new VueJWT();
+
 /**
  * Register this plugin with Vue
  * @param {Vue} Vue
@@ -190,7 +202,6 @@ function installVueJwt(Vue, localStorageName = 'auth_token') {
   }
   installVueJwt.installed = true;
   /* install */
-  const authInstance = new VueJWT();
 
   /**
    * @memberOf {Vue}
@@ -211,5 +222,5 @@ function installVueJwt(Vue, localStorageName = 'auth_token') {
  */
 export default {
   install: installVueJwt,
-  VueJWT,
+  VueJWT: authInstance,
 };

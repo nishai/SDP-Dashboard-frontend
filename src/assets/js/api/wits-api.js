@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable prefer-template */
 
+import { axiosInstance as axios } from '../plugins/vue-axios';
 import {
   Faculty,
   School,
@@ -13,12 +14,34 @@ import {
   EnrolledYear,
   EnrolledCourse,
   Field,
-  CLASS_NAME_TO_MODEL
+  CLASS_NAME_TO_MODEL,
 } from './wits-models';
 import { Q, Queryset } from './queryset';
 import commonFilters from './wits-common-filter';
 
 /* eslint-enable no-unused-vars */
+
+
+/* ========================================================================== */
+/* USER DATA                                                                  */
+/* ========================================================================== */
+
+
+export function getUser() {
+  return axios.get('user/');
+}
+
+export function getProfile() {
+  return axios.get('profile/');
+}
+
+export function getProfileData() {
+  return axios.get('profile/data/');
+}
+
+export function patchProfileData(data) {
+  return axios.patch('profile/data/', data);
+}
 
 
 /* ========================================================================== */

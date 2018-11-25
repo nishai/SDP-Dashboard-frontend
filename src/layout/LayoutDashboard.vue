@@ -4,7 +4,8 @@ Layout css from: https://codepen.io/ilanf/details/ybNVwg/
 -->
 
 <template>
-  <div class="columns" style="margin: 0">
+  <!-- IF LOGGED IN -->
+  <div v-if="auth.authorized" class="columns" style="margin: 0">
     <aside class="column is-1 is-paddingless sidebar-container">
       <div class="section has-side-padding">
         <DashboardSidebar/>
@@ -19,6 +20,13 @@ Layout css from: https://codepen.io/ilanf/details/ybNVwg/
       </div>
     </main>
   </div>
+  <!-- IF NOT LOGGED IN -->
+  <section v-else class="section h-expanded">
+    <div class="content has-text-grey has-text-centered">
+      <p><b-icon icon="key" size="is-large"/></p>
+      <p> Login to Continue! </p>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -34,6 +42,7 @@ export default {
   data() {
     return {
       isSidebarOpen: true,
+      auth: this.$auth, // make the property reactive, I should convert this to vuex
     };
   },
 };
