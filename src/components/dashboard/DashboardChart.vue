@@ -16,24 +16,48 @@
         <button class="button is-warning is-outlined has-margin-left-sm" @click="editChart">
           <b-icon icon="pen" size="is-small"/>
         </button>
+        <div class="button is-bulma has-margin-left-sm" :class="[showRawData ? '' : 'is-outlined']" @click="showRawData=!showRawData">
+          <b-icon :icon="showRawData?chartTypeInfo.icon:'list'" :pack="showRawData?chartTypeInfo.iconPack:undefined"/>
+        </div>
       </template>
     </b-card-header>
 
-    <!-- CHART -->
+    <!-- CARD -->
     <b-card-content class="has-text-centered h-expand">
-      <!-- VALID -->
+      <!-- CHART -->
       <v-chart
         class="h-expanded no-min"
-        v-if="isValid"
+        v-if="isValid && !showRawData"
         :type="chartType"
         :options="chartOptions"
-        :data="chartData"
+        :data="chartDataCopy"
       />
+
+      <!-- RAW DATA -->
+      <div v-if="isValid && showRawData" class="chart-data-container">
+        <b-table :data="chartDataCopy.datasets" paginated per-page="5" detailed striped hoverable class="chart-datasets-table">
+          <template slot-scope="props">
+            <b-table-column label="Index" width="50"> # {{ props.index + 1 }} </b-table-column>
+            <b-table-column label="Dataset"> {{ props.row.label }} </b-table-column>
+          </template>
+          <template slot="detail" slot-scope="props">
+            <b-table :data="props.row.data" paginated per-page="5" striped hoverable class="chart-dataset-table">
+              <template slot-scope="dat">
+                <b-table-column label="Index" width="50"> # {{ dat.index + 1 }} </b-table-column>
+                <b-table-column label="Label"> {{ chartData.labels[dat.index] }} </b-table-column>
+                <b-table-column label="Data"> {{ dat.row }} </b-table-column>
+              </template>
+            </b-table>
+          </template>
+        </b-table>
+      </div>
+
       <!-- ERROR -->
-      <div v-else class="content has-text-grey has-text-centered">
+      <div v-if="!isValid" class="content has-text-grey has-text-centered">
         <p><b-icon icon="sad-tear" pack="far" size="is-large"/></p>
         <p> The chart is invalid. We apologise for the inconvenience. </p>
       </div>
+
       <!-- LOADING -->
       <b-loading :is-full-page="false" :active="isLoading && !isValid"/>
     </b-card-content>
@@ -42,7 +66,10 @@
 </template>
 
 <script>
+import clonedeep from 'lodash.clonedeep';
+import BTable from 'buefy/src/components/table/Table.vue';
 import { mapGetters } from 'vuex';
+import { getDefaultChartInfo } from '../../assets/js/defaults';
 import { CHART_TEMPLATES, getDefaultChartTooltipCallbacks } from '../../assets/js/templates';
 import {
   getMapperLabelsValuesListToChartData,
@@ -52,9 +79,12 @@ import {
 import SlideoutChartOptions from '../slideout/SlideoutChartOptions.vue';
 
 
+const chartTypeInfo = getDefaultChartInfo();
+
+
 export default {
   name: 'DashboardChart',
-  components: { SlideoutChartOptions },
+  components: { BTable, SlideoutChartOptions },
   props: {
     reportId: { type: String, default: undefined },
     chartId: { type: String, default: undefined },
@@ -64,6 +94,8 @@ export default {
     return {
       chartData: undefined,
       chartOptions: {},
+
+      showRawData: false,
     };
   },
 
@@ -84,6 +116,11 @@ export default {
     name() { return this.chart ? this.chart.name : undefined; },
     meta() { return this.chart ? this.chart.meta : undefined; },
     chartType() { return this.meta ? this.meta.chartType : undefined; },
+    chartTypeInfo() { return this.chartType ? chartTypeInfo[this.chartType] : {}; },
+
+    chartDataCopy() {
+      return clonedeep(this.chartData);
+    },
   },
 
   mounted() {
@@ -168,6 +205,7 @@ export default {
         }))
         .then((chartData) => {
           this.chartData = chartData;
+          console.log('CHART DATA', this.chartData);
         });
     },
   },
@@ -176,13 +214,42 @@ export default {
 
 <style scoped lang="scss">
 
-.report-card:hover button {
+.report-card:hover button,
+.report-card:hover div.button.is-outlined {
   opacity: 1;
 }
 
-.report-card button {
+.report-card button,
+.report-card div.button.is-outlined {
   opacity: 0;
   background-color: whitesmoke;
+}
+
+.chart-data-container {
+  overflow-y: scroll;
+}
+
+.chart-datasets-table {}
+.chart-dataset-table {}
+
+/deep/ .chart-dataset-table td {
+  padding-bottom: 0.125rem;
+  padding-top: 0.125rem;
+}
+
+/deep/ .detail {
+  padding: 0;
+  background-color: white;
+}
+
+/deep/ .chart-dataset-table .charttd,
+/deep/ .chart-dataset-table .level,
+/deep/ div.detail-container {
+  padding: 0;
+}
+
+/deep/ .chart-dataset-table .table-wrapper {
+  margin: 0;
 }
 
 </style>
