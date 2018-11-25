@@ -1,16 +1,16 @@
 <template>
   <div style="height: 100%" class="h-expander">
-    <p class="title">{{ template.desc }}</p>
+    <p class="title">{{ templateItem.desc }}</p>
 
     <b-field label="Chart Name">
-      <b-input :value="name" @input="onNameChange" :placeholder="template.desc" expanded></b-input>
+      <b-input :value="name" @input="onNameChange" :placeholder="templateItem.desc" expanded></b-input>
     </b-field>
 
     <!-- CHART TYPE SELECTOR -->
     <DashboardChartOptionsType
       @input="onTypeChange"
       :type="type"
-      :types="template.chartTypes"
+      :types="templateItem.chartTypes"
       expanded
     />
 
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { CHART_TEMPLATES } from '../../assets/js/templates';
 import DashboardChartOptionsType from './DashboardChartOptionsType.vue';
 import DashboardChartOptionsFilterForm from './DashboardChartOptionsFilterForm.vue';
 import OpinionatedTabs from '../opinionated/OpinionatedTabsAddable.vue';
@@ -48,12 +49,18 @@ export default {
       default: undefined,
     },
     template: {
-      type: Object,
+      type: String,
       default: undefined,
     },
     subsets: {
       type: Array,
       default: undefined,
+    },
+  },
+
+  computed: {
+    templateItem() {
+      return CHART_TEMPLATES[this.template] || {};
     },
   },
 

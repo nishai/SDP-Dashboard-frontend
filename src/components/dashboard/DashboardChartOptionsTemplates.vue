@@ -20,21 +20,21 @@ has one event:
 
         <!-- TEMPLATE ITEM -->
         <div
-          v-for="(item, j) in category.items"
+          v-for="(key, j) in category.items"
           class="column template-list-item" :class="[singles ? 'is-full' : 'is-one-third', singles ? 'is-paddingless' : '']"
-          @click="() => handleClick(item)"
+          @click="() => handleClick(key)"
           :key="'category_'+i+'_item_'+j"
         >
           <section class="has-padding-md">
             <b-level class="is-marginless">
               <b-level-item>
                 <figure class="image" :class="[singles ? 'is-64x64' : 'is-128x128']">
-                  <img :src="item.src" alt="chart">
+                  <img :src="CHART_TEMPLATES[key].src" alt="chart">
                 </figure>
               </b-level-item>
             </b-level>
             <p class="content heading has-text-centered is-marginless has-padding-top-sm has-padding-left-sm has-padding-right-sm">
-              {{ item.desc }}
+              {{ CHART_TEMPLATES[key].desc }}
             </p>
           </section>
         </div>
@@ -52,8 +52,8 @@ has one event:
     placeholder="Select a Template Type"
   >
     <optgroup v-for="(category, i) in categories" :key="'category_'+i" :label="category.title">
-      <option v-for="(item, j) in category.items" :value="item" :key="'category_'+i+'_item_'+j">
-        {{ item.desc }}
+      <option v-for="(key, j) in category.items" :value="key" :key="'category_'+i+'_item_'+j">
+        {{ CHART_TEMPLATES[key].desc }}
       </option>
     </optgroup>
   </b-select>
@@ -62,6 +62,7 @@ has one event:
 
 <script>
 import { getDefaultTemplateListItems } from '../../assets/js/defaults';
+import { CHART_TEMPLATES } from '../../assets/js/templates';
 import BLevelItem from '../global/BulmaLevelItem.vue';
 
 export default {
@@ -76,10 +77,15 @@ export default {
     selectorItem: undefined,
     singles: Boolean,
   },
+  data() {
+    return {
+      CHART_TEMPLATES,
+    };
+  },
   methods: {
-    handleClick(item) {
-      this.$emit('input', item);
-      this.$emit('update:selectorItem', item);
+    handleClick(templateKey) {
+      this.$emit('input', templateKey);
+      this.$emit('update:selectorItem', templateKey);
     },
   },
 };

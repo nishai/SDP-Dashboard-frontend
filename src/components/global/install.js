@@ -62,7 +62,7 @@ export default {
     /* install */
     components.forEach((component) => {
       Vue.component(component.name, component);
-      console.log(`Globally installed component: ${component.name}`);
+      // console.log(`Globally installed component: ${component.name}`);
     });
   },
 };

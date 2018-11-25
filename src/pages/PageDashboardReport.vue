@@ -133,7 +133,6 @@ export default {
         return this.reportExists ? this.report.layout : undefined;
       },
       set(value) {
-        console.log('layout:', this.layout);
         this.$store.dispatch('updateReportLayout', { reportId: this.reportId, layout: value });
       },
     },

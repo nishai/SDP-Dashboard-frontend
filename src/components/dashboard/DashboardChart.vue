@@ -4,14 +4,17 @@
     <!-- HEADER -->
     <b-card-header>
       <template slot="title">
-        <p class="title"> {{ name }} </p>
+        <p class="title is-4"> {{ name }} </p>
       </template>
       <template slot="icon">
         <button class="button is-danger is-outlined" @click="deleteChart">
           <b-icon icon="trash-alt" size="is-small"/>
         </button>
-        <button class="button is-info is-outlined has-margin-left-sm" @click="editChart">
-          <b-icon icon="edit" size="is-small"/>
+        <button class="button is-info is-outlined has-margin-left-sm" @click="copyChart">
+          <b-icon icon="copy" size="is-small"/>
+        </button>
+        <button class="button is-warning is-outlined has-margin-left-sm" @click="editChart">
+          <b-icon icon="pen" size="is-small"/>
         </button>
       </template>
     </b-card-header>
@@ -40,7 +43,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { getDefaultChartTooltipCallbacks } from '../../assets/js/defaults';
+import { CHART_TEMPLATES, getDefaultChartTooltipCallbacks } from '../../assets/js/templates';
 import {
   getMapperLabelsValuesListToChartData,
   getMapperListToLabelsValues,
@@ -105,6 +108,16 @@ export default {
       this.$toast.open({ duration: 1000, type: 'is-danger', message: 'Deleted Chart!' });
     },
 
+    copyChart() {
+      if (!this.chart) {
+        return;
+      }
+      this.$store.dispatch('copyReportChart', { reportId: this.reportId, chartId: this.chartId })
+        .then((result) => {
+          console.log('COPIED', result);
+        });
+    },
+
     editChart() {
       if (!this.chart) {
         return;
@@ -113,9 +126,8 @@ export default {
     },
 
     refresh() {
-      console.log('Chart Refreshing:', this.chart);
-
-      const { template, subsets } = this.chart.meta;
+      const template = CHART_TEMPLATES[this.chart.meta.template];
+      const { subsets } = this.chart.meta;
 
       // get a handler for the chartData that returns promises for each set of data for the chart.
 
@@ -155,7 +167,6 @@ export default {
           borders: colors.borders || false,
         }))
         .then((chartData) => {
-          console.log('Chart Refreshed:', chartData, this.chart);
           this.chartData = chartData;
         });
     },

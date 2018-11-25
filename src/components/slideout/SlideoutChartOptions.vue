@@ -1,5 +1,5 @@
 <template>
-  <!-- CREATE NEW FROM TEMPLATE -->
+  <!-- CREATE NEW -->
   <v-slideout v-if="!editor"
     :active.sync="templatesActive"
     :active-extra.sync="optionsActive"
@@ -9,7 +9,7 @@
     <!-- TEMPLATE -->
     <DashboardChartOptionsTemplates
       :categories="templateCategories"
-      @input="(item) => { selectedTemplate=item; optionsActive=true; }"
+      @input="(templateKey) => { selectedTemplate=templateKey; optionsActive=true; }"
       singles
     />
     <!-- OPTIONS -->
@@ -29,10 +29,12 @@
       </b-level>
     </div>
   </v-slideout>
-  <!-- EDIT ONLY, NO TEMPLATES -->
+
+  <!-- EDIT ONLY -->
   <v-slideout v-else
     :active.sync="optionsActive"
-    width="400px" width-pane="400px" width-pane-extra="0"
+    :active-extra.sync="templatesActive"
+    width="600px" width-pane="400px" width-pane-extra="200px"
     disable-parents
   >
     <!-- OPTIONS -->
@@ -46,16 +48,28 @@
       />
       <b-level>
         <b-field slot="left" grouped>
-          <p class="control button is-success" @click="close"> Modify </p>
+          <p class="control button is-success" @click="close"> Save </p>
+        </b-field>
+        <b-field slot="right" grouped>
+          <p class="control button is-warning" @click="templatesActive=true"> Change Type </p>
         </b-field>
       </b-level>
     </div>
+
+    <!-- TEMPLATE -->
+    <DashboardChartOptionsTemplates
+      slot="extra"
+      :categories="templateCategories"
+      @input="(templateKey) => { selectedTemplate=templateKey; templatesActive=false; }"
+      singles
+    />
   </v-slideout>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import { getDefaultTemplateListItems } from '../../assets/js/defaults';
+import { CHART_TEMPLATES } from '../../assets/js/templates';
 import DashboardChartOptions from '../dashboard/DashboardChartOptions.vue';
 import DashboardChartOptionsTemplates from '../dashboard/DashboardChartOptionsTemplates.vue';
 import DisplayOrError from '../DisplayOrError.vue';
@@ -106,7 +120,7 @@ export default {
       return !!(this.valid
         && this.chart.meta
         && this.chart.meta.template
-        && this.chart.meta.template.type);
+        && CHART_TEMPLATES[this.chart.meta.template].type);
     },
     isOpen() {
       return this.optionsActive || this.templatesActive;
@@ -123,7 +137,7 @@ export default {
       this.reportId = reportId;
       this.chartId = chartId;
 
-      this.selectedTemplate = this.valid ? this.chart.meta.template : {};
+      this.selectedTemplate = this.valid ? this.chart.meta.template : undefined;
       this.selectedSubsets = this.valid ? this.chart.meta.subsets : [];
       this.selectedName = this.valid ? this.chart.name : undefined;
       this.selectedChartType = this.valid ? this.chart.meta.chartType : undefined;
@@ -149,7 +163,7 @@ export default {
         subsets: this.selectedSubsets,
         chartType: this.selectedChartType,
       };
-      const name = this.selectedName || meta.template.desc || undefined;
+      const name = this.selectedName || CHART_TEMPLATES[meta.template].desc || undefined;
 
       console.log('closing editor', name, meta);
 

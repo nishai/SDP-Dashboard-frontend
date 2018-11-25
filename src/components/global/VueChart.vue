@@ -112,7 +112,6 @@ export default {
         onResize: this.onResize,
         responsiveAnimationDuration: 0,
       });
-      console.log('Chart Options:', options);
       return options;
     },
   },

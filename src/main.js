@@ -10,10 +10,10 @@ import store from './store';
 import App from './App.vue';
 
 /* Check Mode */ /* eslint-disable */
-console.log(`NODE_ENV: "${process.env.NODE_ENV}"`);
-console.log(`BASE_URL: "${process.env.BASE_URL}"`);
-console.log(`VUE_APP_URL: "${process.env.VUE_APP_URL}"`);
-console.log(`VUE_APP_API: "${process.env.VUE_APP_API}"`);
+console.warn(`NODE_ENV: "${process.env.NODE_ENV}"`);
+console.warn(`BASE_URL: "${process.env.BASE_URL}"`);
+console.warn(`VUE_APP_URL: "${process.env.VUE_APP_URL}"`);
+console.warn(`VUE_APP_API: "${process.env.VUE_APP_API}"`);
 
 /* Use plugins */
 

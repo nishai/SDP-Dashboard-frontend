@@ -1,6 +1,9 @@
+import clonedeep from 'lodash.clonedeep';
 import Vue from 'vue';
+import { CHART_TEMPLATES } from '../../assets/js/templates';
 import { uuidv4 } from '../../assets/js/util/uuid';
 import * as m from '../mutations';
+
 
 /* ========================================================================== */
 /* STATE                                                                      */
@@ -10,16 +13,31 @@ const defaultReportData = {
   isReport: true,
   id: uuidv4(),
   name: 'default',
-  charts: [],
+  charts: {},
   layout: [],
 };
 
-const stateMap = {
+let initialState;
+try {
+  const stringState = localStorage.getItem('userState');
+  const stateObj = JSON.parse(stringState);
+  if (typeof stateObj !== 'object') {
+    console.warn('Local Storage data is not an object.', { value: stateObj, string: { string: stringState } });
+  } else {
+    console.log('Loaded Local Storage', { value: stateObj });
+    initialState = stateObj;
+  }
+} catch (e) {
+  console.error('Failed to load local storage', e);
+}
+
+const stateMap = Object.assign({
   defaultReport: defaultReportData.id,
   reports: {
     [defaultReportData.id]: defaultReportData,
   },
-};
+}, initialState || {});
+
 
 /* ========================================================================== */
 /* GETTERS                                                                    */
@@ -38,7 +56,12 @@ const getterMap = {
     if (!chart) {
       throw new Error(`The specified chart (${chartId}) does not exist for report: ${reportId}`);
     }
-    return chart;
+    // TODO: fix, I shouldn't need to copy the object, im accidentally modifying the data somewhere without a mutation.
+    // TODO: fix, I shouldn't need to copy the object, im accidentally modifying the data somewhere without a mutation.
+    // TODO: fix, I shouldn't need to copy the object, im accidentally modifying the data somewhere without a mutation.
+    // TODO: fix, I shouldn't need to copy the object, im accidentally modifying the data somewhere without a mutation.
+    // TODO: fix, I shouldn't need to copy the object, im accidentally modifying the data somewhere without a mutation.
+    return clonedeep(chart);
   },
 
   hasReportChart: (state) => (reportId, chartId) => !!state.reports[reportId] && !!state.reports[reportId].charts[chartId],
@@ -73,7 +96,7 @@ const mutationMap = {
       isReport: true,
       id: reportId,
       name,
-      charts: [/* ordered set of charts */],
+      charts: {/* map of charts */},
       layout: [/* ordered set of {x, y, w, h, i=chartId}, corresponds to elements in charts */],
     });
   },
@@ -86,16 +109,6 @@ const mutationMap = {
     if (report.charts[chartId]) {
       throw new Error(`The specified chart already exists: ${chartId}`);
     }
-
-    Vue.set(report.charts, chartId, {
-      isChart: true,
-      id: chartId,
-      name: chartId,
-      meta: {
-        template: {},
-        subsets: [],
-      },
-    });
 
     // TODO: no magic variables.
     const col = report.layout.length % 3;
@@ -110,6 +123,18 @@ const mutationMap = {
     report.layout.push({
       x: col, y: 0, w: 1, h: 1, i: chartId,
     });
+
+    Vue.set(report.charts, chartId, {
+      isChart: true,
+      id: chartId,
+      name: chartId,
+      meta: {
+        template: undefined,
+        subsets: [],
+      },
+    });
+
+    console.log('CREATED CHART >>>>', state);
   },
 
   [m.DELETE_REPORT](state, { reportId }) {
@@ -167,13 +192,8 @@ const mutationMap = {
       throw new Error(`The specified chart does not exist: ${chartId}`);
     }
 
-    /* { desc, src, type } */
-    if (!meta.template || !meta.template.type || !Array.isArray(meta.template.chartTypes) || meta.template.chartTypes.length < 1) {
+    if (!meta.template || !CHART_TEMPLATES[meta.template]) {
       throw new Error(`meta.template is invalid, ${meta.template}`);
-    }
-
-    if (!meta.chartType || meta.template.chartTypes.indexOf(meta.chartType) < 0) {
-      throw new Error(`Chart type is invalid "${meta.chartType}", allowedTypes are: [${meta.template.chartTypes}]`);
     }
 
     if (!Array.isArray(meta.subsets)) {
@@ -249,6 +269,18 @@ const actionMap = {
       commit(m.UPDATE_REPORT_CHART, { reportId, chartId: newChartId, meta });
     }
     return newChartId;
+  },
+
+  copyReportChart({ commit, state, getters, dispatch }, { reportId, chartId }) {
+    if (!getters.hasReportChart(reportId, chartId)) {
+      throw new Error(`Report chart does not exist: ${{ reportId, chartId }}`);
+    }
+    const chart = getters.getReportChart(reportId, chartId);
+    return dispatch('createReportChart', {
+      reportId,
+      name: `${chart.name} Copy`,
+      meta: clonedeep(chart.meta),
+    });
   },
 
   updateReportChart({ commit, state, getters }, { reportId, chartId, name = undefined, meta = undefined }) {
