@@ -1,0 +1,62 @@
+
+/*
+ * SASS vs. SCSS vs. CSS (http://sass-lang.com/documentation/file.SASS_REFERENCE.html#syntax):
+ * =====================
+ *
+ *   • There are two syntaxes available for Sass. The first, known as SCSS (Sassy CSS) and
+ *     used throughout this reference, is an extension of the syntax of CSS. This means
+ *     that every valid CSS stylesheet is a valid SCSS file with the same meaning. This
+ *     syntax is enhanced with the Sass features described below. Files using this syntax
+ *     have the .scss extension.
+ *
+ *   • The second and older syntax, known as the indented syntax (or sometimes just “SASS”),
+ *     provides a more concise way of writing CSS. It uses indentation rather than brackets
+ *     to indicate nesting of selectors, and newlines rather than semicolons to separate
+ *     properties. Files using this syntax have the .sass extension.
+ *
+ *   • tl;dr:
+ *     =====
+ *     - SASS is the old (python like) syntax, SCSS is the new syntax.
+ *     - All CSS files are valid SCSS files.
+ */
+
+
+/* ========================================================================== */
+/* Import Everything Needed                                                   */
+/* ========================================================================== */
+
+
+/* external icons */
+@import '~@fortawesome/fontawesome-free/css/all.css';
+@import "~@mdi/font/css/materialdesignicons.css";
+
+/* our buefy theme & colors */
+@import "_theme";
+
+
+/* ========================================================================== */
+/* Import Bulma, Buefy & extensions  [DO NOT IMPORT IN OTHER FILES]           */
+/* NB: Theme must be imported before these                                    */
+/* ========================================================================== */
+
+
+/* https://bulma.io/documentation/customize/with-node-sass/ */
+@import "~bulma";
+
+/* https://buefy.github.io/documentation/customization */
+@import "~buefy/src/scss/buefy";
+
+/* https://wikiki.github.io/ (Importing ~bulma-extensions directly fails with out of memory error) */
+@import '~bulma-extensions/bulma-steps/src/sass/index';
+@import '~bulma-extensions/bulma-divider/src/sass/index';
+@import '~bulma-extensions/bulma-timeline/src/sass/index';
+
+
+/* ========================================================================== */
+/* Import out
+/* ========================================================================== */
+
+
+/* our custom style */
+@import "_defaults";
+@import "_style";

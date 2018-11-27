@@ -2,36 +2,34 @@
  * The javascript entry point for the application
  */
 
-import BootstrapVue from 'bootstrap-vue';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
 import Vue from 'vue';
-import App from './App.vue';
+import { sync } from 'vuex-router-sync';
+import plugins from './plugins';
 import router from './router';
 import store from './store';
-import VueGridLayout from 'vue-grid-layout';
+import App from './App.vue';
 
 /* Check Mode */ /* eslint-disable */
-console.log(`NODE_ENV: "${process.env.NODE_ENV}"`);
-console.log(`BASE_URL: "${process.env.BASE_URL}"`);
-console.log(`VUE_APP_URL: "${process.env.VUE_APP_URL}"`);
-console.log(`VUE_APP_API: "${process.env.VUE_APP_API}"`);
+console.warn(`NODE_ENV: "${process.env.NODE_ENV}"`);
+console.warn(`BASE_URL: "${process.env.BASE_URL}"`);
+console.warn(`VUE_APP_URL: "${process.env.VUE_APP_URL}"`);
+console.warn(`VUE_APP_API: "${process.env.VUE_APP_API}"`);
 
-/* add miscellaneous plugins to Vue */
+/* Use plugins */
 
-Vue.use(BootstrapVue);
+Vue.use(plugins);
+
+/* Sync Vuex & Vue-Router - access the router under: store.state.route (IMMUTABLE) */
+
+sync(store, router);
 
 /* Initialise Vue */
 
 Vue.config.productionTip = false;
 
 const app = new Vue({
-  components: { App },
-  template: '<App/>',
+  el: '#app',
+  render: h => h(App),
   router,
   store,
 });
-
-/* Inject App Into Page */
-
-app.$mount('#app');

@@ -1,0 +1,39 @@
+
+/* ========================================================================== */
+/* Fix Defaults - https://gist.github.com/robinrendle/1d20c566c5e5fbd67f25    */
+/* ========================================================================== */
+
+/*
+ * Include padding and border in element's total width and height
+ * - https://www.jefftk.com/p/the-revenge-of-the-ie-box-model
+ */
+*, *:before, *:after {
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+/*
+ * make sure the app takes up the entire window
+ * for example if this was not here, the footer
+ * could not be placed at the bottom of the screen
+ */
+html, body {
+  height: 100%;
+  width: 100%;
+  background: none;
+}
+
+/*
+ * Fix font rendering defaults. Is this really needed
+ */
+html, button {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-size: 100%;
+}

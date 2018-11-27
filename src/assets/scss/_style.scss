@@ -1,0 +1,194 @@
+
+/*
+ * Imported after bulma theme is generated,
+ * has access to all variables.
+ */
+
+/* ========================================================================== */
+/* Global Style                                                               */
+/* ========================================================================== */
+
+::selection {
+  color: $white;
+  background: $color-wits-yellow;
+}
+
+::-moz-selection {
+  color: $white;
+  background: $color-wits-yellow;
+}
+
+
+/* ========================================================================== */
+/* Theme Overrides                                                            */
+/* ========================================================================== */
+
+///*
+// * ".card.is-shadowless" IS DIFFERENT from ".card .is-shadowless",
+// * no space is both classes must be present, space is something
+// * to do with parent and child
+// */
+//.card {
+//  box-shadow: 0px 0px 0px 1px rgba(10, 10, 10, 0.1)
+//}
+
+/* ========================================================================== */
+/* Custom Theme Tags                                                          */
+/* ========================================================================== */
+
+/*
+ * No left padding for sections...
+ * its nicer when everything is aligned...
+ */
+.section {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.section.has-side-padding {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/*
+ * Use to tell the children to expand vertically,
+ * if they are marked with h-expanded
+ */
+.h-expander {
+  display: flex;
+  flex-direction: column;
+}
+
+/*
+ * Mark children of h-expander to expand vertically.
+ */
+.h-expanded {
+  flex: 1;
+}
+
+/*
+ * union of .h-expander & .h-expanded
+ */
+.h-expand {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/*
+ * by default a flex box cannot be smaller than its content.
+ * This is needed for chartjs to be able to resize itself.
+ *
+ * chartjs responsive fix:
+ * https://github.com/chartjs/Chart.js/issues/4156
+ */
+.h-expander.no-min,
+.h-expand.no-min,
+.h-expanded.no-min,
+.column {
+  min-width: 0;
+  min-height: 0;
+}
+
+.d-footer {
+  height: 3rem;
+  padding: 2rem 1.5rem 3.5rem 1.5rem;
+
+  background: $white;
+  border-top-color: $color-wits-comp-snow;
+  border-top-width: 1px;
+  border-top-style: dotted;
+}
+
+
+/* ========================================================================== */
+/* Outline with pseudo element - I like keeping this around cause its awesome */
+/* ========================================================================== */
+
+.example {
+  border: 2px solid #ffdd57;
+  border-radius: 0 4px 4px 4px;
+
+  box-shadow: none;
+}
+
+.example::before {
+  content: "MVP's";
+
+  border: 2px solid #ffdd57;
+  border-radius: 4px 4px 0 0;
+  background: #ffdd57;
+  color: rgba(0,0,0,.7);
+
+  font-size: 7px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 1px 3px;
+
+  bottom: 100%;
+  margin-left: -1px;
+  display: inline-block;
+  vertical-align: top;
+
+  left: -1px;
+  position: absolute;
+}
+
+/* ========================================================================== */
+/* Padding and Margin Extensions                                              */
+/* https://gist.github.com/VictorOtavio/e0576b755a49ef3682354091c6911dcb      */
+/* https://gist.github.com/williamabbott/47767c82a7b62f4fe0d931b94a9b489b     */
+/* https://github.com/jgthms/bulma/issues/451                                 */
+/* ========================================================================== */
+
+
+$sizeUnit: rem;
+$marginKey: "has-margin";
+$paddingKey: "has-padding";
+$separator: "-";
+$names_to_sizes: (
+    ("none", 0),
+    ("xxs", 0.125),
+    ("xs", 0.25),
+    ("sm", 0.5),
+    ("md", 1.5),
+    ("lg", 3),
+    ("xl", 6),
+    ("xxl", 12)
+);
+$positions: (
+    ("top", "top"),
+    ("right", "right"),
+    ("bottom", "bottom"),
+    ("left", "left")
+);
+
+@function sizeValue($key, $value) {
+  @return if($key == "none", 0, $value + $sizeUnit);
+}
+
+@each $name_size in $names_to_sizes {
+  $sizeKey: nth($name_size, 1);
+  $sizeValue: nth($name_size, 2);
+  /* eg. has-margin-xxs */
+  .#{$marginKey}#{$separator}#{$sizeKey} {
+    margin: sizeValue($sizeKey, $sizeValue);
+  }
+  /* eg. has-padding-xxs */
+  .#{$paddingKey}#{$separator}#{$sizeKey} {
+    padding: sizeValue($sizeKey, $sizeValue);
+  }
+  @each $position in $positions {
+    $posKey: nth($position, 1);
+    $posValue: nth($position, 2);
+    /* eg. has-margin-top-xxs */
+    .#{$marginKey}#{$separator}#{$posKey}#{$separator}#{$sizeKey} {
+      margin-#{$posValue}: sizeValue($sizeKey, $sizeValue);
+    }
+    /* eg. has-padding-top-xxs */
+    .#{$paddingKey}#{$separator}#{$posKey}#{$separator}#{$sizeKey} {
+      padding-#{$posValue}: sizeValue($sizeKey, $sizeValue);
+    }
+  }
+}
