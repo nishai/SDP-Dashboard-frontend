@@ -53,7 +53,7 @@
       </div>
 
       <!-- ERROR -->
-      <div v-if="!isValid" class="content has-text-grey has-text-centered">
+      <div v-if="!isLoading && !isValid" class="content has-text-grey has-text-centered">
         <p><b-icon icon="sad-tear" pack="far" size="is-large"/></p>
         <p> The chart is invalid. We apologise for the inconvenience. </p>
       </div>

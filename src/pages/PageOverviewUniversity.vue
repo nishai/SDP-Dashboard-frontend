@@ -75,6 +75,8 @@
 
 
 <script>
+import { CHART_TYPE_COLORING } from '../assets/js/charts/templates.js';
+import { colorizeChartData } from '../assets/js/util/arrays.js';
 import StandardPageTitle from '../components/StandardPageTitle.vue';
 import OpinionatedLevel from '../components/opinionated/OpinionatedLevel.vue';
 import {
@@ -82,7 +84,7 @@ import {
   getMapperLabelsValuesToChart,
   getMapperListToLabelsValues,
   getMapperFilter,
-  groupsColumnsToStackedChart,
+  groupsColumnsToStackedData,
 } from '../assets/js/util/arrays';
 
 export default {
@@ -138,9 +140,16 @@ export default {
       .then(getMapperFilter((item) => !!item.calendar_instance_year))
       .then(getMapperGroupByFieldToColumns(this.$wits.Faculty.faculty_title))
       .then((groups) => {
-        this.chartFacultiesSchoolCountPerYear = groupsColumnsToStackedChart(groups, 'calendar_instance_year', 'school_count');
-        this.chartFacultiesCourseCountPerYear = groupsColumnsToStackedChart(groups, 'calendar_instance_year', 'course_count');
-        this.chartFacultiesStudentCountPerYear = groupsColumnsToStackedChart(groups, 'calendar_instance_year', 'student_count');
+        const get = (field) => ({
+          type: 'line',
+          data: colorizeChartData(
+            groupsColumnsToStackedData(groups, 'calendar_instance_year', field),
+            CHART_TYPE_COLORING.line,
+          ),
+        });
+        this.chartFacultiesSchoolCountPerYear = get('school_count');
+        this.chartFacultiesCourseCountPerYear = get('course_count');
+        this.chartFacultiesStudentCountPerYear = get('student_count');
       });
 
     // race demographics

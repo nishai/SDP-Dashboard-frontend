@@ -46,9 +46,10 @@ export function getDefaultSidebarSections() {
       name: 'Overview',
       routes: [
         { name: 'University', icon: 'landmark',           type: 'is-primary', to: '/dashboard/overview/university' },
-        { name: 'Faculties',  icon: 'building',           type: 'is-info',    to: '/dashboard/overview/faculties' },
-        { name: 'Schools',    icon: 'school',             type: 'is-bulma', to: '/dashboard/overview/schools' },
-        { name: 'Courses',    icon: 'chalkboard-teacher', type: 'is-warning', to: '/dashboard/overview/courses' },
+        // TODO: enable these and add graphs
+        // { name: 'Faculties',  icon: 'building',           type: 'is-info',    to: '/dashboard/overview/faculties' },
+        // { name: 'Schools',    icon: 'school',             type: 'is-bulma', to: '/dashboard/overview/schools' },
+        // { name: 'Courses',    icon: 'chalkboard-teacher', type: 'is-warning', to: '/dashboard/overview/courses' },
       ],
     },
   ];
@@ -96,25 +97,30 @@ export function getDefaultTemplateListItems() {
         CHART_TEMPLATES.gender.key,
         CHART_TEMPLATES.nationality.key,
         CHART_TEMPLATES.home_language.key,
-        CHART_TEMPLATES.demographics_vs_marks.key,
       ],
     },
     {
       title: 'Marks',
       items: [
+        CHART_TEMPLATES.demographics_vs_marks.key,
+        CHART_TEMPLATES.gender_vs_marks.key,
+
         CHART_TEMPLATES.year_pass_rates.key,
         CHART_TEMPLATES.course_pass_rates.key,
+
         CHART_TEMPLATES.year_mark_bell_curve.key,
         CHART_TEMPLATES.course_mark_bell_curve.key,
-        CHART_TEMPLATES.progress_outcomes.key,
+
+        // CHART_TEMPLATES.year_progress_outcomes.key,
+        // CHART_TEMPLATES.course_effect_on_progress_outcomes.key,
       ],
     },
-    {
-      title: 'Class Sizes',
-      items: [
-        CHART_TEMPLATES.course_size_vs_course_pass_rate.key,
-        CHART_TEMPLATES.average_class_sizes.key,
-      ],
-    },
+    // {
+    //   title: 'Class Sizes',
+    //   items: [
+    //     CHART_TEMPLATES.course_size_vs_course_pass_rate.key,
+    //     CHART_TEMPLATES.average_class_sizes.key,
+    //   ],
+    // },
   ];
 }

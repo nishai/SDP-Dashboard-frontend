@@ -315,7 +315,7 @@ export function getMapperLabelsValuesToChart(type = 'line') {
 /* GROUPS WITH COLS to STACKED CHART OBJ */
 
 
-export function groupsColumnsToStackedChart(groups, labelField, dataField, type) {
+export function groupsColumnsToStackedData(groups, labelField, dataField, type) {
   const labels = Object.values(groups)[0][labelField];
 
   const labelsVaild = Object.values(groups).reduce((flag, group) => {
@@ -336,17 +336,13 @@ export function groupsColumnsToStackedChart(groups, labelField, dataField, type)
   }, []);
 
   return {
-    type: type || 'line',
-    data: {
-      labels,
-      datasets,
-    },
-    options: {},
+    labels,
+    datasets,
   };
 }
 
 export function getMapperGroupsColumnsToStackedChart(labelField, dataField, type) {
-  return (groups) => groupsColumnsToStackedChart(groups, labelField, dataField, type);
+  return (groups) => groupsColumnsToStackedData(groups, labelField, dataField, type);
 }
 
 

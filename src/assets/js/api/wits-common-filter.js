@@ -82,9 +82,9 @@ export const commonFilterEnrolledYear = makeCommonFilterGetter(
 
 export const commonFilterEnrolledCourse = makeCommonFilterGetter(
   EnrolledCourse.enrolled_year_id.calendar_instance_year,
-  EnrolledYear.enrolled_courses.course_code.school_id.faculty_id.faculty_title,
-  EnrolledYear.enrolled_courses.course_code.school_id.school_title,
-  EnrolledYear.enrolled_courses.course_code.course_code,
+  EnrolledCourse.course_code.school_id.faculty_id.faculty_title,
+  EnrolledCourse.course_code.school_id.school_title,
+  EnrolledCourse.course_code.course_code,
 );
 
 export default {

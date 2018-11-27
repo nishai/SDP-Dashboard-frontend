@@ -40,7 +40,7 @@ function freezeAndSetKeys(obj) {
 /**
  * Used to retrieve the coloring information for different chart types.
  */
-const CHART_TYPE_COLORING = {
+export const CHART_TYPE_COLORING = {
   'bar': { colorPalette: 'tol-rainbow', datasetNotLabels: true, shade: true, borders: false },
   'line': { colorPalette: 'tol-rainbow', datasetNotLabels: true, shade: true, borders: true },
   'pie': { colorPalette: 'tol-rainbow', datasetNotLabels: false, shade: true, borders: false },
@@ -78,7 +78,6 @@ const CHART_TEMPLATE_HANDLERS = {
         return promise
           .then(getMapperStripPrefixes())
           .then((results) => {
-            console.log('RESULTS:', results);
             return results;
           })
           .then(getMapperListToLabelsValues(template.fieldLabel, template.fieldData));
@@ -209,11 +208,14 @@ export const CHART_TEMPLATES = {
     getQueryset: (filters) => querysetCommonAnnotateCount(Student, Student.home_language_description, filters),
   },
 
+  /* ===== ===== ===== Marks ===== ===== ===== */
+
+
   demographics_vs_marks: {
     /* template */
     desc: 'Demographics vs Marks',
-    src: '/img/charts/line2.png',
-    chartTypes: ['line', 'bar'],
+    src: '/img/charts/bar2.png',
+    chartTypes: ['bar', 'line'],
     labels: { postfix: ' of 100', rounding: 2 },
     /* type */
     type: CHART_TEMPLATE_HANDLERS.commonFilterChart.key,
@@ -223,7 +225,19 @@ export const CHART_TEMPLATES = {
     getQueryset: (filters) => querysetCommonGroupAveOf(Student, Student.race_description, Student.enrolled_years.enrolled_courses.final_mark, filters),
   },
 
-  /* ===== ===== ===== Marks ===== ===== ===== */
+  gender_vs_marks: {
+    /* template */
+    desc: 'Gender vs Marks',
+    src: '/img/charts/bar3.png',
+    chartTypes: ['bar', 'line'],
+    labels: { postfix: ' of 100', rounding: 2 },
+    /* type */
+    type: CHART_TEMPLATE_HANDLERS.commonFilterChart.key,
+    /* type meta */
+    fieldLabel: Student.gender,
+    fieldData: 'ave',
+    getQueryset: (filters) => querysetCommonGroupAveOf(Student, Student.gender, Student.enrolled_years.enrolled_courses.final_mark, filters),
+  },
 
   year_pass_rates: {
     /* template */
@@ -278,18 +292,44 @@ export const CHART_TEMPLATES = {
     getPromise: (filters) => resultPromiseCommonBellCurve(EnrolledCourse, EnrolledCourse.final_mark, filters),
   },
 
-  progress_outcomes: {
-    desc: 'Progress Outcomes',
-    src: '/img/charts/bar2.png',
+  /* TODO: FIX */
+  year_progress_outcomes: {
+    desc: 'Year Progress Outcomes',
+    src: '/img/charts/pie2.png',
+    chartTypes: ['donut', 'pie'],
+    labels: { postfix: ' count' }, // percent=true not working, when fieldData is count instead of percent
+    /* type */
+    type: CHART_TEMPLATE_HANDLERS.commonFilterChart.key,
+    /* type meta */
+    fieldLabel: 'progress_outcome_type',
+    fieldData: 'count',
+    getPromise: (filters) => querysetCommonAnnotateCount(EnrolledYear, EnrolledYear.progress_outcome_type, filters),
   },
+
+  /* TODO: FIX */
+  course_effect_on_progress_outcomes: {
+    desc: 'Course Effect on Progress Outcomes',
+    src: '/img/charts/pie1.png',
+    chartTypes: ['donut', 'pie'],
+    labels: { postfix: ' count' }, // percent=true not working, when fieldData is count instead of percent
+    /* type */
+    type: CHART_TEMPLATE_HANDLERS.commonFilterChart.key,
+    /* type meta */
+    fieldLabel: 'progress_outcome_type',
+    fieldData: 'count',
+    getPromise: (filters) => querysetCommonAnnotateCount(EnrolledCourse, EnrolledCourse.enrolled_year_id.progress_outcome_type, filters),
+  },
+
 
   /* ===== ===== ===== Class Sizes ===== ===== ===== */
 
+  /* TODO: FIX */
   course_size_vs_course_pass_rate: {
     desc: 'Course Size vs. Course Pass Rate',
     src: '/img/charts/line1.png',
   },
 
+  /* TODO: FIX */
   average_class_sizes: {
     desc: 'Average Course Sizes',
     src: '/img/charts/bar1.png',
