@@ -105,6 +105,11 @@ export function querysetSchoolCourses(schools) {
 }
 
 
+/* ========================================================================== */
+/* CHART TEMPLATES - UTIL                                                     */
+/* ========================================================================== */
+
+
 function checkArrays(...arrays) {
   arrays.forEach((array) => {
     if ((array && !Array.isArray(array)) || (Array.isArray(array) && array.length > 0 && typeof array[0] === 'object')) {
@@ -113,28 +118,92 @@ function checkArrays(...arrays) {
   });
 }
 
-/**
- * @return {Queryset}
- */
-export function querysetCommonGroupByCount(model, groupBy, { years = null, faculties = null, schools = null, courses = null }, distinct = false) {
+
+function veryifyCommonInput(model, { years = null, faculties = null, schools = null, courses = null }) {
   checkArrays(years, faculties, schools, courses);
-
   const modelClass = (typeof model === 'string') ? CLASS_NAME_TO_MODEL[model] : model;
-
   if (!commonFilters[modelClass]) {
     throw new Error(`Model seems to be invalid: ${model}`);
   }
-
-  return modelClass.query
-    .filter(commonFilters[modelClass]({ years, faculties, schools, courses }))
-    .values(groupBy)
-    .annotate({ field: 'count', expr: `count('${groupBy}'${distinct ? ', distinct=True' : ''})` });
+  return modelClass;
 }
 
-export function querysetCommonGroupByAve(Model, groupBy, aveBy, { years = null, faculties = null, schools = null, courses = null }) {
-  return Model.query
-    .filter(commonFilters[Model]({ years, faculties, schools, courses }))
-    .values(groupBy)
+
+/* ========================================================================== */
+/* CHART TEMPLATES                                                            */
+/* ========================================================================== */
+
+
+/**
+ * 'Race'
+ * 'Gender'
+ * 'Nationality'
+ * 'Home Language'
+ * @return {Queryset}
+ */
+export function querysetCommonAnnotateCount(model, annotate, { years = null, faculties = null, schools = null, courses = null }, distinct = false) {
+  const m = veryifyCommonInput(model, { years, faculties, schools, courses });
+  return m.query
+    .filter(commonFilters[m]({ years, faculties, schools, courses }))
+    .values(annotate)
+    .annotate({ field: 'count', expr: `count('${annotate}'${distinct ? ', distinct=True' : ''})` })
+    .orderBy(annotate);
+}
+
+/**
+ * 'Demographics vs Marks'
+ * @return {Queryset}
+ */
+export function querysetCommonGroupAveOf(model, group, aveOf, { years = null, faculties = null, schools = null, courses = null }) {
+  const m = veryifyCommonInput(model, { years, faculties, schools, courses });
+  return m.query
+    .filter(commonFilters[m]({ years, faculties, schools, courses }))
+    .values(group)
     .distinct()
-    .annotate({ field: 'ave', expr: `ave('${aveBy}')` });
+    .annotate({ field: 'ave', expr: `ave('${aveOf}')` })
+    .orderBy(group);
+}
+
+
+export function querysetCommonPassFail(model, marks, { years = null, faculties = null, schools = null, courses = null }, markSep = 50) {
+  const m = veryifyCommonInput(model, { years, faculties, schools, courses });
+  return m.query
+    .filter(commonFilters[m]({ years, faculties, schools, courses }))
+    .annotate({
+      field: 'outcome',
+      expr: `
+            Case(
+              When(${marks.$gte()}=${markSep}, then=Value('>= ${markSep}%')),
+              When(${marks.$lt()}=${markSep}, then=Value('< ${markSep}%')),
+              default=Value('< ${markSep}%'),
+              output_field=CharField(),
+            )
+          `, // this is all valid python (limited in functionality, only a single value expression)
+    })
+    .values('outcome')
+    .annotate({ field: 'count', expr: 'count(F("outcome"))' })
+    .orderBy('outcome');
+}
+
+export function resultPromiseCommonBellCurve(model, marks, { years = null, faculties = null, schools = null, courses = null }) {
+  const m = veryifyCommonInput(model, { years, faculties, schools, courses });
+
+  const queryBase = m.query
+    .filter(commonFilters[m]({ years, faculties, schools, courses }))
+    .exclude(Q(marks.$isnull(), 'True'));
+
+  return Promise.all([
+    queryBase.clone().count().RESULT(),
+    queryBase.clone()
+      .annotate({ field: 'mark', expr: `Round('${marks}')` })
+      .values('mark')
+      .annotate({ field: 'count', expr: `Count('mark')` })
+      .orderBy('mark')
+      .RESULT(),
+  ]).then(([{ count }, results]) => {
+    return results/* .sort((a, b) => a.mark - b.mark) */.map((obj) => {
+      obj.percent = Math.round((obj.count / count) * 100 * 100) / 100;
+      return obj;
+    }); // sort properly...
+  });
 }

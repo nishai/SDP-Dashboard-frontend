@@ -62,7 +62,7 @@ has one event:
 
 <script>
 import { getDefaultTemplateListItems } from '../../assets/js/defaults';
-import { CHART_TEMPLATES } from '../../assets/js/templates';
+import { CHART_TEMPLATES } from '../../assets/js/charts/templates';
 import BLevelItem from '../global/BulmaLevelItem.vue';
 
 export default {

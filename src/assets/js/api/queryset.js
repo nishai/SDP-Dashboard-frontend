@@ -1,6 +1,7 @@
 
 import cloneDeep from 'lodash.clonedeep';
 import { cachiosInstance as cachios } from '../plugins/vue-axios';
+import { stripPrefixes } from '../util/arrays.js';
 
 
 /* ========================================================================== */
@@ -355,29 +356,7 @@ export class Queryset {
    */
   thenStripPrefixes(callback = null) {
     return this.RESULT().then((results) => {
-      let items = results;
-      if (Array.isArray(items) && items.length > 0) {
-        /* get key map */
-        const keysMap = {};
-        let renameCount = 0;
-        /* get new names */
-        Object.keys(items[0]).forEach((key) => {
-          const indexOf = key.lastIndexOf('__');
-          const renamed = indexOf < 0 ? key : key.substring(indexOf + 2);
-          if (renamed !== key) {
-            renameCount += 1;
-          }
-          keysMap[key] = renamed;
-        });
-        /* rename entries */
-        if (renameCount > 0) {
-          items = items.map((item) => {
-            const temp = {};
-            Object.entries(keysMap).forEach(([key, renamed]) => { temp[renamed] = item[key]; });
-            return temp;
-          });
-        }
-      }
+      const items = stripPrefixes(results);
       if (callback) {
         const val = callback(items);
         if (val !== undefined) {
@@ -491,7 +470,7 @@ export class Queryset {
    * }
    *
    * Use ValuesAction followed by AnnotateAction to "group_by"
-   * @param { {field: string, expr: any} } fields
+   * @param {{field: string, expr: string}} fields
    * @return {Queryset}
    */
   annotate(...fields) {

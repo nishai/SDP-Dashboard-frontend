@@ -109,7 +109,7 @@ export function getMapperListToLabelsValues(labelField, valueField) {
 /* LIST OF LABELS VALUES OBJECTS TO OBJECT OF LABELS, VALUES LIST */
 
 
-export function labelsValuesListToChartData(list, datasetLabels) {
+export function labelsValuesListToChartData(list, datasetLabels, labelSorter = null) {
   const labelsMap = new Map();
 
   if (datasetLabels && list.length !== datasetLabels.length) {
@@ -128,7 +128,12 @@ export function labelsValuesListToChartData(list, datasetLabels) {
     });
   });
 
-  const labels = [...labelsMap.keys()];
+  let labels = [...labelsMap.keys()];
+
+  if (labelSorter) {
+    labels = labels.sort(labelSorter);
+  }
+
   const datasets = list.map((_, index) => ({
     data: labels.map((label) => labelsMap.get(label)[index]),
     label: datasetLabels ? datasetLabels[index] : undefined,
@@ -140,8 +145,8 @@ export function labelsValuesListToChartData(list, datasetLabels) {
   };
 }
 
-export function getMapperLabelsValuesListToChartData(datasetLabels) {
-  return (list) =>  labelsValuesListToChartData(list, datasetLabels);
+export function getMapperLabelsValuesListToChartData(datasetLabels, labelSorter = null) {
+  return (list) =>  labelsValuesListToChartData(list, datasetLabels, labelSorter);
 }
 
 /* COLORIZE CHART DATASETS */
@@ -342,4 +347,46 @@ export function groupsColumnsToStackedChart(groups, labelField, dataField, type)
 
 export function getMapperGroupsColumnsToStackedChart(labelField, dataField, type) {
   return (groups) => groupsColumnsToStackedChart(groups, labelField, dataField, type);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+export function stripPrefixes(results) {
+  let items = results;
+  if (Array.isArray(items) && items.length > 0) {
+    /* get key map */
+    const keysMap = {};
+    let renameCount = 0;
+    /* get new names */
+    Object.keys(items[0]).forEach((key) => {
+      const indexOf = key.lastIndexOf('__');
+      const renamed = indexOf < 0 ? key : key.substring(indexOf + 2);
+      if (renamed !== key) {
+        renameCount += 1;
+      }
+      keysMap[key] = renamed;
+    });
+    /* rename entries */
+    if (renameCount > 0) {
+      items = items.map((item) => {
+        const temp = {};
+        Object.entries(keysMap).forEach(([key, renamed]) => { temp[renamed] = item[key]; });
+        return temp;
+      });
+    }
+  }
+  return items;
+}
+
+export function getMapperStripPrefixes() {
+  return stripPrefixes;
 }

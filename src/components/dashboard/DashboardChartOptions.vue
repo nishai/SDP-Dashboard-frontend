@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { CHART_TEMPLATES } from '../../assets/js/templates';
+import { CHART_TEMPLATES } from '../../assets/js/charts/templates';
 import DashboardChartOptionsType from './DashboardChartOptionsType.vue';
 import DashboardChartOptionsFilterForm from './DashboardChartOptionsFilterForm.vue';
 import OpinionatedTabs from '../opinionated/OpinionatedTabsAddable.vue';

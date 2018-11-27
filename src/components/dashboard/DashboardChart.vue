@@ -59,7 +59,7 @@
       </div>
 
       <!-- LOADING -->
-      <b-loading :is-full-page="false" :active="isLoading && !isValid"/>
+      <b-loading :is-full-page="false" :active="isLoading"/>
     </b-card-content>
 
   </b-card>
@@ -69,13 +69,8 @@
 import clonedeep from 'lodash.clonedeep';
 import BTable from 'buefy/src/components/table/Table.vue';
 import { mapGetters } from 'vuex';
+import { CHART_LOAD_HANDLER } from '../../assets/js/charts/templates';
 import { getDefaultChartInfo } from '../../assets/js/defaults';
-import { CHART_TEMPLATES, getDefaultChartTooltipCallbacks } from '../../assets/js/templates';
-import {
-  getMapperLabelsValuesListToChartData,
-  getMapperListToLabelsValues,
-  getMapperColorizeChartData,
-} from '../../assets/js/util/arrays';
 import SlideoutChartOptions from '../slideout/SlideoutChartOptions.vue';
 
 
@@ -96,16 +91,17 @@ export default {
       chartOptions: {},
 
       showRawData: false,
+
+      isLoading: true,
+      isError: false,
     };
   },
 
   computed: {
     ...mapGetters(['getReport', 'hasReport', 'getReportChart', 'hasReportChart']),
-    isLoading() {
-      return false;
-    },
     isValid() {
-      return this.hasReport(this.reportId)
+      return !this.loading && !this.isError
+        && this.hasReport(this.reportId)
         && this.hasReportChart(this.reportId, this.chartId)
         && typeof this.chartOptions === 'object'
         && typeof this.chartData === 'object';
@@ -164,49 +160,20 @@ export default {
 
     // TODO: This needs to be cleaned up.
     refresh() {
-      const template = CHART_TEMPLATES[this.chart.meta.template];
-      const { subsets } = this.chart.meta;
+      this.isLoading = true;
+      this.isError = false;
 
-      // get a handler for the chartData that returns promises for each set of data for the chart.
-
-      const handlers = {
-        commonFilterChart: /* { type: 'commonFilterChart' } */
-          () => subsets.map(
-            ({ label, selected }, i) => template.getQueryset(selected)
-              .thenStripPrefixes()
-              .then(getMapperListToLabelsValues(template.fieldLabel, template.fieldData)),
-          ),
-      };
-
-      if (!handlers[template.type]) {
-        throw Error(`Unsupported Type: ${template.type}`);
-      }
-
-      const allPromises = handlers[template.type]();
-      const colors = template.colors || {};
-      const labels = template.labels || {};
-
-      this.chartOptions.tooltips = {
-        callbacks: getDefaultChartTooltipCallbacks({
-          postfix: labels.postfix || '',
-          rounding: labels.rounding || false,
-          percent: labels.percent || false,
-        }),
-      };
-
-      // Resolve promises for data.
-
-      Promise.all(allPromises)
-        .then(getMapperLabelsValuesListToChartData(subsets.map((subset) => subset.label)))
-        .then(getMapperColorizeChartData({
-          colorPalette: colors.palette || 'tol-rainbow',
-          datasetNotLabels: colors.datasetNotLabels || false,
-          shade: colors.shaded || true,
-          borders: colors.borders || false,
-        }))
-        .then((chartData) => {
-          this.chartData = chartData;
-          console.log('CHART DATA', this.chartData);
+      CHART_LOAD_HANDLER(this.chart)
+        .then((obj) => {
+          console.log('Loaded Chart Data:', obj);
+          this.chartData = obj.data;
+          this.chartOptions = obj.options;
+          this.isLoading = false;
+        })
+        .catch((e) => {
+          console.warn('Failed Loading Chart Data:', e);
+          this.isLoading = false;
+          this.isError = true;
         });
     },
   },

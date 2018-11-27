@@ -11,13 +11,13 @@
       </p>
       <p>
         <ul class="has-text-grey-dark">
-          <li> Nathan </li>
-          <li> Or </li>
-          <li> Nishai </li>
-          <li> Avi </li>
-          <li> Niambh </li>
-          <li> Matt </li>
           <li> Adrian </li>
+          <li> Avi </li>
+          <li> Matt </li>
+          <li> Nathan </li>
+          <li> Niambh </li>
+          <li> Nishai </li>
+          <li> Or </li>
         </ul>
       </p>
       <p>

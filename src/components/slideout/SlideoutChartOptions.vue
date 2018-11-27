@@ -69,7 +69,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { getDefaultTemplateListItems } from '../../assets/js/defaults';
-import { CHART_TEMPLATES } from '../../assets/js/templates';
+import { CHART_TEMPLATES } from '../../assets/js/charts/templates';
 import DashboardChartOptions from '../dashboard/DashboardChartOptions.vue';
 import DashboardChartOptionsTemplates from '../dashboard/DashboardChartOptionsTemplates.vue';
 import DisplayOrError from '../DisplayOrError.vue';

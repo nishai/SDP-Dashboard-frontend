@@ -1,6 +1,6 @@
 import clonedeep from 'lodash.clonedeep';
 import Vue from 'vue';
-import { CHART_TEMPLATES } from '../../assets/js/templates';
+import { CHART_TEMPLATES } from '../../assets/js/charts/templates';
 import { uuidv4 } from '../../assets/js/util/uuid';
 import * as m from '../mutations';
 

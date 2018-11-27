@@ -1,17 +1,22 @@
 
+/* eslint-disable no-unused-vars */
+/* eslint-disable prefer-template */
+
 import Color from 'color';
 import { Q } from './api/queryset';
 import {
   querysetCommon,
-  querysetCommonGroupByAve,
-  querysetCommonGroupByCount,
+  querysetCommonGroupAveOf,
+  querysetCommonAnnotateCount,
 } from './api/wits-api';
 import { Student, Faculty, EnrolledYear, EnrolledCourse } from './api/wits-models';
-import { CHART_TEMPLATES } from './templates.js';
+import { CHART_TEMPLATES } from './charts/templates';
+
+/* eslint-enable no-unused-vars */
 
 
 /* ========================================================================== */
-/* Navbar                                                                     */
+/* NAVBAR                                                                     */
 /* ========================================================================== */
 
 
@@ -24,7 +29,7 @@ export function getDefaultNavbarStartItems() {
 
 
 /* ========================================================================== */
-/* Sidebar                                                                    */
+/* SIDEBAR                                                                    */
 /* ========================================================================== */
 
 
@@ -51,7 +56,7 @@ export function getDefaultSidebarSections() {
 
 
 /* ========================================================================== */
-/* VueChart.vue                                                               */
+/* CHART TYPES                                                                */
 /* ========================================================================== */
 
 
@@ -76,7 +81,7 @@ export function getDefaultChartInfo() {
 
 
 /* ========================================================================== */
-/* DashboardChartOptionsTemplates.vue                                         */
+/* CHART TEMPLATES                                                             */
 /* ========================================================================== */
 
 
@@ -97,55 +102,19 @@ export function getDefaultTemplateListItems() {
     {
       title: 'Marks',
       items: [
-        CHART_TEMPLATES.pass_rates_by_year.key,
-        CHART_TEMPLATES.pass_rates_by_faculty_or_course.key,
-        CHART_TEMPLATES.bell_curve.key,
-        CHART_TEMPLATES.progress_outcome_by_faculty_or_couse.key,
+        CHART_TEMPLATES.year_pass_rates.key,
+        CHART_TEMPLATES.course_pass_rates.key,
+        CHART_TEMPLATES.year_mark_bell_curve.key,
+        CHART_TEMPLATES.course_mark_bell_curve.key,
+        CHART_TEMPLATES.progress_outcomes.key,
       ],
     },
     {
       title: 'Class Sizes',
       items: [
-        CHART_TEMPLATES.class_size_vs_pass_rate.key,
-        CHART_TEMPLATES.average_class_size_by_faculty_or_course.key,
+        CHART_TEMPLATES.course_size_vs_course_pass_rate.key,
+        CHART_TEMPLATES.average_class_sizes.key,
       ],
     },
   ];
 }
-
-// /* ========================================================================== */
-// /* DashboardChartOptionsFilterForm.vue                                             */
-// /* ========================================================================== */
-//
-//
-// // todo, maybe make library function, immediately accessible on models.
-// function getFlatDataPromise(model, ...fields) {
-//   return model.query.values(...fields).distinct().orderBy(...fields).thenStripPrefixes();
-// }
-//
-// export function getDefaultFilterables() {
-//   return [
-//     {
-//       label: 'Years',
-//       field: 'calendar_instance_year',
-//       itemsPromise: getFlatDataPromise(this.$wits.EnrolledYear, this.$wits.EnrolledYear.calendar_instance_year),
-//     },
-//     {
-//       label: 'Faculties',
-//       field: 'faculty_title',
-//       itemsPromise: getFlatDataPromise(this.$wits.Faculty, this.$wits.Faculty.faculty_title),
-//     },
-//     {
-//       label: 'Schools',
-//       field: 'school_title',
-//       dependsOn: ['faculty_title'],
-//       itemsPromise: getFlatDataPromise(this.$wits.School, this.$wits.School.school_title, this.$wits.School.faculty_id.faculty_title),
-//     },
-//     {
-//       label: 'Course',
-//       field: 'course_code',
-//       dependsOn: ['school_title', 'faculty_title'],
-//       itemsPromise: getFlatDataPromise(this.$wits.Course, this.$wits.Course.course_code, this.$wits.Course.school_id.school_title, this.$wits.Course.school_id.faculty_id.faculty_title),
-//     },
-//   ];
-// }

@@ -21,9 +21,6 @@ import PageOverviewSchools from '../pages/PageOverviewSchools.vue';
 import PageOverviewCourses from '../pages/PageOverviewCourses.vue';
 
 
-/* todo: remove */
-
-
 const overviewRoutes = [
   {
     path: '/dashboard/overview/university',
@@ -97,7 +94,8 @@ const mainRoutes = [
     children: dashboardRoutes,
   },
   {
-    path: '/', /* duplicate name allowed for children only */
+    path: '/', /* duplicate name allowed for children only, careful with redirects, child overwrites parent. */
+    redirect: '/dashboard',
     component: LayoutSingle,
     children: singleRoutes,
   },
